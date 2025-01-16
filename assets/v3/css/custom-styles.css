@@ -1,0 +1,383 @@
+/*surveys*/
+
+.surveyListView {
+    display: block;
+}
+table.surveys-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.surveys-table-row {
+    background-color: var(--white);
+    margin: 5px 0px;
+    width: 100%;
+    border: 3px solid var(--bodyBg);
+}
+table.surveys-table td {
+    border: 0;
+    padding: 20px 10px;
+}
+.createSurveyFormView {
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    padding: 30px;
+    border-radius: 10px;
+    -o-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+div#survey-form {
+    display: flex;
+    flex-direction: column;
+}
+.createSurveyFormView div#survey-form .form-group {
+    width: 100%;
+}
+.createSurveyFormView .bs-callout {
+    display: flex;
+    border: 1px solid var(--grey5);
+    border-left: 5px solid var(--blue2);
+    border-radius: 3px;
+    position: relative;
+    flex-direction: column;
+}
+.createSurveyFormView .bs-callout::after {
+    position: absolute;
+    content: "";
+    height: 100%;
+    width: 1px;
+    background: var(--grey5);
+    right: 42px;
+    top: 0;
+}
+.bs-callout .row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.bs-callout .row .col-sm-9 {
+    width: 75%;
+}
+.bs-callout .row .col-sm-3 {
+    width: calc(25% - 60px);
+    margin-left: 30px;
+}
+.bs-callout .row .col-sm-9 input.form-control-line {
+    display: block;
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid var(--grey5);
+    padding: 10px 0;
+    margin: 0 0 20px;
+}
+#multiple-options .options-set input[type="text"] {
+    border: 1px solid var(--grey5);
+    padding: 10px;
+    margin: 0 10px 0 0;
+    border-radius: 3px;
+    outline: none;
+    width: 100%;
+}
+#multiple-options .options-set {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#checkbox-options .options-set input[type="text"] {
+    border: 1px solid var(--grey5);
+    padding: 10px;
+    margin: 0 10px 0 0;
+    border-radius: 3px;
+    outline: none;
+    width: 80%;
+}
+#checkbox-options .options-set {
+    margin: 0 0 10px;
+}
+
+#dropdown-options .options-set input[type="text"] {
+    border: 1px solid var(--grey5);
+    padding: 10px;
+    margin: 0 10px 0 0;
+    border-radius: 3px;
+    outline: none;
+    width: 80%;
+}
+#dropdown-options .options-set {
+    margin: 0 0 10px;
+}
+
+#linear-options label {
+    margin: 20px 0 10px;
+}
+#linear-options input[type="number"] {
+    border: 1px dotted #c3c3c3;
+    padding: 10px;
+    margin: 0 10px 0 0;
+    border-radius: 3px;
+    outline: none;
+}
+.lastLabel {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.lastLabel label {
+    margin: 0;
+}
+#multiple-options .options-set span.badge.rmbtn,
+#checkbox-options .options-set span.badge.rmbtn,
+#dropdown-options .options-set span.badge.rmbtn {
+    display: inline-flex;
+    background: var(--red);
+    color: var(--white);
+    padding: 5px;
+    text-transform: uppercase;
+    font-size: 10px;
+    border-radius: 20px;
+    cursor: default;
+}
+.bs-callout .row .col-sm-3 .right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 44px;
+}
+.bs-callout .row .col-sm-3 .right a,
+.bs-callout .row .col-sm-3 .right label {
+    width: 100%;
+    display: inline-flex;
+    text-align: center;
+    color: var(--blue2);
+}
+.bs-callout .row .col-sm-3 .right a span,
+.bs-callout .row .col-sm-3 .right label span {
+    width: 100%;
+    display: inline-flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    color: var(--blue2);
+}
+.bottom-icons {
+    display: block;
+    width: calc(100% - 30px);
+    margin: 20px 0 0;
+}
+.bottom-icons ul.list-inline {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    justify-content: flex-end;
+}
+.bottom-icons ul.list-inline li {
+    list-style: none;
+    width: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0 0 5px;
+}
+.bottom-icons ul.list-inline li a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.form-group label.switch2 {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 15px;
+    margin: 0;
+}
+.switch2 input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider2 {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--grey5);
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 10px;
+}
+.slider2:before {
+    position: absolute;
+    content: "";
+    height: 13px;
+    width: 13px;
+    left: 1px;
+    bottom: 1px;
+    background-color: var(--white);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+.slider2.round:before {
+    border-radius: 50%;
+}
+input:checked + .slider2 {
+    background-color: var(--blue2);
+}
+input:checked + .slider2:before {
+    -webkit-transform: translateX(15px);
+    -ms-transform: translateX(15px);
+    transform: translateX(15px);
+}
+
+.chkopt, .drpopt, .linopt, .txtopt, .erropt {
+    display: none;
+}
+.Uploadmedia {
+    display: block;
+    margin: 20px 0 0;
+}
+.Uploadmedia img {
+    max-width: 100px;
+    height: auto;
+    border: 1px solid var(--grey5);
+    padding: 5px;
+}
+.getSurveyQues {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--white);
+    padding: 30px;
+    margin: 0 0 20px;
+    border-radius: 10px;
+    -o-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+p.author {
+    display: block;
+    font-size: 13px;
+    margin: 0 0 20px;
+}
+.successMessgae {
+    display: block;
+    color: var(--green2);
+    background: var(--green4);
+    padding: 10px;
+    width: 100%;
+}
+.successMessgae h3 {
+    font-size: 13px;
+}
+.bsCalloutView {
+    display: block;
+    padding: 30px;
+    background: var(--white);
+    border-radius: 10px;
+    -o-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+.bsCalloutView .bs-callout {
+    padding: 30px;
+    margin: 0 0 30px;
+    width: 100%;
+    border: 1px solid var(--grey5);
+}
+.bsCalloutView .bs-callout .col-md-12 {
+    width: 100%;
+}
+.bsCalloutView .bs-callout .col-md-12 .col-sm-8 {
+    width: 70%;
+}
+.bsCalloutView .bs-callout .col-md-12 .col-sm-4 {
+    width: 30%;
+}
+.bsCalloutView .bs-callout .labelGroup {
+    display: flex;
+    align-items: center;
+}
+.bsCalloutView .bs-callout .labelGroup label {
+    margin: 0;
+}
+.sur-sub-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 30px;
+}
+.subHeaderForm {
+    display: flex;
+    align-items: center;
+}
+.subHeaderForm a.btn {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 0 10px;
+}
+.bsCalloutView .user-records {
+    display: flex;
+    align-items: center;
+}
+.bsCalloutView .user-records .user-name {
+    margin: 0 10px 0 0;
+}
+.bsCalloutView .user-records .user-name + span {
+    margin: 0;
+}
+
+.surveyListView .surveys-table {
+    border-collapse: separate;
+    border-spacing: 0 5px;
+}
+.surveys-table tr.rowRadius td {
+    background: #fff;
+}
+.surveys-table tr.rowRadius td:first-child {
+    border-radius: 10px 0 0 10px;
+}
+.surveys-table tr.rowRadius td:last-child {
+    border-radius: 0 10px 10px 0;
+}
+.question-media{
+    min-height: 100px;
+    background: transparent;
+    border: 1px dashed #a7a7a7;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a7a7a7;
+}
+
+.form-control-hidden{
+    display: none;
+}
+
+.qstns{
+    border-bottom: 1px dotted #ececec;
+    margin-bottom: 10px;
+}
+
+.btn-h{
+    height: 28px;
+}
+
+.custom-switch .custom-switch-input + .custom-switch-btn{
+    width: 66px;
+    height: 35px;
+}
+.custom-switch .custom-switch-input + .custom-switch-btn:after, .custom-switch .custom-switch-input + .custom-switch-btn:before{
+    width: 25px;
+    height: 25px;
+}
+/*surveys*/

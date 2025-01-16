@@ -1,0 +1,81 @@
+.settingsView form {
+	width: 100%;
+	display: flex;
+	align-items: flex-start;
+}
+.checkPermList {
+	display: block;
+	width: 100%;
+}
+.checkPermList form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 30px 0 0;
+	width: 100%;
+}
+.checkPermList form .form-group.headFormGroup {
+	margin: 30px 0 2px;
+	margin-top: 30px;
+}
+.checkPermList form .form-group {
+	width: 100%;
+	border: 1px solid var(--grey5);
+	align-items: center;
+	display: flex;
+	padding: 10px;
+	line-height: 18px;
+	margin: 0 0 2px;
+}
+.checkPermList form .form-group label {
+	line-height: 18px;
+	margin: 0;
+}
+.form-group label {
+	display: inline-block;
+	width: 100%;
+	margin-bottom: 0px;
+	font-weight: 400;
+	text-align: left;
+	margin-left: 10px;
+}
+.form-group, .input-group {
+	margin: 0 auto 15px;
+	float: left;
+	width: 100%;
+	position: relative;
+	text-align: left;
+}
+.flex-custom{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.card-title{
+	margin-bottom: 0px!important;
+}
+.box{
+	margin-top: 25px;
+	display: block;
+	border: 1px solid #d7d7d7;
+	border-radius: 5px;
+}
+.box-head{
+	display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #d7d7d7;
+}
+.box-head label{
+	font-size: 15px;
+	margin-left: 10px;
+	margin-bottom: 0px;
+	cursor: pointer;
+}
+.box-body {
+    padding: 20px 15px 0px 15px;
+    display: inline-block;
+}
+.align-items-center{
+	align-items: center;
+}

@@ -1,0 +1,110 @@
+html {
+  width: 100%;
+}
+
+body {
+  overflow-x: hidden !important;
+}
+
+body.show-spinner>main {
+  overflow: hidden !important;
+}
+
+/* Hide everything under body tag */
+body.show-spinner>* {
+  opacity: 0;
+}
+
+/* Spinner */
+body.show-spinner::after {
+  content: " ";
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  border-top-color: rgba(0, 0, 0, 0.3);
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+  left: calc(50% - 15px);
+  top: calc(50% - 15px);
+  position: fixed;
+  z-index: 1;
+}
+
+/* Floating button */
+button.btn-floating {
+  z-index: 1000;
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+  height: 50px;
+  font-size: 25px;
+  text-align: center;
+  width: 50px;
+  color: #FFFFFF;
+  border: 1px solid #008ecc;
+  background-color: #008ecc;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  box-shadow: 1px 1px 11px #0000007a;
+}
+
+button.btn-floating:hover {
+  background-color: #007eb5;
+  border: 1px solid #007eb5;
+}
+
+div.floating-table{
+  display: none;
+  background-color: #FFFFFF;
+  height: 75vh;
+  width: 350px;
+  border-radius: 10px;
+  z-index: 1000;
+  position: fixed;
+  right: 25px;
+  bottom: 80px;
+  box-shadow: 0px 2px 5px #0000011a;
+}
+
+.floating-table-title{
+  margin: 20px;
+}
+
+.floating-table-body {
+  position: relative;
+  padding: 0px 20px 20px 20px;
+  height: 85%;
+  width: inherit;
+  overflow-y: auto;
+}
+
+.float-child-img-thumb{
+  height: 80px!important;
+  width: 80px!important;
+}
+
+.floating-child-box{
+  border-bottom: 1px solid #ececec;
+}
+
+.floating-child-box-metadata{
+  padding-top: 30px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+

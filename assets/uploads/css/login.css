@@ -1,0 +1,287 @@
+	@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab');
+	@import url('https://fonts.googleapis.com/css2?family=Roboto');
+	@import url('https://fonts.googleapis.com/css2?family=Nunito');
+body {
+  font-family: Arial;
+  color: white;
+}
+
+.split {
+  height: 100%;
+  width: 60%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow: hidden;
+}
+.split1 {
+  height: 100%;
+  width: 40%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow: hidden;
+}
+
+.left {
+  left: 0;
+  background: linear-gradient(133.91deg, #041F37 0%, #297DB6 100%);
+
+}
+
+.right {
+  right: 0;
+  background-color: #F4F8F9;
+}
+
+
+.rightlogo {
+	display: flex;
+	justify-content: center;
+	margin-top: 50px;"
+}
+.righttitle {
+	display: flex;
+	justify-content: center;
+	color: #1B2E4B;
+	font-weight: 600;
+	font-family: 'Roboto Slab';
+	font-style: normal;
+font-weight: 500;
+font-size: 24px;
+line-height: 32px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+.parentdiv {
+	position:absolute;
+	width: 100%;
+	
+		left: 30%;
+}
+.typename {
+	font-family: Roboto Slab;
+font-style: normal;
+font-weight: normal;
+font-size: 18px;
+line-height: 24px;
+margin-bottom: 10px;
+/* identical to box height */
+
+
+color: #297DB6;
+}
+.rightdiv {
+	display: flex;
+	
+
+	padding-bottom: 5px;
+	border-bottom: 1px solid rgba(95, 109, 128, 0.38);
+    width: 40%;
+		margin-bottom: 10px;
+}
+.rightuser {
+	
+	font-family: Roboto;
+font-style: normal;
+font-weight: normal;
+font-size: 13px;
+line-height: 129.69%;
+color:#000000;
+}
+.rightuser > a {
+	
+	font-family: Roboto;
+font-style: normal;
+font-weight: normal;
+font-size: 13px;
+line-height: 129.69%;
+color:#000000;
+}
+.leftspan {
+	position: absolute;
+		width: 227px;
+height: 47px;
+left: 310px;
+top: 105px;
+
+font-family: Roboto Slab;
+font-style: normal;
+font-weight: normal;
+font-size: 30px;
+line-height: 47px;
+
+color: #FFFFFF;
+}
+.leftspan1{
+	position: absolute;
+width: 292px;
+height: 45px;
+left: 280px;
+top: 190px;
+
+font-family: Stoke;
+font-style: normal;
+font-weight: normal;
+font-size: 33px;
+line-height: 45px;
+/* identical to box height */
+
+
+color: #FFFFFF;
+
+}
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.he {
+	font-family: Roboto Slab;
+font-size: 24px;
+font-style: normal;
+font-weight: 500;
+line-height: 32px;
+letter-spacing: 0em;
+text-align: center;
+
+	color: #1B2E4B;
+
+}
+
+.centered img {
+  width: 150px;
+ 
+}
+.Row {
+    display: table;
+    width: 100%; /*Optional*/
+    table-layout: fixed; /*Optional*/
+    border-spacing: 10px; /*Optional*/
+}
+.Column {
+    display: table-cell;
+	height: 50px;
+width: 138px;
+left: 872px;
+top: 200px;
+padding-top:40px;
+background: #FFFFFF;
+
+}
+input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus,input:-webkit-autofill:active {
+	background:#FFFFFF !important; 
+}
+.bottom {
+    position: absolute;
+	right:30px;
+    bottom: 10px;
+	font-family: Roboto Slab;
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 18px;
+
+color: #979797;
+	
+
+}
+.label {
+display: flex;
+    margin-left: -10px;
+	height: 22px;
+width: 75px;
+left: 0px;
+top: 0px;
+border-radius: nullpx;
+color: #77869E;
+
+	font-family: Nunito;
+font-style: normal;
+font-weight: normal;
+font-size: 12px !important;
+line-height: 22px;
+/* identical to box height */
+
+letter-spacing: 0.270833px;
+
+color: #77869E;
+	text-align: left;
+
+}
+.centered img {
+  width: 150px;
+}
+.input-group{
+	height: 30px;
+	width: 300px;
+  margin: 8px 0;
+  box-sizing: border-box;
+		border: none; 
+border-width: 0; 
+box-shadow: none;
+color: #042C5C;
+border-bottom: 1px solid #77869E;
+background: #F4F8F9;
+
+}
+.button-group
+{
+	height: 40px;
+	width: 200px;
+	left: 1100px;
+	top: 575px;
+	background: #297DB6;
+	border-radius: 10px;
+
+
+
+}
+.alignRight > a {
+    float: right;
+		color: #0047CC;
+		font-family: Nunito;
+font-style: normal;
+font-weight: normal;
+font-size: 12px !important;
+line-height: 22px;
+/* identical to box height */
+
+letter-spacing: 0.270833px;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+}
+.alignLeft {
+		color: #77869E;
+		margin-left: -10px;
+		font-family: Nunito;
+font-style: normal;
+font-weight: normal;
+font-size: 12px !important;
+line-height: 22px;
+/* identical to box height */
+
+letter-spacing: 0.270833px;
+position: absolute;
+    left: 10px;
+}
+.footer {
+    position: fixed;
+	text-align: right;
+    bottom: 0px;
+	width: 50%;
+	color: #1B2E4B;
+}
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}

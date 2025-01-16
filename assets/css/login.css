@@ -1,0 +1,500 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+body {
+	font-family: 'Roboto', sans-serif !important;
+	color: white;
+}
+
+.split {
+  height: 100%;
+  width: 60%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow: hidden;
+}
+.split1 {
+  height: 100%;
+  width: 40%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow: hidden;
+}
+.page-sub-title {
+    display: block;
+    font-size: 20px;
+    color: #000;
+    font-weight: 500;
+}
+.left {
+  left: 0;
+  background: linear-gradient(133.91deg, #e95e12 0%, #f5b719 100%);
+
+}
+.leftImg {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 50%;
+}
+.leftImg img {
+	mix-blend-mode: screen;
+}
+
+.right {
+  right: 0;
+  background-color: #F4F8F9;
+}
+.rightCont {
+	width: 50%;
+	padding: 30px;
+	display: flex;
+    align-items: self-start;
+    flex-direction: column;
+	box-sizing: border-box;
+}
+
+.rightlogo {
+	display: flex;
+	justify-content: center;
+	margin-top: 50px;
+}
+.headTitle {
+	display: block;
+	font-weight: bold;
+	font-size: 25px;
+	color: #000;
+	text-transform: uppercase;
+}
+.righttitle {
+	display: flex;
+	justify-content: flex-start;
+	text-align: left;
+	width: 600px;
+	color: #1B2E4B;
+	margin: 0 0 20px;
+	/* font-weight: 600; */
+	/* font-family: 'Roboto Slab'; */
+	font-family: 'Roboto', sans-serif;
+	font-style: normal;
+font-weight: 300;
+font-size: 15px;
+line-height: 25px;
+text-transform: uppercase;
+	/* margin-top: 30px;
+	margin-bottom: 30px; */
+}
+.logoMykronicle {
+    display: block;
+    width: 100%;
+}
+.midCont {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.parentdiv {
+	position:absolute;
+	width: 100%;
+	left: 30%;
+}
+.mainRowRightPart {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    align-items: center;
+}
+.typename {
+	/* font-family: Roboto Slab; */
+	font-family: 'Roboto', sans-serif;
+font-style: normal;
+font-weight: normal;
+font-size: 15px;
+line-height: 24px;
+/* identical to box height */
+
+
+color: #297DB6;
+}
+.rightdiv {
+	display: flex;
+	
+
+	padding-bottom: 5px;
+	border-bottom: 1px solid rgba(95, 109, 128, 0.38);
+    width: 40%;
+		margin-bottom: 10px;
+}
+.mainRowRightPart .rightdiv {
+	width: 100%;
+}
+.rightuser {
+	/* font-family: Roboto; */
+	font-family: 'Roboto', sans-serif;
+font-style: normal;
+font-weight: normal;
+font-size: 13px;
+line-height: 129.69%;
+color:#000000;
+}
+.rightuser > a {
+	font-family: 'Roboto', sans-serif;
+	/* font-family: Roboto; */
+font-style: normal;
+font-weight: normal;
+font-size: 13px;
+line-height: 129.69%;
+color:#000000;
+text-decoration: none;
+}
+.leftspan {
+	position: absolute;
+		width: 227px;
+height: 47px;
+left: 310px;
+top: 105px;
+
+font-family: 'Roboto', sans-serif;
+/* font-family: Roboto Slab; */
+font-style: normal;
+font-weight: normal;
+font-size: 30px;
+line-height: 47px;
+
+color: #FFFFFF;
+}
+.leftspan1{
+	position: absolute;
+width: 292px;
+height: 45px;
+left: 280px;
+top: 190px;
+
+font-family: Stoke;
+font-style: normal;
+font-weight: normal;
+font-size: 33px;
+line-height: 45px;
+/* identical to box height */
+
+
+color: #FFFFFF;
+
+}
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.he {
+
+	font-family: 'Roboto', sans-serif;
+	/* font-family: Roboto Slab; */
+font-size: 24px;
+font-style: normal;
+font-weight: 500;
+line-height: 32px;
+letter-spacing: 0em;
+text-align: center;
+
+	color: #1B2E4B;
+
+}
+
+.centered img {
+  width: 150px;
+ 
+}
+.Row {
+    display: table;
+    width: 100%; /*Optional*/
+    table-layout: fixed; /*Optional*/
+    border-spacing: 10px; /*Optional*/
+}
+.mainRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.Column {
+/* display: table-cell; */
+display: inline-flex;
+width: 189px;
+/* left: 872px;
+top: 200px;
+padding-top:40px;
+background: #FFFFFF; */
+
+}
+.Column a {
+    display: block;
+	text-align: center;
+	text-transform: uppercase;
+	text-decoration: none;
+	color: #000;
+	font-size: 15px;
+}
+.Column a img {
+	background: #e5e5e5;
+	border-radius: 189px;
+	-o-border-radius: 189px;
+	-webkit-border-radius: 189px;
+	margin: 0 0 20px;
+	transition: all 300ms ease;
+	-o-transition: all 300ms ease;
+	-ms-transition: all 300ms ease;
+	-moz-transition: all 300ms ease;
+	-webkit-transition: all 300ms ease;
+}
+.Column a:hover img {
+	background: #91e2a8;
+	transition: all 300ms ease;
+	-o-transition: all 300ms ease;
+	-ms-transition: all 300ms ease;
+	-moz-transition: all 300ms ease;
+	-webkit-transition: all 300ms ease;
+}
+input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus,input:-webkit-autofill:active {
+	background:#FFFFFF !important; 
+}
+.bottom {
+    /* position: absolute;
+	right:30px;
+    bottom: 10px;
+
+	font-family: 'Roboto', sans-serif;
+font-family: Roboto Slab;
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 18px;
+
+color: #979797; */
+background: #297db6;
+color: #fff;
+font-size: 15px;
+line-height: 50px;
+display: flex;
+position: absolute;
+right: 30px;
+bottom: 30px;
+border-radius: 50px;
+-o-border-radius: 50px;
+-webkt-border-radius: 50px;
+padding: 5px 7px 5px 24px;
+}
+.bottom img {
+	width: 50px;
+	height: 50px;
+	border-radius: 50px;
+	-o-border-radius: 50px;
+	-webkt-border-radius: 50px;
+	background: #fff;
+} 
+.label {
+display: flex;
+    margin-left: -10px;
+	height: 22px;
+width: 75px;
+left: 0px;
+top: 0px;
+border-radius: nullpx;
+color: #77869E;
+
+	font-family: Nunito;
+font-style: normal;
+font-weight: normal;
+font-size: 12px !important;
+line-height: 22px;
+/* identical to box height */
+
+letter-spacing: 0.270833px;
+
+color: #77869E;
+	text-align: left;
+
+}
+.centered img {
+  width: 150px;
+}
+.input-group{
+	height: 30px;
+	width: 300px;
+  margin: 8px 0;
+  box-sizing: border-box;
+		border: none; 
+border-width: 0; 
+box-shadow: none;
+color: #042C5C;
+border-bottom: 1px solid #77869E;
+background: #F4F8F9;
+
+}
+.button-group
+{
+	height: 40px;
+	width: 200px;
+	left: 1100px;
+	top: 575px;
+	background: #297DB6;
+	border-radius: 10px;
+
+
+
+}
+.alignRight > a {
+    float: right;
+		color: #0047CC;
+		font-family: Nunito;
+font-style: normal;
+font-weight: normal;
+font-size: 12px !important;
+line-height: 22px;
+/* identical to box height */
+
+letter-spacing: 0.270833px;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+}
+.alignLeft {
+		color: #77869E;
+		margin-left: -10px;
+		font-family: Nunito;
+font-style: normal;
+font-weight: normal;
+font-size: 12px !important;
+line-height: 22px;
+/* identical to box height */
+
+letter-spacing: 0.270833px;
+position: absolute;
+    left: 10px;
+}
+.footer {
+    position: fixed;
+	text-align: right;
+    bottom: 0px;
+	width: 50%;
+	color: #1B2E4B;
+}
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.form-control {
+	padding: 26px 20px !important;
+	border: 1px solid #ddd !important;
+	border-radius: 10px !important;
+	-o-border-radius: 10px !important;
+	-webkit-border-radius: 10px !important;
+}
+.login-form {
+	width: 400px;
+}
+input.pin {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    -o-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    padding: 12px;
+    width: 46px;
+}
+.btnSubmit {
+	padding: 10px 15px;
+    border-radius: 10px;
+    -o-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+
+.PassField {
+	position: relative;
+}
+#viewPassword {
+	background: url(../images/eye.png) no-repeat center center;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 0;
+    right: 8px;
+    bottom: 0;
+    margin: auto;
+	background-size: 52%;
+}
+.PassField input[type="checkbox"] {
+    position: absolute;
+    top: 0;
+    right: 12px;
+    bottom: 0;
+    margin: auto;
+    width: 32px;
+    height: 32px;
+    opacity: 0;
+    z-index: 9;
+}
+.PassField input[type="checkbox"] + span#viewPassword::after {
+    position: absolute;
+    width: 2px;
+    height: 21px;
+    content: "";
+    left: 19px;
+    background: #000;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    transform: rotate(24deg);
+}
+.PassField input[type="checkbox"]:checked + span#viewPassword::after {
+	display: none;
+}
+
+
+@media only screen and (min-width: 320px) and (max-width: 1024px) {
+.leftImg {
+    width: 100%;
+	position: relative;
+	height: auto;
+}
+.leftImg img {
+    width: 84%;
+	margin: 50px 0;
+}
+.rightCont {
+    width: 100%;
+	position: relative;
+	height: auto;
+}
+.logoMykronicle {
+    margin: 0 0 30px;
+}
+.Column {
+    width: 32%;
+}
+.Column img {
+    width: 100%;
+}
+.bottom {
+    position: relative;
+    bottom: 0;
+    margin: 50px 0 0 auto;
+    display: block;
+    clear: both;
+    right: 0;
+}
+
+
+
+
+}

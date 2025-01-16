@@ -1,0 +1,9 @@
+/* Designed by Sagar speecially for modals in Mykronicle*/
+
+.add-recipe-modal > .form-group{
+	width: 100%;
+}
+
+.add-recipe-modal > .form-group > .form-control{
+	margin: 0 0 10px;
+}

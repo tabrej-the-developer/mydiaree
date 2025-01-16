@@ -1,0 +1,790 @@
+<html>
+<head><meta http-equiv=Content-Type content="text/html; charset=UTF-8">
+<style type="text/css">
+<!--
+span.cls_003{font-family:Arial,serif;font-size:16.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+div.cls_003{font-family:Arial,serif;font-size:16.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+span.cls_004{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
+div.cls_004{font-family:Arial,serif;font-size:8.0px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
+span.cls_006{font-family:"Calibri Bold",serif;font-size:12.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+div.cls_006{font-family:"Calibri Bold",serif;font-size:12.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+span.cls_007{font-family:"Calibri Bold",serif;font-size:10.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+div.cls_007{font-family:"Calibri Bold",serif;font-size:10.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+span.cls_008{font-family:"Calibri Bold",serif;font-size:8.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+div.cls_008{font-family:"Calibri Bold",serif;font-size:8.0px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+span.cls_002{font-family:"Calibri",serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
+div.cls_002{font-family:"Calibri",serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
+span.cls_009{font-family:"Calibri Italic",serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:italic;text-decoration: none}
+div.cls_009{font-family:"Calibri Italic",serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:italic;text-decoration: none}
+span.cls_010{font-family:"Calibri Bold Italic",serif;font-size:10.1px;color:rgb(0,0,0);font-weight:bold;font-style:italic;text-decoration: none}
+div.cls_010{font-family:"Calibri Bold Italic",serif;font-size:10.1px;color:rgb(0,0,0);font-weight:bold;font-style:italic;text-decoration: none}
+span.cls_011{font-family:"Calibri Bold",serif;font-size:11.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+div.cls_011{font-family:"Calibri Bold",serif;font-size:11.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+span.cls_045{font-family:"Calibri Italic",serif;font-size:10.1px;color:rgb(0,0,255);font-weight:normal;font-style:italic;text-decoration: underline}
+div.cls_045{font-family:"Calibri Italic",serif;font-size:10.1px;color:rgb(0,0,255);font-weight:normal;font-style:italic;text-decoration: none}
+span.cls_015{font-family:"Calibri",serif;font-size:11.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
+div.cls_015{font-family:"Calibri",serif;font-size:11.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
+span.cls_017{font-family:"Calibri",serif;font-size:9.2px;color:rgb(128,127,128);font-weight:normal;font-style:normal;text-decoration: none}
+div.cls_017{font-family:"Calibri",serif;font-size:9.2px;color:rgb(128,127,128);font-weight:normal;font-style:normal;text-decoration: none}
+span.cls_016{font-family:"Calibri",serif;font-size:12.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
+div.cls_016{font-family:"Calibri",serif;font-size:12.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
+span.cls_018{font-family:"Calibri Italic",serif;font-size:12.1px;color:rgb(0,0,0);font-weight:normal;font-style:italic;text-decoration: none}
+div.cls_018{font-family:"Calibri Italic",serif;font-size:12.1px;color:rgb(0,0,0);font-weight:normal;font-style:italic;text-decoration: none}
+span.cls_046{font-family:"Calibri",serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: underline}
+div.cls_046{font-family:"Calibri",serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
+span.cls_047{font-family:Arial,serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: underline}
+div.cls_047{font-family:Arial,serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
+span.cls_048{font-family:"Calibri Bold",serif;font-size:10.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: underline}
+div.cls_048{font-family:"Calibri Bold",serif;font-size:10.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+span.cls_024{font-family:"Candara Italic",serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:italic;text-decoration: none}
+div.cls_024{font-family:"Candara Italic",serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:italic;text-decoration: none}
+span.cls_049{font-family:"Calibri Bold",serif;font-size:12.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: underline}
+div.cls_049{font-family:"Calibri Bold",serif;font-size:12.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+span.cls_026{font-family:"Calibri Italic",serif;font-size:8.0px;color:rgb(0,0,0);font-weight:normal;font-style:italic;text-decoration: none}
+div.cls_026{font-family:"Calibri Italic",serif;font-size:8.0px;color:rgb(0,0,0);font-weight:normal;font-style:italic;text-decoration: none}
+span.cls_030{font-family:"Calibri Bold Italic",serif;font-size:12.1px;color:rgb(0,0,0);font-weight:bold;font-style:italic;text-decoration: none}
+div.cls_030{font-family:"Calibri Bold Italic",serif;font-size:12.1px;color:rgb(0,0,0);font-weight:bold;font-style:italic;text-decoration: none}
+span.cls_035{font-family:"Calibri",serif;font-size:10.1px;color:rgb(49,100,255);font-weight:normal;font-style:normal;text-decoration: none}
+div.cls_035{font-family:"Calibri",serif;font-size:10.1px;color:rgb(49,100,255);font-weight:normal;font-style:normal;text-decoration: none}
+span.cls_050{font-family:"Calibri",serif;font-size:11.1px;color:rgb(0,0,255);font-weight:normal;font-style:normal;text-decoration: underline}
+div.cls_050{font-family:"Calibri",serif;font-size:11.1px;color:rgb(0,0,255);font-weight:normal;font-style:normal;text-decoration: none}
+span.cls_034{font-family:"Calibri Bold Italic",serif;font-size:9.2px;color:rgb(0,0,0);font-weight:bold;font-style:italic;text-decoration: none}
+div.cls_034{font-family:"Calibri Bold Italic",serif;font-size:9.2px;color:rgb(0,0,0);font-weight:bold;font-style:italic;text-decoration: none}
+span.cls_022{font-family:Arial,serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
+div.cls_022{font-family:Arial,serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
+span.cls_037{font-family:Arial,serif;font-size:11.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
+div.cls_037{font-family:Arial,serif;font-size:11.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
+span.cls_039{font-family:"Calibri Italic",serif;font-size:11.1px;color:rgb(0,0,0);font-weight:normal;font-style:italic;text-decoration: none}
+div.cls_039{font-family:"Calibri Italic",serif;font-size:11.1px;color:rgb(0,0,0);font-weight:normal;font-style:italic;text-decoration: none}
+span.cls_051{font-family:"Calibri Bold",serif;font-size:16.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: underline}
+div.cls_051{font-family:"Calibri Bold",serif;font-size:16.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+span.cls_041{font-family:"Calibri",serif;font-size:9.2px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
+div.cls_041{font-family:"Calibri",serif;font-size:9.2px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
+span.cls_042{font-family:"Calibri Bold",serif;font-size:9.2px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+div.cls_042{font-family:"Calibri Bold",serif;font-size:9.2px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+-->
+</style>
+<script type="text/javascript" src="97c0762a-299b-11eb-8b25-0cc47a792c0a_id_97c0762a-299b-11eb-8b25-0cc47a792c0a_files/wz_jsgraphics.js"></script>
+</head>
+<body>
+<div style="position:absolute;left:50%;margin-left:-297px;top:0px;width:595px;height:841px;border-style:outset;overflow:hidden">
+<div style="position:absolute;left:0px;top:0px">
+<img src="97c0762a-299b-11eb-8b25-0cc47a792c0a_id_97c0762a-299b-11eb-8b25-0cc47a792c0a_files/background01.jpg" width=595 height=841></div>
+<div style="position:absolute;left:241.20px;top:36.61px" class="cls_003"><span class="cls_003">CHILD ENROLMENT FORM</span></div>
+<div style="position:absolute;left:290.94px;top:55.57px" class="cls_004"><span class="cls_004">Point Cook Montessori Centre</span></div>
+<div style="position:absolute;left:255.58px;top:64.69px" class="cls_004"><span class="cls_004">13-19 Boardwalk Boulevard, Point Cook, Vic 3030</span></div>
+<div style="position:absolute;left:313.83px;top:74.05px" class="cls_004"><span class="cls_004">Ph 03 8353 1299</span></div>
+<div style="position:absolute;left:232.42px;top:92.53px" class="cls_006"><span class="cls_006">SECTION 1: CHILD DETAILS</span></div>
+<div style="position:absolute;left:44.70px;top:107.65px" class="cls_007"><span class="cls_007">Full Name:</span></div>
+<div style="position:absolute;left:276.92px;top:107.65px" class="cls_007"><span class="cls_007">Other name(s) he/she is known by:</span></div>
+<div style="position:absolute;left:44.70px;top:135.25px" class="cls_007"><span class="cls_007">Date of Birth:</span></div>
+<div style="position:absolute;left:277.05px;top:135.25px" class="cls_007"><span class="cls_007">Language he/she speaks:</span></div>
+<div style="position:absolute;left:44.70px;top:147.73px" class="cls_008"><span class="cls_008">(DD/MM/YYYY)</span></div>
+<div style="position:absolute;left:44.70px;top:166.93px" class="cls_007"><span class="cls_007">Country of Birth:</span></div>
+<div style="position:absolute;left:279.16px;top:166.93px" class="cls_007"><span class="cls_007">Religion:</span></div>
+<div style="position:absolute;left:44.70px;top:191.89px" class="cls_007"><span class="cls_007">Gender:</span></div>
+<div style="position:absolute;left:114.65px;top:191.89px" class="cls_007"><span class="cls_007">Female</span></div>
+<div style="position:absolute;left:197.96px;top:191.89px" class="cls_007"><span class="cls_007">Male</span></div>
+<div style="position:absolute;left:276.05px;top:191.89px" class="cls_007"><span class="cls_007">Other</span></div>
+<div style="position:absolute;left:44.70px;top:219.49px" class="cls_007"><span class="cls_007">Home Address:</span></div>
+<div style="position:absolute;left:44.70px;top:251.65px" class="cls_007"><span class="cls_007">Family Cultural Background / Special Considerations:</span></div>
+<div style="position:absolute;left:302.18px;top:251.65px" class="cls_007"><span class="cls_007">Is the child of an Aboriginal or Torres Strait Islander origin?</span></div>
+<div style="position:absolute;left:44.70px;top:276.13px" class="cls_002"><span class="cls_002">_____________________________</span></div>
+<div style="position:absolute;left:345.95px;top:276.13px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:438.15px;top:276.13px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.70px;top:293.89px" class="cls_007"><span class="cls_007">Has your child attended or are they currently attending childcare?</span></div>
+<div style="position:absolute;left:180.03px;top:351.25px" class="cls_006"><span class="cls_006">SECTION 2: PARENT/GUARDIAN INFORMATION</span></div>
+<div style="position:absolute;left:55.23px;top:365.89px" class="cls_009"><span class="cls_009">A </span><span class="cls_010">parent</span><span class="cls_009"> includes a guardian of the child and a person with parental responsibility for the child under a decision or court</span></div>
+<div style="position:absolute;left:285.66px;top:378.13px" class="cls_009"><span class="cls_009">order.</span></div>
+<div style="position:absolute;left:46.51px;top:390.13px" class="cls_010"><span class="cls_010">Parental responsibility</span><span class="cls_009"> is a term defined under section 61C of the Family Law Act 1975, which means “all the duties, powers,</span></div>
+<div style="position:absolute;left:135.23px;top:402.37px" class="cls_009"><span class="cls_009">responsibilities and authority which, by law, parents have in relation to children”</span></div>
+<div style="position:absolute;left:247.11px;top:416.53px" class="cls_011"><span class="cls_011">Parent/Guardian No.1</span></div>
+<div style="position:absolute;left:44.70px;top:430.45px" class="cls_007"><span class="cls_007">Full Name:</span></div>
+<div style="position:absolute;left:297.27px;top:430.45px" class="cls_007"><span class="cls_007">Relation to child:</span></div>
+<div style="position:absolute;left:44.70px;top:459.25px" class="cls_007"><span class="cls_007">Home Address:</span></div>
+<div style="position:absolute;left:297.83px;top:459.25px" class="cls_007"><span class="cls_007">Does the child live with this parent?</span></div>
+<div style="position:absolute;left:44.70px;top:488.29px" class="cls_007"><span class="cls_007">Contact Details:</span></div>
+<div style="position:absolute;left:44.70px;top:500.53px" class="cls_007"><span class="cls_007">(H):</span></div>
+<div style="position:absolute;left:186.50px;top:500.53px" class="cls_007"><span class="cls_007">(W):</span></div>
+<div style="position:absolute;left:326.54px;top:498.61px" class="cls_007"><span class="cls_007">(M):</span></div>
+<div style="position:absolute;left:44.70px;top:517.09px" class="cls_007"><span class="cls_007">Email Address:</span></div>
+<div style="position:absolute;left:44.70px;top:537.25px" class="cls_011"><span class="cls_011">Occupation:</span></div>
+<div style="position:absolute;left:281.48px;top:537.25px" class="cls_011"><span class="cls_011">Work Address:</span></div>
+<div style="position:absolute;left:247.11px;top:564.85px" class="cls_011"><span class="cls_011">Parent/Guardian No.2</span></div>
+<div style="position:absolute;left:44.70px;top:580.45px" class="cls_007"><span class="cls_007">Full Name:</span></div>
+<div style="position:absolute;left:297.27px;top:580.45px" class="cls_007"><span class="cls_007">Relation to child:</span></div>
+<div style="position:absolute;left:44.70px;top:614.53px" class="cls_007"><span class="cls_007">Home Address:</span></div>
+<div style="position:absolute;left:297.83px;top:614.53px" class="cls_007"><span class="cls_007">Does the child live with this parent?</span></div>
+<div style="position:absolute;left:44.70px;top:649.81px" class="cls_007"><span class="cls_007">Contact Details:</span></div>
+<div style="position:absolute;left:44.70px;top:662.05px" class="cls_007"><span class="cls_007">(H):</span></div>
+<div style="position:absolute;left:186.50px;top:662.05px" class="cls_007"><span class="cls_007">(W):</span></div>
+<div style="position:absolute;left:326.54px;top:661.09px" class="cls_007"><span class="cls_007">(M):</span></div>
+<div style="position:absolute;left:44.70px;top:677.89px" class="cls_007"><span class="cls_007">Email Address:</span></div>
+<div style="position:absolute;left:44.70px;top:705.97px" class="cls_011"><span class="cls_011">Occupation:</span></div>
+<div style="position:absolute;left:281.48px;top:705.97px" class="cls_011"><span class="cls_011">Work Address:</span></div>
+<div style="position:absolute;left:90.06px;top:804.13px" class="cls_002"><span class="cls_002">Page 1 of 12</span></div>
+<div style="position:absolute;left:485.34px;top:804.13px" class="cls_002"><span class="cls_002">CWA</span></div>
+</div>
+<div style="position:absolute;left:50%;margin-left:-297px;top:851px;width:595px;height:841px;border-style:outset;overflow:hidden">
+<div style="position:absolute;left:0px;top:0px">
+<img src="97c0762a-299b-11eb-8b25-0cc47a792c0a_id_97c0762a-299b-11eb-8b25-0cc47a792c0a_files/background02.jpg" width=595 height=841></div>
+<div style="position:absolute;left:241.20px;top:36.61px" class="cls_003"><span class="cls_003">CHILD ENROLMENT FORM</span></div>
+<div style="position:absolute;left:290.94px;top:55.57px" class="cls_004"><span class="cls_004">Point Cook Montessori Centre</span></div>
+<div style="position:absolute;left:255.58px;top:64.69px" class="cls_004"><span class="cls_004">13-19 Boardwalk Boulevard, Point Cook, Vic 3030</span></div>
+<div style="position:absolute;left:313.83px;top:74.05px" class="cls_004"><span class="cls_004">Ph 03 8353 1299</span></div>
+<div style="position:absolute;left:216.31px;top:105.97px" class="cls_006"><span class="cls_006">SECTION 3: CHILD CARE SUBSIDY</span></div>
+<div style="position:absolute;left:54.30px;top:135.25px" class="cls_002"><span class="cls_002">The Child Care Subsidy (CCS) is a subsidy from the Australian Government that offers different levels of financial</span></div>
+<div style="position:absolute;left:54.30px;top:147.49px" class="cls_002"><span class="cls_002">assistance to help cover the cost of childcare for eligible families and will be paid directly to services. How much you</span></div>
+<div style="position:absolute;left:54.30px;top:159.73px" class="cls_002"><span class="cls_002">receive depends on your individual circumstances. Amiga Montessori is under no obligation to estimate or reduce the</span></div>
+<div style="position:absolute;left:54.30px;top:171.97px" class="cls_002"><span class="cls_002">fees for the families of children enrolled at the centre in advance OR to determine whether they qualify for a fee reduction</span></div>
+<div style="position:absolute;left:54.30px;top:184.21px" class="cls_002"><span class="cls_002">through Child Care Subsidy. It is the responsibility of the parent / guardian to apply for CCS</span></div>
+<div style="position:absolute;left:44.22px;top:207.01px" class="cls_007"><span class="cls_007">Will you be claiming CCS?</span></div>
+<div style="position:absolute;left:311.34px;top:211.33px" class="cls_011"><span class="cls_011">For more information please visit:</span></div>
+<div style="position:absolute;left:44.22px;top:219.25px" class="cls_007"><span class="cls_007">Yes</span><span class="cls_002">: Please fill out the below details</span></div>
+<div style="position:absolute;left:311.34px;top:224.77px" class="cls_045"><span class="cls_045"> </span><A HREF="http://www.familyassist.gov.au/">www.familyassist.gov.au</A> </div>
+<div style="position:absolute;left:44.22px;top:231.49px" class="cls_007"><span class="cls_007">No:</span><span class="cls_002">  Please continue to Section 9.</span></div>
+<div style="position:absolute;left:311.34px;top:237.01px" class="cls_045"><span class="cls_045"> </span><A HREF="http://www.education.gov.au/childcarepackage/">www.education.gov.au/ChildCarePackage</A> </div>
+<div style="position:absolute;left:311.34px;top:249.25px" class="cls_045"><span class="cls_045"> </span><A HREF="https://my.gov.au/">https://my.gov.au/</A> </div>
+<div style="position:absolute;left:115.92px;top:267.97px" class="cls_011"><span class="cls_011">If claiming CCS please ensure that the following details are provided accurately:</span></div>
+<div style="position:absolute;left:253.50px;top:287.17px" class="cls_011"><span class="cls_011">Parent Information</span></div>
+<div style="position:absolute;left:44.22px;top:304.45px" class="cls_002"><span class="cls_002">CRN of parent claiming CCS:</span></div>
+<div style="position:absolute;left:44.22px;top:327.97px" class="cls_002"><span class="cls_002">Date of birth of parent claiming CCS:</span></div>
+<div style="position:absolute;left:44.22px;top:352.93px" class="cls_002"><span class="cls_002">Full name and surname of parent claiming CCS</span></div>
+<div style="position:absolute;left:257.21px;top:377.65px" class="cls_011"><span class="cls_011">Child Information</span></div>
+<div style="position:absolute;left:44.22px;top:390.61px" class="cls_002"><span class="cls_002">CRN of child claiming CCS</span></div>
+<div style="position:absolute;left:44.22px;top:415.09px" class="cls_002"><span class="cls_002">Date of birth of child claiming CCS:</span></div>
+<div style="position:absolute;left:44.22px;top:441.25px" class="cls_002"><span class="cls_002">Full name and surname of child claiming CCS:</span></div>
+<div style="position:absolute;left:206.14px;top:471.25px" class="cls_006"><span class="cls_006">SECTION 4: BOOKING INFORMATION</span></div>
+<div style="position:absolute;left:43.74px;top:485.89px" class="cls_009"><span class="cls_009">*All sessions are subject to conditions and availability. Late collection fees apply to all sessions and will be charged to your</span></div>
+<div style="position:absolute;left:43.74px;top:498.13px" class="cls_009"><span class="cls_009">account</span></div>
+<div style="position:absolute;left:43.74px;top:510.85px" class="cls_006"><span class="cls_006">Session</span></div>
+<div style="position:absolute;left:213.66px;top:510.85px" class="cls_006"><span class="cls_006">Session</span></div>
+<div style="position:absolute;left:284.22px;top:510.85px" class="cls_006"><span class="cls_006">Daily</span></div>
+<div style="position:absolute;left:334.62px;top:510.85px" class="cls_006"><span class="cls_006">Booked days care will be provided for:</span></div>
+<div style="position:absolute;left:213.66px;top:525.49px" class="cls_006"><span class="cls_006">Attendance</span></div>
+<div style="position:absolute;left:284.22px;top:525.49px" class="cls_006"><span class="cls_006">Fee</span></div>
+<div style="position:absolute;left:334.62px;top:525.49px" class="cls_015"><span class="cls_015">(please √ applicable)</span></div>
+<div style="position:absolute;left:334.62px;top:539.65px" class="cls_017"><span class="cls_017">Monday</span></div>
+<div style="position:absolute;left:377.10px;top:539.65px" class="cls_017"><span class="cls_017">Tuesday</span></div>
+<div style="position:absolute;left:419.58px;top:539.65px" class="cls_017"><span class="cls_017">Wednesday</span></div>
+<div style="position:absolute;left:474.54px;top:539.65px" class="cls_017"><span class="cls_017">Thursday</span></div>
+<div style="position:absolute;left:518.94px;top:539.65px" class="cls_017"><span class="cls_017">Friday</span></div>
+<div style="position:absolute;left:43.74px;top:540.61px" class="cls_016"><span class="cls_016">Full Day</span></div>
+<div style="position:absolute;left:213.66px;top:540.61px" class="cls_016"><span class="cls_016">7am - 6pm</span></div>
+<div style="position:absolute;left:284.22px;top:540.61px" class="cls_016"><span class="cls_016">$136.00</span></div>
+<div style="position:absolute;left:43.74px;top:555.25px" class="cls_018"><span class="cls_018">11 Hours: </span><span class="cls_002">Children 24-36 months</span></div>
+<div style="position:absolute;left:334.62px;top:569.41px" class="cls_017"><span class="cls_017">Monday</span></div>
+<div style="position:absolute;left:377.10px;top:569.41px" class="cls_017"><span class="cls_017">Tuesday</span></div>
+<div style="position:absolute;left:419.58px;top:569.41px" class="cls_017"><span class="cls_017">Wednesday</span></div>
+<div style="position:absolute;left:474.54px;top:569.41px" class="cls_017"><span class="cls_017">Thursday</span></div>
+<div style="position:absolute;left:518.94px;top:569.41px" class="cls_017"><span class="cls_017">Friday</span></div>
+<div style="position:absolute;left:43.74px;top:570.37px" class="cls_016"><span class="cls_016">Full Day</span></div>
+<div style="position:absolute;left:213.66px;top:570.37px" class="cls_016"><span class="cls_016">7am - 6pm</span></div>
+<div style="position:absolute;left:284.22px;top:570.37px" class="cls_016"><span class="cls_016">$135.00</span></div>
+<div style="position:absolute;left:43.74px;top:585.25px" class="cls_018"><span class="cls_018">11 Hours: </span><span class="cls_002">Children 3-6yrs</span></div>
+<div style="position:absolute;left:334.62px;top:600.13px" class="cls_017"><span class="cls_017">Monday</span></div>
+<div style="position:absolute;left:377.10px;top:600.13px" class="cls_017"><span class="cls_017">Tuesday</span></div>
+<div style="position:absolute;left:419.58px;top:600.13px" class="cls_017"><span class="cls_017">Wednesday</span></div>
+<div style="position:absolute;left:474.54px;top:600.13px" class="cls_017"><span class="cls_017">Thursday</span></div>
+<div style="position:absolute;left:518.94px;top:600.13px" class="cls_017"><span class="cls_017">Friday</span></div>
+<div style="position:absolute;left:43.74px;top:600.37px" class="cls_016"><span class="cls_016">Mid Session</span></div>
+<div style="position:absolute;left:213.66px;top:600.37px" class="cls_016"><span class="cls_016">8am - 5pm</span></div>
+<div style="position:absolute;left:284.22px;top:600.37px" class="cls_016"><span class="cls_016">$118.00</span></div>
+<div style="position:absolute;left:43.74px;top:615.01px" class="cls_018"><span class="cls_018">9 Hours: </span><span class="cls_002"> Children 24-36 months</span></div>
+<div style="position:absolute;left:334.62px;top:630.13px" class="cls_017"><span class="cls_017">Monday</span></div>
+<div style="position:absolute;left:377.10px;top:630.13px" class="cls_017"><span class="cls_017">Tuesday</span></div>
+<div style="position:absolute;left:419.58px;top:630.13px" class="cls_017"><span class="cls_017">Wednesday</span></div>
+<div style="position:absolute;left:474.54px;top:630.13px" class="cls_017"><span class="cls_017">Thursday</span></div>
+<div style="position:absolute;left:518.94px;top:630.13px" class="cls_017"><span class="cls_017">Friday</span></div>
+<div style="position:absolute;left:43.74px;top:630.13px" class="cls_016"><span class="cls_016">Mid Session</span></div>
+<div style="position:absolute;left:213.66px;top:630.13px" class="cls_016"><span class="cls_016">8am - 5pm</span></div>
+<div style="position:absolute;left:284.22px;top:630.13px" class="cls_016"><span class="cls_016">$117.00</span></div>
+<div style="position:absolute;left:43.74px;top:644.77px" class="cls_018"><span class="cls_018">9 Hours: </span><span class="cls_002">Children 3 - 6yrs</span></div>
+<div style="position:absolute;left:43.74px;top:659.89px" class="cls_016"><span class="cls_016">Sessional </span><span class="cls_018">6 Hours</span></div>
+<div style="position:absolute;left:213.66px;top:659.89px" class="cls_016"><span class="cls_016">9am - 3pm</span></div>
+<div style="position:absolute;left:284.22px;top:659.89px" class="cls_016"><span class="cls_016">$  83.00</span></div>
+<div style="position:absolute;left:334.62px;top:658.93px" class="cls_017"><span class="cls_017">Monday</span></div>
+<div style="position:absolute;left:377.10px;top:658.93px" class="cls_017"><span class="cls_017">Tuesday</span></div>
+<div style="position:absolute;left:419.58px;top:658.93px" class="cls_017"><span class="cls_017">Wednesday</span></div>
+<div style="position:absolute;left:474.54px;top:658.93px" class="cls_017"><span class="cls_017">Thursday</span></div>
+<div style="position:absolute;left:518.94px;top:658.93px" class="cls_017"><span class="cls_017">Friday</span></div>
+<div style="position:absolute;left:43.74px;top:674.53px" class="cls_002"><span class="cls_002">Kindergarten Program attendance only</span></div>
+<div style="position:absolute;left:43.74px;top:687.25px" class="cls_007"><span class="cls_007">Date on which care will commence (does not included orientation sessions):</span></div>
+<div style="position:absolute;left:365.99px;top:687.25px" class="cls_007"><span class="cls_007">_________________</span></div>
+<div style="position:absolute;left:43.74px;top:713.41px" class="cls_007"><span class="cls_007">Parent Signature: __________________________</span></div>
+<div style="position:absolute;left:43.74px;top:740.29px" class="cls_007"><span class="cls_007">Dates for arranged orientation sessions: 1) _________________</span></div>
+<div style="position:absolute;left:318.57px;top:740.29px" class="cls_007"><span class="cls_007">2) ________________</span></div>
+<div style="position:absolute;left:90.06px;top:804.13px" class="cls_002"><span class="cls_002">Page 2 of 12</span></div>
+<div style="position:absolute;left:485.34px;top:804.13px" class="cls_002"><span class="cls_002">CWA</span></div>
+</div>
+<div style="position:absolute;left:50%;margin-left:-297px;top:1702px;width:595px;height:841px;border-style:outset;overflow:hidden">
+<div style="position:absolute;left:0px;top:0px">
+<img src="97c0762a-299b-11eb-8b25-0cc47a792c0a_id_97c0762a-299b-11eb-8b25-0cc47a792c0a_files/background03.jpg" width=595 height=841></div>
+<div style="position:absolute;left:241.20px;top:36.61px" class="cls_003"><span class="cls_003">CHILD ENROLMENT FORM</span></div>
+<div style="position:absolute;left:290.94px;top:55.57px" class="cls_004"><span class="cls_004">Point Cook Montessori Centre</span></div>
+<div style="position:absolute;left:255.58px;top:64.69px" class="cls_004"><span class="cls_004">13-19 Boardwalk Boulevard, Point Cook, Vic 3030</span></div>
+<div style="position:absolute;left:313.83px;top:74.05px" class="cls_004"><span class="cls_004">Ph 03 8353 1299</span></div>
+<div style="position:absolute;left:56.97px;top:93.25px" class="cls_006"><span class="cls_006">SECTION 5: COURT ORDERS/PARENTING ORDERS OR PARENTING PLANS RELATING TO THE CHILD</span></div>
+<div style="position:absolute;left:46.25px;top:107.89px" class="cls_009"><span class="cls_009">According to the National Regulations 2011- (160), the centre must be informed & have record of details of any court orders,</span></div>
+<div style="position:absolute;left:61.55px;top:119.89px" class="cls_009"><span class="cls_009">parenting order or parenting plans relating to residence, child’s contact with parents or other person, powers, duties,</span></div>
+<div style="position:absolute;left:120.49px;top:130.21px" class="cls_009"><span class="cls_009">responsibilities or authorities of any person in relation to the child or access to the child.</span></div>
+<div style="position:absolute;left:43.74px;top:150.13px" class="cls_010"><span class="cls_010">Parenting order </span><span class="cls_009">means a parenting order within the meaning of section 64B(1) of the Family Law Act 1975 (commonwealth)</span></div>
+<div style="position:absolute;left:43.74px;top:162.37px" class="cls_010"><span class="cls_010">Parenting plan</span><span class="cls_007"> </span><span class="cls_002">means a parenting plan within the meaning of section 63C (1) of the Family Law Act 1975 includes a</span></div>
+<div style="position:absolute;left:43.74px;top:174.61px" class="cls_002"><span class="cls_002">registered parenting plan within the meaning of section 63C (6) of that Act.</span></div>
+<div style="position:absolute;left:43.74px;top:191.65px" class="cls_007"><span class="cls_007">Are there any court orders/parenting orders or parenting plans relating to the powers & responsibilities of the parents in</span></div>
+<div style="position:absolute;left:43.74px;top:203.89px" class="cls_007"><span class="cls_007">relation to the child or access to the child?</span></div>
+<div style="position:absolute;left:64.09px;top:216.13px" class="cls_007"><span class="cls_007">No</span><span class="cls_002"> - Continue to next section</span></div>
+<div style="position:absolute;left:64.09px;top:228.13px" class="cls_007"><span class="cls_007">Yes</span><span class="cls_002"> - Please complete this section of the application.</span></div>
+<div style="position:absolute;left:41.74px;top:240.37px" class="cls_002"><span class="cls_002">1.   Please describe the orders and provide the contact details of any person given powers, duties, responsibilities or</span></div>
+<div style="position:absolute;left:59.74px;top:252.61px" class="cls_002"><span class="cls_002">authorities. Name: ___________________________________________ Contact: _______________________</span></div>
+<div style="position:absolute;left:59.74px;top:270.85px" class="cls_002"><span class="cls_002">Do these court orders/parenting orders/parenting plan change the powers of the parent or guardian to:</span></div>
+<div style="position:absolute;left:88.09px;top:283.09px" class="cls_002"><span class="cls_002">Consent to the medical treatment of the child;</span></div>
+<div style="position:absolute;left:88.09px;top:297.25px" class="cls_002"><span class="cls_002">Request or permit the administration of medication to the child;</span></div>
+<div style="position:absolute;left:88.09px;top:311.17px" class="cls_002"><span class="cls_002">The powers, duties, responsibilities or authorities of any person in relation to the child or access to the child</span></div>
+<div style="position:absolute;left:88.09px;top:325.33px" class="cls_002"><span class="cls_002">(regulation 160(3)(c));</span></div>
+<div style="position:absolute;left:88.09px;top:339.25px" class="cls_002"><span class="cls_002">The child’s residence of the child’s contact with a parent or other person (regulation 160(3)(d)).</span></div>
+<div style="position:absolute;left:41.74px;top:353.41px" class="cls_002"><span class="cls_002">2.   Original order/s to sight by and copy attached;</span></div>
+<div style="position:absolute;left:59.74px;top:365.65px" class="cls_046"><span class="cls_046">Staff Name & Signature:</span></div>
+<div style="position:absolute;left:361.24px;top:365.65px" class="cls_047"><span class="cls_047">Date:</span></div>
+<div style="position:absolute;left:43.74px;top:398.05px" class="cls_007"><span class="cls_007">Restraining/ domestic violence order:</span></div>
+<div style="position:absolute;left:345.64px;top:398.05px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:437.24px;top:398.05px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:43.74px;top:410.29px" class="cls_048"><span class="cls_048">(If yes, original copy must be sighted by centre staff and a copy must be supplied to & attached to enrolment before care</span></div>
+<div style="position:absolute;left:43.74px;top:422.53px" class="cls_048"><span class="cls_048">can commence)</span></div>
+<div style="position:absolute;left:43.74px;top:434.77px" class="cls_002"><span class="cls_002">Restraining/domestic violence order sighted by and copy attached:</span></div>
+<div style="position:absolute;left:43.74px;top:448.93px" class="cls_046"><span class="cls_046">Staff Name & Signature::</span></div>
+<div style="position:absolute;left:361.48px;top:448.93px" class="cls_047"><span class="cls_047">Date:</span></div>
+<div style="position:absolute;left:143.67px;top:485.41px" class="cls_006"><span class="cls_006">SECTION 6: EMERGENCY CONTACTS/ AUTHORISED NOMINEES</span></div>
+<div style="position:absolute;left:46.10px;top:500.05px" class="cls_010"><span class="cls_010">Note:</span><span class="cls_009"> It is the responsibility of the parent/guardian to inform the centre management of any updates or changes to be made</span></div>
+<div style="position:absolute;left:50.69px;top:512.29px" class="cls_009"><span class="cls_009">to this list to ensure that the centre has the correct details. The list of authorised nominees may be changed at any time by</span></div>
+<div style="position:absolute;left:210.43px;top:524.53px" class="cls_010"><span class="cls_010">written</span><span class="cls_009"> request from the parent/</span><span class="cls_024"> </span><span class="cls_009">guardian.</span></div>
+<div style="position:absolute;left:44.70px;top:541.81px" class="cls_007"><span class="cls_007">As the parent/guardian of the child, you are required to nominate a person(s) who you give consent/permission to pick up</span></div>
+<div style="position:absolute;left:44.70px;top:554.05px" class="cls_007"><span class="cls_007">your child from the centre, be notified of illness/emergency, authorise educators to bring the child out of the service,</span></div>
+<div style="position:absolute;left:44.70px;top:566.29px" class="cls_007"><span class="cls_007">consent to medical treatment and authorisation to seek emergency medical treatment for the child from a registered</span></div>
+<div style="position:absolute;left:44.70px;top:578.29px" class="cls_007"><span class="cls_007">medical practitioner, hospital or ambulance service; and/or transportation of the child by an ambulance service. Please</span></div>
+<div style="position:absolute;left:44.70px;top:590.53px" class="cls_007"><span class="cls_007">complete their information below.</span></div>
+<div style="position:absolute;left:261.95px;top:603.25px" class="cls_011"><span class="cls_011">NOMINEE No. 1</span></div>
+<div style="position:absolute;left:44.70px;top:617.17px" class="cls_007"><span class="cls_007">Full Name:</span></div>
+<div style="position:absolute;left:290.48px;top:617.17px" class="cls_007"><span class="cls_007">Relation to child:</span></div>
+<div style="position:absolute;left:44.70px;top:642.13px" class="cls_007"><span class="cls_007">Home Address:</span></div>
+<div style="position:absolute;left:44.70px;top:669.25px" class="cls_007"><span class="cls_007">Contact Details:</span></div>
+<div style="position:absolute;left:44.70px;top:681.49px" class="cls_007"><span class="cls_007">(H):</span></div>
+<div style="position:absolute;left:186.50px;top:681.49px" class="cls_007"><span class="cls_007">(W):</span></div>
+<div style="position:absolute;left:326.54px;top:681.49px" class="cls_007"><span class="cls_007">(M):</span></div>
+<div style="position:absolute;left:44.70px;top:696.61px" class="cls_002"><span class="cls_002">Collect your child from the centre on your behalf:</span></div>
+<div style="position:absolute;left:274.80px;top:696.61px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:325.19px;top:696.61px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.70px;top:710.53px" class="cls_002"><span class="cls_002">Be notified of an emergency involving your child:</span></div>
+<div style="position:absolute;left:274.77px;top:710.53px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:325.16px;top:710.53px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.70px;top:724.69px" class="cls_002"><span class="cls_002">Authorise an educator to take your child outside the education care service:</span></div>
+<div style="position:absolute;left:382.46px;top:724.69px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:432.85px;top:724.69px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.70px;top:738.61px" class="cls_002"><span class="cls_002">Consent to medical treatment of your child:</span></div>
+<div style="position:absolute;left:251.84px;top:738.61px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:302.23px;top:738.61px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.70px;top:752.77px" class="cls_002"><span class="cls_002">Authorised for the administration of medication to be given to your child:</span></div>
+<div style="position:absolute;left:372.57px;top:752.77px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:422.96px;top:752.77px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.70px;top:766.69px" class="cls_002"><span class="cls_002">Consent to authorise transportation of your child by an ambulance service in case of an emergency:</span></div>
+<div style="position:absolute;left:476.27px;top:766.69px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:526.66px;top:766.69px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:90.06px;top:804.13px" class="cls_002"><span class="cls_002">Page 3 of 12</span></div>
+<div style="position:absolute;left:485.34px;top:804.13px" class="cls_002"><span class="cls_002">CWA</span></div>
+</div>
+<div style="position:absolute;left:50%;margin-left:-297px;top:2553px;width:595px;height:841px;border-style:outset;overflow:hidden">
+<div style="position:absolute;left:0px;top:0px">
+<img src="97c0762a-299b-11eb-8b25-0cc47a792c0a_id_97c0762a-299b-11eb-8b25-0cc47a792c0a_files/background04.jpg" width=595 height=841></div>
+<div style="position:absolute;left:241.20px;top:36.61px" class="cls_003"><span class="cls_003">CHILD ENROLMENT FORM</span></div>
+<div style="position:absolute;left:290.94px;top:55.57px" class="cls_004"><span class="cls_004">Point Cook Montessori Centre</span></div>
+<div style="position:absolute;left:255.58px;top:64.69px" class="cls_004"><span class="cls_004">13-19 Boardwalk Boulevard, Point Cook, Vic 3030</span></div>
+<div style="position:absolute;left:313.83px;top:74.05px" class="cls_004"><span class="cls_004">Ph 03 8353 1299</span></div>
+<div style="position:absolute;left:261.47px;top:117.01px" class="cls_011"><span class="cls_011">NOMINEE No. 2</span></div>
+<div style="position:absolute;left:44.22px;top:130.93px" class="cls_007"><span class="cls_007">Full Name:</span></div>
+<div style="position:absolute;left:294.53px;top:130.93px" class="cls_007"><span class="cls_007">Relation to child:</span></div>
+<div style="position:absolute;left:44.22px;top:156.85px" class="cls_007"><span class="cls_007">Home Address:</span></div>
+<div style="position:absolute;left:44.22px;top:182.53px" class="cls_007"><span class="cls_007">Contact Details:</span></div>
+<div style="position:absolute;left:44.22px;top:194.77px" class="cls_007"><span class="cls_007">(H):</span></div>
+<div style="position:absolute;left:186.02px;top:194.77px" class="cls_007"><span class="cls_007">(W):</span></div>
+<div style="position:absolute;left:326.06px;top:194.77px" class="cls_007"><span class="cls_007">(M):</span></div>
+<div style="position:absolute;left:44.22px;top:208.45px" class="cls_002"><span class="cls_002">Collect your child from the centre on your behalf:</span></div>
+<div style="position:absolute;left:274.32px;top:208.45px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:324.71px;top:208.45px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.22px;top:226.69px" class="cls_002"><span class="cls_002">Be notified of an emergency involving your child:</span></div>
+<div style="position:absolute;left:274.29px;top:226.69px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:324.68px;top:226.69px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.22px;top:244.93px" class="cls_002"><span class="cls_002">Authorise an educator to take your child outside the education care service:</span></div>
+<div style="position:absolute;left:381.98px;top:244.93px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:432.37px;top:244.93px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.22px;top:263.41px" class="cls_002"><span class="cls_002">Consent to medical treatment of your child:</span></div>
+<div style="position:absolute;left:251.36px;top:263.41px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:301.75px;top:263.41px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.22px;top:281.65px" class="cls_002"><span class="cls_002">Authorised for the administration of medication to be given to your child:</span></div>
+<div style="position:absolute;left:372.08px;top:281.65px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:422.48px;top:281.65px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.22px;top:299.89px" class="cls_002"><span class="cls_002">Consent to authorise transportation of your child by an ambulance service in case of an emergency:</span></div>
+<div style="position:absolute;left:475.79px;top:299.89px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:526.18px;top:299.89px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:261.47px;top:318.85px" class="cls_011"><span class="cls_011">NOMINEE No. 3</span></div>
+<div style="position:absolute;left:44.22px;top:332.77px" class="cls_007"><span class="cls_007">Full Name:</span></div>
+<div style="position:absolute;left:294.53px;top:332.77px" class="cls_007"><span class="cls_007">Relation to child:</span></div>
+<div style="position:absolute;left:44.22px;top:358.45px" class="cls_007"><span class="cls_007">Home Address:</span></div>
+<div style="position:absolute;left:44.22px;top:384.37px" class="cls_007"><span class="cls_007">Contact Details:</span></div>
+<div style="position:absolute;left:44.22px;top:396.37px" class="cls_007"><span class="cls_007">(H):</span></div>
+<div style="position:absolute;left:186.02px;top:396.37px" class="cls_007"><span class="cls_007">(W):</span></div>
+<div style="position:absolute;left:326.06px;top:396.37px" class="cls_007"><span class="cls_007">(M):</span></div>
+<div style="position:absolute;left:44.22px;top:410.05px" class="cls_002"><span class="cls_002">Collect your child from the centre on your behalf:</span></div>
+<div style="position:absolute;left:274.32px;top:410.05px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:324.71px;top:410.05px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.22px;top:428.29px" class="cls_002"><span class="cls_002">Be notified of an emergency involving your child:</span></div>
+<div style="position:absolute;left:274.29px;top:428.29px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:324.68px;top:428.29px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.22px;top:446.77px" class="cls_002"><span class="cls_002">Authorise an educator to take your child outside the education care service:</span></div>
+<div style="position:absolute;left:381.98px;top:446.77px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:432.37px;top:446.77px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.22px;top:465.01px" class="cls_002"><span class="cls_002">Consent to medical treatment of your child:</span></div>
+<div style="position:absolute;left:251.36px;top:465.01px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:301.75px;top:465.01px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.22px;top:483.25px" class="cls_002"><span class="cls_002">Authorised for the administration of medication to be given to your child:</span></div>
+<div style="position:absolute;left:372.08px;top:483.25px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:422.48px;top:483.25px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.22px;top:501.73px" class="cls_002"><span class="cls_002">Consent to authorise transportation of your child by an ambulance service in case of an emergency:</span></div>
+<div style="position:absolute;left:475.79px;top:501.73px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:526.18px;top:501.73px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:261.47px;top:520.45px" class="cls_011"><span class="cls_011">NOMINEE No. 4</span></div>
+<div style="position:absolute;left:44.22px;top:534.37px" class="cls_007"><span class="cls_007">Full Name:</span></div>
+<div style="position:absolute;left:294.53px;top:534.37px" class="cls_007"><span class="cls_007">Relation to child:</span></div>
+<div style="position:absolute;left:44.22px;top:560.05px" class="cls_007"><span class="cls_007">Home Address:</span></div>
+<div style="position:absolute;left:44.22px;top:585.97px" class="cls_007"><span class="cls_007">Contact Details:</span></div>
+<div style="position:absolute;left:44.22px;top:598.21px" class="cls_007"><span class="cls_007">(H):</span></div>
+<div style="position:absolute;left:186.02px;top:598.21px" class="cls_007"><span class="cls_007">(W):</span></div>
+<div style="position:absolute;left:326.16px;top:598.21px" class="cls_007"><span class="cls_007">(M):</span></div>
+<div style="position:absolute;left:44.22px;top:611.89px" class="cls_002"><span class="cls_002">Collect your child from the centre on your behalf:</span></div>
+<div style="position:absolute;left:274.32px;top:611.89px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:324.71px;top:611.89px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.22px;top:630.13px" class="cls_002"><span class="cls_002">Be notified of an emergency involving your child:</span></div>
+<div style="position:absolute;left:274.29px;top:630.13px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:324.68px;top:630.13px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.22px;top:648.37px" class="cls_002"><span class="cls_002">Authorise an educator to take your child outside the education care service:</span></div>
+<div style="position:absolute;left:381.98px;top:648.37px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:432.37px;top:648.37px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.22px;top:666.61px" class="cls_002"><span class="cls_002">Consent to medical treatment of your child:</span></div>
+<div style="position:absolute;left:251.36px;top:666.61px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:301.75px;top:666.61px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.22px;top:685.09px" class="cls_002"><span class="cls_002">Authorised for the administration of medication to be given to your child:</span></div>
+<div style="position:absolute;left:372.08px;top:685.09px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:422.48px;top:685.09px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:44.22px;top:703.33px" class="cls_002"><span class="cls_002">Consent to authorise transportation of your child by an ambulance service in case of an emergency:</span></div>
+<div style="position:absolute;left:475.79px;top:703.33px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:526.18px;top:703.33px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:90.06px;top:804.13px" class="cls_002"><span class="cls_002">Page 4 of 12</span></div>
+<div style="position:absolute;left:485.34px;top:804.13px" class="cls_002"><span class="cls_002">CWA</span></div>
+</div>
+<div style="position:absolute;left:50%;margin-left:-297px;top:3404px;width:595px;height:841px;border-style:outset;overflow:hidden">
+<div style="position:absolute;left:0px;top:0px">
+<img src="97c0762a-299b-11eb-8b25-0cc47a792c0a_id_97c0762a-299b-11eb-8b25-0cc47a792c0a_files/background05.jpg" width=595 height=841></div>
+<div style="position:absolute;left:241.20px;top:36.61px" class="cls_003"><span class="cls_003">CHILD ENROLMENT FORM</span></div>
+<div style="position:absolute;left:290.94px;top:55.57px" class="cls_004"><span class="cls_004">Point Cook Montessori Centre</span></div>
+<div style="position:absolute;left:255.58px;top:64.69px" class="cls_004"><span class="cls_004">13-19 Boardwalk Boulevard, Point Cook, Vic 3030</span></div>
+<div style="position:absolute;left:313.83px;top:74.05px" class="cls_004"><span class="cls_004">Ph 03 8353 1299</span></div>
+<div style="position:absolute;left:164.76px;top:117.01px" class="cls_006"><span class="cls_006">SECTION 7: CHILD MEDICAL & HEALTH INFORMATION</span></div>
+<div style="position:absolute;left:168.31px;top:138.61px" class="cls_011"><span class="cls_011">Doctor/ Registered Medical Practitioner/ Medical Centre</span></div>
+<div style="position:absolute;left:44.22px;top:152.53px" class="cls_007"><span class="cls_007">Full Name:</span></div>
+<div style="position:absolute;left:44.22px;top:177.49px" class="cls_007"><span class="cls_007">Address & Phone Number:</span></div>
+<div style="position:absolute;left:44.22px;top:204.85px" class="cls_007"><span class="cls_007">Medicare Number:</span></div>
+<div style="position:absolute;left:44.22px;top:217.81px" class="cls_007"><span class="cls_007">Health Card</span></div>
+<div style="position:absolute;left:44.22px;top:230.05px" class="cls_002"><span class="cls_002">Card Number: _____________________________________ Start date: __________________End date: _________________</span></div>
+<div style="position:absolute;left:44.22px;top:251.65px" class="cls_007"><span class="cls_007">Ambulance Membership Number:</span></div>
+<div style="position:absolute;left:44.22px;top:264.37px" class="cls_007"><span class="cls_007">Is the child currently attending or has previously attended:</span></div>
+<div style="position:absolute;left:59.92px;top:278.05px" class="cls_002"><span class="cls_002">Counsellor/ psychologist</span></div>
+<div style="position:absolute;left:188.94px;top:278.05px" class="cls_002"><span class="cls_002">Occupational Therapy</span></div>
+<div style="position:absolute;left:309.51px;top:278.05px" class="cls_002"><span class="cls_002">Paediatrician</span></div>
+<div style="position:absolute;left:398.53px;top:278.05px" class="cls_002"><span class="cls_002">Approved NDIS</span></div>
+<div style="position:absolute;left:59.92px;top:291.49px" class="cls_002"><span class="cls_002">Speech Therapy</span></div>
+<div style="position:absolute;left:187.80px;top:291.49px" class="cls_002"><span class="cls_002">Dietician</span></div>
+<div style="position:absolute;left:311.48px;top:291.49px" class="cls_002"><span class="cls_002">Specialist</span></div>
+<div style="position:absolute;left:399.20px;top:291.49px" class="cls_002"><span class="cls_002">Other</span></div>
+<div style="position:absolute;left:44.22px;top:315.97px" class="cls_002"><span class="cls_002">If</span><span class="cls_007"> yes, </span><span class="cls_002">please provide details: </span><span class="cls_007">___________________________________________________________________</span></div>
+<div style="position:absolute;left:44.22px;top:341.89px" class="cls_007"><span class="cls_007">Child Health Record:</span></div>
+<div style="position:absolute;left:185.54px;top:341.89px" class="cls_002"><span class="cls_002">Not Available</span></div>
+<div style="position:absolute;left:307.58px;top:341.89px" class="cls_002"><span class="cls_002">Sighted</span></div>
+<div style="position:absolute;left:398.92px;top:341.89px" class="cls_002"><span class="cls_002">Sighted by: ____________________</span></div>
+<div style="position:absolute;left:48.30px;top:354.37px" class="cls_010"><span class="cls_010">Please list details of any specific health care needs of the child including any medical condition; allergies or whether your</span></div>
+<div style="position:absolute;left:191.92px;top:366.61px" class="cls_010"><span class="cls_010">child have been diagnosed as at risk of anaphylaxis</span></div>
+<div style="position:absolute;left:218.05px;top:378.85px" class="cls_049"><span class="cls_049">Specific Healthcare Needs </span><span class="cls_026">Reg 162.</span></div>
+<div style="position:absolute;left:51.90px;top:400.21px" class="cls_011"><span class="cls_011">Allergies</span><span class="cls_007">: </span><span class="cls_002">Does your child have any allergies:</span></div>
+<div style="position:absolute;left:265.66px;top:401.17px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:334.14px;top:399.25px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:51.90px;top:418.45px" class="cls_002"><span class="cls_002">If </span><span class="cls_010">yes</span><span class="cls_007"> </span><span class="cls_002">please provide a copy of a valid allergy action plan completed and signed by a medical practitioner; risk</span></div>
+<div style="position:absolute;left:51.90px;top:430.69px" class="cls_002"><span class="cls_002">minimisation plan as well as a communication plan. Copies of these can be requested from the office. If your child</span></div>
+<div style="position:absolute;left:51.90px;top:442.93px" class="cls_002"><span class="cls_002">requires any medication as stated on the action plan, this must be supplied to the centre as well. Your child will not be</span></div>
+<div style="position:absolute;left:51.90px;top:455.17px" class="cls_002"><span class="cls_002">allowed to attend the centre without their prescribed medication.</span></div>
+<div style="position:absolute;left:51.90px;top:480.61px" class="cls_002"><span class="cls_002">Have your child been diagnosed of being at risk of</span><span class="cls_007"> </span><span class="cls_011">anaphylaxis</span><span class="cls_002">:</span></div>
+<div style="position:absolute;left:359.49px;top:481.57px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:415.38px;top:479.65px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:51.90px;top:498.85px" class="cls_002"><span class="cls_002">If </span><span class="cls_010">yes</span><span class="cls_007"> </span><span class="cls_002">please provide a copy of a valid anaphylaxis action plan completed and signed by a medical practitioner; risk</span></div>
+<div style="position:absolute;left:51.90px;top:511.09px" class="cls_002"><span class="cls_002">minimisation plan as well as a communication plan. Copies of these can be requested from the office. An Epinephrine</span></div>
+<div style="position:absolute;left:51.90px;top:523.33px" class="cls_002"><span class="cls_002">Autoinjector (such as an EpiPen jnr or Anapen) must be supplied to the centre. Any child diagnosed as being at risk of</span></div>
+<div style="position:absolute;left:51.90px;top:533.65px" class="cls_002"><span class="cls_002">anaphylaxis will not be allowed to attend the centre without their prescribed medication.</span></div>
+<div style="position:absolute;left:51.90px;top:562.69px" class="cls_002"><span class="cls_002">Have your child been diagnosed with </span><span class="cls_011">Asthma</span><span class="cls_002">?</span></div>
+<div style="position:absolute;left:380.46px;top:563.65px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:445.39px;top:561.73px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:51.90px;top:581.17px" class="cls_002"><span class="cls_002">If </span><span class="cls_010">yes</span><span class="cls_007"> </span><span class="cls_002">please provide a copy of a valid asthma action plan completed and signed by a medical practitioner; risk</span></div>
+<div style="position:absolute;left:51.90px;top:593.41px" class="cls_002"><span class="cls_002">minimisation plan as well as a communication plan. Copies of these can be requested from the office. If your child</span></div>
+<div style="position:absolute;left:51.90px;top:605.41px" class="cls_002"><span class="cls_002">requires any medication as stated on the action plan, this must be supplied to the centre as well. Your child will not be</span></div>
+<div style="position:absolute;left:51.90px;top:615.73px" class="cls_002"><span class="cls_002">allowed to attend the centre without their prescribed medication.</span></div>
+<div style="position:absolute;left:51.90px;top:642.13px" class="cls_011"><span class="cls_011">Specific Healthcare Needs</span><span class="cls_007">: </span><span class="cls_002">Have your child been diagnosed with any other medical condition/ health care need that</span></div>
+<div style="position:absolute;left:51.90px;top:655.33px" class="cls_002"><span class="cls_002">are relevant to the care & education of your child? (e.g. Epilepsy, Diabetes etc.)</span></div>
+<div style="position:absolute;left:407.56px;top:655.33px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:455.69px;top:653.41px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:51.90px;top:672.61px" class="cls_002"><span class="cls_002">If </span><span class="cls_010">yes</span><span class="cls_007"> </span><span class="cls_002">please provide a copy of a valid action plan completed and signed by a medical practitioner; risk minimisation plan</span></div>
+<div style="position:absolute;left:51.90px;top:684.61px" class="cls_002"><span class="cls_002">as well as a communication plan. Copies of these can be requested from the office. If an action plan is </span><span class="cls_007">not</span><span class="cls_002"> applicable,</span></div>
+<div style="position:absolute;left:51.90px;top:696.85px" class="cls_002"><span class="cls_002">please complete all the details of the healthcare need/ medical condition on pg. 10. Any child diagnosed with a medical</span></div>
+<div style="position:absolute;left:51.90px;top:707.17px" class="cls_002"><span class="cls_002">condition with prescribed medication will not be allowed to attend the centre without their medication.</span></div>
+<div style="position:absolute;left:90.06px;top:804.13px" class="cls_002"><span class="cls_002">Page 5 of 12</span></div>
+<div style="position:absolute;left:485.34px;top:804.13px" class="cls_002"><span class="cls_002">CWA</span></div>
+</div>
+<div style="position:absolute;left:50%;margin-left:-297px;top:4255px;width:595px;height:841px;border-style:outset;overflow:hidden">
+<div style="position:absolute;left:0px;top:0px">
+<img src="97c0762a-299b-11eb-8b25-0cc47a792c0a_id_97c0762a-299b-11eb-8b25-0cc47a792c0a_files/background06.jpg" width=595 height=841></div>
+<div style="position:absolute;left:241.20px;top:36.61px" class="cls_003"><span class="cls_003">CHILD ENROLMENT FORM</span></div>
+<div style="position:absolute;left:290.94px;top:55.57px" class="cls_004"><span class="cls_004">Point Cook Montessori Centre</span></div>
+<div style="position:absolute;left:255.58px;top:64.69px" class="cls_004"><span class="cls_004">13-19 Boardwalk Boulevard, Point Cook, Vic 3030</span></div>
+<div style="position:absolute;left:313.83px;top:74.05px" class="cls_004"><span class="cls_004">Ph 03 8353 1299</span></div>
+<div style="position:absolute;left:51.90px;top:128.77px" class="cls_011"><span class="cls_011">Dietary Restrictions</span><span class="cls_015">: </span><span class="cls_002">Does the child have any specific dietary requirements?</span></div>
+<div style="position:absolute;left:415.02px;top:129.73px" class="cls_007"><span class="cls_007">Yes</span></div>
+<div style="position:absolute;left:490.28px;top:128.77px" class="cls_007"><span class="cls_007">No</span></div>
+<div style="position:absolute;left:51.90px;top:142.21px" class="cls_002"><span class="cls_002">If </span><span class="cls_010">yes</span><span class="cls_007"> </span><span class="cls_002">please refer to and complete page 13</span></div>
+<div style="position:absolute;left:251.29px;top:166.93px" class="cls_030"><span class="cls_030">OFFICE USE ONLY</span></div>
+<div style="position:absolute;left:44.22px;top:181.57px" class="cls_002"><span class="cls_002">If the service is aware that the child has a specific healthcare need, allergy or other relevant medical condition as identified</span></div>
+<div style="position:absolute;left:44.22px;top:193.81px" class="cls_002"><span class="cls_002">above, has a copy of the service’s medical conditions policy been provided to the parent or guardian of the child?</span></div>
+<div style="position:absolute;left:59.92px;top:207.25px" class="cls_002"><span class="cls_002">Yes</span></div>
+<div style="position:absolute;left:136.86px;top:207.25px" class="cls_002"><span class="cls_002">No</span></div>
+<div style="position:absolute;left:232.11px;top:207.25px" class="cls_002"><span class="cls_002">N/A</span></div>
+<div style="position:absolute;left:44.22px;top:219.49px" class="cls_002"><span class="cls_002">Has a </span><span class="cls_009">risk management plan and medical condition communication plan</span><span class="cls_002"> for the child been completed in consulation with</span></div>
+<div style="position:absolute;left:44.22px;top:231.73px" class="cls_002"><span class="cls_002">the child’s parents/ guardian and educators?</span></div>
+<div style="position:absolute;left:59.92px;top:245.17px" class="cls_002"><span class="cls_002">Yes</span></div>
+<div style="position:absolute;left:136.86px;top:245.17px" class="cls_002"><span class="cls_002">No</span></div>
+<div style="position:absolute;left:232.11px;top:245.17px" class="cls_002"><span class="cls_002">N/A</span></div>
+<div style="position:absolute;left:44.22px;top:257.41px" class="cls_002"><span class="cls_002">Have parents supplied an up to date (no older than 6 months or prior to date of review) action plan Or a </span><span class="cls_009">‘medical condition</span></div>
+<div style="position:absolute;left:44.22px;top:269.65px" class="cls_009"><span class="cls_009">support plan’</span><span class="cls_002"> (when an action plan is not required)  along with prescribed medication? </span><span class="cls_009">(*any medication requires an action</span></div>
+<div style="position:absolute;left:44.22px;top:281.89px" class="cls_009"><span class="cls_009">plan</span><span class="cls_002">)</span></div>
+<div style="position:absolute;left:59.92px;top:295.57px" class="cls_002"><span class="cls_002">Yes</span></div>
+<div style="position:absolute;left:136.86px;top:295.57px" class="cls_002"><span class="cls_002">No</span></div>
+<div style="position:absolute;left:232.11px;top:295.57px" class="cls_002"><span class="cls_002">N/A</span></div>
+<div style="position:absolute;left:44.22px;top:319.81px" class="cls_007"><span class="cls_007">Staff Name: ____________________________   Position: ______________________   Date: ___________________</span></div>
+<div style="position:absolute;left:44.22px;top:344.29px" class="cls_007"><span class="cls_007">Signature:</span></div>
+<div style="position:absolute;left:95.64px;top:344.29px" class="cls_007"><span class="cls_007">____________________________</span></div>
+<div style="position:absolute;left:159.34px;top:375.97px" class="cls_006"><span class="cls_006">SECTION 8: CHILD IMMUNISATION RECORD & DETAILS</span></div>
+<div style="position:absolute;left:52.14px;top:403.09px" class="cls_002"><span class="cls_002">On 28 February 2018, the </span><span class="cls_048">‘No Jab, No Play’</span><span class="cls_002"> legislation was amended so that an </span><span class="cls_035">Immunisation History Statement from</span></div>
+<div style="position:absolute;left:52.14px;top:415.33px" class="cls_035"><span class="cls_035">the Australian Immunisation Register (AIR) </span><span class="cls_002">is the only form of documentation accepted for the purpose of enrolling in</span></div>
+<div style="position:absolute;left:52.14px;top:427.57px" class="cls_002"><span class="cls_002">any early childhood education and care service. Previous forms of documentation, for example a letter from a GP or</span></div>
+<div style="position:absolute;left:52.14px;top:439.81px" class="cls_002"><span class="cls_002">local council, are no longer accepted.</span></div>
+<div style="position:absolute;left:52.14px;top:452.05px" class="cls_002"><span class="cls_002">For a copy of your child’s Immunisation History Statement, please log onto your </span><span class="cls_035">myGov account </span><span class="cls_002">OR call the AIR on</span></div>
+<div style="position:absolute;left:52.14px;top:462.37px" class="cls_002"><span class="cls_002">phone 1800 653 809 OR visit a Medicare or Centrelink office</span></div>
+<div style="position:absolute;left:51.90px;top:488.29px" class="cls_007"><span class="cls_007">16 - Week Grace Period:</span><span class="cls_002"> Some families experiencing vulnerability and disadvantage may face difficulties accessing</span></div>
+<div style="position:absolute;left:51.90px;top:500.53px" class="cls_002"><span class="cls_002">immunisation services and documentation and as such may need additional time and help. Children who fall within any</span></div>
+<div style="position:absolute;left:51.90px;top:512.77px" class="cls_002"><span class="cls_002">of the following categories are eligible for the grace period: Children experiencing vulnerability or disadvantage;</span></div>
+<div style="position:absolute;left:51.90px;top:525.01px" class="cls_002"><span class="cls_002">Aboriginal and/or Torres Strait Islander Children; Children known to child protection; Children in the care of an adult who</span></div>
+<div style="position:absolute;left:51.90px;top:537.25px" class="cls_002"><span class="cls_002">is not their parent; Children in emergency care; Evacuated children following an emergency. For more information please</span></div>
+<div style="position:absolute;left:51.90px;top:549.49px" class="cls_002"><span class="cls_002">visit </span><A HREF="https://www2.health.vic.gov.au/">https://www2.health.vic.gov.au/</A> </span><span class="cls_002">or speak to the centre manager.</span></div>
+<div style="position:absolute;left:44.22px;top:572.53px" class="cls_002"><span class="cls_002">Has your child been Immunised?</span></div>
+<div style="position:absolute;left:454.54px;top:572.53px" class="cls_002"><span class="cls_002">Yes</span></div>
+<div style="position:absolute;left:531.47px;top:572.53px" class="cls_002"><span class="cls_002">No</span></div>
+<div style="position:absolute;left:44.22px;top:587.89px" class="cls_002"><span class="cls_002">Is your child eligible for the 16 week grace period?</span></div>
+<div style="position:absolute;left:454.09px;top:587.89px" class="cls_002"><span class="cls_002">Yes</span></div>
+<div style="position:absolute;left:531.03px;top:587.89px" class="cls_002"><span class="cls_002">No</span></div>
+<div style="position:absolute;left:44.22px;top:602.05px" class="cls_002"><span class="cls_002">Immunisation History Statement sighted by </span><span class="cls_007">and</span><span class="cls_002"> copy attached: </span><span class="cls_007"> _____________________________________</span></div>
+<div style="position:absolute;left:44.22px;top:623.41px" class="cls_007"><span class="cls_007">Name: ____________________________   Position: ______________________   Date: __________________</span></div>
+<div style="position:absolute;left:44.22px;top:645.01px" class="cls_034"><span class="cls_034">In some cases when there is an outbreak of a vaccine preventable disease, unimmunised children will be excluded from the Education</span></div>
+<div style="position:absolute;left:44.22px;top:656.05px" class="cls_034"><span class="cls_034">and Care Service as per the period of exclusion of contacts recommended by the National Health & Medical Research Council. The</span></div>
+<div style="position:absolute;left:44.22px;top:667.09px" class="cls_034"><span class="cls_034">exclusion periods table can be found at </span><A HREF="http://ideas.health.vic.gov.au/guidelines/school-exclusion-table.asp/">http://ideas.health.vic.gov.au/guidelines/school-exclusion-table.asp</A> </div>
+<div style="position:absolute;left:208.43px;top:682.69px" class="cls_006"><span class="cls_006">SECTION 9:  OTHER INFORMATION</span></div>
+<div style="position:absolute;left:44.22px;top:702.13px" class="cls_002"><span class="cls_002">If there is any other information relating to the child that staff should know about (excessive fears, anxiety, behaviour</span></div>
+<div style="position:absolute;left:44.22px;top:714.37px" class="cls_002"><span class="cls_002">management etc.) Please provide details:</span></div>
+<div style="position:absolute;left:90.06px;top:804.13px" class="cls_002"><span class="cls_002">Page 6 of 12</span></div>
+<div style="position:absolute;left:485.34px;top:804.13px" class="cls_002"><span class="cls_002">CWA</span></div>
+</div>
+<div style="position:absolute;left:50%;margin-left:-297px;top:5106px;width:595px;height:841px;border-style:outset;overflow:hidden">
+<div style="position:absolute;left:0px;top:0px">
+<img src="97c0762a-299b-11eb-8b25-0cc47a792c0a_id_97c0762a-299b-11eb-8b25-0cc47a792c0a_files/background07.jpg" width=595 height=841></div>
+<div style="position:absolute;left:241.20px;top:36.61px" class="cls_003"><span class="cls_003">CHILD ENROLMENT FORM</span></div>
+<div style="position:absolute;left:290.94px;top:55.57px" class="cls_004"><span class="cls_004">Point Cook Montessori Centre</span></div>
+<div style="position:absolute;left:255.58px;top:64.69px" class="cls_004"><span class="cls_004">13-19 Boardwalk Boulevard, Point Cook, Vic 3030</span></div>
+<div style="position:absolute;left:313.83px;top:74.05px" class="cls_004"><span class="cls_004">Ph 03 8353 1299</span></div>
+<div style="position:absolute;left:144.23px;top:108.85px" class="cls_006"><span class="cls_006">SECTION 10: CONSENT TO EMERGENCY MEDICAL TREATMENT</span></div>
+<div style="position:absolute;left:44.70px;top:137.89px" class="cls_002"><span class="cls_002">I ……………………………………… </span><span class="cls_007">(Please print full name)</span><span class="cls_002"> a person with lawful authority of the child ………………………………… </span><span class="cls_007">(Please</span></div>
+<div style="position:absolute;left:44.70px;top:156.13px" class="cls_007"><span class="cls_007">print full name)</span><span class="cls_002"> referred to in this enrolled form;</span></div>
+<div style="position:absolute;left:44.70px;top:174.85px" class="cls_022"><span class="cls_022">• </span><span class="cls_002">Declare that all medical & health information provided in this enrolment form relating to the child is true & correct;</span></div>
+<div style="position:absolute;left:44.70px;top:189.49px" class="cls_022"><span class="cls_022">• </span><span class="cls_002">Consent where it is in the best interest of my child for the obtained medical & health information of my child to be made</span></div>
+<div style="position:absolute;left:51.80px;top:203.65px" class="cls_002"><span class="cls_002">available to staff;</span></div>
+<div style="position:absolute;left:44.70px;top:218.05px" class="cls_022"><span class="cls_022">• </span><span class="cls_002">Declare that the provided ‘Medical Condition Support Plan’ & ‘Action Plan’ relating to the child in this enrolment form is</span></div>
+<div style="position:absolute;left:51.80px;top:232.21px" class="cls_002"><span class="cls_002">true, correct, signed & authorised by a registered medical practitioner;</span></div>
+<div style="position:absolute;left:44.70px;top:246.61px" class="cls_022"><span class="cls_022">• </span><span class="cls_002">Understand that I will not be allowed to leave the child in the care of the staff without a required action plan and/or medical</span></div>
+<div style="position:absolute;left:51.80px;top:260.77px" class="cls_002"><span class="cls_002">condition support plan; communication plan; risk minimisation plan and prescribed medication in place as set out in the</span></div>
+<div style="position:absolute;left:51.80px;top:274.93px" class="cls_002"><span class="cls_002">centres ‘Medical Conditions Policy’</span></div>
+<div style="position:absolute;left:44.70px;top:289.33px" class="cls_022"><span class="cls_022">• </span><span class="cls_002">Understand that it is my obligation to ensure that the child(s) Medical Condition Support Plan/ Action Plan (no older than 6</span></div>
+<div style="position:absolute;left:51.80px;top:303.49px" class="cls_002"><span class="cls_002">months prior to date of review at time of enrolment)  is revised annually by a registered medical practitioner & that I will</span></div>
+<div style="position:absolute;left:51.80px;top:317.41px" class="cls_002"><span class="cls_002">provide the centre with a new & updated copy of the ‘Medical Condition Support Plan’/ Action Plan’ as signed & authorised</span></div>
+<div style="position:absolute;left:51.80px;top:331.57px" class="cls_002"><span class="cls_002">by a registered medical practitioner;</span></div>
+<div style="position:absolute;left:44.70px;top:345.97px" class="cls_022"><span class="cls_022">• </span><span class="cls_002">Participate in the development of a risk minimisation as well as communication plan for the child in relation to their specific</span></div>
+<div style="position:absolute;left:51.80px;top:360.13px" class="cls_002"><span class="cls_002">health care need, allergy or any other diagnosed medical condition.</span></div>
+<div style="position:absolute;left:44.70px;top:374.53px" class="cls_022"><span class="cls_022">• </span><span class="cls_002">Agree to collect the child from the centre if the child becomes unwell at the centre and is informed of this by the centre;</span></div>
+<div style="position:absolute;left:44.70px;top:389.17px" class="cls_037"><span class="cls_037">• </span><span class="cls_002">Understand that it is my responsibility to check the expiry dates of the child(s) medication & to supply new medication at</span></div>
+<div style="position:absolute;left:51.80px;top:403.33px" class="cls_002"><span class="cls_002">my own cost.</span></div>
+<div style="position:absolute;left:44.70px;top:418.93px" class="cls_022"><span class="cls_022">• </span><span class="cls_002">Agree that it is my responsibility to inform the centre of ANY changes to the child(s) health or medical information including</span></div>
+<div style="position:absolute;left:51.80px;top:432.85px" class="cls_002"><span class="cls_002">immunisation records as soon as possible;</span></div>
+<div style="position:absolute;left:44.70px;top:447.49px" class="cls_022"><span class="cls_022">• </span><span class="cls_002">Agree & understand that it is my responsibility to inform the centre if my child has been diagnosed with an illness listed on</span></div>
+<div style="position:absolute;left:51.80px;top:461.41px" class="cls_002"><span class="cls_002">the ‘communicable diseases table’. I agree to </span><span class="cls_007">NOT</span><span class="cls_002"> send my child to the centre for the period & conditions specified on the</span></div>
+<div style="position:absolute;left:51.80px;top:475.57px" class="cls_002"><span class="cls_002">communicable diseases & exclusion table </span><span class="cls_007">AND</span><span class="cls_002"> understand that my child will only be allowed back in the centre when a</span></div>
+<div style="position:absolute;left:51.80px;top:489.49px" class="cls_002"><span class="cls_002">medical certificate is produced stating by a registered medical practitioner that the child is no longer infectious.</span></div>
+<div style="position:absolute;left:44.70px;top:504.13px" class="cls_022"><span class="cls_022">• </span><span class="cls_002">Update my child’s Action plan & ‘Medical Condition Support Plan’ annually or at the request of the approved provider/</span></div>
+<div style="position:absolute;left:51.80px;top:518.29px" class="cls_002"><span class="cls_002">nominated supervisor</span></div>
+<div style="position:absolute;left:44.70px;top:532.69px" class="cls_022"><span class="cls_022">• </span><span class="cls_002">I authorise the approved provider, the nominated supervisor or educator to seek medical treatment for my child, be it from</span></div>
+<div style="position:absolute;left:51.80px;top:546.85px" class="cls_002"><span class="cls_002">a registered medical practitioner, hospital or transportation by an ambulance service and agree to meet any expenses</span></div>
+<div style="position:absolute;left:51.80px;top:560.77px" class="cls_002"><span class="cls_002">including ambulance costs, incurred.</span></div>
+<div style="position:absolute;left:55.50px;top:594.37px" class="cls_002"><span class="cls_002">Full First & Last Name: _______________________________________________</span></div>
+<div style="position:absolute;left:55.50px;top:630.85px" class="cls_002"><span class="cls_002">Signature: _________________________________________</span></div>
+<div style="position:absolute;left:55.50px;top:667.57px" class="cls_002"><span class="cls_002">Date: _____________________</span></div>
+<div style="position:absolute;left:90.06px;top:804.13px" class="cls_002"><span class="cls_002">Page 7 of 12</span></div>
+<div style="position:absolute;left:485.34px;top:804.13px" class="cls_002"><span class="cls_002">CWA</span></div>
+</div>
+<div style="position:absolute;left:50%;margin-left:-297px;top:5957px;width:595px;height:841px;border-style:outset;overflow:hidden">
+<div style="position:absolute;left:0px;top:0px">
+<img src="97c0762a-299b-11eb-8b25-0cc47a792c0a_id_97c0762a-299b-11eb-8b25-0cc47a792c0a_files/background08.jpg" width=595 height=841></div>
+<div style="position:absolute;left:241.20px;top:36.61px" class="cls_003"><span class="cls_003">CHILD ENROLMENT FORM</span></div>
+<div style="position:absolute;left:290.94px;top:55.57px" class="cls_004"><span class="cls_004">Point Cook Montessori Centre</span></div>
+<div style="position:absolute;left:255.58px;top:64.69px" class="cls_004"><span class="cls_004">13-19 Boardwalk Boulevard, Point Cook, Vic 3030</span></div>
+<div style="position:absolute;left:313.83px;top:74.05px" class="cls_004"><span class="cls_004">Ph 03 8353 1299</span></div>
+<div style="position:absolute;left:193.29px;top:117.01px" class="cls_006"><span class="cls_006">SECTION 11: AUTHORISATION & CONSENT</span></div>
+<div style="position:absolute;left:171.02px;top:131.65px" class="cls_039"><span class="cls_039">*Information in this section will be shared with educators</span></div>
+<div style="position:absolute;left:44.22px;top:145.57px" class="cls_007"><span class="cls_007">Please indicate by circling </span><span class="cls_010">‘I agree ‘</span><span class="cls_007"> </span><span class="cls_010">or</span><span class="cls_007">  </span><span class="cls_010">‘I disagree’</span><span class="cls_007">, whether you give your consent for the following:</span></div>
+<div style="position:absolute;left:44.22px;top:163.33px" class="cls_022"><span class="cls_022">• </span><span class="cls_002">  Staff may apply sunscreen to my child when necessary. (If no: parents MUST supply their own, labelled with the child’s</span></div>
+<div style="position:absolute;left:58.42px;top:175.57px" class="cls_002"><span class="cls_002">details. This will be accepted as authorisation that staff may apply the sunscreen when necessary).</span></div>
+<div style="position:absolute;left:88.87px;top:189.49px" class="cls_002"><span class="cls_002">I Agree</span></div>
+<div style="position:absolute;left:171.72px;top:188.53px" class="cls_002"><span class="cls_002">I Disagree</span></div>
+<div style="position:absolute;left:44.22px;top:208.69px" class="cls_022"><span class="cls_022">• </span><span class="cls_002">  My child’s photograph (including name & age) may be taken in the classroom or outside in the playground for the purpose</span></div>
+<div style="position:absolute;left:58.42px;top:220.93px" class="cls_002"><span class="cls_002">of observation records or placed in their file/ portfolio documenting the child’s progress & development.</span></div>
+<div style="position:absolute;left:89.37px;top:234.85px" class="cls_002"><span class="cls_002">I Agree</span></div>
+<div style="position:absolute;left:172.21px;top:234.85px" class="cls_002"><span class="cls_002">I Disagree</span></div>
+<div style="position:absolute;left:44.22px;top:249.73px" class="cls_022"><span class="cls_022">• </span><span class="cls_002">  My child’s photograph may be taken in the classroom or outside in the playground for the purpose of display within- or</span></div>
+<div style="position:absolute;left:58.42px;top:261.97px" class="cls_002"><span class="cls_002">newsletters from the centre- or Facebook-Parents Closed Group. The name & age of the child may be included.</span></div>
+<div style="position:absolute;left:89.37px;top:275.89px" class="cls_002"><span class="cls_002">I Agree</span></div>
+<div style="position:absolute;left:172.21px;top:275.89px" class="cls_002"><span class="cls_002">I Disagree</span></div>
+<div style="position:absolute;left:44.22px;top:292.69px" class="cls_022"><span class="cls_022">• </span><span class="cls_002">  My child’s photograph may be taken in the classroom or outside in the playground for the purpose of display and use in</span></div>
+<div style="position:absolute;left:58.42px;top:304.93px" class="cls_002"><span class="cls_002">any advertising, marketing or promotion undertaken by AMIGA using any advertising, marketing or promotional medium,</span></div>
+<div style="position:absolute;left:58.42px;top:317.17px" class="cls_002"><span class="cls_002">including but not limited to: AMIGA’s Facebook pages-Public, AMIGA’s website, print media, electronic media, promotional</span></div>
+<div style="position:absolute;left:58.42px;top:329.41px" class="cls_002"><span class="cls_002">boards, promotional banners, promotional flyers and any other form of advertising marketing or promotion undertaken</span></div>
+<div style="position:absolute;left:58.42px;top:341.65px" class="cls_002"><span class="cls_002">by AMIGA.</span></div>
+<div style="position:absolute;left:89.37px;top:355.57px" class="cls_002"><span class="cls_002">I Agree</span></div>
+<div style="position:absolute;left:172.21px;top:355.57px" class="cls_002"><span class="cls_002">I Disagree</span></div>
+<div style="position:absolute;left:44.22px;top:370.45px" class="cls_022"><span class="cls_022">• </span><span class="cls_002">  My child may take part in incursions or in-house activities presented by a person(s) approved by the centre under the</span></div>
+<div style="position:absolute;left:58.42px;top:382.45px" class="cls_002"><span class="cls_002">supervision of staff members. (Notice of such an event will be given in advance).</span></div>
+<div style="position:absolute;left:89.27px;top:396.13px" class="cls_002"><span class="cls_002">I Agree</span></div>
+<div style="position:absolute;left:172.11px;top:396.13px" class="cls_002"><span class="cls_002">I Disagree</span></div>
+<div style="position:absolute;left:230.85px;top:414.85px" class="cls_006"><span class="cls_006">SECTION 12: DECLARATION</span></div>
+<div style="position:absolute;left:44.22px;top:433.09px" class="cls_002"><span class="cls_002">I</span></div>
+<div style="position:absolute;left:53.55px;top:433.09px" class="cls_002"><span class="cls_002">…………………………………………. </span><span class="cls_007"> (Please  print  full  name  &  surname), </span><span class="cls_002"> a  person  with  lawful  authority  of  the  child</span></div>
+<div style="position:absolute;left:44.22px;top:451.33px" class="cls_002"><span class="cls_002">…………………………………………… </span><span class="cls_007">(Please print full name & surname of the child)</span><span class="cls_002"> referred to in this enrolment form;</span></div>
+<div style="position:absolute;left:45.66px;top:470.05px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.87px;top:470.05px" class="cls_002"><span class="cls_002">Declare that all information provided in the ‘enrolment form’, the ‘action plans & ‘nutrition and dietary guidelines’ & the</span></div>
+<div style="position:absolute;left:59.87px;top:482.29px" class="cls_002"><span class="cls_002">‘Medical Condition support plan’ forms are true & correct.</span></div>
+<div style="position:absolute;left:45.66px;top:495.01px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.87px;top:495.01px" class="cls_002"><span class="cls_002">Understand that it is my responsibility to ensure that management are informed of any changes relating to information</span></div>
+<div style="position:absolute;left:59.87px;top:507.25px" class="cls_002"><span class="cls_002">obtained in the enrolment form’, the ‘nutrition & dietary guidelines’ & the ‘Medical Condition Support Plan, or any other</span></div>
+<div style="position:absolute;left:59.87px;top:519.49px" class="cls_002"><span class="cls_002">information which is in the best interest of the child while in the care of staff.</span></div>
+<div style="position:absolute;left:45.66px;top:532.21px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.87px;top:532.21px" class="cls_002"><span class="cls_002">Acknowledge & agree to abide by and co-operate with the principles and policies & procedures outlined in the parent</span></div>
+<div style="position:absolute;left:59.87px;top:544.45px" class="cls_002"><span class="cls_002">handbook.</span></div>
+<div style="position:absolute;left:45.66px;top:557.17px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.87px;top:557.17px" class="cls_002"><span class="cls_002">Acknowledge that I have been informed of the location of important information such as emergency management plan,</span></div>
+<div style="position:absolute;left:59.87px;top:569.41px" class="cls_002"><span class="cls_002">location of first-aid kits, education & care services national regulations 2011, education & care services national law act</span></div>
+<div style="position:absolute;left:59.87px;top:581.65px" class="cls_002"><span class="cls_002">2012.</span></div>
+<div style="position:absolute;left:45.66px;top:594.37px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.87px;top:594.37px" class="cls_002"><span class="cls_002">I/we agree to the centre or its assistants arranging for provision of medical treatment for the said child including</span></div>
+<div style="position:absolute;left:59.87px;top:606.61px" class="cls_002"><span class="cls_002">administration of medication (including administration of paracetamol, Ventolin or the EpiPen) or other medications as</span></div>
+<div style="position:absolute;left:59.87px;top:618.85px" class="cls_002"><span class="cls_002">considered necessary in case of emergency (this acting in the best interest of the child) or where I/we, or other nominated</span></div>
+<div style="position:absolute;left:59.87px;top:630.85px" class="cls_002"><span class="cls_002">persons, cannot be readily contacted.</span></div>
+<div style="position:absolute;left:45.66px;top:643.57px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.87px;top:643.57px" class="cls_002"><span class="cls_002">We understand all aspects and conditions relating to the fees & payment policy & agree that:</span></div>
+<div style="position:absolute;left:59.52px;top:655.81px" class="cls_002"><span class="cls_002">-</span></div>
+<div style="position:absolute;left:80.77px;top:655.81px" class="cls_002"><span class="cls_002">My child’s enrolment will not be confirmed without payment of the $250.00 Enrolment Fee.</span></div>
+<div style="position:absolute;left:59.52px;top:668.05px" class="cls_002"><span class="cls_002">-</span></div>
+<div style="position:absolute;left:80.77px;top:668.05px" class="cls_002"><span class="cls_002">Accept & acknowledge that the Enrolment Fee comprises of $50, Non-refundable administration fee; and a further</span></div>
+<div style="position:absolute;left:80.77px;top:680.29px" class="cls_002"><span class="cls_002">$200 bond which will be kept and refunded when 4 weeks notice has been given for the withdrawal of a child from</span></div>
+<div style="position:absolute;left:80.77px;top:692.53px" class="cls_002"><span class="cls_002">the service and all fees have been paid up to date up to the end of the 4 weeks notice period.</span></div>
+<div style="position:absolute;left:59.52px;top:704.77px" class="cls_002"><span class="cls_002">-</span></div>
+<div style="position:absolute;left:80.77px;top:704.77px" class="cls_002"><span class="cls_002">AMIGA reserves its rights to seek legal council to pursue any outstanding debt and all costs associated with the</span></div>
+<div style="position:absolute;left:80.77px;top:717.01px" class="cls_002"><span class="cls_002">recovery of these funds will be carried by the registered parent.</span></div>
+<div style="position:absolute;left:59.52px;top:729.25px" class="cls_002"><span class="cls_002">-</span></div>
+<div style="position:absolute;left:80.77px;top:729.25px" class="cls_002"><span class="cls_002">Payment of fees is accepted by direct debit only</span></div>
+<div style="position:absolute;left:45.42px;top:741.97px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.52px;top:741.97px" class="cls_002"><span class="cls_002">Full-time and sessional bookings and attendances are subject to availability and conditions as set out in the enrolment</span></div>
+<div style="position:absolute;left:59.52px;top:753.97px" class="cls_002"><span class="cls_002">policy.</span></div>
+<div style="position:absolute;left:45.42px;top:766.69px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.52px;top:766.69px" class="cls_002"><span class="cls_002">Late collection fees apply to all sessions/ booking types and will be charged to your account.</span></div>
+<div style="position:absolute;left:45.42px;top:779.65px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.52px;top:779.65px" class="cls_002"><span class="cls_002">Any Discounts on fees are subject to conditions set out in the fees and payment policy.</span></div>
+<div style="position:absolute;left:90.06px;top:804.13px" class="cls_002"><span class="cls_002">Page 8 of 12</span></div>
+<div style="position:absolute;left:485.34px;top:804.13px" class="cls_002"><span class="cls_002">CWA</span></div>
+</div>
+<div style="position:absolute;left:50%;margin-left:-297px;top:6808px;width:595px;height:841px;border-style:outset;overflow:hidden">
+<div style="position:absolute;left:0px;top:0px">
+<img src="97c0762a-299b-11eb-8b25-0cc47a792c0a_id_97c0762a-299b-11eb-8b25-0cc47a792c0a_files/background09.jpg" width=595 height=841></div>
+<div style="position:absolute;left:241.20px;top:36.61px" class="cls_003"><span class="cls_003">CHILD ENROLMENT FORM</span></div>
+<div style="position:absolute;left:290.94px;top:55.57px" class="cls_004"><span class="cls_004">Point Cook Montessori Centre</span></div>
+<div style="position:absolute;left:255.58px;top:64.69px" class="cls_004"><span class="cls_004">13-19 Boardwalk Boulevard, Point Cook, Vic 3030</span></div>
+<div style="position:absolute;left:313.83px;top:74.05px" class="cls_004"><span class="cls_004">Ph 03 8353 1299</span></div>
+<div style="position:absolute;left:45.42px;top:104.77px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.52px;top:104.77px" class="cls_002"><span class="cls_002">It is my / our responsibility to apply through the FAO for CCS & that AMIGA Montessori is under no obligation to pass on</span></div>
+<div style="position:absolute;left:59.52px;top:117.01px" class="cls_002"><span class="cls_002">any fee reductions unless authorised to do so via CRN.</span></div>
+<div style="position:absolute;left:45.42px;top:129.73px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.52px;top:129.73px" class="cls_002"><span class="cls_002">I / we are required to provide 4 weeks written notice when completely withdrawing my/our child/children from a position</span></div>
+<div style="position:absolute;left:59.52px;top:141.97px" class="cls_002"><span class="cls_002">at the centre.  Fees will be charged up to the end of the four weeks from the date at which notice was received in writing,</span></div>
+<div style="position:absolute;left:59.52px;top:154.21px" class="cls_002"><span class="cls_002">whether or not the child has attended the Centre during those 4 weeks. No exceptions will be made.</span></div>
+<div style="position:absolute;left:45.42px;top:166.93px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.52px;top:166.93px" class="cls_002"><span class="cls_002">We do not allow for extra additional days to make up for previous days missed due to any absence for any reason.</span></div>
+<div style="position:absolute;left:45.42px;top:179.65px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:61.78px;top:179.65px" class="cls_002"><span class="cls_002">I / we will be invoiced for everyday the child is scheduled & booked to attend including all gazetted Public Holidays.</span></div>
+<div style="position:absolute;left:45.42px;top:192.37px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.52px;top:192.37px" class="cls_002"><span class="cls_002">If a child is absent for a period longer than 2 weeks & staff have not been notified & the centre manager cannot contact a</span></div>
+<div style="position:absolute;left:59.52px;top:204.61px" class="cls_002"><span class="cls_002">child’s parent or guardian, the child’s place will be withdrawn as we will assume they will not be returning.</span></div>
+<div style="position:absolute;left:45.42px;top:217.33px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.52px;top:217.33px" class="cls_002"><span class="cls_002">Understand arrangements & my/our responsibility in regards to overdue accounts & dishonoured payments.</span></div>
+<div style="position:absolute;left:45.42px;top:230.05px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.52px;top:230.05px" class="cls_002"><span class="cls_002">I/we understand that fee levels are set by directors and management according to the centre’s required income, budget</span></div>
+<div style="position:absolute;left:59.52px;top:242.29px" class="cls_002"><span class="cls_002">and expenses necessary to provide quality care and maintain a high standard of operation and facilities. The fee structure</span></div>
+<div style="position:absolute;left:59.52px;top:254.53px" class="cls_002"><span class="cls_002">will be reviewed annually or when deemed necessary by directors. Families will be provided with 4 weeks’ notice should</span></div>
+<div style="position:absolute;left:59.52px;top:266.77px" class="cls_002"><span class="cls_002">there be an increase in fees.</span></div>
+<div style="position:absolute;left:45.42px;top:279.49px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.52px;top:279.49px" class="cls_002"><span class="cls_002">Understand & will follow correct complaints & grievance procedures as set out in the handbook.</span></div>
+<div style="position:absolute;left:45.42px;top:292.21px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.52px;top:292.21px" class="cls_002"><span class="cls_002">Respecting the individual needs, cultural practices & beliefs of families and staff in all interactions- both verbal & non-</span></div>
+<div style="position:absolute;left:59.52px;top:304.45px" class="cls_002"><span class="cls_002">verbal.</span></div>
+<div style="position:absolute;left:45.42px;top:317.17px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.52px;top:317.17px" class="cls_002"><span class="cls_002">All families/staff/management must be treated with dignity & respect. Regardless of the situation, outbursts of anger &</span></div>
+<div style="position:absolute;left:59.52px;top:329.41px" class="cls_002"><span class="cls_002">frustration will not be tolerated.</span></div>
+<div style="position:absolute;left:45.42px;top:342.13px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.52px;top:342.13px" class="cls_002"><span class="cls_002">Accept & acknowledge that the management will deal with any breach according to our grievance procedures, & that any</span></div>
+<div style="position:absolute;left:59.52px;top:354.37px" class="cls_002"><span class="cls_002">serious breach could lead to the withdrawal of my/our child children’s place at the centre or my freedom to be in</span></div>
+<div style="position:absolute;left:59.52px;top:366.61px" class="cls_002"><span class="cls_002">attendance at the centre or legal or disciplinary action.</span></div>
+<div style="position:absolute;left:45.42px;top:379.33px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.52px;top:379.33px" class="cls_002"><span class="cls_002">In reference to hygiene & infection control I agree to keep my child at home when suffering from a heavy cold or other</span></div>
+<div style="position:absolute;left:59.52px;top:391.57px" class="cls_002"><span class="cls_002">infectious illness likely to affect the health of other children/staff.</span></div>
+<div style="position:absolute;left:45.42px;top:404.29px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:61.78px;top:404.29px" class="cls_002"><span class="cls_002">I will telephonically inform the centre if my child is unable to attend for a scheduled day. I also understand that I will still</span></div>
+<div style="position:absolute;left:59.52px;top:416.53px" class="cls_002"><span class="cls_002">be invoiced for that day.</span></div>
+<div style="position:absolute;left:45.42px;top:429.25px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.52px;top:429.25px" class="cls_002"><span class="cls_002">Any matters, concerns, arrangements or complaints in relation to a family, parent, child and staff are regarded as private</span></div>
+<div style="position:absolute;left:59.52px;top:441.49px" class="cls_002"><span class="cls_002">& confidential and may not be discussed with others attending or outside the premises of the centre, unless with</span></div>
+<div style="position:absolute;left:59.52px;top:453.73px" class="cls_002"><span class="cls_002">management.</span></div>
+<div style="position:absolute;left:45.42px;top:466.45px" class="cls_022"><span class="cls_022">•</span></div>
+<div style="position:absolute;left:59.52px;top:466.45px" class="cls_002"><span class="cls_002">I/we aware that the Centre is also equipped with the CCTV security. The purpose of the CCTV system is for the security of</span></div>
+<div style="position:absolute;left:59.52px;top:478.45px" class="cls_002"><span class="cls_002">the premises, the safety of children, staff and visitors to the Centre. The images that are recorded will be held in a secure</span></div>
+<div style="position:absolute;left:59.52px;top:490.69px" class="cls_002"><span class="cls_002">location on the systems. The images will be digitally recorded on a rolling programme of 4 days.</span></div>
+<div style="position:absolute;left:54.30px;top:584.29px" class="cls_002"><span class="cls_002">Full First & Last Name: _______________________________________________</span></div>
+<div style="position:absolute;left:54.30px;top:608.77px" class="cls_002"><span class="cls_002">Signature: _________________________________________</span></div>
+<div style="position:absolute;left:54.30px;top:633.25px" class="cls_002"><span class="cls_002">Date: _____________________</span></div>
+<div style="position:absolute;left:90.06px;top:804.13px" class="cls_002"><span class="cls_002">Page 9 of 12</span></div>
+<div style="position:absolute;left:485.34px;top:804.13px" class="cls_002"><span class="cls_002">CWA</span></div>
+</div>
+<div style="position:absolute;left:50%;margin-left:-297px;top:7659px;width:595px;height:841px;border-style:outset;overflow:hidden">
+<div style="position:absolute;left:0px;top:0px">
+<img src="97c0762a-299b-11eb-8b25-0cc47a792c0a_id_97c0762a-299b-11eb-8b25-0cc47a792c0a_files/background10.jpg" width=595 height=841></div>
+<div style="position:absolute;left:241.20px;top:36.61px" class="cls_003"><span class="cls_003">CHILD ENROLMENT FORM</span></div>
+<div style="position:absolute;left:290.94px;top:55.57px" class="cls_004"><span class="cls_004">Point Cook Montessori Centre</span></div>
+<div style="position:absolute;left:255.58px;top:64.69px" class="cls_004"><span class="cls_004">13-19 Boardwalk Boulevard, Point Cook, Vic 3030</span></div>
+<div style="position:absolute;left:313.83px;top:74.05px" class="cls_004"><span class="cls_004">Ph 03 8353 1299</span></div>
+<div style="position:absolute;left:200.70px;top:119.17px" class="cls_051"><span class="cls_051">Medical Condition Support Plan</span></div>
+<div style="position:absolute;left:40.41px;top:166.21px" class="cls_041"><span class="cls_041">Any child enrolled at the centre who has a known medical condition which requires medication and/or treatment needs to have a ‘medical</span></div>
+<div style="position:absolute;left:40.41px;top:177.25px" class="cls_041"><span class="cls_041">condition support plan’. This plan should include the condition, signs, symptoms and action and/ or treatment required </span><span class="cls_042">AND</span><span class="cls_041"> must be signed</span></div>
+<div style="position:absolute;left:40.41px;top:188.05px" class="cls_041"><span class="cls_041">by a medical practitioner. Parents/ legal guardians are responsible to inform our centre upon enrolment or diagnosis after enrolment of their</span></div>
+<div style="position:absolute;left:40.41px;top:199.09px" class="cls_041"><span class="cls_041">child’s medical condition. Parents/ legal guardians are responsible to provide a copy of these plans (action plan for asthma/ anaphylaxis/</span></div>
+<div style="position:absolute;left:40.41px;top:210.13px" class="cls_041"><span class="cls_041">allergy; or medical condition support plan any other medical condition) to our centre upon enrolment and keep it up to date. It is understood</span></div>
+<div style="position:absolute;left:40.41px;top:221.17px" class="cls_041"><span class="cls_041">and accepted that this plan will be followed in respect to the condition.</span></div>
+<div style="position:absolute;left:248.21px;top:255.01px" class="cls_011"><span class="cls_011">Child Personal Details</span></div>
+<div style="position:absolute;left:44.46px;top:281.17px" class="cls_002"><span class="cls_002">Child name and surname: ……………………………………………………………………………………………………………………………………</span></div>
+<div style="position:absolute;left:44.46px;top:299.41px" class="cls_002"><span class="cls_002">Date of birth: ……………………………………………………………………………………………………………………………………………………….</span></div>
+<div style="position:absolute;left:44.46px;top:319.81px" class="cls_002"><span class="cls_002">Gender:</span></div>
+<div style="position:absolute;left:104.39px;top:319.81px" class="cls_002"><span class="cls_002">Female</span></div>
+<div style="position:absolute;left:179.10px;top:319.81px" class="cls_002"><span class="cls_002">Male</span></div>
+<div style="position:absolute;left:244.80px;top:319.81px" class="cls_002"><span class="cls_002">Other</span></div>
+<div style="position:absolute;left:44.46px;top:339.01px" class="cls_002"><span class="cls_002">Medical Condition: ………………………………………………………………………………………………………………………………………………</span></div>
+<div style="position:absolute;left:239.66px;top:379.09px" class="cls_011"><span class="cls_011">Child’s health information</span></div>
+<div style="position:absolute;left:45.90px;top:393.01px" class="cls_002"><span class="cls_002">List ANY medical condition or health requirement your child has which would require any form of treatment while in the</span></div>
+<div style="position:absolute;left:45.90px;top:405.25px" class="cls_002"><span class="cls_002">care of our centre:</span></div>
+<div style="position:absolute;left:45.90px;top:527.89px" class="cls_002"><span class="cls_002">List the signs or symptoms thereof:</span></div>
+<div style="position:absolute;left:45.90px;top:638.29px" class="cls_002"><span class="cls_002">List the treatment or first aid management thereof:</span></div>
+<div style="position:absolute;left:45.90px;top:650.53px" class="cls_009"><span class="cls_009">(* if any medication is required and action plan must be completed)</span></div>
+<div style="position:absolute;left:90.06px;top:804.13px" class="cls_002"><span class="cls_002">Page 10 of 12</span></div>
+<div style="position:absolute;left:485.34px;top:804.13px" class="cls_002"><span class="cls_002">CWA</span></div>
+</div>
+<div style="position:absolute;left:50%;margin-left:-297px;top:8510px;width:595px;height:841px;border-style:outset;overflow:hidden">
+<div style="position:absolute;left:0px;top:0px">
+<img src="97c0762a-299b-11eb-8b25-0cc47a792c0a_id_97c0762a-299b-11eb-8b25-0cc47a792c0a_files/background11.jpg" width=595 height=841></div>
+<div style="position:absolute;left:241.20px;top:36.61px" class="cls_003"><span class="cls_003">CHILD ENROLMENT FORM</span></div>
+<div style="position:absolute;left:290.94px;top:55.57px" class="cls_004"><span class="cls_004">Point Cook Montessori Centre</span></div>
+<div style="position:absolute;left:255.58px;top:64.69px" class="cls_004"><span class="cls_004">13-19 Boardwalk Boulevard, Point Cook, Vic 3030</span></div>
+<div style="position:absolute;left:313.83px;top:74.05px" class="cls_004"><span class="cls_004">Ph 03 8353 1299</span></div>
+<div style="position:absolute;left:184.14px;top:104.53px" class="cls_051"><span class="cls_051">Medical Condition Support Plan</span></div>
+<div style="position:absolute;left:224.65px;top:146.29px" class="cls_011"><span class="cls_011">Parent/Guardian Contact Details</span></div>
+<div style="position:absolute;left:45.90px;top:172.45px" class="cls_002"><span class="cls_002">Name and surname: ……………………………………………………………………………………………………………………………………………</span></div>
+<div style="position:absolute;left:45.90px;top:190.93px" class="cls_002"><span class="cls_002">Home Phone: ………………………………………………………………  Work Phone: ………………………………………………………………</span></div>
+<div style="position:absolute;left:45.90px;top:209.17px" class="cls_002"><span class="cls_002">Mobile: ……………………………………………………………………….</span></div>
+<div style="position:absolute;left:45.90px;top:227.41px" class="cls_002"><span class="cls_002">Email address: …………………………………………………………………………………………………………………………………………………….</span></div>
+<div style="position:absolute;left:253.48px;top:257.41px" class="cls_011"><span class="cls_011">Emergency contacts</span></div>
+<div style="position:absolute;left:45.90px;top:271.33px" class="cls_002"><span class="cls_002">1.  Name & surname:</span></div>
+<div style="position:absolute;left:298.40px;top:271.33px" class="cls_002"><span class="cls_002">2.   Name & surname:</span></div>
+<div style="position:absolute;left:45.90px;top:308.29px" class="cls_002"><span class="cls_002">Relation to the child:</span></div>
+<div style="position:absolute;left:295.50px;top:308.29px" class="cls_002"><span class="cls_002">Relation to the child:</span></div>
+<div style="position:absolute;left:45.90px;top:345.49px" class="cls_002"><span class="cls_002">Home address:</span></div>
+<div style="position:absolute;left:295.50px;top:345.49px" class="cls_002"><span class="cls_002">Home address:</span></div>
+<div style="position:absolute;left:45.90px;top:382.69px" class="cls_002"><span class="cls_002">Contact details:</span></div>
+<div style="position:absolute;left:295.50px;top:382.69px" class="cls_002"><span class="cls_002">Contact details:</span></div>
+<div style="position:absolute;left:45.90px;top:400.93px" class="cls_002"><span class="cls_002">H: …………………………………………… W: ………………………………….</span></div>
+<div style="position:absolute;left:295.50px;top:400.93px" class="cls_002"><span class="cls_002">H: …………………………………………… W: ………………………………….</span></div>
+<div style="position:absolute;left:45.90px;top:419.17px" class="cls_002"><span class="cls_002">Mobile: …………………………………………………………………………….</span></div>
+<div style="position:absolute;left:295.50px;top:419.17px" class="cls_002"><span class="cls_002">Mobile: …………………………………………………………………………….</span></div>
+<div style="position:absolute;left:45.90px;top:437.65px" class="cls_002"><span class="cls_002">Email address: ………………………………………………………………….</span></div>
+<div style="position:absolute;left:295.50px;top:437.65px" class="cls_002"><span class="cls_002">Email address: ………………………………………………………………….</span></div>
+<div style="position:absolute;left:252.66px;top:470.53px" class="cls_011"><span class="cls_011">Medical practitioner</span></div>
+<div style="position:absolute;left:45.90px;top:496.69px" class="cls_002"><span class="cls_002">Name: …………………………………………………………………………………………………………………………………………………………………</span></div>
+<div style="position:absolute;left:45.90px;top:514.93px" class="cls_002"><span class="cls_002">Address: ……………………………………………………………………………………………………………………………………………………………..</span></div>
+<div style="position:absolute;left:45.90px;top:533.41px" class="cls_002"><span class="cls_002">Contact details: …………………………………………………………………………………………………………………………………………………..</span></div>
+<div style="position:absolute;left:45.90px;top:551.65px" class="cls_002"><span class="cls_002">Signature: ……………………………………………</span></div>
+<div style="position:absolute;left:277.14px;top:551.65px" class="cls_002"><span class="cls_002">Date: …………………………………………………………………………</span></div>
+<div style="position:absolute;left:256.02px;top:590.29px" class="cls_011"><span class="cls_011">Other information</span></div>
+<div style="position:absolute;left:45.90px;top:721.57px" class="cls_007"><span class="cls_007">Parent name & signature:</span></div>
+<div style="position:absolute;left:407.10px;top:721.57px" class="cls_007"><span class="cls_007">Date:</span></div>
+<div style="position:absolute;left:90.06px;top:804.13px" class="cls_002"><span class="cls_002">Page 11 of 12</span></div>
+<div style="position:absolute;left:485.34px;top:804.13px" class="cls_002"><span class="cls_002">CWA</span></div>
+</div>
+<div style="position:absolute;left:50%;margin-left:-297px;top:9361px;width:595px;height:841px;border-style:outset;overflow:hidden">
+<div style="position:absolute;left:0px;top:0px">
+<img src="97c0762a-299b-11eb-8b25-0cc47a792c0a_id_97c0762a-299b-11eb-8b25-0cc47a792c0a_files/background12.jpg" width=595 height=841></div>
+<div style="position:absolute;left:241.20px;top:36.61px" class="cls_003"><span class="cls_003">CHILD ENROLMENT FORM</span></div>
+<div style="position:absolute;left:290.94px;top:55.57px" class="cls_004"><span class="cls_004">Point Cook Montessori Centre</span></div>
+<div style="position:absolute;left:255.58px;top:64.69px" class="cls_004"><span class="cls_004">13-19 Boardwalk Boulevard, Point Cook, Vic 3030</span></div>
+<div style="position:absolute;left:313.83px;top:74.05px" class="cls_004"><span class="cls_004">Ph 03 8353 1299</span></div>
+<div style="position:absolute;left:183.00px;top:102.85px" class="cls_051"><span class="cls_051">Nutrition and Dietary Information</span></div>
+<div style="position:absolute;left:249.65px;top:143.89px" class="cls_011"><span class="cls_011">Child Personal Details</span></div>
+<div style="position:absolute;left:45.90px;top:170.05px" class="cls_002"><span class="cls_002">Child name and surname: ……………………………………………………………………………………………………………………………………</span></div>
+<div style="position:absolute;left:45.90px;top:188.29px" class="cls_002"><span class="cls_002">Date of birth: ……………………………………………………………………………………………………………………………………………………..</span></div>
+<div style="position:absolute;left:45.90px;top:208.69px" class="cls_002"><span class="cls_002">Gender:</span></div>
+<div style="position:absolute;left:105.83px;top:208.69px" class="cls_002"><span class="cls_002">Female</span></div>
+<div style="position:absolute;left:180.54px;top:208.69px" class="cls_002"><span class="cls_002">Male</span></div>
+<div style="position:absolute;left:246.24px;top:208.69px" class="cls_002"><span class="cls_002">Other</span></div>
+<div style="position:absolute;left:202.31px;top:251.17px" class="cls_011"><span class="cls_011">Information relating to dietary restrictions</span></div>
+<div style="position:absolute;left:45.90px;top:265.09px" class="cls_002"><span class="cls_002">List </span><span class="cls_007">ALL</span><span class="cls_002"> foods which should be avoided due to </span><span class="cls_007">allergies</span><span class="cls_002">:</span></div>
+<div style="position:absolute;left:45.90px;top:375.01px" class="cls_009"><span class="cls_009">*Please ensure that you have completed an ‘Allergy Action Plan’ and provided the centre with prescribed medication</span></div>
+<div style="position:absolute;left:45.90px;top:399.97px" class="cls_002"><span class="cls_002">List </span><span class="cls_007">ALL</span><span class="cls_002"> foods which should be avoided due to a confirmed intolerance:</span></div>
+<div style="position:absolute;left:45.90px;top:521.89px" class="cls_009"><span class="cls_009">*Please ensure that you have completed and attached the ‘medical condition support plan’</span></div>
+<div style="position:absolute;left:45.90px;top:546.85px" class="cls_002"><span class="cls_002">List any other special dietary requirements (such as for cultural or religious reasons):</span></div>
+<div style="position:absolute;left:45.90px;top:706.93px" class="cls_007"><span class="cls_007">Parent name & signature:</span></div>
+<div style="position:absolute;left:407.10px;top:706.69px" class="cls_007"><span class="cls_007">Date:</span></div>
+<div style="position:absolute;left:90.06px;top:804.13px" class="cls_002"><span class="cls_002">Page 12 of 12</span></div>
+<div style="position:absolute;left:485.34px;top:804.13px" class="cls_002"><span class="cls_002">CWA</span></div>
+</div>
+
+</body>
+</html>
