@@ -29,18 +29,23 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.sublime-project
 /tests/tests/
 /tests/results/
-api/application/config/database.php
-application/config/constants.php
-application/config/config.php
-application/config/config.php
-application/config/constants.php
-application/config/constants.php
-application/config/config.php
-application/config/config.php
-application/config/constants.php
-application/config/config.php
-application/config/constants.php
-application/config/constants.php
-application/config/config.php
-application/config/constants.php
-application/config/constants.php
+# api/application/config/database.php
+# application/config/constants.php
+# application/config/config.php
+# application/config/config.php
+# application/config/constants.php
+# application/config/constants.php
+# application/config/config.php
+# application/config/config.php
+# application/config/constants.php
+# application/config/config.php
+# application/config/constants.php
+# application/config/constants.php
+# application/config/config.php
+# application/config/constants.php
+# application/config/constants.php
+
+/application/logs/
+/vendor/
+/writable/
+/.env

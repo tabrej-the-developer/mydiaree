@@ -72,8 +72,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $active_group = 'default';
 $query_builder = TRUE;
- 
-// server Database conn
  // arpi10682595
 $db['default'] = array(
 	'dsn'	=> '',

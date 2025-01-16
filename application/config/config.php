@@ -23,15 +23,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-// $config['base_url'] = 'http://todquest.com/Mykronicle101/';
-// $config['base_url'] = 'https://stage.todquest.com/Mykronicle101/';
+// $config['base_url'] = 'https://todquest.com/mykronicle101/';
+// $config['base_url'] = 'https://stage.todquest.com/mykronicle101/';
 
 // server url
 $config['base_url'] = 'https://mydiaree.com/';
 
 //local host url
 // $config['base_url'] = 'http://localhost/mydiaree/';
-/*   
+
+/*
 |--------------------------------------------------------------------------
 | Index File
 |--------------------------------------------------------------------------
@@ -58,7 +59,7 @@ $config['index_page'] = '';
 |
 | WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
 */
-$config['uri_protocol']	= 'REQUEST_URI';
+$config['uri_protocol']	= 'AUTO';
 
 /*
 |--------------------------------------------------------------------------
@@ -229,7 +230,7 @@ $config['allow_get_array'] = TRUE;
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
+$config['log_threshold'] = 2;
 
 /*
 |--------------------------------------------------------------------------
