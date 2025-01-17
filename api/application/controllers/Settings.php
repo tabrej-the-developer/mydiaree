@@ -270,6 +270,11 @@ class Settings extends CI_Controller {
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			// $json = json_decode(file_get_contents('php://input'));
+			// echo "<pre>";
+			// print_r($_POST);
+			// exit;
+
+
 			if($_POST!= null && $res != null && $res->userid == $_POST['userid']){
 
 				$checkEmpCode = $this->SettingsModel->checkEmpCodeAvl($_POST['username']);
@@ -313,7 +318,7 @@ class Settings extends CI_Controller {
 							$_POST['image_name'] = "AMIGA-Montessori.jpg";
 						}
 
-						$password = rand (0000 , 9999);
+						$password = $_POST['password'];
 						$hashedPassword = sha1($password);
 						$_POST['password'] = $hashedPassword;
 					}

@@ -104,21 +104,46 @@ class Settings extends CI_Controller {
 				$user = $query->row();
 	
 				if ($user) {
-					$email = $user->emailid; 
-					$password = $user->password; 
-					// $this->load->library('email');
-					$this->load->library('email', $config);
-					$this->email->from('your_email@example.com', 'Your App Name');
-					$this->email->to($email);
-					$this->email->subject('Your Password');
-					$this->email->message("Your password is: " . $password);
+					// $email = $user->emailid; 
+					// $password = $user->password; 
+					// // $this->load->library('email');
+					// $this->load->library('email', $config);
+					// $this->email->from('your_email@example.com', 'Your App Name');
+					// $this->email->to($email);
+					// $this->email->subject('Your Password');
+					// $this->email->message("Your password is: " . $password);
 	
-					if ($this->email->send()) {
-						echo "Password has been sent to the user's email.";
-					} else {
-						echo "Failed to send the email.";
-						echo $this->email->print_debugger();
+					// if ($this->email->send()) {
+					// 	echo "Password has been sent to the user's email.";
+					// } else {
+					// 	echo "Failed to send the email.";
+					// 	echo $this->email->print_debugger();
+					// }
+  
+					$this->load->library('form_validation');
+
+
+
+					if ($this->input->post()) {
+						// Handle form submission
+						$this->form_validation->set_rules('change_pin', 'Change Pin', 'required|numeric|exact_length[4]');
+						$this->form_validation->set_rules('confirm_pin', 'Confirm Pin', 'required|matches[change_pin]');
+	
+						if ($this->form_validation->run() == TRUE) { 
+							$newPin = $this->input->post('change_pin');
+							$this->db->where('userid', $recordId);
+							$this->db->update('users', ['password' => sha1($newPin)]);
+	
+							$this->session->set_flashdata('success', 'PIN updated successfully!');
+							redirect('Settings/adminresetpassword?recordId=' . $recordId);
+						} else {
+							$this->session->set_flashdata('error', validation_errors());
+						}
 					}
+	
+					$this->load->view('admin_reset_password', ['user' => $user]);
+          
+
 				} else {
 					echo "No user found with the provided Record ID.";
 				}
@@ -402,6 +427,14 @@ class Settings extends CI_Controller {
 			// echo "<pre>";
 			// print_r($data);
 			// exit;
+			if (!isset($data['centerIds']) || empty($data['centerIds'])) {
+				$data = [];
+				$data['Status'] = "ERROR";
+				$data['Message'] = "Please select at least one center.";
+				echo json_encode($data);
+				return;
+			}
+			
 			$data['centerIds'] = json_encode($data['centerIds']);
 			if(isset($_FILES['image']['tmp_name']) && !empty($_FILES['image']['tmp_name'])){
 				$data['image'] = new CurlFile($_FILES['image']['tmp_name'],$_FILES['image']['type'],$_FILES['image']['name']);
