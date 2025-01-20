@@ -58,6 +58,8 @@ class SelfAssessment extends CI_Controller {
 				
 				if ($response) {
 					http_response_code(200);
+					$data['id'] = $response;
+					$data['center_id'] = $json->centerid;
 					$data['Status'] = "SUCCESS";
 					$data['Message'] = "New self assessment is created!";
 				}else{

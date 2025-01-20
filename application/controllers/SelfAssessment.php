@@ -149,10 +149,13 @@ class SelfAssessment extends CI_Controller {
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close ($ch);
         $jsonOutput = json_decode($server_output);
-        //print_r($jsonOutput); exit;
+        // print_r($jsonOutput); exit;
         if($httpcode == 200){
           if ($jsonOutput->Status == "SUCCESS") {
-            $url = base_url('SelfAssessment').'?centerid='.$data['centerid'];
+            // print_r($jsonOutput); exit;
+            // $url = base_url('SelfAssessment').'?centerid='.$data['centerid'];
+            $this->session->set_flashdata('success', 'Self Assessment Creted successfully!');
+            $url = base_url('SelfAssessment').'/edit?id='.$jsonOutput->id.'&center_id='.$jsonOutput->center_id;
             redirect($url);
           }else{
             echo $jsonOutput->Message;
@@ -193,6 +196,7 @@ class SelfAssessment extends CI_Controller {
     {
       if($this->session->has_userdata('LoginId')){
         $formdata = $this->input->post();
+        $center_id = $this->input->post('center_id');
         $legalMatches = preg_grep("/^nl_status_/",array_keys($formdata));
         $legalArr = [];
         $tempArr = [];
@@ -236,7 +240,9 @@ class SelfAssessment extends CI_Controller {
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close ($ch);
         if ($httpcode == "200") {
-          $url = base_url("SelfAssessment/edit")."?id=".$formdata['asmnt_id']."&status=success";
+          // $url = base_url("SelfAssessment/edit")."?id=".$formdata['asmnt_id']."&status=success";
+          $this->session->set_flashdata('success', 'Added successfully!');
+          $url = base_url('SelfAssessment').'?centerid='.$center_id;
         }else{
           $url = base_url("SelfAssessment/edit")."?id=".$formdata['asmnt_id']."&status=error";
         }

@@ -133,6 +133,11 @@
 <body id="app-container" class="menu-default show-spinner">
 <?php $this->load->view('sidebar'); ?> 
 <main data-centerid="<?= isset($centerid)?$centerid:null; ?>">
+<?php if ($this->session->flashdata('success')): ?>
+    <div class="alert alert-success">
+        <?php echo $this->session->flashdata('success'); ?>
+    </div>
+<?php endif; ?>
     <div class="default-transition">
         <div class="container-fluid">
             <div class="row">
@@ -202,9 +207,13 @@
                                     <a class="nav-link" href="#tabs-2" data-toggle="tab" aria-expanded="true">Quality Area</a>
                                 </li>
                             </ul>
+                            <?php 
+$center_id = $this->input->get('center_id'); // Retrieve from the URL
+?>
                             <div class="card-body sw-container tab-content">
                                 <form action="<?= base_url("SelfAssessment/saveSelfAssessment"); ?>" method="post">
                                     <input type="hidden" class="form-control" name="asmnt_id" value="<?= $_GET['id']; ?>">
+                                    <input type="hidden" name="center_id" value="<?php echo $center_id; ?>">
                                     <div class="tab-content mainTabObservation">
                                         <div class="tab-pane step-content active" id="tabs-1">
                                             <table class="qiptable table table-bordered">

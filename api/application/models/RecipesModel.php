@@ -177,7 +177,7 @@ class RecipesModel extends CI_Model {
 		$this->db->from('recipes r');
 		$this->db->join('users u', 'r.createdBy = u.userid', 'left');
 		$this->db->where('r.centerid', $centerid);
-		$this->db->order_by('r.type', 'ASC');
+		$this->db->order_by('r.type', 'DESC');
 	
 		// Execute the query and return the result
 		$query = $this->db->get();

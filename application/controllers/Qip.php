@@ -492,9 +492,13 @@ class Qip extends CI_Controller {
 			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			curl_close ($ch);
 			$jsonOutput = json_decode($server_output);
+			// print_r($jsonOutput);
+			// exit;
 			if($httpcode == 200){
 				if ($jsonOutput->Status == "SUCCESS") {
-					$urlqip = base_url('Qip')."?centerid=".$jsonOutput->Centerid;
+					$this->session->set_flashdata('success', 'New Qip Added!');
+					$urlqip = base_url('qip/')."edit?id=".$jsonOutput->id."&centerid=".$jsonOutput->Centerid;
+					// $urlqip = base_url('Qip')."?centerid=".$jsonOutput->Centerid;
 					redirect($urlqip);
 				}else{
 					echo $jsonOutput->Message;

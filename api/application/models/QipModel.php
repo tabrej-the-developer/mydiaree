@@ -124,10 +124,12 @@ class QipModel extends CI_Model {
 	}
 
 	public function getQips($centerid)
-	{
-		$query = $this->db->get_where("qip", array('centerId' => $centerid));
-		return $query->result();
-	}
+{
+    $this->db->where('centerId', $centerid);
+    $this->db->order_by('id', 'DESC'); // Replace 'id' with the column name to sort by
+    $query = $this->db->get("qip");
+    return $query->result();
+}
 
 	public function getQip($id,$centerid=null)
 	{	

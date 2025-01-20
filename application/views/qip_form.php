@@ -37,6 +37,11 @@
 <body id="app-container" class="menu-default show-spinner">
     <?php $this->load->view('sidebar'); ?> 
     <main data-centerid="<?= isset($centerid)?$centerid:null; ?>">
+    <?php if ($this->session->flashdata('success')): ?>
+    <div class="alert alert-success">
+        <?php echo $this->session->flashdata('success'); ?>
+    </div>
+<?php endif; ?>
         <div class="default-transition">
             <div class="container-fluid">
                 <div class="row">

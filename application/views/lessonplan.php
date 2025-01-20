@@ -67,14 +67,18 @@
                                         <span class="h5 text-primary"><?php echo $name;?></span>
                                     </div>
                                     <ul class="mt-3 mb-0 p-0" style="list-style-type: none;">
-                                        <?php if(isset($get_title)){
-                                                foreach($get_title as $title_key=>$title_value){?>
-                                                    <li>
-                                                        <input id="<?php echo $title_key;?>" class='status_change' type="checkbox">
-                                                        <label class="h6" for="check1"><?php echo $title_value;  }?></label>
-                                                    </li>
-                                        <?php }?>
-                                    </ul>
+    <?php if (isset($get_title)) {
+        // echo '<pre>';
+        // print_r($get_title);
+        // echo '</pre>';
+        foreach ($get_title as $title_key => $title_value) { ?>
+            <li>
+                <input id="<?php echo $title_key; ?>" class='status_change' type="checkbox">
+                <label class="h6" for="<?php echo $title_key; ?>"><?php echo $title_value; ?></label>
+            </li>
+        <?php }
+    } ?>
+</ul>
                                 </div>
                             </div>
                             <?php } ?>
@@ -100,12 +104,18 @@
 </body>
 <script>
     $(document).ready(function(){
-        $('.status_change').click(function(){
-            get_id=$('.status_change').attr('id');
-            split_id=get_id.split('_');
+        $('.status_change').click(function() {
+        // Use $(this) to get the id of the clicked checkbox
+        var get_id = $(this).attr('id'); // Changed this line
+        var split_id = get_id.split('_'); // Assuming your IDs are formatted with underscores
+        console.log("split_id id", split_id);
+            console.log("split_id id",split_id);
             childid=split_id[0];
             actid=split_id[1];
             subid=split_id[2];
+            console.log("child id",childid);
+            console.log("activityid id",actid);
+            console.log("subid id",subid); 
 
             $.ajax({
                 url:'<?php echo base_url()?>/Lessonplan/lessondetailschange',

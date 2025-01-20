@@ -163,7 +163,7 @@
                                 $integerCount = 0;
                                 foreach ($Recent as $recent => $rct) { $integerCount++;
                             ?>
-                            <div class="col-xl-2 col-lg-3 col-12 col-sm-6 mb-4 main-card-tag">
+                            <div class="col-xl-3 col-lg-3 col-12 col-sm-6 mb-4 main-card-tag" style="max-height:300px;">
                                 <div class="card active">
                                     <div class="position-relative">
                                         <a class="" href="#">
@@ -225,7 +225,7 @@
                         <h3 class="mb-3">Earlier</h3>
                         <div class="row list disable-text-selection" data-check-all="checkAll">
                             <?php $integerCount = 0;foreach ($Earlier as $earlier => $rct) { $integerCount++; ?>
-                            <div class="col-xl-2 col-lg-3 col-12 col-sm-6 mb-4 main-card-tag">
+                                <div class="col-xl-3 col-lg-3 col-12 col-sm-6 mb-4 main-card-tag" style="max-height:300px;">
                                 <div class="card active">
                                     <div class="position-relative">
                                         <a class="" href="#">

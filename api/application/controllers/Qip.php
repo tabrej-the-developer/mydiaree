@@ -469,6 +469,7 @@ class Qip extends CI_Controller {
 					$data['Status'] = "SUCCESS";
 					$data['Message'] = "New QIP is created!";
 					$data['Centerid'] = $json->centerid;
+					$data['id'] = $response;
 				}else{
 					$data['Status'] = "ERROR";
 					$data['Message'] = "Something went wrong!";
