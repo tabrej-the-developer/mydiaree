@@ -223,17 +223,18 @@ class Lessonplan extends CI_Controller {
         $_POST['userid']=$this->session->userdata('LoginId');
         $_POST['created_by']=$this->session->userdata('Name');
 				$centerIds=$this->session->userdata('centerIds');
-
+        // print_r($centerIds);
+        // exit;
           if($_POST['usertype']=='Superadmin'){
             $_POST['centerid']='0';
           }else{
-            $_POST['centerid']=$centerIds->id;
+            $_POST['centerid']=$centerIds[0]->id;
           } 
           
           
           $url = BASE_API_URL.'lessonplan/getlessonstatusdetails';
           
-          
+         
           $ch = curl_init($url);
           curl_setopt($ch, CURLOPT_URL,$url);
 
@@ -250,6 +251,8 @@ class Lessonplan extends CI_Controller {
       
           if($httpcode == 200){
             $jsonOutput = json_decode($server_output);
+            print_r($jsonOutput);
+            exit;
             $status = $jsonOutput->status;
             curl_close ($ch);
             }
