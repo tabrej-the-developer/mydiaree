@@ -306,7 +306,7 @@
 
                                                         <div id="obs-notes">
                                                             <div class="form-group required">
-                                                                <label class="control-label">Notes</label>
+                                                                <label class="control-label">Analysis</label>
                                                                 <textarea name="notes" style="height: 73px;" id="obs_notes"><?php echo isset($observation->notes)?$observation->notes:''; ?></textarea>
                                                             </div>
                                                         </div>

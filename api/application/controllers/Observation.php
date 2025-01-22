@@ -3055,5 +3055,80 @@ foreach ($obsMonSubArr as $monSubjects => $monsubject) {
 		}
 		echo json_encode($data);
 	}
+
+
+	public function getDraftObservations() {
+		$date = date('Y-m-d H:i:s', strtotime('-14 days'));
+		
+		// Get observations older than 14 days
+		$observations = $this->db
+			->select('id, title, date_added')
+			->where('status', 'Draft')
+			->where('date_added <', $date)  
+			->get('observation')
+			->result_array();
+			
+			
+		
+		// Get media for each observation
+		foreach ($observations as &$observation) {
+			$media = $this->db
+				->select('mediaType, mediaUrl')
+				->where('observationId', $observation['id'])
+				->get('observationmedia')
+				->row();
+			
+			if ($media) {
+				$observation['mediaType'] = $media->mediaType;
+				$observation['mediaUrl'] = $media->mediaUrl;
+			} else {
+				$observation['mediaType'] = null;
+				$observation['mediaUrl'] = null;
+			}
+		}
+		// print_r($observations);
+		// exit;
+		$observationsCount = count($observations);
+
+		$response = [
+			'status' => 'success',
+			'count' => $observationsCount,
+			'observations' => $observations
+		];
+		$this->output
+        ->set_content_type('application/json')
+        ->set_output(json_encode($response));
+		// Return observations with count
+		// return [
+		// 	'observations' => $observations,
+		// 	'count' => $observationsCount
+		// ];
+	
+	}
+	
+	public function updateObservations() {
+		$action = $this->input->post('action');
+		$selectedIds = json_decode($this->input->post('selectedIds'));
+		$userId = $this->input->post('userId');
+		
+		if ($action === 'delete') {
+			$result = $this->ObservationModel->deleteObservations($selectedIds);
+		} else if ($action === 'publish') {
+			$result = $this->ObservationModel->publishObservations($selectedIds);
+		}
+		
+		$response = [
+			'status' => $result ? 'success' : 'error',
+			'message' => $result ? 'Observations updated successfully' : 'Failed to update observations'
+		];
+		
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($response));
+	}
+
+
+
+
 }
 ?>

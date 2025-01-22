@@ -26,15 +26,18 @@ class Room extends CI_Controller
 
     public function getRooms($user_id,$centerid, $filter_name = null){
         $headers = $this->input->request_headers();
+        // print_r($user_id); exit;
         if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
             $res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
             if ($user_id != null && $res != null && $res->userid == $user_id) {
                 $userArr = $this->LoginModel->getUserFromId($user_id);
                 if ($userArr->userType == "Superadmin") {
                     $loadProg = 1;
+                    $admin = 1;
                     $permission = NULL;
                 }else{
                     if ($userArr->userType == "Staff") {
+                        $admin = 0;
                         $permission = $this->UtilModel->getPermissions($user_id,$centerid);
                         if (!empty($permission) && $permission->viewRoom==1) {
                             $loadProg = 1;
@@ -51,7 +54,16 @@ class Room extends CI_Controller
                 if ($loadProg == 1) {
                     $filter_type = ['filter_type' => 'staff','centerid'=>$centerid];
                     $educators = $this->roomModel->getUser($filter_type);
+                    // print_r($user_id);exit;
+                    $rooms = [];
+                    if($userArr->userType == "Superadmin"){
+                        // print_r("admin");exit;
                     $rooms = $this->roomModel->getRooms($user_id,$centerid,$filter_name);
+                    }else{
+                        // print_r("admin");exit;
+                        $rooms = $this->roomModel->getRoomsByUserId($user_id,$centerid,$filter_name); 
+                        // $rooms = $this->roomModel->getRooms($user_id,$centerid,$filter_name);
+                    }
                     foreach ($rooms as $room) {
                         $filter_data = ['filter_room' => $room->id];
                         $childs = $this->roomModel->getRoomChilds($filter_data);
@@ -148,6 +160,57 @@ class Room extends CI_Controller
             http_response_code(401);
         }
     }
+
+
+
+
+    public function getEducatorsList($userId, $roomId) {
+        // Validate user session/token here if needed
+        
+        // Get all staff users
+        $filter_type = ['filter_type' => 'staff'];
+        $all_educators = $this->roomModel->getUser($filter_type);
+        
+        // Get assigned staff for this room
+        $assigned_staff = $this->roomModel->getRoomStaff2($roomId);
+        
+        // Create array of assigned staff IDs
+        $assigned_staff_ids = array_column($assigned_staff, 'staffid');
+        
+        $response = [
+            'status' => 'success',
+            'educators' => $all_educators,
+            'assigned_staff' => $assigned_staff_ids
+        ];
+        
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
+    }
+    
+    public function updateEducatorsList() {
+        $roomId = $this->input->post('roomId');
+        $selectedStaff = json_decode($this->input->post('selectedStaff'));
+        $userId = $this->input->post('userId');
+        
+        // Validate user session/token here if needed
+        
+        $result = $this->roomModel->updateRoomStaff($roomId, $selectedStaff);
+        
+        $response = [
+            'status' => $result ? 'success' : 'error',
+            'message' => $result ? 'Educators updated successfully' : 'Failed to update educators'
+        ];
+        
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
+    }
+
+
+
+
+
 
     public function editRoom()
     {

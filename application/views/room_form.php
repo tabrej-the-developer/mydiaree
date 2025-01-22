@@ -126,13 +126,17 @@
                 </div> 
             </div>
             <ul class="nav nav-tabs separator-tabs ml-0 mb-5" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="first-tab" data-toggle="tab" href="#first" role="tab" aria-controls="first" aria-selected="true">CHILDS</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="second-tab" data-toggle="tab" href="#second" role="tab" aria-controls="second" aria-selected="false">EDUCATORS</a>
-                </li>
-            </ul>
+            <ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" id="first-tab" data-toggle="tab" href="#first" role="tab" aria-controls="first" aria-selected="true">CHILDS</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="second-tab" data-toggle="tab" href="#second" role="tab" aria-controls="second" aria-selected="false">EDUCATORS</a>
+    </li>
+</ul>
+<button id="manageEducatorsBtn" class="btn btn-outline-primary" style="margin-left:1111px;margin-bottom:15px; display: none;" onclick="loadEducators()" >Manage Educators</button>
+
+
             <div class="tab-content">
                 <div class="tab-pane show active" id="first" role="tabpanel" aria-labelledby="first-tab">
                     <div class="row my-2">
@@ -348,6 +352,27 @@
         </div>
     </div>
 
+    <!-- Add Modal HTML -->
+<div class="modal fade" id="educatorsModal" tabindex="-1" role="dialog" aria-labelledby="educatorsModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="educatorsModalLabel">Manage Educators</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="max-height:450px;overflow-y:auto;">
+        <div id="educatorsList"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="saveEducators()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
     <?php $this->load->view('footer_v3'); ?>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/jquery-3.3.1.min.js"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/bootstrap.bundle.min.js"></script>
@@ -357,6 +382,8 @@
     <script src="<?= base_url('assets/v3'); ?>/js/dore.script.js"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/scripts.js"></script>
 </body>
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+
 <script>
     $(document).ready(function(){
         //$('.btn-delete-child').on('click', function() {
@@ -460,5 +487,99 @@
             
         });
     });
+
+
+    function loadEducators() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get('id');
+    
+    $.ajax({
+        url: '<?= base_url("room/manageEducators") ?>',
+        type: 'GET',
+        data: { roomId: roomId },
+        success: function(response) {
+            const data = typeof response === 'string' ? JSON.parse(response) : response;
+            
+            if (data.status === 'success') {
+                let html = '<div class="form-group">';
+                
+                data.educators.forEach(educator => {
+                    const isChecked = data.assigned_staff.includes(educator.userid) ? 'checked' : '';
+                    html += `
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="educator" value="${educator.userid}" ${isChecked}>
+                                ${educator.name}
+                            </label>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+                $('#educatorsList').html(html);
+                $('#educatorsModal').modal('show');
+            } else {
+                alert('Error loading educators. Please try again.');
+            }
+        },
+        error: function() {
+            alert('Failed to connect to the server. Please try again.');
+        }
+    });
+}
+
+function saveEducators() {
+    const selectedStaff = [];
+    $('input[name="educator"]:checked').each(function() {
+        selectedStaff.push($(this).val());
+    });
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get('id');
+    
+    $.ajax({
+        url: '<?= base_url("room/updateEducators") ?>',
+        type: 'POST',
+        data: {
+            roomId: roomId,
+            selectedStaff: JSON.stringify(selectedStaff)
+        },
+        success: function(response) {
+            const result = typeof response === 'string' ? JSON.parse(response) : response;
+            
+            if (result.status === 'success') {
+                alert('Educators updated successfully!');
+                $('#educatorsModal').modal('hide');
+                location.reload();
+            } else {
+                alert('Error updating educators. Please try again.');
+            }
+        },
+        error: function() {
+            alert('Failed to connect to the server. Please try again.');
+        }
+    });
+}
+
+
+
 </script>
+
+
+<script>
+$(document).ready(function() {
+    // Show the button when the second tab is clicked
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        if ($(e.target).attr('id') === 'second-tab') {
+            $('#manageEducatorsBtn').show(); // Show the button
+        } else {
+            $('#manageEducatorsBtn').hide(); // Hide the button
+        }
+    });
+});
+</script>
+
+
+
+
 </html>

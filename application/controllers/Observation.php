@@ -2287,5 +2287,67 @@ class Observation extends CI_Controller {
 			$this->load->view('welcome');	
 		}
 	}
+
+
+	public function getDraftObservations() {
+		if($this->session->has_userdata('LoginId')) {
+			$url = BASE_API_URL."/observation/getDraftObservations/".$this->session->userdata('LoginId');
+			
+			$ch = curl_init($url);
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'X-Device-Id: '.$this->session->userdata('X-Device-Id'),
+				'X-Token: '.$this->session->userdata('AuthToken')
+			));
+			
+			$server_output = curl_exec($ch);
+			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+			// print_r($server_output);exit;
+			if($httpcode == 200) {
+				echo $server_output;
+			} else {
+				echo json_encode(['error' => 'Failed to fetch observations']);
+			}
+			curl_close($ch);
+		}
+	}
+	
+	public function updateObservations() {
+		if($this->session->has_userdata('LoginId')) {
+			$url = BASE_API_URL."/observation/updateObservations";
+			$action = $this->input->post('action'); // 'delete' or 'publish'
+			$selectedIds = $this->input->post('selectedIds');
+			
+			$ch = curl_init($url);
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+				'action' => $action,
+				'selectedIds' => $selectedIds,
+				'userId' => $this->session->userdata('LoginId')
+			]));
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'X-Device-Id: '.$this->session->userdata('X-Device-Id'),
+				'X-Token: '.$this->session->userdata('AuthToken')
+			));
+			
+			$server_output = curl_exec($ch);
+			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+			
+			if($httpcode == 200) {
+				echo $server_output;
+			} else {
+				echo json_encode(['error' => 'Failed to update observations']);
+			}
+			curl_close($ch);
+		}
+	}
+
+
+
+
+
 }  
 ?>

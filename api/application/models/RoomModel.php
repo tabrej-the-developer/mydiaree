@@ -207,6 +207,43 @@ class roomModel extends CI_Model
         return $query->result();
     }
 
+
+    
+
+    public function getRoomStaff2($roomId) {
+        return $this->db
+            ->select('staffid')
+            ->where('roomid', $roomId)
+            ->get('room_staff')
+            ->result_array();
+    }
+    
+    public function updateRoomStaff($roomId, $staffIds) {
+        // Begin transaction
+        $this->db->trans_start();
+        
+        // Delete existing assignments
+        $this->db->where('roomid', $roomId)->delete('room_staff');
+        
+        // Insert new assignments
+        $data = [];
+        foreach ($staffIds as $staffId) {
+            $data[] = [
+                'roomid' => $roomId,
+                'staffid' => $staffId
+            ];
+        }
+        
+        if (!empty($data)) {
+            $this->db->insert_batch('room_staff', $data);
+        }
+        
+        $this->db->trans_complete();
+        return $this->db->trans_status();
+    }
+
+
+
     // public function getRooms($userid, $centerid, $filter_name = null)
     // {
     //     $this->load->database();
@@ -242,6 +279,35 @@ class roomModel extends CI_Model
         $query = $this->db->query($sql, [$centerid]);
     }
     
+    return $query->result();
+}
+
+public function getRoomsByUserId($userid, $centerid, $filter_name = null)
+{
+    $this->load->database();
+
+    // Step 1: Get all room IDs for the given user ID from the room_staff table
+    $this->db->select('roomid');
+    $this->db->from('room_staff');
+    $this->db->where('staffid', $userid);
+    $subquery = $this->db->get_compiled_select();
+
+    // Step 2: Use the room IDs to fetch room details from the room table
+    $sql = "SELECT r.id, r.name, r.capacity, r.color, r.status, u.name AS userName
+            FROM room r
+            LEFT JOIN users u ON u.userid = r.userId
+            WHERE r.centerid = ? AND r.id IN ($subquery)";
+    
+    // If a filter name is provided, add it to the query
+    if (!empty($filter_name)) {
+        $sql .= " AND r.name LIKE ?";
+        $filter_name = "%$filter_name%";
+        $query = $this->db->query($sql, [$centerid, $filter_name]);
+    } else {
+        $query = $this->db->query($sql, [$centerid]);
+    }
+
+    // Return the result as an array of objects
     return $query->result();
 }
 

@@ -277,7 +277,7 @@ class Room extends CI_Controller {
 	{	
 		if($this->session->has_userdata('LoginId')){
 			
-			if(empty($_GET['centerid'])){
+	if(empty($_GET['centerid'])){
 				$centers = $this->session->userdata("centerIds");
 				$defCenter = $centers[0]->id;
 			}else{
@@ -419,6 +419,75 @@ class Room extends CI_Controller {
 		redirect('welcome');
 	   }	
 	}
+
+
+	
+
+	public function manageEducators() {
+		if($this->session->has_userdata('LoginId')) {
+			$roomId = $this->input->get('roomId');
+			
+			$url = BASE_API_URL."/room/getEducatorsList/".$this->session->userdata('LoginId')."/".$roomId;
+			
+			$ch = curl_init($url);
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'X-Device-Id: '.$this->session->userdata('X-Device-Id'),
+				'X-Token: '.$this->session->userdata('AuthToken')
+			));
+			
+			$server_output = curl_exec($ch);
+			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+			// print_r($server_output);
+			// exit;
+			if($httpcode == 200) {
+				echo $server_output; // Return the API response directly
+			} else {
+				echo json_encode(['error' => 'Failed to fetch educators']);
+			}
+			curl_close($ch);
+		}
+	}
+	
+	public function updateEducators() {
+		if($this->session->has_userdata('LoginId')) {
+			$roomId = $this->input->post('roomId');
+			$selectedStaff = $this->input->post('selectedStaff');
+			
+			$url = BASE_API_URL."/room/updateEducatorsList";
+			
+			$ch = curl_init($url);
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+				'roomId' => $roomId,
+				'selectedStaff' => $selectedStaff,
+				'userId' => $this->session->userdata('LoginId')
+			]));
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'X-Device-Id: '.$this->session->userdata('X-Device-Id'),
+				'X-Token: '.$this->session->userdata('AuthToken')
+			));
+			
+			$server_output = curl_exec($ch);
+			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+			
+			if($httpcode == 200) {
+				echo $server_output;
+			} else {
+				echo json_encode(['error' => 'Failed to update educators']);
+			}
+			curl_close($ch);
+		}
+	}
+
+
+
+
+
+
 
 	public function getRoom()
 	{

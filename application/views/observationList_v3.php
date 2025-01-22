@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/bootstrap-datepicker3.min.css?v=1.1.1" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/main.css?v=1.1.1" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/dore.light.blueolympic.min.css?v=1.1.1" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         .list-thumbnail{
             height: 150px!important;
@@ -46,6 +47,22 @@
         }
 }
     </style>
+    <style>
+    .list-thumbnail {
+        max-width: 100px;
+        height: 75px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+    
+    .checkbox input[type="checkbox"] {
+        margin-top: 0;
+    }
+    
+    #observationsList .checkbox:hover {
+        background-color: #f8f9fa;
+    }
+</style>
 </head>
 
 <body id="app-container" class="menu-default show-spinner">
@@ -143,7 +160,9 @@
                         <a type="button" class="btn btn-primary btn-lg top-right-button" href="<?= $newObsUrl; ?>">ADD NEW</a>
                         
                         <?php } ?>
+                        
                     </div>
+                    
                     <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
                         <ol class="breadcrumb pt-0">
                             <li class="breadcrumb-item">
@@ -155,6 +174,8 @@
                     <div class="separator mb-5"></div>
                 </div>
             </div>
+            <button id="checkDraftObservationsBtn" class="btn btn-outline-danger" style="margin-left:1081px;margin-bottom:10px;">Check Draft Observations</button>
+
             <div class="row" id="observations-list">
                 <?php 
                     if($showList == 1){ 
@@ -207,6 +228,9 @@
                                 </div>
                             </a>
                         </div>
+                       
+                        <!-- <i class="fa-solid fa-trash fa-fade"></i> -->
+                      
                     </div>
                 </div>
                 <?php } }else{ ?>
@@ -479,6 +503,29 @@
         </div>
     </div>
 
+    <!-- Draft Observations Modal -->
+    <div class="modal fade" id="draftObservationsModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document"> <!-- Changed to modal-xl -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Draft Observations (14+ Days Old)</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="max-height:500px;overflow-y:auto;">
+                <div id="observationCount" class="mb-3"></div>
+                <div id="observationsList"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" onclick="deleteSelectedObservations()">Delete Selected</button>
+                <button type="button" class="btn btn-outline-success" onclick="publishSelectedObservations()">Publish Selected</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/jquery-3.3.1.min.js?v=1.1.1"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/bootstrap.bundle.min.js?v=1.1.1"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/moment.min.js?v=1.1.1"></script>
@@ -638,6 +685,145 @@
 
 
         });
+
+
+
+
+
+        function loadDraftObservations() {
+    $.ajax({
+        url: '<?= base_url("observation/getDraftObservations") ?>',
+        type: 'GET',
+        success: function(response) {
+            const data = typeof response === 'string' ? JSON.parse(response) : response;
+            console.log(data);
+            if (data.status === 'success') {
+                // Show count
+                $('#observationCount').html(`<strong>${data.count} draft observations found</strong>`);
+                
+                // Generate list
+                let html = '<div class="form-group">';
+              
+    function processTitle(title, maxLength = 40) {
+    // Decode HTML entities
+    const textArea = document.createElement('textarea');
+    textArea.innerHTML = title;
+    let decodedTitle = textArea.value;
+
+    // Strip HTML tags
+    decodedTitle = decodedTitle.replace(/<[^>]*>/g, '');
+
+    // Truncate the string and append '...' if it exceeds maxLength
+    if (decodedTitle.length > maxLength) {
+        decodedTitle = decodedTitle.substring(0, maxLength) + '...';
+    }
+
+    return decodedTitle;
+}
+                
+                if (data.count > 0) {
+                    data.observations.forEach(obs => {
+                        const date = new Date(obs.date_added).toLocaleDateString();
+                        const processedTitle = processTitle(obs.title); 
+                        const imageUrl = obs.mediaUrl 
+                            ? `<?= base_url('/api/assets/media/') ?>${obs.mediaUrl}`
+                            : 'https://via.placeholder.com/320x240?text=Media+Deleted';
+                        
+                        html += `
+                            <div class="checkbox d-flex align-items-center mb-3 p-2 border rounded">
+                                <div class="mr-3">
+                                    <input type="checkbox" name="observation" value="${obs.id}">
+                                </div>
+                                <div class="mr-3" style="width: 100px;">
+                                    <img src="${imageUrl}" 
+                                         alt="Observation Media" 
+                                         class="list-thumbnail border-0"
+                                         style="width: 100%; height: auto;">
+                                </div>
+                                <div style="margin-left:100px;">
+                                    <label class="mb-0">
+                                    ${processedTitle}
+                                        <br>
+                                        <small class="text-muted">Created: ${date}</small>
+                                        <span class="badge badge-warning ml-2">Draft</span>
+                                    </label>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += '<p>No draft observations older than 14 days found.</p>';
+                }
+                
+                html += '</div>';
+                $('#observationsList').html(html);
+                $('#draftObservationsModal').modal('show');
+            } else {
+                alert('Error loading observations. Please try again.');
+            }
+        },
+        error: function() {
+            alert('Failed to connect to the server. Please try again.');
+        }
+    });
+}
+
+function updateObservations(action) {
+    const selectedIds = [];
+    $('input[name="observation"]:checked').each(function() {
+        selectedIds.push($(this).val());
+    });
+    
+    if (selectedIds.length === 0) {
+        alert('Please select at least one observation.');
+        return;
+    }
+    
+    if (action === 'delete' && !confirm('Are you sure you want to delete the selected observations?')) {
+        return;
+    }
+    
+    $.ajax({
+        url: '<?= base_url("observation/updateObservations") ?>',
+        type: 'POST',
+        data: {
+            action: action,
+            selectedIds: JSON.stringify(selectedIds)
+        },
+        success: function(response) {
+            const result = typeof response === 'string' ? JSON.parse(response) : response;
+            
+            if (result.status === 'success') {
+                alert(action === 'delete' ? 'Observations deleted successfully!' : 'Observations published successfully!');
+                loadDraftObservations(); // Reload the list
+            } else {
+                alert('Error updating observations. Please try again.');
+            }
+        },
+        error: function() {
+            alert('Failed to connect to the server. Please try again.');
+        }
+    });
+}
+
+// Helper functions for the buttons
+function deleteSelectedObservations() {
+    updateObservations('delete');
+}
+
+function publishSelectedObservations() {
+    updateObservations('publish');
+}
+
+// Add event listener for the check button
+$(document).ready(function() {
+    $('#checkDraftObservationsBtn').click(function() {
+        loadDraftObservations();
+    });
+});
+
+
+
     </script>   
 </body>
 </html>

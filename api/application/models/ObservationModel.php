@@ -2056,5 +2056,31 @@ class ObservationModel extends CI_Model {
 		$q = $this->db->query($sql);
 		return $q->row();
 	}
+
+
+	public function getDraftObservations() {
+		$date = date('Y-m-d H:i:s', strtotime('-14 days'));
+		
+		return $this->db
+			->select('id, title, date_added')
+			->where('status', 'Draft')
+			->where('date_added <', $date)
+			->get('observation')
+			->result_array();
+	}
+	
+	public function deleteObservations($observationIds) {
+		return $this->db
+			->where_in('id', $observationIds)
+			->delete('observation');
+	}
+	
+	public function publishObservations($observationIds) {
+		return $this->db
+			->where_in('id', $observationIds)
+			->update('observation', ['status' => 'Published']);
+	}
+
+	
 }
 ?>
