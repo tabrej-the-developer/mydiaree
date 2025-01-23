@@ -383,7 +383,9 @@
     <script src="<?= base_url('assets/v3'); ?>/js/scripts.js"></script>
 </body>
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-
+<script>
+    const BASE_URL = "<?= base_url(); ?>";
+</script>
 <script>
     $(document).ready(function(){
         //$('.btn-delete-child').on('click', function() {
@@ -492,28 +494,34 @@
     function loadEducators() {
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get('id');
-    
+
     $.ajax({
         url: '<?= base_url("room/manageEducators") ?>',
         type: 'GET',
         data: { roomId: roomId },
         success: function(response) {
             const data = typeof response === 'string' ? JSON.parse(response) : response;
-            
+            console.log(data);
             if (data.status === 'success') {
                 let html = '<div class="form-group">';
                 
                 data.educators.forEach(educator => {
-                    const isChecked = data.assigned_staff.includes(educator.userid) ? 'checked' : '';
-                    html += `
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" name="educator" value="${educator.userid}" ${isChecked}>
-                                ${educator.name}
-                            </label>
-                        </div>
-                    `;
-                });
+    const isChecked = data.assigned_staff.includes(educator.userid) ? 'checked' : '';
+    const imageUrl = educator.imageUrl 
+                    ? `${BASE_URL}/api/assets/media/${educator.imageUrl}` 
+                    : "https://via.placeholder.com/100x100?text=No+Media";
+    
+    html += `
+        <div class="checkbox d-flex align-items-center mb-2">
+            <img src="${imageUrl}" alt="${educator.name}" class="rounded-circle mr-3" style="width: 50px; height: 50px; object-fit: cover;">
+            <label class="flex-grow-1 mb-0">
+                <input type="checkbox" name="educator" value="${educator.userid}" ${isChecked}>
+                ${educator.name}
+            </label>
+        </div>
+    `;
+});
+
                 
                 html += '</div>';
                 $('#educatorsList').html(html);
