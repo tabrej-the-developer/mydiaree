@@ -51,49 +51,72 @@ class Media extends CI_Controller {
 	}
 
 	public function fileUpload()
-	{
-		if ($this->session->has_userdata("LoginId")) {
-			$data = $_POST;
+{
+    if ($this->session->has_userdata("LoginId")) {
+        $response = ["Status" => "ERROR", "Message" => ""];
+        
+        if (!empty($_FILES['fileUpload']['name'])) {
+            $countFiles = count($_FILES['fileUpload']['name']);
+            
+            // Validate max file count
+            if ($countFiles > 5) {
+                $response["Message"] = "You can only upload up to 5 files at once.";
+                echo json_encode($response);
+                return;
+            }
 
-			if (!empty($_FILES['fileUpload']['name'])) {
-				$countFiles = count($_FILES['fileUpload']['name']);
-				for ($i=0; $i < $countFiles ; $i++) { 
-					$data['media'.$i] = new CurlFile($_FILES['fileUpload']['tmp_name'][$i],$_FILES['fileUpload']['type'][$i],$_FILES['fileUpload']['name'][$i]);
+            for ($i = 0; $i < $countFiles; $i++) {
+                $fileSize = $_FILES['fileUpload']['size'][$i];
+                $fileType = $_FILES['fileUpload']['type'][$i];
+                $fileName = $_FILES['fileUpload']['name'][$i];
+                $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
 
-					if (isset($data['childTags'.$i])) {
-						$data['childTags'.$i] = json_encode($data['childTags'.$i]);
-					}
+                // Validate file size (max 2MB)
+                if ($fileSize > (2 * 1024 * 1024)) {
+                    $response["Message"] = "File size should not exceed 2MB.";
+                    echo json_encode($response);
+                    return;
+                }
 
-					if (isset($data['eduTags'.$i])) {
-						$data['eduTags'.$i] = json_encode($data['eduTags'.$i]);
-					}
-				}
-			}
-			$data['userid'] = $this->session->userdata("LoginId");
-			$url = BASE_API_URL."Media/uploadFiles/";
-			$ch = curl_init($url);
-			curl_setopt($ch, CURLOPT_URL,$url);
-			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_POSTFIELDS,$data);
-			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-				'X-Device-Id: '.$this->session->userdata('X-Device-Id'),
-				'X-Token: '.$this->session->userdata('AuthToken')
-			));
-			$server_output = curl_exec($ch);
-			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-			curl_close($ch);
-			if ($httpcode=="200") {
-				redirect("Media");
-			} else {
-				$data["Status"] = "ERROR";
-				$data["Message"] = "Something went wrong!";
-				echo json_encode($data);
-			}
-		} else {
-			redirect('Welcome');
-		}
-	}
+                // Validate file type (JPG, JPEG, PNG)
+                if (!in_array(strtolower($fileExt), ['jpg', 'jpeg', 'png'])) {
+                    $response["Message"] = "Only JPG, JPEG, and PNG files are allowed.";
+                    echo json_encode($response);
+                    return;
+                }
+            }
+
+            // Proceed with file upload logic
+            // Add your existing curl-based upload logic here
+            $data['userid'] = $this->session->userdata("LoginId");
+            $url = BASE_API_URL . "Media/uploadFiles/";
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'X-Device-Id: ' . $this->session->userdata('X-Device-Id'),
+                'X-Token: ' . $this->session->userdata('AuthToken')
+            ]);
+            $server_output = curl_exec($ch);
+            $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($httpcode == 200) {
+                redirect("Media");
+            } else {
+                $response["Message"] = "Something went wrong!";
+                echo json_encode($response);
+            }
+        } else {
+            $response["Message"] = "No files uploaded.";
+            echo json_encode($response);
+        }
+    } else {
+        redirect('Welcome');
+    }
+}
 
 	public function getTagsArr()
 	{

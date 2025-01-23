@@ -139,21 +139,34 @@
                     <div class="separator mb-5"></div>
                 </div>
             </div>
-            <div class="row mb-5">
-                <div class="col-12">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <form action="<?= base_url("media/fileUpload"); ?>" enctype="multipart/form-data" method="post" id="form-data">
-                                <div class="dropzone">
-                                </div>
-                            </form>
-                            <div class="text-center mt-3">
-                                <button class="btn btn-outline-primary" id="clearall">Clear All</button>
-                            </div>
-                        </div>
-                    </div>
+            <div class="row mb-3">
+    <div class="col-12">
+        <div class="alert alert-info" role="alert">
+            <strong>File Upload Guidelines:</strong>
+            <ul>
+                <li>You can upload a maximum of <strong>5 files</strong> at a time.</li>
+                <li>Each file must not exceed <strong>2 MB</strong>.</li>
+                <li>Accepted file types: <strong>JPG, JPEG, PNG</strong>.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-body">
+                <form action="<?= base_url("media/fileUpload"); ?>" enctype="multipart/form-data" method="post" id="form-data">
+                    <div class="dropzone"></div>
+                </form>
+                <div class="dropzone-feedback mt-3"></div>
+                <div class="text-center mt-3">
+                    <button class="btn btn-outline-primary" id="clearall">Clear All</button>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
             <div class="row">
                 <?php if(!empty($Recent)){ ?>
                     <div class="col-12 list disable-text-selection mb-5">
@@ -341,32 +354,45 @@
     <script src="<?= base_url('assets/v3'); ?>/js/scripts.js?v=1.0.0"></script>
 </body>
 <script>
-    $(function() {
-        if ($().dropzone && !$(".dropzone").hasClass("disabled")) {
+   $(function() {
+    if ($().dropzone && !$(".dropzone").hasClass("disabled")) {
 
-        let formData = $('#form-data');
-          $(".dropzone").dropzone({
-            maxFilesize: 100000,
-            timeout:0,
+        $(".dropzone").dropzone({
             url: "<?= base_url('Media/uploadFiles'); ?>",
+            maxFilesize: 2, // File size in MB
+            maxFiles: 5, // Max number of files
+            acceptedFiles: "image/jpeg,image/png,image/jpg", // Restrict file types
+            timeout: 0,
             init: function () {
                 this.on("success", function (file, responseText) {
-                    result = $.parseJSON(responseText);
-                    if (result.Status=="SUCCESS") {
+                    const result = $.parseJSON(responseText);
+                    if (result.Status === "SUCCESS") {
                         file.previewElement.id = result.recordid;
-                        $(document).find('.dz-preview[id="' + result.recordid + '"]').attr('data-type', result.type);
-                    }else{
+                        $(document)
+                            .find('.dz-preview[id="' + result.recordid + '"]')
+                            .attr('data-type', result.type);
+                    } else {
                         alert(result.Message);
+                        this.removeFile(file); // Remove file from preview on error
                     }
                 });
 
-                this.on("sending", function(file, xhr, formData) {
-                  formData.append("centerid", $('main').data('centerid'));
+                this.on("sending", function (file, xhr, formData) {
+                    formData.append("centerid", $('main').data('centerid'));
                 });
 
-                this.on('error', function(file, responseText) {
-                    result = $.parseJSON(responseText);
-                    $(file.previewElement).find('.dz-error-message').text(result.Message);
+                this.on("error", function (file, message) {
+                    if (typeof message !== "string") {
+                        message = "An error occurred during upload.";
+                    }
+                    $(file.previewElement)
+                        .find('.dz-error-message')
+                        .text(message);
+                });
+
+                this.on("maxfilesexceeded", function (file) {
+                    alert("You can only upload up to 5 files at once.");
+                    this.removeFile(file);
                 });
             },
             thumbnailWidth: 160,
@@ -387,7 +413,7 @@
                         </div>
                         <div class="pl-3 pt-2 pr-2 pb-1 w-70 dz-details position-relative">
                             <div><span data-dz-name></span></div>
-                            <div class="text-primary text-extra-small" data-dz-size />
+                            <div class="text-primary text-extra-small" data-dz-size></div>
                             <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
                             <div class="dz-error-message"><span data-dz-errormessage></span></div>
                         </div>
@@ -396,8 +422,10 @@
                     <a href="#/" class="edit" data-image="data-dz-thumbnail" data-toggle="modal" data-target="#myModal"><i class="glyph-icon simple-icon-tag"></i></a>
                 </div>
             `
-          });
-        }
+        });
+    }
+
+
 
         $(document).on('click','.edit', function (event) {
             let _id = $(this).closest('.dz-preview').attr('id');
