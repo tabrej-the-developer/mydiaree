@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/bootstrap-datepicker3.min.css?v=1.0.0" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/main.css?v=1.0.0" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/dore.light.blueolympic.min.css?v=1.0.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <style>
         .list-thumbnail{
             height: 150px;
@@ -72,8 +73,8 @@
                             <?php } ?>
                         </div>
                         <?php if (isset($permission) && $permission->add == 1) { ?>
-                            <a href="<?= base_url('lessonPlanList/addNew').'?centerid='.$centerid; ?>" class="btn btn-primary btn-lg top-right-button">ADD NEW</a>
-                        <?php } ?>
+    <a href="#" class="btn btn-primary btn-lg top-right-button" id="addnewbtn" data-toggle="modal" data-target="#templateModal">ADD NEW</a>
+<?php } ?>
                     </div>
                     <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
                         <ol class="breadcrumb pt-0">
@@ -104,6 +105,9 @@
                     }else{
                 ?>
                 <div class="col-12 list" data-check-all="checkAll">
+                <a href="<?= base_url('lessonPlanList/viewnewtemplate').'?centerid='.$centerid; ?>">
+    <button class="btn btn-outline-primary" style="margin-left:1120px;margin-bottom:10px;">Add Templates</button>
+</a>
                 <?php foreach($page_content as $page_key=>$page_value) { ?>
                 <div class="card d-flex flex-row mb-3">
                     <div class="d-flex flex-grow-1 min-width-zero">
@@ -197,6 +201,45 @@
             </div>
         </div>
     </div>
+
+ 
+
+<div class="modal fade" id="templateModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Option</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6 text-center">
+                        <a href="<?= base_url('lessonPlanList/addNew').'?centerid='.$centerid; ?>"  class="btn btn-success btn-lg mb-3">
+                            <i class="fa fa-plus"></i> Create Without Template
+                        </a>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <button class="btn btn-primary btn-lg mb-3" id="loadTemplates">
+                            <i class="fa fa-list"></i> Select Existing Template
+                        </button>
+                    </div>
+                </div>
+
+                <div id="existingTemplatesList" style="display:none;">
+                    <hr>
+                    <h6 class="text-center">Available Templates</h6>
+                    <div class="row" id="templateContainer">
+                        <!-- Templates will be dynamically loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/jquery-3.3.1.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/bootstrap.bundle.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/moment.min.js?v=1.0.0"></script>
@@ -227,5 +270,53 @@
             })
         });
     </script>
+
+
+<script>
+$(document).ready(function() {
+    $('#loadTemplates').on('click', function() {
+        $('#existingTemplatesList').show();
+        console.log("this is here");
+        // Load templates if not already loaded
+        if ($('#templateContainer').children().length === 0) {
+            $.ajax({
+                url: '<?= base_url('LessonPlanList/getTemplates') ?>',
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    let container = $('#templateContainer');
+                    container.empty();
+
+                    if (response.length === 0) {
+                        container.append('<div class="col-12 text-center"><p>No templates available</p></div>');
+                        return;
+                    }
+
+                    response.forEach(function(template) {
+                        let templateCard = `
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6 class="card-title">${template.template_name}</h6>
+                                        <a href="<?= base_url('lessonPlanList/templateload/') ?>${template.template_id}" 
+                                           class="btn btn-primary btn-sm">
+                                            Use Template
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        container.append(templateCard);
+                    });
+                },
+                error: function() {
+                    $('#templateContainer').html('<div class="col-12 text-center text-danger">Failed to load templates</div>');
+                }
+            });
+        }
+    });
+});
+</script>
+
 </body>
 </html>

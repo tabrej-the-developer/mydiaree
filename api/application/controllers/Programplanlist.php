@@ -805,6 +805,103 @@ class Programplanlist extends CI_Controller{
         echo json_encode($data);
 	}
 
+
+	public function templatesave(){
+		$headers = $this->input->request_headers();		
+		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){			
+			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);		
+			$json = json_decode(file_get_contents('php://input'));			
+			if($json != null && $res != null && $res->userid == $json->userid){	
+				// Start a database transaction
+				$this->db->trans_start();
+	            
+				$template_id = 'TPL_' . uniqid() . '_' . time();
+				// Prepare header data
+				$template_name = $json->template_name;
+				$center_id = $json->centerid;
+				$created_by = $json->userid;
 	
+				// Insert headings into template_programplanlist_header
+				$header_insert_data = [];
+				foreach ($json->headings as $index => $heading) {
+					$header_insert_data[] = [
+						'template_id' => $template_id,
+						'template_name' => $template_name,
+						'headingname' => $heading->heading_title,
+						'headingcolor' => $heading->heading_color,
+						'priority_order' => $index + 1, // start from 1 instead of 0
+						'center_id' => $center_id,
+						'created_by' => $created_by
+					];
+				}
+	
+				// Batch insert into header table
+				$this->db->insert_batch('template_programplanlist_header', $header_insert_data);
+	
+				// Get the inserted header IDs
+				$header_ids = $this->db->insert_id();
+	
+				// Prepare content data
+				$content_insert_data = [];
+				foreach ($json->headings as $index => $heading) {
+					// Calculate the correct header ID (first ID + index)
+					$header_id = $header_ids + $index;
+	
+					// Check if contents exist for this heading
+					if (isset($heading->contents) && is_array($heading->contents)) {
+						foreach ($heading->contents as $content_index => $content) {
+							$content_insert_data[] = [
+								'template_id' => $template_id,
+								'headingid' => $header_id,
+								'perhaps' => htmlspecialchars($content),
+								'createdBy' => $created_by,
+								'template_name' => $template_name
+							];
+						}
+					}
+				}
+	
+				// Batch insert into content table
+				if (!empty($content_insert_data)) {
+					$this->db->insert_batch('template_programplanlist_content', $content_insert_data);
+				}
+	
+				// Complete the transaction
+				$this->db->trans_complete();
+	
+				// Check if the transaction was successful
+				if ($this->db->trans_status() === FALSE) {
+					// Transaction failed
+					http_response_code(500);
+					$data = [
+						'Status' => 'ERROR',
+						'Message' => 'Failed to save template'
+					];
+				} else {
+					// Transaction successful
+					http_response_code(200);
+					$data = [
+						'Status' => 'SUCCESS',
+						'Message' => 'Template saved successfully'
+					];
+				}
+			} else {
+				http_response_code(401);
+				$data = [
+					'Status' => 'ERROR',
+					'Message' => 'User Id doesn\'t match'
+				];
+			}
+		} else {
+			http_response_code(401);
+			$data = [
+				'Status' => 'ERROR',
+				'Message' => 'Invalid Headers Sent!'
+			];
+		}
+		
+		echo json_encode($data);
+	}
+
 }
 ?>

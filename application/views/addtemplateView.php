@@ -61,24 +61,27 @@
 
 <body id="app-container" class="menu-default show-spinner">
     <?php $this->load->view('sidebar'); ?>
-    <?php  
-        //PHP Block
-        $progPlanId = $this->uri->segment(3);   
-    ?>
+   
     <main data-centerid="<?= isset($centerid)?$centerid:null; ?>">
+    <?php if ($this->session->flashdata('success')): ?>
+    <div class="alert alert-success">
+        <?php echo $this->session->flashdata('success'); ?>
+    </div>
+<?php endif; ?>
+
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <h1>Manage Program Plan</h1>
+                    <h1>Create Template for Program Plan</h1>
                     <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
                         <ol class="breadcrumb pt-0">
                             <li class="breadcrumb-item">
                                 <a href="<?= base_url('Dashboard'); ?>">Dashboard</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="<?= base_url('lessonPlanList/programPlanList')."?centerid=".$centerid; ?>">Program Plan List</a>
+                                <a href="#">Program Plan List</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Manage Program Plan</li>
+                            <li class="breadcrumb-item active" aria-current="page">Create Template</li>
                         </ol>
                     </nav>
                     <div class="separator mb-5"></div>
@@ -89,97 +92,36 @@
                     <div class="card mb-4">
                         <div class="card-body">
                             <div class="mb-3">
-                                <h3>Program Plan Form</h3>
+                                <h3>Create Template</h3>
                             </div>
-                            <form action="<?= base_url('lessonPlanList/save'); ?>" enctype="multipart/form-data" method="post" autocomplete="off">
+                            <form action="<?= base_url('lessonPlanList/saveTemplate'); ?>" enctype="multipart/form-data" method="post" autocomplete="off">
                                 <?php if (isset($centerid)) { ?>
                                 <input type="hidden" name="centerid" value="<?= $centerid; ?>">
                                 <?php } ?>
-                                <?php if (isset($ProgramPlan->id)) { ?>
-                                    <input type="hidden" name="progplanid" value="<?= $ProgramPlan->id; ?>">
-                                <?php } ?>
+                              
                                 <div id="manage-prog-plan">
-                                    <div class="row">
-                                        <div class="col-md-4 col-lg-4">
-                                            <div class="form-group mb-1">
-                                                <label>Start Date</label>
-                                                <div class="input-group date">
-                                                    <input type="text" class="form-control" name="start_date" value="<?= isset($ProgramPlan->startdate)?date('d-m-Y',strtotime($ProgramPlan->startdate)):''; ?>" required>
-                                                    <span class="input-group-text input-group-append input-group-addon">
-                                                        <i class="simple-icon-calendar"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-lg-4">
-                                            <div class="form-group mb-1">
-                                                <label>End Date</label>
-                                                <div class="input-group date">
-                                                    <input type="text" class="form-control" name="end_date" value="<?= isset($ProgramPlan->enddate)?date('d-m-Y',strtotime($ProgramPlan->enddate)):''; ?>" required>
-                                                    <span class="input-group-text input-group-append input-group-addon">
-                                                        <i class="simple-icon-calendar"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-lg-4">
-                                            <div class="form-group mb-1">
-                                                <label>Select Room</label>
-                                                <select class="form-control" name="room">
-                                                    <?php if (empty($Rooms)) { ?>
-                                                    <option> No Room Found </option>
-                                                    <?php 
-                                                          } else { 
-                                                            if(isset($ProgramPlan)){
-                                                                foreach ($Rooms as $rooms => $room) {
-                                                                    if ($room->id == $ProgramPlan->room_id) {
-                                                                        ?>
-                                                                        <option value="<?= $room->id; ?>" selected><?= $room->name; ?></option>
-                                                                        <?php } else { ?>
-                                                                        <option value="<?= $room->id; ?>"><?= $room->name; ?></option>
-                                                                        <?php
-                                                                    }
-                                                                }
-                                                            }else{
-                                                                foreach ($Rooms as $rooms => $room) {
-                                                        ?>
-                                                        <option value="<?= $room->id; ?>"><?= $room->name; ?></option>   
-                                                        <?php    
-                                                                }
-                                                            } 
-                                                        }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
+                                    
+                                
+                                <div class="row">
                                         <div class="col-md-6 col-lg-6">
                                             <div class="form-group mb-1">
-                                                <label>Select Members</label>
-                                                <select class="form-control select2-multiple" name="members[]" multiple="multiple" data-width="100%">                                                    
-                                                    <?php if (empty($Users)) { ?>
-                                                    <option> No Users Found </option>
-                                                    <?php 
-                                                          } else { 
-                                                            foreach ($Users as $users => $user) {
-                                                    ?>
-                                                    <option value="<?= $user->id; ?>" <?= isset($user->checked)?$user->checked:''; ?>><?= $user->name; ?></option>
-                                                    <?php } } ?>
-                                                </select>
+                                                <label>Title Name</label>
+                                                <div class="input-group text">
+                                                    <input type="text" class="form-control" name="template_name" required>
+                                                </div>
                                             </div>
                                         </div>
+                                </div>  
+
+
+                                    <div class="row">
+                                
+
                                         <div class="col-md-6 col-lg-6">
                                             <div class="form-group">
                                                 <label>More Options</label><br>
                                                 <div>
-                                                    <?php if ($progPlanId != "") { ?>
-                                                    <!-- Element to be shown when id is present -->
-                                                    <button class="btn btn-info" data-target="#linkModal" data-toggle="modal" data-at="observation" type="button">Link Observation</button>
-                                                    <button class="btn btn-info" data-target="#linkModal" data-toggle="modal" data-at="qip" type="button">Link QIP</button>
-                                                    <button class="btn btn-info" data-target="#linkModal" data-toggle="modal" data-at="reflection" type="button">Link Reflection</button>
-                                                    <!-- Element -->   
-                                                    <?php } ?>
+                                                  
                                                     <button class="btn btn-outline-primary" id="newHeadingBtn" type="button"> + New Heading </button>
                                                 </div>
                                             </div>
@@ -267,35 +209,7 @@
         </div>
     </main>
 
-<!-- Modal for links -->
-<div class="modal fade" id="linkModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <form action="" id="save-links-form" method="post">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Links</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="link_type" id="link_type" value="">
-                    <?php if(isset($ProgramPlan)){ ?>
-                    <input type="hidden" name="programid" value="<?= $progPlanId; ?>">
-                    <?php } ?>
-                    <div class="appendCont">
-                        
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- End of modal --> 
+
 
     <?php $this->load->view('footer_v3'); ?>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/jquery-3.3.1.min.js?v=1.0.0"></script>
@@ -506,130 +420,7 @@
             }
         });
 
-        function loadObservation(){
-            $(document).find(".appendCont").empty();
-            $.ajax({
-                url: '<?= base_url("lessonPlanList/getPublishedObservations"); ?>',
-                type: 'POST',
-                data: { 'progplanid' : <?= empty($progPlanId)?'0':$progPlanId; ?>, 'centerid':<?= empty($centerid)?'0':$centerid; ?> }
-            })
-            .done(function(msg) {
-                base_url = '<?= base_url(); ?>';
-                res = $.parseJSON(msg);            
-                if (res.Status == "SUCCESS") {
-                    $.each(res.observations, function(index, val) {
-
-                        if (val.observationsMedia.length > 0) {
-                            imgUrl = base_url + 'api/assets/media/' + val.observationsMedia;
-                        } else {
-                            imgUrl = `https://via.placeholder.com/128x85?text=No+Image`;
-                        }
-
-                        $(".appendCont").append(`
-                            <div class="col-12">
-                                <div class="form-element">
-                                    <input type="checkbox" name="linkids[]" class="modal-checkbox"  value="`+ val.id +`" `+val.checked+`>
-                                </div>
-                                <div class="d-flex flex-row mb-3 bg-white br-10">
-                                    <a class="d-block position-relative" href="#">
-                                        <img src="`+imgUrl+`" alt="Image" class="list-thumbnail border-0">
-                                        <span class="badge badge-pill position-absolute badge-top-right badge-success">PUBLISHED</span>
-                                    </a>
-                                    <div class="pl-3 pt-2 pr-2 pb-2">
-                                        <a href="#" class="obs-link">
-                                            <p class="list-item-heading">`+ val.title +`</p>
-                                            <div class="pr-4 d-none d-sm-block">
-                                                <p class="text-muted mb-1 text-small"> By: `+ val.user_name +`</p>
-                                            </div>
-                                            <div class="text-primary text-small font-weight-medium d-none d-sm-block">`+ val.date_added +`</div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        `);
-                    });
-                }else{
-                    alert(res.Message);
-                }
-            }); 
-        }
-
-        function loadReflection(){
-            console.log("clicked");
-            
-            $(document).find(".appendCont").empty();
-            $.ajax({
-                url: '<?php echo  base_url("lessonPlanList/getPublishedReflections"); ?>',
-                type:'POST',
-                data:{ 'progplanid' : <?= empty($progPlanId)?'0':$progPlanId; ?>, 'centerid':<?= empty($centerid)?'0':$centerid; ?> }, 
-            })
-            .done(function(msg) {
-                   
-                console.log(msg);
-                
-                res = $.parseJSON(msg);
-                if (res.Status == "SUCCESS") {
-                    $.each(res.reflections, function(index, val) {
-                        $(".appendCont").append(`
-                            <div class="col-12">
-                                <div class="card d-flex flex-row mb-3">
-                                    <a class="d-flex" href="#">
-                                        <img src="<?= base_url('api/assets/media/'); ?>`+ val.mediaThumbnail +`" alt="`+ val.title +`" class="list-thumbnail h-140 responsive border-0 card-img-left" />
-                                    </a>
-                                    <div class="pl-2 d-flex flex-grow-1 min-width-zero">
-                                        <div class="card-body align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero align-items-lg-center p-0">
-                                            <a href="#" class="w-80 w-sm-100">
-                                                <p class="list-item-heading mb-0 truncate">`+ val.title +`</p>
-                                                <p class="text-muted text-small mb-0">`+ val.name +`</p>
-                                                <p class="text-muted text-small">`+ val.createdAt +`</p>
-                                            </a>
-                                        </div>
-                                        <label class="custom-control custom-checkbox mb-1 align-self-center pr-4">
-                                            <input type="checkbox" class="modal-checkbox custom-control-input" name="linkids[]" value="`+ val.id +`" `+val.checked+`>
-                                            <span class="custom-control-label">&nbsp;</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        `);
-                    });
-                }else{
-                    alert(res.Message);
-                }
-            });
-        }
-
-        function loadQip(){
-            $(document).find(".appendCont").empty();
-            $.ajax({
-                url: '<?php echo  base_url("lessonPlanList/getPublishedQip"); ?>',
-                type:'POST',
-                data:{ 'progplanid' : <?= empty($progPlanId)?'0':$progPlanId; ?>, 'centerid':<?= empty($centerid)?'0':$centerid; ?> },
-            })
-            .done(function(msg) {
-                res = $.parseJSON(msg);
-                if (res.Status == "SUCCESS") {
-                    $.each(res.qip, function(index, val) {
-                        $(".appendCont").append(`
-                            <div class="col-12 mb-2">
-                                <div class="d-flex flex-row d-flex-custom">
-                                    <input type="checkbox" name="linkids[]" class="modal-checkbox Qip"  value="`+ val.id +`" `+val.checked+`>
-                                    <a href="#">`+ val.name +`</a>
-                                    <div class="observation-extras">
-                                        <span>Author: `+ val.name +`</span>
-                                        <span>Date: `+ val.created_at +`</span>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                        `);
-                    });
-                }else{
-                    alert(res.Message);
-                }
-            }); 
-        }
-
+      
         $(document).on('submit','#save-links-form', function(e){
             e.preventDefault();
             $.ajax({

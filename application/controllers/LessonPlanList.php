@@ -5,6 +5,7 @@ class LessonPlanList extends CI_Controller {
     function __construct() {
       parent::__construct();
       $this->load->helper('get_details');
+      $this->load->database(); 
     }
 
       
@@ -146,6 +147,17 @@ class LessonPlanList extends CI_Controller {
           print_r($data);
 
         // $this->load->view('editProgramPlan',$data);
+      }else{ 
+        $this->load->view('welcome');
+      }
+
+    }
+
+    public function viewnewtemplate(){
+      if($this->session->has_userdata('LoginId')){
+
+        $this->load->view('addtemplateView');
+
       }else{ 
         $this->load->view('welcome');
       }
@@ -686,6 +698,9 @@ class LessonPlanList extends CI_Controller {
         if($httpcode == 200){
           $data = [];
           $data = json_decode($server_output);
+          // echo "<pre>";
+          // print_r($data);
+          // exit;
           $this->load->view('editProgramPlan_v3', $data);
         }else{
           redirect('Welcome');
@@ -695,6 +710,85 @@ class LessonPlanList extends CI_Controller {
         redirect('Welcome');
       }
     }
+
+
+
+
+
+    public function templateload($template_id = null) {
+      if ($template_id) {
+          // Fetch headers
+          $headers = $this->db->where('template_id', $template_id)
+                              ->order_by('priority_order', 'ASC')
+                              ->get('template_programplanlist_header')
+                              ->result();
+  
+          $programPlan = new stdClass();
+          $programPlan->headings = [];
+  
+          foreach ($headers as $header) {
+              // Fetch contents for each header
+              $contents = $this->db->where('template_id', $template_id)
+                                   ->where('headingid', $header->id)
+                                   ->get('template_programplanlist_content')
+                                   ->result();
+  
+              $headingObj = new stdClass();
+              $headingObj->id = $header->id;
+              $headingObj->headingname = $header->headingname;
+              $headingObj->headingcolor = $header->headingcolor;
+              $headingObj->priority_order = $header->priority_order;
+              $headingObj->programplanparentid = $template_id;
+              $headingObj->contents = $contents;
+  
+              $programPlan->headings[] = $headingObj;
+          }
+  
+          // Fetch Users (Staff)
+          $users = $this->db->select('userid as id, name, imageUrl')
+                            ->where('userType', 'Staff')
+                            ->get('users')
+                            ->result();
+          
+          // $users['id'] = $users['userid'];
+  
+          // Fetch Rooms for specific center
+          $centerid = 1;
+          $rooms = $this->db->where('centerid', $centerid)
+                            ->get('room')
+                            ->result();
+  
+          $data = [
+              'ProgramPlan' => $programPlan,
+              'Users' => $users,
+              'Rooms' => $rooms,
+              'centerid' => $centerid
+          ];
+          // echo "<pre>";
+          // print_r($data);
+          // exit;
+          $this->load->view('editProgramPlan_v3', $data);
+      } else {
+          // Handle case when no template is selected
+          redirect('Welcome');
+      }
+  }
+
+
+    public function getTemplates() {
+      // Fetch unique templates from header table
+      $templates = $this->db->select('template_id, template_name')
+                            ->from('template_programplanlist_header')
+                            ->group_by('template_id, template_name') // Use group_by instead
+                            ->get()
+                            ->result();
+      
+      echo json_encode($templates);
+  }
+
+
+
+
 
     public function addNew()
     {
@@ -784,7 +878,10 @@ class LessonPlanList extends CI_Controller {
 
         unset($formdata['heading_color']);
         unset($formdata['heading_title']);
-        
+        // echo "<pre>";
+        // print_r($formdata);
+        // exit;
+
         $url = BASE_API_URL.'Programplanlist/save';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_URL,$url);
@@ -810,6 +907,88 @@ class LessonPlanList extends CI_Controller {
         redirect('Welcome');
       }
     }
+
+
+
+    public function saveTemplate(){
+      if($this->session->has_userdata('LoginId')){
+        $formdata = $this->input->post();
+       
+        $keys = array_keys($formdata);
+        $matches = preg_grep("/^content_/",$keys);
+        $end = end($matches);
+        $count = substr($end, -1);
+        
+        $json = [];
+        $jsonInput = [];
+
+        for ($i=0; $i < count($formdata['heading_color']); $i++) { 
+          $json['heading_color'] = $formdata['heading_color'][$i];
+          $json['heading_title'] = $formdata['heading_title'][$i];
+          $integer = 1;
+          for ($j=1; $j <= $count; $j++) { 
+            if (isset($formdata['content_'.$j])) {
+              $countElem = count($formdata['content_'.$j]);
+              if( $countElem != 0 ){
+                if($integer == 1){
+                  $json['contents'] = $formdata['content_'.$j];
+                  unset($formdata['content_'.$j]);
+                  $integer++;
+                }
+              }
+            }
+          }
+          array_push($jsonInput, $json);
+        }
+      
+        $formdata['headings'] = $jsonInput;
+        $formdata['userid'] = $this->session->userdata('LoginId');
+      
+        if (isset($_GET['centerid'])) {
+          $centerid = strip_tags(trim(stripslashes($_GET['centerid'])));
+        }else{
+          $center = $this->session->userdata("centerIds");
+          $centerid = $center[0]->id;
+        }
+
+        $formdata['centerid'] = $centerid;
+        unset($formdata['heading_color']);
+        unset($formdata['heading_title']);
+        // echo "<pre>";
+        // print_r($formdata);
+        // exit;
+
+
+        $url = BASE_API_URL.'Programplanlist/templatesave';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_URL,$url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($formdata));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+          'X-Device-Id: '.$this->session->userdata('X-Device-Id'),
+          'X-Token: '.$this->session->userdata('AuthToken')
+        ));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $server_output = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        
+        if($httpcode == 200){
+          $this->session->set_flashdata('success', 'Template Stored Successfully!');
+
+          $url = base_url('LessonPlanList/viewnewtemplate').'?centerid='.$centerid;
+          redirect($url);
+        }else{
+          redirect('Welcome');
+        }
+
+      }else{ 
+          redirect('Welcome');
+        }
+
+    }
+
+
 
     public function saveLinks()
     {
