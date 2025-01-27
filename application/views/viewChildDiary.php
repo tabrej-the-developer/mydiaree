@@ -745,92 +745,115 @@
                                     <button type="button" class="btn btn-outline-primary add-sunscreen-row mt-2 mb-1 mr-4">Add</button>
                                 </div>
                             </div>
-                            </div>
+                        </div>
 
-                            <div class="card mb-2">
-                                <div class="card-body">
-                                    <h3 class="card-title">Toileting</h3>
-                                    <?php
-                                        if(empty($cobj->toileting->startTime)){
-                                            $hour = 1;
-                                            $mins = 00;
-                                        } else {
-                                            $time = explode(":",$cobj->toileting->startTime);
-                                            $hour = str_replace("h","",$time[0]);
-                                            $mins = str_replace("m","",$time[1]);
-                                        }
-                                    ?>
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <div class="form-group">
-                                                <label>Time</label>
-                                                <br>
-                                                <input type="number" min="1" max="12" value="<?php echo $hour; ?>" name="hour" class="form-hour from-hour form-number"> H : <input type="number" min="0" max="59" value="<?php echo $mins; ?>" name="mins" class="form-mins from-mins form-number"> M
-                                            </div>
-                                            <div class="form-group">
-                                                <?php
-                                                    if(empty($cobj->toileting->nappy)){
-                                                        $nappy = "";
-                                                    } else {
-                                                        $nappy = $cobj->toileting->nappy;
-                                                    }
-                                                ?>
-                                                <label for="nappy">Nappy</label>
-                                                <br>
-                                                <input type="text" class="form-control modal-form-control" name="nappy" id="nappy" value="<?php echo $nappy; ?>">
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="form-group">
-                                                <?php
-                                                    if(empty($cobj->toileting->potty)){
-                                                        $potty = "";
-                                                    } else {
-                                                        $potty = $cobj->toileting->potty;
-                                                    }
-                                                ?>
-                                                <label for="potty">Potty</label>
-                                                <input type="text" class="form-control modal-form-control" name="potty" id="potty" value="<?php echo $potty; ?>">
-                                            </div>
-                                            <div class="form-group">
-                                                <?php
-                                                    if(empty($cobj->toileting->toilet)){
-                                                        $toilet = "";
-                                                    } else {
-                                                        $toilet = $cobj->toileting->toilet;
-                                                    }
-                                                ?>
-                                                <label for="toilet">Toilet</label>
-                                                <input type="text" class="form-control modal-form-control" name="toilet" id="toilet" value="<?php echo $toilet; ?>">
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="form-group">
-                                                <?php
-                                                    if(empty($cobj->toileting->signature)){
-                                                        $signature = "";
-                                                    } else {
-                                                        $signature = $cobj->toileting->signature;
-                                                    }
-                                                ?>
-                                                <label for="signature">Signature</label>
-                                                <input type="text" class="form-control modal-form-control" name="signature" id="signature" value="<?php echo $signature; ?>">
-                                            </div>
-                                            <div class="form-group">
-                                                <?php
-                                                    if(empty($cobj->toileting->comments)){
-                                                        $comments = "";
-                                                    } else {
-                                                        $comments = $cobj->toileting->comments;
-                                                    }
-                                                ?>
-                                                <label for="ttcomments">Comments</label>
-                                                <input name="ttcomments" class="form-control modal-form-control" id="ttcomments" value="<?php echo $comments; ?>">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                         
+                        <div class="card mb-2">
+    <div class="card-body">
+        <h3 class="card-title">Toileting</h3>
+        <div class="toileting-block">
+            <?php
+            if (!empty($cobj->toileting)) {
+                foreach ($cobj->toileting as $index => $entry) {
+                    // Extract values
+                    $startTime = $entry->startTime ?? '1h:00m';
+                    $nappy = $entry->nappy ?? '';
+                    $potty = $entry->potty ?? '';
+                    $toilet = $entry->toilet ?? '';
+                    $signature = $entry->signature ?? '';
+                    $comments = $entry->comments ?? '';
+
+                    // Split time into hours and minutes
+                    list($hour, $minute) = explode(':', str_replace(['h', 'm'], '', $startTime));
+            ?>
+                    <div class="row" style="margin-top:20px;">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label>Time</label><br>
+                                <input type="number" min="1" max="12" value="<?php echo $hour; ?>" name="hour[]" class="form-hour from-hour form-number"> H :
+                                <input type="number" min="0" max="59" value="<?php echo $minute; ?>" name="mins[]" class="form-mins from-mins form-number"> M
                             </div>
+                            <div class="form-group">
+                                <label for="nappy">Nappy</label><br>
+                                <input type="text" class="form-control modal-form-control" name="nappy[]" id="nappy" value="<?php echo $nappy; ?>">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="potty">Potty</label>
+                                <input type="text" class="form-control modal-form-control" name="potty[]" id="potty" value="<?php echo $potty; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="toilet">Toilet</label>
+                                <input type="text" class="form-control modal-form-control" name="toilet[]" id="toilet" value="<?php echo $toilet; ?>">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="signature">Signature</label>
+                                <input type="text" class="form-control modal-form-control" name="signature[]" id="signature" value="<?php echo $signature; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="ttcomments">Comments</label>
+                                <input name="ttcomments[]" class="form-control modal-form-control" id="ttcomments" value="<?php echo $comments; ?>">
+                            </div>
+                        </div>
+                        <?php if ($index !== 0) { ?>
+                            <div class="col-12 text-right">
+                                <button type="button" class="btn btn-outline-danger btn-sm remove-toileting-row mt-2 mb-1">Remove</button>
+                            </div>
+                        <?php } ?>
+                    </div>
+            <?php
+                }
+            } else {
+                // Show an empty row with no data
+            ?>
+                <div class="row" style="margin-top:20px;">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label>Time</label><br>
+                            <input type="number" min="1" max="12" value="1" name="hour[]" class="form-hour from-hour form-number"> H :
+                            <input type="number" min="0" max="59" value="00" name="mins[]" class="form-mins from-mins form-number"> M
+                        </div>
+                        <div class="form-group">
+                            <label for="nappy">Nappy</label><br>
+                            <input type="text" class="form-control modal-form-control" name="nappy[]" id="nappy">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="potty">Potty</label>
+                            <input type="text" class="form-control modal-form-control" name="potty[]" id="potty">
+                        </div>
+                        <div class="form-group">
+                            <label for="toilet">Toilet</label>
+                            <input type="text" class="form-control modal-form-control" name="toilet[]" id="toilet">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="signature">Signature</label>
+                            <input type="text" class="form-control modal-form-control" name="signature[]" id="signature">
+                        </div>
+                        <div class="form-group">
+                            <label for="ttcomments">Comments</label>
+                            <input name="ttcomments[]" class="form-control modal-form-control" id="ttcomments">
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+        <div class="text-right">
+            <button type="button" class="btn btn-outline-primary add-toileting-row mt-2 mb-1 mr-4">Add</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+
                             <?php if ($this->session->userdata('UserType') != "Parent") { ?>
                             <div class="formSubmit text-center mt-3 mb-4">
                                 <button type="submit" class="btn btn-info btn-default btnBlue pull-right btn-sm">SAVE</button>
@@ -873,11 +896,60 @@
 
             $(document).on("click",".add-sunscreen-row",function(){
                 $(".sunscreen-block").append('<div class="row" style=""><div class="col-md-4 col-sm-12"><div class="form-group"> <label>Time</label> <br> <input type="number" min="1" max="12" value="1" name="sshour[]" id="sshour" class="form-hour from-hour form-number"> H : <input type="number" min="0" max="59" value="00" name="ssmins[]" id="ssmins" class="form-mins from-mins form-number"> M</div></div><div class="col-md-7 col-sm-12" style="height:50px;position: relative;"><div class="form-group"> <label for="sscomments">Comments</label> <input name="sscomments[]" class="form-control modal-form-control form-number" id="sscomments"></div></div><div class="col-md-1 col-sm-12" style="padding-top: 1.5rem;"> <button type="button" class="btn btn-outline-danger btn-sm pull-right btn-default btnRed btn-small remove-sunscreen-row">Remove</button></div></div>');
-            })
+            });
 
             $(document).on("click",".remove-sunscreen-row",function(){
                 $(this).closest(".row").remove();
             });
+          
+
+            $(document).on("click", ".add-toileting-row", function() {
+    $(".toileting-block").append(`
+        <div class="row" style="margin-top:20px;">
+            <div class="col-4">
+                <div class="form-group">
+                    <label>Time</label><br>
+                    <input type="number" min="1" max="12" value="1" name="hour[]" class="form-hour from-hour form-number"> H :
+                    <input type="number" min="0" max="59" value="00" name="mins[]" class="form-mins from-mins form-number"> M
+                </div>
+                <div class="form-group">
+                    <label for="nappy">Nappy</label><br>
+                    <input type="text" class="form-control modal-form-control" name="nappy[]" id="nappy">
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="potty">Potty</label>
+                    <input type="text" class="form-control modal-form-control" name="potty[]" id="potty">
+                </div>
+                <div class="form-group">
+                    <label for="toilet">Toilet</label>
+                    <input type="text" class="form-control modal-form-control" name="toilet[]" id="toilet">
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="signature">Signature</label>
+                    <input type="text" class="form-control modal-form-control" name="signature[]" id="signature">
+                </div>
+                <div class="form-group">
+                    <label for="ttcomments">Comments</label>
+                    <input name="ttcomments[]" class="form-control modal-form-control" id="ttcomments">
+                </div>
+            </div>
+            <div class="col-12 text-right">
+                <button type="button" class="btn btn-outline-danger btn-sm remove-toileting-row mt-2 mb-1">Remove</button>
+            </div>
+        </div>
+    `);
+});
+            $(document).on("click", ".remove-toileting-row", function() {
+                  $(this).closest(".row").remove();
+             });
+
+
+
+
 
             $(document).on("click",".btn-link-clear",function(){
                 $(this).closest('.row').find('input:text, select, textarea').each(function () {

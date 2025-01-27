@@ -109,14 +109,13 @@ class DailyDiaryModel extends CI_Model {
 		return $query->result();
 	}
 
-	public function getToileting($childid,$date=NULL)
-	{
-		if ($date==NULL) {
-			$query = $this->db->get_where("dailydiarytoileting",array("childid"=>$childid));
+	public function getToileting($childid, $date = NULL) {
+		if ($date == NULL) {
+			$query = $this->db->get_where("dailydiarytoileting", array("childid" => $childid));
 		} else {
-			$query = $this->db->get_where("dailydiarytoileting",array("childid"=>$childid,"diarydate"=>$date));
+			$query = $this->db->get_where("dailydiarytoileting", array("childid" => $childid, "diarydate" => $date));
 		}
-		return $query->row();
+		return $query->result(); // Changed from row() to result() to return all matching rows as an array
 	}
 
 	public function getItems($search=null,$type=null){
@@ -175,54 +174,82 @@ class DailyDiaryModel extends CI_Model {
 	}
 
 	public function addToiletingRecord($data)
-	{
-		if (isset($data->diarydate)) {
-			$diarydate = date('Y-m-d', strtotime($data->diarydate));
-		} else {
-			$diarydate = date("Y-m-d");
-		}
-		$this->db->delete('dailydiarytoileting', array('childid' => $data->childid, 'diarydate' => $diarydate));
+{
+    if (isset($data->diarydate)) {
+        $diarydate = date('Y-m-d', strtotime($data->diarydate));
+    } else {
+        $diarydate = date("Y-m-d");
+    }
+    
+    // Delete existing records for this child and date
+    $this->db->delete('dailydiarytoileting', array('childid' => $data->childid, 'diarydate' => $diarydate));
 
-		$ins_data = array(
-		    'childid' => $data->childid,
-		    'diarydate' => $diarydate,
-		    'startTime' => $data->startTime,
-		    'nappy' => $data->nappy,
-		    'potty' => $data->potty,
-		    'toilet' => $data->toilet,
-		    'signature' => $data->signature,
-		    'comments' => $data->comments,
-		    'createdBy' => $data->userid,
-		    'createdAt' => date('Y-m-d h:i:s')
-		);
-		$this->db->insert("dailydiarytoileting", $ins_data);
-		$insertId = $this->db->insert_id();
-		return  $insertId;
-	}
+    // Prepare to insert multiple records
+    $insert_batch = [];
+    
+    // Count the number of entries based on startTime array
+    $entry_count = count($data->startTime);
+    
+    for ($i = 0; $i < $entry_count; $i++) {
+        $ins_data = array(
+            'childid' => $data->childid,
+            'diarydate' => $diarydate,
+            'startTime' => $data->startTime[$i],
+            'nappy' => $data->nappy[$i] ?? null,
+            'potty' => $data->potty[$i] ?? null,
+            'toilet' => $data->toilet[$i] ?? null,
+            'signature' => $data->signature[$i] ?? null,
+            'comments' => $data->comments[$i] ?? null,
+            'createdBy' => $data->userid,
+            'createdAt' => date('Y-m-d H:i:s')
+        );
+        
+        $insert_batch[] = $ins_data;
+    }
+    
+    // Insert multiple records
+    if (!empty($insert_batch)) {
+        $this->db->insert_batch("dailydiarytoileting", $insert_batch);
+    }
+    
+    return $this->db->affected_rows();
+}
 
-	public function addSunscreenRecord($data,$delete=NULL)
-	{
-		if (isset($data->diarydate)) {
-			$diarydate = date('Y-m-d', strtotime($data->diarydate));
-		} else {
-			$diarydate = date("Y-m-d");
-		}
-		if ($delete==NULL) {
-			$this->db->delete('dailydiarysunscreen', array('childid' => $data->childid, 'diarydate' => $diarydate));
-		}
-		
-		$ins_data = array(
-		    'childid' => $data->childid,
-		    'diarydate' => $diarydate,
-		    'startTime' => $data->startTime,
-		    'comments' => $data->comments,
-		    'createdBy' => $data->userid,
-		    'createdAt' => date('Y-m-d h:i:s')
-		);
-		$this->db->insert("dailydiarysunscreen", $ins_data);
-		$insertId = $this->db->insert_id();
-		return  $insertId;
-	}
+public function addSunscreenRecord($data)
+{
+    if (isset($data->diarydate)) {
+        $diarydate = date('Y-m-d', strtotime($data->diarydate));
+    } else {
+        $diarydate = date("Y-m-d");
+    }
+    
+    // Delete existing records for this child and date
+    $this->db->delete('dailydiarysunscreen', array('childid' => $data[0]->childid, 'diarydate' => $diarydate));
+
+    // Prepare to insert multiple records
+    $insert_batch = [];
+    
+    // Insert each entry in the sunscreen array
+    foreach ($data as $entry) {
+        $ins_data = array(
+            'childid' => $entry->childid,
+            'diarydate' => $diarydate,
+            'startTime' => $entry->startTime,
+            'comments' => $entry->comments,
+            'createdBy' => $entry->userid,
+            'createdAt' => date('Y-m-d H:i:s')
+        );
+        
+        $insert_batch[] = $ins_data;
+    }
+    
+    // Insert multiple records
+    if (!empty($insert_batch)) {
+        $this->db->insert_batch("dailydiarysunscreen", $insert_batch);
+    }
+    
+    return $this->db->affected_rows();
+}
 
 	public function getChildInfo($childid)
 	{

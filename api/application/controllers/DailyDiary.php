@@ -486,6 +486,7 @@ class DailyDiary extends CI_Controller {
 				$snRecords = $this->ddm->addFoodRecord($json->snack,"dailydiarysnacks");
 				$ttRecords = $this->ddm->addToiletingRecord($json->toileting);
 
+
 				$i = 0;
 				foreach ($json->sleep as $slp) {
 					if ($i==0) {
@@ -493,18 +494,20 @@ class DailyDiary extends CI_Controller {
 					} else {
 						$slRecords = $this->ddm->addSleepRecord($slp,1);
 					}
-					$i++;
+					$i++; 
 				}
 				
-				$j = 0;
-				foreach ($json->sunscreen as $ss) {
-					if ($j==0) {
-						$ssRecords = $this->ddm->addSunscreenRecord($ss);
-					} else {
-						$ssRecords = $this->ddm->addSunscreenRecord($ss,1);
-					}
-					$j++;
-				}
+				$ssRecords = $this->ddm->addSunscreenRecord($json->sunscreen);
+
+				// $j = 0;
+				// foreach ($json->sunscreen as $ss) {
+				// 	if ($j==0) {
+				// 		$ssRecords = $this->ddm->addSunscreenRecord($ss);
+				// 	} else {
+				// 		$ssRecords = $this->ddm->addSunscreenRecord($ss,1);
+				// 	}
+				// 	$j++;
+				// }
 				$data['Status'] = "SUCCESS";
 				$data['Message'] = "Saved Successfully";
 

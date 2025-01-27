@@ -276,6 +276,9 @@ class DailyDiary extends CI_Controller {
 			if($httpcode == 200){
 				curl_close ($ch);
 				$data = json_decode($server_output);
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
 				$data->centerid = $centerid;
 				$this->load->view('viewChildDiary', $data);
 			}
@@ -303,6 +306,9 @@ class DailyDiary extends CI_Controller {
                 $roomid = $_GET['roomid'];
             }
 			$data = $this->input->post();
+			// echo "<pre>";	
+            // print_r($data);  
+            // exit();
 			$data['userid'] = $this->session->userdata("LoginId");
 			$data['breakfast']['childid'] = $data['childid'];
 			$data['breakfast']['diarydate'] = $data['diarydate'];
@@ -356,7 +362,15 @@ class DailyDiary extends CI_Controller {
 
 		    $data['toileting']['childid'] = $data['childid'];
 		    $data['toileting']['diarydate'] = $data['diarydate'];
-		    $data['toileting']['startTime'] = $data['hour']."h:".$data['mins']."m";
+			$data['toileting']['startTime'] = []; // Initialize an empty array
+
+			if (isset($data['hour']) && isset($data['mins'])) {
+				foreach ($data['hour'] as $key => $hour) {
+					$minute = isset($data['mins'][$key]) ? $data['mins'][$key] : '00'; // Handle missing minutes
+					$data['toileting']['startTime'][] = $hour . 'h:' . $minute . 'm';
+				}
+			}
+			
 		    $data['toileting']['nappy'] = $data['nappy'];
 		    $data['toileting']['potty'] = $data['potty'];
 		    $data['toileting']['toilet'] = $data['toilet'];
@@ -381,7 +395,7 @@ class DailyDiary extends CI_Controller {
 			}
 
 			$ssCount = count($data['sscomments']);
-			for($i=0;$i<$sleepCount;$i++){
+			for($i=0;$i<$ssCount;$i++){
 				$ss['childid'] = $data['childid'];
 				$ss['diarydate'] = $data['diarydate'];
 				$ss['startTime'] = $data['sshour'][$i]."h:".$data['ssmins'][$i]."m";
@@ -390,10 +404,10 @@ class DailyDiary extends CI_Controller {
 				$ss['createdAt'] = date('Y-m-d h:i:s');
 				array_push($data['sunscreen'], $ss);
 			}
-            // echo "<pre>";
-            // print_r($data);
-            // print_r($roomid);
-            // exit();
+				// echo "<pre>";
+				// print_r($data);
+				// print_r($roomid);   
+				// exit();
 			$url = BASE_API_URL."DailyDiary/updateChildDailyDiary/";
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_URL,$url);

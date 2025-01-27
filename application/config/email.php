@@ -5,8 +5,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $config['protocol'] = 'smtp';               // Email sending protocol
 $config['smtp_host'] = 'smtp.your-email-provider.com';  // SMTP server
 $config['smtp_port'] = 587;                 // SMTP port (587 for TLS, 465 for SSL)
-$config['smtp_user'] = 'your_email@example.com'; // Your email address
-$config['smtp_pass'] = 'your_password';     // Your email password
+$config['smtp_user'] = 'support@mydiaree.com'; // Your email address
+$config['smtp_pass'] = 'MyD1@ree';     // Your email password
 $config['smtp_crypto'] = 'tls';             // Encryption type: 'tls' or 'ssl'
 $config['mailtype'] = 'html';               // Email format (html/text)
 $config['charset'] = 'utf-8';               // Character set
