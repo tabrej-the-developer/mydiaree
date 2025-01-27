@@ -795,7 +795,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="ttcomments">Comments</label>
-                                <input name="ttcomments[]" class="form-control modal-form-control" id="ttcomments" value="<?php echo $comments; ?>">
+                                <input type="text" name="ttcomments[]" class="form-control modal-form-control" id="ttcomments" value="<?php echo $comments; ?>">
                             </div>
                         </div>
                         <?php if ($index !== 0) { ?>
@@ -824,7 +824,7 @@
                     <div class="col-4">
                         <div class="form-group">
                             <label for="potty">Potty</label>
-                            <input type="text" class="form-control modal-form-control" name="potty[]" id="potty">
+                            <input type="text" class="form-control modal-form-control" name="potty[]" id="potty">  
                         </div>
                         <div class="form-group">
                             <label for="toilet">Toilet</label>
@@ -838,7 +838,7 @@
                         </div>
                         <div class="form-group">
                             <label for="ttcomments">Comments</label>
-                            <input name="ttcomments[]" class="form-control modal-form-control" id="ttcomments">
+                            <input type="text" name="ttcomments[]" class="form-control modal-form-control" id="ttcomments">
                         </div>
                     </div>
                 </div>
@@ -934,7 +934,7 @@
                 </div>
                 <div class="form-group">
                     <label for="ttcomments">Comments</label>
-                    <input name="ttcomments[]" class="form-control modal-form-control" id="ttcomments">
+                    <input type="text" name="ttcomments[]" class="form-control modal-form-control" id="ttcomments">
                 </div>
             </div>
             <div class="col-12 text-right">

@@ -86,7 +86,9 @@ class DailyDiary extends CI_Controller {
 				$data = new stdClass();
 				$data = json_decode($server_output);
 				$data->centerid = $centerid;
-				//print_r($data); exit;
+                // echo "<pre>";
+				// print_r($data); 
+				// exit;
 				$this->load->view('dailyDiary_v3',$data);
 			}
 			else if($httpcode == 401){
@@ -406,7 +408,7 @@ class DailyDiary extends CI_Controller {
 			}
 				// echo "<pre>";
 				// print_r($data);
-				// print_r($roomid);   
+				// print_r($roomid);     
 				// exit();
 			$url = BASE_API_URL."DailyDiary/updateChildDailyDiary/";
 			$ch = curl_init($url);

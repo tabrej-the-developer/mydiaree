@@ -292,6 +292,12 @@
                                                 $childImage = BASE_API_URL."assets/media/".$cobj->imageUrl;
                                             }                                            
                                     ?>
+                                    <?php 
+    //                                // Print the object in a readable format
+    // echo "<pre>";
+    // print_r($cobj); // or use var_dump($cobj);  
+    // echo "</pre>";
+                                    ?>
                                     <tr class="records">
                                         <td class="kids-cell d-flex flex-row justify-content-start">
                                             <?php if ($this->session->userdata("UserType")!="Parent") { ?>
@@ -395,7 +401,31 @@
                                             <button class="btn btn-outline-primary btn-sm btnSunscreen" data-toggle="modal" data-target="#sunscreenModal" data-bgcolor="#E07F7F" data-title="Add Sunscreen" data-type="sunscreen" data-childid="<?= $cobj->id; ?>"> Add </button>
                                             <?php
                                                 } else {
-                                                    echo $cobj->sunscreen[0]->startTime;
+                                                    $totalMinutes2 = 0;
+
+                                                    // Check if 'toileting' exists and is an array
+                                                    if (isset($cobj->sunscreen) && is_array($cobj->sunscreen)) {
+                                                        foreach ($cobj->sunscreen as $toiletEntry) {
+                                                            // Display the startTime for each entry
+                                                            // echo "Start Time: " . htmlspecialchars($toiletEntry->startTime) . "<br>";
+                                                
+                                                            // Parse the startTime
+                                                            if (preg_match('/(\d+)h:(\d+)m/', $toiletEntry->startTime, $matches)) {
+                                                                $hours = (int)$matches[1];
+                                                                $minutes = (int)$matches[2];
+                                                
+                                                                // Convert to total minutes
+                                                                $totalMinutes2 += ($hours * 60) + $minutes;
+                                                            }
+                                                        }
+                                                    }
+                                                
+                                                    // Convert total minutes back to hours and minutes
+                                                    $totalHours = floor($totalMinutes2 / 60);
+                                                    $remainingMinutes = $totalMinutes2 % 60;
+                                                
+                                                    // Display the total time
+                                                    echo  $totalHours . "h:" . str_pad($remainingMinutes, 2, '0', STR_PAD_LEFT) . "m<br>";
                                                 }
                                             ?>
                                         </td>
@@ -403,12 +433,36 @@
                                         <?php if($columns->toileting==1){ ?>
                                         <td>
                                             <?php 
-                                                if (empty($cobj->toileting->startTime)) {
+                                                if (empty($cobj->toileting[0]->startTime)) {
                                             ?>
                                             <button class="btn btn-outline-primary btn-sm btnToileting" data-toggle="modal" data-target="#toiletingModal" data-bgcolor="#D1FFCD" data-title="Add Toileting Info" data-type="toileting" data-childid="<?php echo $cobj->id; ?>"> Add </button>
                                             <?php
                                                 } else {
-                                                    echo $cobj->toileting->startTime;
+                                                    $totalMinutes = 0;
+
+                                                    // Check if 'toileting' exists and is an array
+                                                    if (isset($cobj->toileting) && is_array($cobj->toileting)) {
+                                                        foreach ($cobj->toileting as $toiletEntry) {
+                                                            // Display the startTime for each entry
+                                                            // echo "Start Time: " . htmlspecialchars($toiletEntry->startTime) . "<br>";
+                                                
+                                                            // Parse the startTime
+                                                            if (preg_match('/(\d+)h:(\d+)m/', $toiletEntry->startTime, $matches)) {
+                                                                $hours = (int)$matches[1];
+                                                                $minutes = (int)$matches[2];
+                                                
+                                                                // Convert to total minutes
+                                                                $totalMinutes += ($hours * 60) + $minutes;
+                                                            }
+                                                        }
+                                                    }
+                                                
+                                                    // Convert total minutes back to hours and minutes
+                                                    $totalHours = floor($totalMinutes / 60);
+                                                    $remainingMinutes = $totalMinutes % 60;
+                                                
+                                                    // Display the total time
+                                                    echo  $totalHours . "h:" . str_pad($remainingMinutes, 2, '0', STR_PAD_LEFT) . "m<br>";
                                                 }
                                             ?>
                                         </td>
