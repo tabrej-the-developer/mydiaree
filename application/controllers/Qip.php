@@ -511,6 +511,9 @@ class Qip extends CI_Controller {
 		}
 	}
 
+
+
+
 	public function renameQip()
 	{
 		if($this->session->has_userdata('LoginId')){
@@ -1097,5 +1100,56 @@ class Qip extends CI_Controller {
 			echo json_encode($data);
 		}
 	}
+
+
+
+
+
+	public function print_selectedqip()
+    {
+        if ($this->session->has_userdata('LoginId')) {
+            $data = $this->input->post();
+            $data['userid'] = $this->session->userdata('LoginId');
+
+            // Call API to generate PDF
+            $url = BASE_API_URL . 'qip/printqip/';
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'X-Device-Id: ' . $this->session->userdata('X-Device-Id'),
+                'X-Token: ' . $this->session->userdata('AuthToken')
+            ));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $server_output = curl_exec($ch);
+            curl_close($ch);
+
+			// echo "<pre>";
+			// print_r($server_output);
+			// exit;
+
+			if (!empty($server_output)) {
+				$apiResponse = json_decode($server_output);
+				if ($apiResponse->Status == "SUCCESS") {
+					// Return the URL in a JSON response
+					echo json_encode(['status' => 'success', 'fileName' => $apiResponse->FileName]);
+				} else {
+					// Return an error message in JSON format
+					echo json_encode(['status' => 'error', 'message' => "Failed to generate PDF: " . $apiResponse->Message]);
+				}
+			} else {
+				// Return an error message in JSON format
+				echo json_encode(['status' => 'error', 'message' => "No response from API."]);
+			}
+        } else {
+            redirect("Welcome");
+        }
+    }
+
+
+
+
+
 }  
 ?>

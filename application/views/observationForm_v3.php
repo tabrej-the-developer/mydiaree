@@ -185,6 +185,157 @@
             top: 400px!important;
         }*/
     </style>
+
+<style>
+    .custom-nav .nav-link {
+        background-color: #f8f9fa; /* Light background */
+        color: #007bff; /* Blue text */
+        padding: 10px;
+        border: 1px solid #ddd;
+        margin-bottom: 5px;
+        transition: 0.3s ease-in-out;
+        text-align: center;
+    }
+
+    .custom-nav .nav-link:hover {
+        background-color: #e9ecef; /* Lighter background on hover */
+        color: #0056b3; /* Darker blue */
+    }
+
+    .custom-nav .nav-link.active {
+        background-color: #007bff; /* Active link background */
+        color: #fff; /* White text */
+        border-color: #0056b3;
+        font-weight: bold;
+    }
+
+      /* Panel Styling */
+      .custom-panel {
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+    }
+
+    /* Collapsible Button Styling */
+    .custom-panel .btn-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        text-align: left;
+        background-color: #007bff;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        transition: 0.3s ease-in-out;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .custom-panel .btn-link:hover {
+        background-color: #0056b3;
+        text-decoration: none;
+    }
+
+    /* Arrow Indicator */
+    .custom-panel .btn-link::after {
+        content: "\25BC"; /* Down Arrow */
+        font-size: 14px;
+        transition: 0.3s ease-in-out;
+    }
+
+    .custom-panel .btn-link[aria-expanded="true"]::after {
+        content: "\25B2"; /* Up Arrow */
+    }
+
+    /* Collapsible Content */
+    .custom-panel .collapse {
+        padding: 10px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-top: 5px;
+    }
+
+    .custom-panel .collapse.show {
+        background-color: #e9ecef;
+    }
+
+      /* Styling for Activity Title */
+      .custom-subactivity .activity-title {
+        font-weight: bold;
+        display:flex;
+        align-items:center;
+        font-size: 16px;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    /* Box styling */
+    .custom-subactivity .subactivity-box {
+        padding: 10px;
+        border-bottom: 1px solid #ddd; /* Adds lower border for separation */
+        display: flex;
+        align-items: center;
+        gap: 15px; /* Adds space between radio buttons */
+    }
+
+    /* Label Styling */
+    .custom-subactivity .subactivity-box label {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 500;
+        color: #555;
+        cursor: pointer;
+    }
+
+    /* Radio Button Styling */
+    .custom-subactivity .subactivity-box input[type="radio"] {
+        margin-right: 5px;
+        accent-color: #007bff; /* Blue color */
+        transform: scale(1.2); /* Slightly increase size */
+    }
+
+     /* Container for checkbox group */
+     .custom-checkbox-group {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ddd; /* Adds separation */
+        gap: 10px; /* Space between elements */
+    }
+
+    /* Custom Checkbox Styling */
+    .custom-checkbox-group .custom-control {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        cursor: pointer;
+    }
+
+    /* Checkbox Input Styling */
+    .custom-checkbox-group .custom-control-input {
+        width: 18px;
+        height: 18px;
+        accent-color: #007bff; /* Bootstrap blue */
+        margin-right: 8px;
+        transform: scale(1.1); /* Slightly increase size */
+    }
+
+    /* Checkbox Label Styling */
+    .custom-checkbox-group .custom-control-label {
+        cursor: pointer;
+    }
+</style>
+
+
+
 </head>
 <body id="app-container" class="menu-default show-spinner">
     <?php 
@@ -441,25 +592,25 @@
                                                     <form action="" method="post" enctype="multipart/form-data" id="form-montessori" class="form-horizontal">
                                                         <div class="row">
                                                             <div class="col-md-3">
-                                                                <nav class="nav flex-column">
-                                                                    <?php 
-                                                                        $i=1; 
-                                                                        foreach($mon_subjects as $mon_subject) { 
-                                                                            $name = str_replace(" ","",$mon_subject->name);
-                                                                            if($i==1){
-                                                                                $actv = "nav-link active";
-                                                                                $asel = "true";
-                                                                            }else{
-                                                                                $actv = "nav-link";
-                                                                                $asel = "false";
-                                                                            }
-                                                                    ?>
-                                                                    <a class="<?= $actv; ?>" id="<?= 'nav-'.$name.'-tab'; ?>" data-toggle="tab" data-target="<?= '#'.$name; ?>" type="button" role="tab" aria-controls="<?= 'nav-'.$name; ?>" aria-selected="<?= $asel; ?>"><?= $mon_subject->name; ?></a>
-                                                                    <?php 
-                                                                            $i++; 
-                                                                        } 
-                                                                    ?>
-                                                                </nav>
+                                                            <nav class="nav flex-column custom-nav">
+    <?php 
+        $i=1; 
+        foreach($mon_subjects as $mon_subject) { 
+            $name = str_replace(" ","",$mon_subject->name);
+            if($i==1){
+                $actv = "nav-link active";
+                $asel = "true";
+            }else{
+                $actv = "nav-link";
+                $asel = "false";
+            }
+    ?>
+    <a class="<?= $actv; ?>" id="<?= 'nav-'.$name.'-tab'; ?>" data-toggle="tab" data-target="<?= '#'.$name; ?>" type="button" role="tab" aria-controls="<?= 'nav-'.$name; ?>" aria-selected="<?= $asel; ?>"><?= $mon_subject->name; ?></a>
+    <?php 
+            $i++; 
+        } 
+    ?>
+</nav>
                                                             </div>
                                                             <div class="col-md-9">
                                                                 <div class="tab-content" id="nav-tabContent">
@@ -475,7 +626,9 @@
                                                                                 $asel = "false";
                                                                             }
                                                                     ?>
-                                                                    <div class="<?= $actv; ?>" id="<?= $name; ?>" role="tabpanel" aria-labelledby="<?= 'nav-'.$name.'-tab'; ?>">
+
+
+                                                                    <div class="custom-panel <?= $actv; ?>" id="<?= $name; ?>" role="tabpanel" aria-labelledby="<?= 'nav-'.$name.'-tab'; ?>">
                                                                         <div class="pull-left" id="<?= 'accord-'.$name; ?>">
 
                                                                             <?php  
@@ -496,22 +649,45 @@
                                                                                 <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#<?= $target; ?>" aria-expanded="<?= $expanded; ?>" aria-controls="<?= $target; ?>">
                                                                                     <?= ucwords(strtolower($mon_activity->title)); ?>
                                                                                 </button>
+
+
                                                                                 <div id="<?= $target; ?>" class="<?= $collapse; ?>" data-parent="#<?= 'accord-'.$name; ?>">
                                                                                     <?php 
                                                                                     if(!empty($mon_sub_activites[$mon_activity->idActivity])) {
                                                                                         foreach($mon_sub_activites[$mon_activity->idActivity] as $key2 => $mon_sub_activity) { 
                                                                                     ?>
-                                                                                    <div class="activity-box d-flex justify-content-between px-3">
-                                                                                        <div class="activity-title"><?= $mon_sub_activity->title; ?></div>
-                                                                                        <div class="subactivity-box">
-                                                                                            <label><input type="radio" class="mon-sub" id="<?= $mon_sub_activity->idSubActivity; ?>montessoriNotAssessed" name="montessori[<?= $mon_sub_activity->idSubActivity; ?>]" value="Not Assessed" data-subactid="<?= $mon_sub_activity->idSubActivity; ?>">NA</label>
-                                                                                            &nbsp;&nbsp;
-                                                                                            <label><input type="radio" class="mon-sub" id="<?= $mon_sub_activity->idSubActivity; ?>montessoriIntroduced" name="montessori[<?= $mon_sub_activity->idSubActivity; ?>]" value="Introduced" data-subactid="<?= $mon_sub_activity->idSubActivity; ?>">I</label>
-                                                                                            &nbsp;&nbsp;
-                                                                                            <label><input type="radio" class="mon-sub" id="<?= $mon_sub_activity->idSubActivity; ?>montessoriWorking" name="montessori[<?= $mon_sub_activity->idSubActivity; ?>]" value="Working" data-subactid="<?= $mon_sub_activity->idSubActivity; ?>">W</label>
-                                                                                            &nbsp;&nbsp;
-                                                                                            <label><input type="radio" class="mon-sub" id="<?= $mon_sub_activity->idSubActivity; ?>montessoriCompleted" name="montessori[<?= $mon_sub_activity->idSubActivity; ?>]" value="Completed" data-subactid="<?= $mon_sub_activity->idSubActivity; ?>">C</label>
-                                                                                            <?php 
+                                                                                    <div class="activity-box custom-subactivity d-flex justify-content-between px-3">
+
+                                                                                    <div class="activity-title"><?= $mon_sub_activity->title; ?></div>
+    <div class="subactivity-box">
+        <label>
+            <input type="radio" class="mon-sub" id="<?= $mon_sub_activity->idSubActivity; ?>montessoriNotAssessed" 
+                name="montessori[<?= $mon_sub_activity->idSubActivity; ?>]" value="Not Assessed" 
+                data-subactid="<?= $mon_sub_activity->idSubActivity; ?>">
+            Not Assessed
+        </label>
+        
+        <label>
+            <input type="radio" class="mon-sub" id="<?= $mon_sub_activity->idSubActivity; ?>montessoriIntroduced" 
+                name="montessori[<?= $mon_sub_activity->idSubActivity; ?>]" value="Introduced" 
+                data-subactid="<?= $mon_sub_activity->idSubActivity; ?>">
+            Introduced
+        </label>
+
+        <label>
+            <input type="radio" class="mon-sub" id="<?= $mon_sub_activity->idSubActivity; ?>montessoriWorking" 
+                name="montessori[<?= $mon_sub_activity->idSubActivity; ?>]" value="Working" 
+                data-subactid="<?= $mon_sub_activity->idSubActivity; ?>">
+            Working
+        </label>
+
+        <label>
+            <input type="radio" class="mon-sub" id="<?= $mon_sub_activity->idSubActivity; ?>montessoriCompleted" 
+                name="montessori[<?= $mon_sub_activity->idSubActivity; ?>]" value="Completed" 
+                data-subactid="<?= $mon_sub_activity->idSubActivity; ?>">
+            Completed
+        </label>
+                     <?php 
                                                                                             if (!empty($obsMontessori)) {
                                                                                               foreach ($obsMontessori as $key => $obsMon) {
                                                                                                  if ($obsMon->idSubActivity==$mon_sub_activity->idSubActivity) {
@@ -619,7 +795,7 @@
                                                     <form action="" method="post" enctype="multipart/form-data" id="form-eylf" class="form-horizontal">
                                                         <div class="row">
                                                             <div class="col-md-3">
-                                                                <nav class="nav flex-column">
+                                                                <nav class="nav flex-column custom-nav">
                                                                     <?php 
                                                                         $i=1; 
                                                                         foreach($eylf_outcomes as $eylf_outcome) { 
@@ -653,7 +829,7 @@
                                                                                 $asel = "false";
                                                                             }
                                                                     ?>
-                                                                    <div class="<?= $actv; ?>" id="<?= $name; ?>" role="tabpanel" aria-labelledby="<?= 'nav-'.$name.'-tab'; ?>">
+                                                                    <div class="custom-panel <?= $actv; ?>" id="<?= $name; ?>" role="tabpanel" aria-labelledby="<?= 'nav-'.$name.'-tab'; ?>">
                                                                         <div class="pull-left" id="<?= 'accord-'.$name; ?>">
 
                                                                             <?php  
@@ -679,12 +855,19 @@
                                                                                     if(!empty($eylf_sub_activites[$eylf_activity->id])) {
                                                                                        foreach($eylf_sub_activites[$eylf_activity->id] as $key2=>$eylf_sub_activity){
                                                                                     ?>
-                                                                                    <div class="d-flex">
-                                                                                        <div class="custom-control custom-checkbox mb-2">
-                                                                                           <input type="checkbox" class="custom-control-input eylfsubactivity" name="eylf[<?= $eylf_activity->id; ?>][]" id="<?= "cb-".$eylf_sub_activity->id; ?>" value="<?= $eylf_sub_activity->id; ?>" data-eylfsubactvt="<?= $eylf_sub_activity->id; ?>" <?php if(!empty($observationEylf[$eylf_activity->id][$eylf_sub_activity->id])) { ?>checked<?php } ?>>
-                                                                                           <label class="custom-control-label" for="<?= "cb-".$eylf_sub_activity->id; ?>"><?= $eylf_sub_activity->title; ?></label>
-                                                                                        </div>
-                                                                                    </div>
+                                                                                  <div class="custom-checkbox-group d-flex">
+    <div class="custom-control custom-checkbox mb-2">
+        <input type="checkbox" class="custom-control-input eylfsubactivity" 
+               name="eylf[<?= $eylf_activity->id; ?>][]" 
+               id="<?= "cb-".$eylf_sub_activity->id; ?>" 
+               value="<?= $eylf_sub_activity->id; ?>" 
+               data-eylfsubactvt="<?= $eylf_sub_activity->id; ?>" 
+               <?php if(!empty($observationEylf[$eylf_activity->id][$eylf_sub_activity->id])) { ?>checked<?php } ?>>
+        <label class="custom-control-label" for="<?= "cb-".$eylf_sub_activity->id; ?>">
+            <?= $eylf_sub_activity->title; ?>
+        </label>
+    </div>
+</div>
                                                                                     <?php } } ?>
                                                                                 </div>
                                                                             </div>
@@ -718,7 +901,7 @@
                                                     <form action="" method="post" enctype="multipart/form-data" id="form-milestones" class="form-horizontal">
                                                         <div class="row">
                                                             <div class="col-md-3">
-                                                                <nav class="nav flex-column">
+                                                                <nav class="nav flex-column custom-nav">
                                                                     <?php 
                                                                         $i=1; 
                                                                         foreach($milestones as $milestone) { 
@@ -752,7 +935,7 @@
                                                                                 $asel = "false";
                                                                             }
                                                                     ?>
-                                                                    <div class="<?= $actv; ?>" id="dm<?= $name; ?>" role="tabpanel" aria-labelledby="<?= 'nav-'.$name.'-tab'; ?>">
+                                                                    <div class="custom-panel <?= $actv; ?>" id="dm<?= $name; ?>" role="tabpanel" aria-labelledby="<?= 'nav-'.$name.'-tab'; ?>">
                                                                         <div class="pull-left" id="<?= 'accord-'.$name; ?>">
                                                                             <?php  
                                                                                 $j = 1;
@@ -1652,7 +1835,11 @@
     <script src="<?= base_url('assets/v3'); ?>/js/scripts.js?v=1.0.0"></script>
     <script src="<?= base_url(); ?>assets/js/slick.min.js"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/observation.js?v=1.0.0"></script>
-    <script src="https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js"></script>
+    <!-- <script src="https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js"></script> -->
+    <script src="https://cdn.ckeditor.com/4.22.1/full-all/ckeditor.js"></script>
+
+
+
     <script src="<?= base_url(); ?>assets/js/vendor/jquery/jquery-ui.min.js"></script>
     
     <script>
@@ -1703,159 +1890,114 @@
     //       ]
     //    });
 
-    CKEDITOR.replace('obs_notes', {
-    plugins: 'mentions,basicstyles,undo,link,wysiwygarea,toolbar,format,list',
-    contentsCss: [
-        'https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.css', 
-        'https://ckeditor.com/docs/ckeditor5/latest/examples/assets/mentions/contents.css'
-    ],
-    height: 150,
-    toolbar: [
-        {
-            name: 'document',
-            items: ['Undo', 'Redo']
-        },
-        {
-            name: 'basicstyles',
-            items: ['Bold', 'Italic', 'Strike', 'Format']
-        },
-        {
-            name: 'links',
-            items: ['Link', 'Unlink', 'NumberedList', 'BulletedList']
-        }
-    ],
-    extraAllowedContent: '*[*]{*}(*)',
-    mentions: [
-        {  
-            feed: dataFeed,
-            itemTemplate: '<li data-id="{id}">' +
-                          '<strong class="username">{name}</strong>' +
-                          '</li>',
-            outputTemplate: '<a href="user_{id}">{name}</a>',
-            minChars: 0
-        },
-        {
-            feed: tagsFeed,
-            marker: '#',
-            itemTemplate: '<li data-id="{id}"><strong>{title}</strong></li>',
-            outputTemplate: '<a href="#tags_{rid}" data-tagid="{rid}" data-type="{type}" data-toggle="modal" data-target="#tagsModal">#{title}</a>',
-            minChars: 0
-        }
-    ]
+   // Common configuration that can be reused for all instances
+// Wait for DOM to be ready
+
+// Add this before the DOMContentLoaded event
+// var users = [
+//     { id: 1, name: "John Doe" },
+//     { id: 2, name: "Jane Smith" }
+//     // ... other users
+// ];
+
+var tags = [
+    { id: 1, title: "important", rid: "1", type: "tag" },
+    { id: 2, title: "urgent", rid: "2", type: "tag" }
+    // ... other tags
+];
+
+document.addEventListener('DOMContentLoaded', function() {
+    // First define the feed functions
+    function dataFeed(opts, callback) {
+        var matchProperty = 'name',
+        data = users.filter(function(item) {
+            return item[matchProperty].indexOf(opts.query.toLowerCase()) == 0;
+        });
+
+        data = data.sort(function(a, b) {
+            return a[matchProperty].localeCompare(b[matchProperty], undefined, {
+                sensitivity: 'accent'
+            });
+        });
+        callback(data);
+    }
+
+    function tagsFeed(opts, callback) {
+        var matchProperty = 'title',
+        data = tags.filter(function(item) {
+            return item[matchProperty].indexOf(opts.query.toLowerCase()) == 0;
+        });
+
+        data = data.sort(function(a, b) {
+            return a[matchProperty].localeCompare(b[matchProperty], undefined, {
+                sensitivity: 'accent'
+            });
+        });
+        callback(data);
+    }
+
+    // Make sure 'users' and 'tags' arrays are defined
+    var users = window.users || []; // Define default if not exists
+    var tags = window.tags || [];   // Define default if not exists
+
+    // Then define the common configuration
+    const commonConfig = {
+        plugins: 'mentions,basicstyles,undo,link,wysiwygarea,toolbar,format,list',
+        contentsCss: [
+            'https://cdn.ckeditor.com/4.25.0-lts/full-all/contents.css',
+            'https://ckeditor.com/docs/ckeditor4/4.25.0/examples/assets/mentions/contents.css'
+        ],
+        height: 150,
+        toolbar: [
+            {
+                name: 'document',
+                items: ['Undo', 'Redo']
+            },
+            {
+                name: 'basicstyles',
+                items: ['Bold', 'Italic', 'Strike', 'Format']
+            },
+            {
+                name: 'links',
+                items: ['Link', 'Unlink', 'NumberedList', 'BulletedList']
+            }
+        ],
+        extraAllowedContent: '*[*]{*}(*)',
+        mentions: [
+            {  
+                feed: dataFeed,
+                itemTemplate: '<li data-id="{id}">' +
+                              '<strong class="username">{name}</strong>' +
+                              '</li>',
+                outputTemplate: '<a href="user_{id}">{name}</a>',
+                minChars: 0
+            },
+            {
+                feed: tagsFeed,
+                marker: '#',
+                itemTemplate: '<li data-id="{id}"><strong>{title}</strong></li>',
+                outputTemplate: '<a href="#tags_{rid}" data-tagid="{rid}" data-type="{type}" data-toggle="modal" data-target="#tagsModal">#{title}</a>',
+                minChars: 0
+            }
+        ]
+    };
+
+    // Finally initialize the editors
+    if (document.getElementById('obs_title')) {
+        CKEDITOR.replace('obs_title', commonConfig);
+    }
+    
+    if (document.getElementById('obs_notes')) {
+        CKEDITOR.replace('obs_notes', commonConfig);
+    }
+    
+    if (document.getElementById('obs_reflection')) {
+        CKEDITOR.replace('obs_reflection', commonConfig);
+    }
 });
 
 
 
-       CKEDITOR.replace('obs_reflection', {
-          plugins: 'mentions,basicstyles,undo,link,wysiwygarea,toolbar,format,list',
-          contentsCss: [
-             'http://cdn.ckeditor.com/4.16.2/full-all/contents.css',
-             'https://ckeditor.com/docs/ckeditor4/4.16.2/examples/assets/mentions/contents.css'
-          ],
-          height: 150,
-          toolbar: [{
-              name: 'document',
-              items: ['Undo', 'Redo']
-          },
-          {
-              name: 'basicstyles',
-              items: ['Bold', 'Italic', 'Strike', 'Format']
-          },
-          {
-              name: 'links',
-              items: ['Link', 'Unlink', 'NumberedList', 'BulletedList']
-          }],
-          extraAllowedContent: '*[*]{*}(*)',
-          mentions: [{  
-             feed: dataFeed,
-                itemTemplate: '<li data-id="{id}">' +
-                   '<strong class="username">{name}</strong>' +
-                   '</li>',
-                outputTemplate: '<a href="user_{id}">{name}</a>',
-                minChars: 0
-             },
-             {
-                feed: tagsFeed,
-                marker: '#',
-                itemTemplate: '<li data-id="{id}"><strong>{title}</strong></li>',
-                outputTemplate: '<a href="#tags_{rid}" data-tagid="{rid}" data-type="{type}" data-toggle="modal" data-target="#tagsModal">#{title}</a>',
-                minChars: 0
-             }
-          ]
-       });
-
-       CKEDITOR.replace('obs_title', {
-          plugins: 'mentions,basicstyles,undo,link,wysiwygarea,toolbar,format,list',
-          contentsCss: [
-             'http://cdn.ckeditor.com/4.16.2/full-all/contents.css',
-             'https://ckeditor.com/docs/ckeditor4/4.16.2/examples/assets/mentions/contents.css'
-          ],
-          height: 150,
-          toolbar: [{
-              name: 'document',
-              items: ['Undo', 'Redo']
-          },
-          {
-              name: 'basicstyles',
-              items: ['Bold', 'Italic', 'Strike', 'Format']
-          },
-          {
-              name: 'links',
-              items: ['Link', 'Unlink', 'NumberedList', 'BulletedList']
-          }],
-          extraAllowedContent: '*[*]{*}(*)',
-          mentions: [{  
-             feed: dataFeed,
-                itemTemplate: '<li data-id="{id}">' +
-                   '<strong class="username">{name}</strong>' +
-                   '</li>',
-                outputTemplate: '<a href="user_{id}">{name}</a>',
-                minChars: 0
-             },
-             {
-                feed: tagsFeed,
-                marker: '#',
-                itemTemplate: '<li data-id="{id}"><strong>{title}</strong></li>',
-                outputTemplate: '<a href="#tags_{rid}" data-tagid="{rid}" data-type="{type}" data-toggle="modal" data-target="#tagsModal">#{title}</a>',
-                minChars: 0
-             }
-          ]
-       });
-
-
-    
-    
-
-
-
-
-        function dataFeed(opts, callback) {
-            var matchProperty = 'name',
-            data = users.filter(function(item) {
-                return item[matchProperty].indexOf(opts.query.toLowerCase()) == 0;
-            });
-
-            data = data.sort(function(a, b) {
-                return a[matchProperty].localeCompare(b[matchProperty], undefined, {
-                    sensitivity: 'accent'
-                });
-            });
-            callback(data);
-        }
-
-       function tagsFeed(opts, callback) {
-          var matchProperty = 'title',
-          data = tags.filter(function(item) {
-             return item[matchProperty].indexOf(opts.query.toLowerCase()) == 0;
-          });
-
-          data = data.sort(function(a, b) {
-             return a[matchProperty].localeCompare(b[matchProperty], undefined, {
-                sensitivity: 'accent'
-             });
-          });
-          callback(data);
-       }
     </script>
     
     <script type="text/javascript">

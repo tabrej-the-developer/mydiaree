@@ -213,7 +213,8 @@
                                                     <div class="form-group col-md-3 col-sm-12">
                                                         <label>Time</label>
                                                         <br>
-                                                        <input type="number" min="1" max="12" value="1" name="hour[]" class="form-hour form-number w-40" id="hour"> H : <input type="number" min="00" max="59" value="00" name="mins[]" id="mins" class="form-mins form-number w-40"> M
+                                                        <input type="number" min="1" max="12" value="1" name="hour[]" class="form-hour form-number w-40" id="hour"> H : 
+                                                        <input type="number" min="00" max="59" value="00" name="mins[]" id="mins" class="form-mins form-number w-40"> M
                                                     </div>
                                                     <div class="form-group col-md-3 col-sm-12">
                                                         <label>Head Count</label>

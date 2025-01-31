@@ -75,6 +75,10 @@
                         <?php if (isset($permission) && $permission->add == 1) { ?>
     <a href="#" class="btn btn-primary btn-lg top-right-button" id="addnewbtn" data-toggle="modal" data-target="#templateModal">ADD NEW</a>
 <?php } ?>
+
+<a href="<?= base_url('lessonPlanList/viewnewtemplate').'?centerid='.$centerid; ?>">
+    <button class="btn btn-outline-primary" style="margin-left:5px;">Add Templates</button>
+</a>
                     </div>
                     <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
                         <ol class="breadcrumb pt-0">
@@ -105,9 +109,7 @@
                     }else{
                 ?>
                 <div class="col-12 list" data-check-all="checkAll">
-                <a href="<?= base_url('lessonPlanList/viewnewtemplate').'?centerid='.$centerid; ?>">
-    <button class="btn btn-outline-primary" style="margin-left:1120px;margin-bottom:10px;">Add Templates</button>
-</a>
+         
                 <?php foreach($page_content as $page_key=>$page_value) { ?>
                 <div class="card d-flex flex-row mb-3">
                     <div class="d-flex flex-grow-1 min-width-zero">

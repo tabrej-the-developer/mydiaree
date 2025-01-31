@@ -309,7 +309,9 @@
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/glide.min.js?v=1.0.0"></script>    
     <script src="<?= base_url('assets/v3'); ?>/js/dore.script.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/scripts.js?v=1.0.0"></script>
-    <script src="https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js"></script>
+    <!-- <script src="https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js"></script> -->
+    <script src="https://cdn.ckeditor.com/4.22.1/full-all/ckeditor.js"></script>
+
     <script type="text/javascript">
         $(document).on('click','.delete',function(){
             var id = $(this).attr('id');
@@ -390,24 +392,28 @@
         }
 
         function set_cka(set_header){
-            CKEDITOR.replace(set_header, {
-                plugins: 'mentions,basicstyles,undo,wysiwygarea,toolbar',
-                contentsCss: [
-                    'https://cdn.ckeditor.com/4.16.2/full-all/contents.css',
-                    'https://ckeditor.com/docs/ckeditor4/4.16.2/examples/assets/mentions/contents.css'
-                ],
-                height: 150,
-                toolbar: [{
-                        name: 'document',
-                        items: ['Undo', 'Redo']
-                    },
-                    {
-                        name: 'basicstyles',
-                        items: ['Bold', 'Italic', 'Strike']
-                    }
-                ]
-            });
-        }
+    CKEDITOR.replace(set_header, {
+        plugins: 'mentions,basicstyles,undo,link,wysiwygarea,toolbar,format,list',
+        contentsCss: [
+            'https://cdn.ckeditor.com/4.22.1/full-all/contents.css',
+            'https://ckeditor.com/docs/ckeditor4/4.22.1/examples/assets/mentions/contents.css'
+        ],
+        height: 150,
+        toolbar: [{
+                name: 'document',
+                items: ['Undo', 'Redo']
+            },
+            {
+                name: 'basicstyles',
+                items: ['Bold', 'Italic', 'Strike', 'Format']
+            },
+            {
+                name: 'links',
+                items: ['Link', 'Unlink', 'NumberedList', 'BulletedList']
+            }
+        ]
+    });
+}
 
         <?php 
             $j = 1;

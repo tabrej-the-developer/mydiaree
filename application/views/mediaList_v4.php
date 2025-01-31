@@ -144,9 +144,11 @@
         <div class="alert alert-info" role="alert">
             <strong>File Upload Guidelines:</strong>
             <ul>
-                <li>You can upload a maximum of <strong>5 files</strong> at a time.</li>
-                <li>Each file must not exceed <strong>2 MB</strong>.</li>
-                <li>Accepted file types: <strong>JPG, JPEG, PNG</strong>.</li>
+                <li>You can upload a maximum of <strong>7 files</strong> at a time.</li>
+                <li>Each file must not exceed <strong>5 MB</strong>.</li>
+                <li>Accepted file types: 
+        <strong>JPG, JPEG, PNG, GIF, HEIC, HEIF, MP4, AVI, MOV, WMV, FLV, WEBM</strong>.
+    </li>
             </ul>
         </div>
     </div>
@@ -286,12 +288,12 @@
                                 <source src=""  />
                             </video> -->
                             <div class="form-group">
-                                <label>Childs<?php //print_r($Children); ?></label>
+                                <label>Children<?php //print_r($Children); ?></label>
                                 <select class="select2-multiple form-control" multiple="multiple" name="childTags[]" id="child-tags" style="width: 100%;">
                                     <?php foreach ($Children as $key => $ch) {
 
                                         ?>
-                                    <option value="<?php echo $ch->childid; ?>"><?php echo $ch->childname; ?></option>
+                                    <option value="<?php echo $ch->childid; ?>"><?php echo $ch->name; ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -359,9 +361,12 @@
 
         $(".dropzone").dropzone({
             url: "<?= base_url('Media/uploadFiles'); ?>",
-            maxFilesize: 2, // File size in MB
-            maxFiles: 5, // Max number of files
-            acceptedFiles: "image/jpeg,image/png,image/jpg", // Restrict file types
+            maxFilesize: 5, // File size in MB
+            maxFiles: 7, // Max number of files
+        // /  acceptedFiles: "image/jpeg,image/png,image/jpg", // Restrict file types
+        acceptedFiles: "image/jpeg,image/png,image/jpg,image/gif,image/heic,image/heif," + // Image types
+                  "video/mp4,video/avi,video/mov,video/wmv,video/flv,video/webm," + // Video types
+                  "video/quicktime,video/x-msvideo,video/x-ms-wmv", // Additional video formats
             timeout: 0,
             init: function () {
                 this.on("success", function (file, responseText) {

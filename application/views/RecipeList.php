@@ -545,7 +545,8 @@
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/perfect-scrollbar.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/select2.full.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/mousetrap.min.js?v=1.0.0"></script>
-    <script src="https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js"></script>
+    <!-- <script src="https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js"></script> -->
+	<script src="https://cdn.ckeditor.com/4.22.1/full-all/ckeditor.js"></script>
     <script src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/dore.script.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/scripts.js?v=1.0.0"></script>
@@ -571,25 +572,26 @@
 			});
 
 			CKEDITOR.replace('recipe', {
-				plugins: 'mentions,basicstyles,undo,link,wysiwygarea,toolbar,format,list',
-				contentsCss: [
-				 'http://cdn.ckeditor.com/4.16.2/full-all/contents.css',
-				 'https://ckeditor.com/docs/ckeditor4/4.16.2/examples/assets/mentions/contents.css'
-				],
-				height: 150,
-				toolbar: [{
-				  name: 'document',
-				  items: ['Undo', 'Redo']
-				},
-				{
-				  name: 'basicstyles',
-				  items: ['Bold', 'Italic', 'Strike', 'Format']
-				},
-				{
-				  name: 'links',
-				  items: ['NumberedList', 'BulletedList']
-				}],
-	       	});
+    plugins: 'mentions,basicstyles,undo,link,wysiwygarea,toolbar,format,list',
+    contentsCss: [
+        'https://cdn.ckeditor.com/4.22.1/full-all/contents.css',
+        'https://ckeditor.com/docs/ckeditor4/4.22.1/examples/assets/mentions/contents.css'
+    ],
+    height: 150,
+    toolbar: [{
+            name: 'document',
+            items: ['Undo', 'Redo']
+        },
+        {
+            name: 'basicstyles',
+            items: ['Bold', 'Italic', 'Strike', 'Format']
+        },
+        {
+            name: 'links',
+            items: ['NumberedList', 'BulletedList', 'Link', 'Unlink']
+        }
+    ]
+});
 			
 			//Add ingredient 
 			$('.add-ingr').on('click',function(){

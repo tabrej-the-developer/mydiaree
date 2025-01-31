@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/nouislider.min.css" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/bootstrap-datepicker3.min.css" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/main.css" />
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- <link rel="stylesheet" href="<?#= base_url('assets/v3'); ?>/css/dore.light.blueolympic.min.css" /> -->
     <style>
         @media screen and (min-width: 1511px) {
@@ -32,6 +35,21 @@
             max-width: 23%;
           }
         }
+    </style>
+      <style>
+        .form-check {
+            display: flex;
+            align-items: center;
+        }
+        .form-check-input {
+            margin-top: 0;
+            margin-right: 0.5rem;
+        }
+        .btn-link {
+            padding: 0;
+            font-size: 0.9rem;
+        }
+        
     </style>
 </head>
 <body id="app-container" class="menu-default show-spinner">
@@ -58,6 +76,7 @@
                                 <li class="breadcrumb-item active" aria-current="page">Edit QIP</li>
                             </ol>
                         </nav>
+                        <button class="btn btn-outline-primary" style="float:right;" data-toggle="modal" data-target="#printModal">Print</button>
                         <div class="separator mb-5"></div>
                     </div>
                 </div>
@@ -127,6 +146,171 @@
             </div>
         </div>
     </main>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="printModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="printModalLabel">Select Options to Print</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="max-height:500px;overflow-y:auto;">
+                    <form id="printForm">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="selectAll">
+                            <label class="form-check-label" for="selectAll">Select All</label>
+                        </div>
+                        <hr>
+                        <!-- Quality Area Options -->
+                        <div id="qualityAreas">
+                            <!-- Loop for Quality Areas -->
+                            <div class="form-group">
+                                <div>
+                                    <input type="checkbox" class="form-check-input area-checkbox" id="qa1" data-group="qa1">
+                                    <label class="form-check-label" for="qa1">Quality Area 1</label> 
+                                    <button type="button" class="btn btn-link btn-sm toggle-collapse" data-target="#qa1SubOptions">Expand</button>
+                                </div>
+                                <div id="qa1SubOptions" class="collapse pl-3">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input sub-checkbox" id="qa1_1" data-parent="qa1">
+                                        <label class="form-check-label" for="qa1_1">Standard 1.1</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input sub-checkbox" id="qa1_2" data-parent="qa1">
+                                        <label class="form-check-label" for="qa1_2">Standard 1.2</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input sub-checkbox" id="qa1_3" data-parent="qa1">
+                                        <label class="form-check-label" for="qa1_3">Standard 1.3</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Repeat for other Quality Areas -->
+                            <div class="form-group">
+                                <div>
+                                    <input type="checkbox" class="form-check-input area-checkbox" id="qa2" data-group="qa2">
+                                    <label class="form-check-label" for="qa2">Quality Area 2</label>
+                                    <button type="button" class="btn btn-link btn-sm toggle-collapse" data-target="#qa2SubOptions">Expand</button>
+                                </div>
+                                <div id="qa2SubOptions" class="collapse pl-3">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input sub-checkbox" id="qa2_1" data-parent="qa2">
+                                        <label class="form-check-label" for="qa2_1">Standard 2.1</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input sub-checkbox" id="qa2_2" data-parent="qa2">
+                                        <label class="form-check-label" for="qa2_2">Standard 2.2</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                              <!-- Quality Area 3 -->
+                              <div class="form-group">
+                                <div>
+                                    <input type="checkbox" class="form-check-input area-checkbox" id="qa3" data-group="qa3">
+                                    <label class="form-check-label" for="qa3">Quality Area 3</label>
+                                    <button type="button" class="btn btn-link btn-sm toggle-collapse" data-target="#qa3SubOptions">Expand</button>
+                                </div>
+                                <div id="qa3SubOptions" class="collapse pl-3">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input sub-checkbox" id="qa3_1" data-parent="qa3">
+                                        <label class="form-check-label" for="qa3_1">Standard 3.1</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input sub-checkbox" id="qa3_2" data-parent="qa3">
+                                        <label class="form-check-label" for="qa3_2">Standard 3.2</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Quality Area 4 -->
+                            <div class="form-group">
+                                <div>
+                                    <input type="checkbox" class="form-check-input area-checkbox" id="qa4" data-group="qa4">
+                                    <label class="form-check-label" for="qa4">Quality Area 4</label>
+                                    <button type="button" class="btn btn-link btn-sm toggle-collapse" data-target="#qa4SubOptions">Expand</button>
+                                </div>
+                                <div id="qa4SubOptions" class="collapse pl-3">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input sub-checkbox" id="qa4_1" data-parent="qa4">
+                                        <label class="form-check-label" for="qa4_1">Standard 4.1</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input sub-checkbox" id="qa4_2" data-parent="qa4">
+                                        <label class="form-check-label" for="qa4_2">Standard 4.2</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Quality Area 5 -->
+                            <div class="form-group">
+                                <div>
+                                    <input type="checkbox" class="form-check-input area-checkbox" id="qa5" data-group="qa5">
+                                    <label class="form-check-label" for="qa5">Quality Area 5</label>
+                                    <button type="button" class="btn btn-link btn-sm toggle-collapse" data-target="#qa5SubOptions">Expand</button>
+                                </div>
+                                <div id="qa5SubOptions" class="collapse pl-3">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input sub-checkbox" id="qa5_1" data-parent="qa5">
+                                        <label class="form-check-label" for="qa5_1">Standard 5.1</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input sub-checkbox" id="qa5_2" data-parent="qa5">
+                                        <label class="form-check-label" for="qa5_2">Standard 5.2</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Quality Area 6 -->
+                            <div class="form-group">
+                                <div>
+                                    <input type="checkbox" class="form-check-input area-checkbox" id="qa6" data-group="qa6">
+                                    <label class="form-check-label" for="qa6">Quality Area 6</label>
+                                    <button type="button" class="btn btn-link btn-sm toggle-collapse" data-target="#qa6SubOptions">Expand</button>
+                                </div>
+                                <div id="qa6SubOptions" class="collapse pl-3">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input sub-checkbox" id="qa6_1" data-parent="qa6">
+                                        <label class="form-check-label" for="qa6_1">Standard 6.1</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input sub-checkbox" id="qa6_2" data-parent="qa6">
+                                        <label class="form-check-label" for="qa6_2">Standard 6.2</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Quality Area 7 -->
+                            <div class="form-group">
+                                <div>
+                                    <input type="checkbox" class="form-check-input area-checkbox" id="qa7" data-group="qa7">
+                                    <label class="form-check-label" for="qa7">Quality Area 7</label>
+                                    <button type="button" class="btn btn-link btn-sm toggle-collapse" data-target="#qa7SubOptions">Expand</button>
+                                </div>
+                                <div id="qa7SubOptions" class="collapse pl-3">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input sub-checkbox" id="qa7_1" data-parent="qa7">
+                                        <label class="form-check-label" for="qa7_1">Standard 7.1</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input sub-checkbox" id="qa7_2" data-parent="qa7">
+                                        <label class="form-check-label" for="qa7_2">Standard 7.2</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Add similar blocks for Quality Areas 3 to 7 -->
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="printSelected">Print Selected</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <?php $this->load->view('footer_v3'); ?>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/jquery-3.3.1.min.js"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/bootstrap.bundle.min.js"></script>
@@ -182,4 +366,86 @@
         }
     });
 </script>
+
+<script>
+        $(document).ready(function() {
+            // Handle Select All
+            $('#selectAll').on('change', function() {
+                const isChecked = $(this).is(':checked');
+                $('.area-checkbox, .sub-checkbox').prop('checked', isChecked);
+            });
+
+            // Handle Quality Area Selection
+            $('.area-checkbox').on('change', function() {
+                const group = $(this).data('group');
+                const isChecked = $(this).is(':checked');
+                $(`#${group}SubOptions .sub-checkbox`).prop('checked', isChecked);
+            });
+
+            // Handle Sub-option Selection
+            $('.sub-checkbox').on('change', function() {
+                const parent = $(this).data('parent');
+                const allSubChecked = $(`#${parent}SubOptions .sub-checkbox`).length === $(`#${parent}SubOptions .sub-checkbox:checked`).length;
+                $(`#${parent}`).prop('checked', allSubChecked);
+            });
+
+            // Toggle Expand/Collapse
+            $('.toggle-collapse').on('click', function() {
+    const target = $(this).data('target');
+    const isExpanded = $(target).hasClass('show'); // Check if it's currently expanded
+    $(target).collapse('toggle'); // Toggle the collapse
+
+    // Update the text based on the current state
+    $(this).text(isExpanded ? 'Expand' : 'Collapse');
+});
+
+           
+
+
+// Print Selected
+            $('#printSelected').on('click', function() {
+    // Get the selected options
+    const selectedOptions = [];
+    $('.sub-checkbox:checked').each(function() {
+        selectedOptions.push($(this).attr('id'));
+    });
+
+    // Get the ID from the URL segment
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id'); // Extract the 'id' query parameter
+    const center_id = urlParams.get('centerid'); // Extract the 'id' query parameter
+
+    // AJAX request to send data to the controller
+    $.ajax({
+        url: '<?= base_url("Qip/print_selectedqip"); ?>', // Controller method to handle the request
+        type: 'POST',
+        data: {
+            id: id,
+            centerid: center_id,
+            selectedOptions: selectedOptions
+        },
+        dataType: 'json',
+        success: function(response) {
+    // Handle success response
+    if (response.status === 'success') {
+        // Open the PDF URL in a new tab
+        window.open(response.fileName, '_blank');
+    } else {
+        // Handle error message
+        console.error('Error:', response.message);
+        alert('Failed to update data: ' + response.message);
+    }
+},
+error: function(xhr, status, error) {
+    // Handle error response
+    console.error('AJAX Error:', error);
+    alert('An error occurred. Please try again.');
+}
+    });
+});
+
+       
+       
+        });
+    </script>
 </html>

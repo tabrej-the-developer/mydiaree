@@ -665,7 +665,9 @@
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/glide.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/dore.script.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/scripts.js?v=1.0.0"></script>
-    <script src="https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js"></script>
+    <!-- <script src="https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js"></script> -->
+    <script src="https://cdn.ckeditor.com/4.22.1/full-all/ckeditor.js"></script>
+
     <script>
 
         $(document).ready(function(){
@@ -729,80 +731,80 @@
         });
 
         var users = <?php echo $getStaffChild; ?>;
-        CKEDITOR.replace('comment', {
-            plugins: 'mentions,basicstyles,undo,link,wysiwygarea,toolbar,format,list',
-            contentsCss: [
-            'http://cdn.ckeditor.com/4.16.2/full-all/contents.css',
-            'https://ckeditor.com/docs/ckeditor4/4.16.2/examples/assets/mentions/contents.css'
-            ],
-            height: 150,
-            toolbar: [{
-                name: 'document',
-                items: ['Undo', 'Redo']
-          },
-          {
-                name: 'basicstyles',
-                items: ['Bold', 'Italic', 'Strike', 'Format']
-          },
-          {
-                name: 'links',
-                items: ['Link', 'Unlink', 'NumberedList', 'BulletedList']
-          }],
-          mentions: [{  
-            feed: dataFeed,
-                itemTemplate: '<li data-id="{id}">' +
-                    '<strong class="username">{name}</strong>' +
-                    '</li>',
-                outputTemplate: '<a href="#">{name}</a><span>&nbsp;</span>',
-                minChars: 0
-            }]
+
+// Define feed functions first
+function dataFeed(opts, callback) {
+    var matchProperty = 'name',
+    data = users.filter(function(item) {
+        return item[matchProperty].indexOf(opts.query.toLowerCase()) == 0;
+    });
+
+    data = data.sort(function(a, b) {
+        return a[matchProperty].localeCompare(b[matchProperty], undefined, {
+            sensitivity: 'accent'
         });
+    });
 
-        function dataFeed(opts, callback) {
-          var matchProperty = 'name',
-            data = users.filter(function(item) {
-              return item[matchProperty].indexOf(opts.query.toLowerCase()) == 0;
-            });
+    callback(data);
+}
 
-          data = data.sort(function(a, b) {
-            return a[matchProperty].localeCompare(b[matchProperty], undefined, {
-              sensitivity: 'accent'
-            });
-          });
+function tagsFeed(opts, callback) {
+    var matchProperty = 'title',
+    data = tags.filter(function(item) {
+        return item[matchProperty].indexOf(opts.query.toLowerCase()) == 0;
+    });
 
-          callback(data);
-        }
+    data = data.sort(function(a, b) {
+        return a[matchProperty].localeCompare(b[matchProperty], undefined, {
+            sensitivity: 'accent'
+        });
+    });
+    callback(data);
+}
 
-        function tagsFeed(opts, callback) {
-          var matchProperty = 'title',
-          data = tags.filter(function(item) {
-             return item[matchProperty].indexOf(opts.query.toLowerCase()) == 0;
-          });
+// Initialize CKEditor for comments
+CKEDITOR.replace('comment', {
+    plugins: 'mentions,basicstyles,undo,link,wysiwygarea,toolbar,format,list',
+    contentsCss: [
+        'https://cdn.ckeditor.com/4.22.1/full-all/contents.css',
+        'https://ckeditor.com/docs/ckeditor4/4.22.1/examples/assets/mentions/contents.css'
+    ],
+    height: 150,
+    toolbar: [{
+        name: 'document',
+        items: ['Undo', 'Redo']
+    },
+    {
+        name: 'basicstyles',
+        items: ['Bold', 'Italic', 'Strike', 'Format']
+    },
+    {
+        name: 'links',
+        items: ['Link', 'Unlink', 'NumberedList', 'BulletedList']
+    }],
+    mentions: [{  
+        feed: dataFeed,
+        itemTemplate: '<li data-id="{id}">' +
+            '<strong class="username">{name}</strong>' +
+            '</li>',
+        outputTemplate: '<a href="#">{name}</a><span>&nbsp;</span>',
+        minChars: 0
+    }]
+});
 
-          data = data.sort(function(a, b) {
-             return a[matchProperty].localeCompare(b[matchProperty], undefined, {
-                sensitivity: 'accent'
-             });
-          });
+var id = "<?php echo $id; ?>"; 
 
-          callback(data);
-        }
+function commentobs() {
+    if(CKEDITOR.instances.comment.getData() == '') {
+        alert('Please Enter Comments');
+        return false;
+    }
+    var url = "<?php echo base_url('observation/comment'); ?>?id=" + id;
+    var test = url.replace(/&amp;/g, '&');
+    document.getElementById("form-comment").action = test;
+    document.getElementById("form-comment").submit();
+}
 
-        
-
-        var id="<?php echo $id; ?>"; 
-        function commentobs()
-        {
-            if(CKEDITOR.instances.comment.getData()=='')
-            {
-                alert('Please Enter Comments');
-                return false;
-            }
-            var url="<?php echo base_url('observation/comment'); ?>?id="+id;
-            var test= url.replace(/&amp;/g, '&');
-            document.getElementById("form-comment").action =test;
-            document.getElementById("form-comment").submit();
-        }
-    </script>
+</script>
 </body>
 </html>

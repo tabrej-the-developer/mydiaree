@@ -1791,6 +1791,7 @@ class Observation extends CI_Controller {
 				$jsonOutput=json_decode($server_output);
 				$data=$jsonOutput;  
 			    // echo "JSON Output: <pre>" . print_r($jsonOutput, true) . "</pre>";
+				// exit;
 
 				$data->type = isset($_GET['type'])?$_GET['type']:'';
 				$count=$data->observationsTotal/10;

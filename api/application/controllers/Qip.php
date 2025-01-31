@@ -1375,4 +1375,499 @@ class Qip extends CI_Controller {
 		}
 		echo json_encode($data);
 	}
+
+
+
+
+	public function printqip()
+	{
+		$headers = $this->input->request_headers();
+		if (!empty($headers['X-Device-Id']) && !empty($headers['X-Token'])) {
+			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
+			$json = json_decode(file_get_contents('php://input'));
+	
+			if ($json != null && $res != null && $res->userid == $json->userid) {
+				// print_r($json);
+				// exit;
+				// Load mPDF library
+				$this->load->library('M_pdf');
+				$mpdf = $this->m_pdf->load([
+					'mode' => 'utf-8',
+					'format' => 'A3',
+					'margin_left' => 0,
+					'margin_right' => 0,
+					'margin_top' => 0,
+					'margin_bottom' => 0,
+					'margin_header' => 0,
+					'margin_footer' => 0
+				]);
+	
+				$baseapiurl = BASE_API_URL;
+				$imgname = $baseapiurl.'assets/logo.png';
+	
+				// Add introduction page first
+				$introHtml = $this->prepareIntroductionPage($imgname);
+				$mpdf->WriteHTML($introHtml);
+				
+				// Add a page break after introduction
+				// $mpdf->AddPage('', '', '', '', '', 10, 10, 25, 25, 15, 15);
+
+
+				$mpdf->AddPage('', '', '', '', '', 10, 10, 25, 25, 15, 15); // Margins for the new page
+
+// Content for the new page
+$newPageContent = '
+<div style="margin: 20px;">
+    <h1 style="color: #003366; font-size: 20px; font-weight: bold; text-align: center; margin-bottom: 20px;">
+        The National Quality Standard and Quality Improvement
+    </h1>
+    <p style="text-align: justify; font-size: 12px; line-height: 1.8;">
+        The National Quality Standard is the standard against which providers self-assess the performance of their service/s in delivering quality education and care, and plan future improvements to their service/s. One result of this process is a Quality Improvement Plan (QIP).
+    </p>
+    <p style="text-align: justify; font-size: 12px; line-height: 1.8;">
+        The Education and Care Services National Regulations 2017 (the National Regulations) require approved providers to prepare a Quality Improvement Plan (regulation 55) for each service that:
+    </p>
+    <ul style="font-size: 12px; line-height: 1.8;">
+        <li>Includes an assessment by the provider of the quality of the practices of the service against the National Quality Standard.</li>
+        <li>And the National Regulations; and</li>
+        <li>Identifies any areas that the provider considers may require improvement; and</li>
+        <li>Contains a statement of philosophy of the service.</li>
+    </ul>
+    <p style="text-align: justify; font-size: 12px; line-height: 1.8;">
+        The National Regulations do not prescribe a format for a Quality Improvement Plan. The purpose of this template is to offer a format that supports approved providers to meet their obligations under the National Regulations.
+    </p>
+    <p style="text-align: justify; font-size: 12px; line-height: 1.8;">
+        Approved providers also have an obligation (r56) to review and revise the Quality Improvement Plan at least annually, having regard to the National Quality Standard. A Quality Improvement Plan must be reviewed and/or submitted to the regulatory authority on request.
+    </p>
+    <h2 style="color: #003366; font-size: 16px; font-weight: bold; margin-top: 30px;">
+        About the ACECQA Quality Improvement Plan template
+    </h2>
+    <p style="text-align: justify; font-size: 12px; line-height: 1.8;">
+        The purpose of this template is to offer a planning format that supports approved providers to meet their obligations under the National Regulations. This template provides quick links to helpful resources for each quality area in the Guide to the National Framework and the ACECQA website.
+    </p>
+    <h2 style="color: #003366; font-size: 16px; font-weight: bold; margin-top: 30px;">
+        Exceeding NQS themes guidance
+    </h2>
+    <p style="text-align: justify; font-size: 12px; line-height: 1.8;">
+        The Exceeding NQS sections provided for each standard should be completed when there is evidence of one or more Exceeding NQS themes demonstrated in the practice at the service. When the QIP is submitted to the regulatory authority for assessment and rating, an authorised officer will consider the evidence documented and gathered at the assessment visit to determine if the Exceeding NQS themes are being met.
+    </p>
+    <p style="text-align: justify; font-size: 12px; line-height: 1.8;">
+        For further information on the three Exceeding themes, including what authorised officers consider when reviewing whether evidence demonstrates a theme, see ACECQA’s Exceeding the NQS webpage.
+    </p>
+</div>
+';
+
+// Write the content for the new page
+$mpdf->WriteHTML($newPageContent);
+
+
+
+// footer code globally ------------------------------------------
+// Set footer with image (left) and page number info (right)
+$footerHtml = '
+<table width="100%" style="border-top: 1px solid #000; font-size: 10px; padding-top: 5px;">
+    <tr>
+        <td width="10%" align="left">
+            <img src="' . $imgname . '" width="45" height="35">
+        </td>
+        <td width="90%" align="right">
+            Quality Improvement Plan template | {PAGENO}
+        </td>
+    </tr>
+</table>';
+
+$mpdf->SetHTMLFooter($footerHtml);
+//-----------------------------------------------------
+
+// service form page ------------------------------------
+$records = $this->db->where('centerid', $json->centerid)
+				->get('servicedetails')
+				->result();
+$record = $records[0]; 
+
+$mpdf->AddPage('', '', '', '', '', 10, 10, 25, 25, 15, 15); // Margins for the new page
+
+// Content for the new page
+$servicedetailsformpage = '
+<div class="service-details-container">
+    <h2 style="color: #0066cc; margin-bottom: 20px;">Service details</h2>
+    
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <tr>
+            <td style="border: 1px solid #000; padding: 8px; width: 50%;"><strong>Service name</strong></td>
+            <td style="border: 1px solid #000; padding: 8px;"><strong>Service approval number</strong></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000; padding: 8px; height: 40px;">'. $record->serviceName .'</td>
+            <td style="border: 1px solid #000; padding: 8px;">'. $record->serviceApprovalNumber .'</td>
+        </tr>
+    </table>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <tr>
+            <td colspan="2" style="border: 1px solid #000; padding: 8px;"><strong>Primary contacts at service</strong></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border: 1px solid #000; padding: 8px; height: 40px;"></td>
+        </tr>
+    </table>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <tr>
+            <td style="border: 1px solid #000; padding: 8px; width: 50%;"><strong>Physical location of service</strong></td>
+            <td style="border: 1px solid #000; padding: 8px;"><strong>Physical location contact details</strong></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000; padding: 8px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 4px; border: 1px solid black;"><strong>Street</strong></td>
+                        <td style="padding: 4px; border: 1px solid black;">'. $record->serviceStreet .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Suburb</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->serviceSuburb .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>State/territory</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->serviceState .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Postcode</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->servicePostcode .'</td>
+                    </tr>
+                </table>
+            </td>
+            <td style="border: 1px solid #000; padding: 8px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Telephone</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->contactTelephone .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Mobile</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->contactMobile .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Fax</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->contactFax .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Email</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->contactEmail .'</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <tr>
+            <td style="border: 1px solid #000; padding: 8px; width: 50%;"><strong>Approved Provider</strong></td>
+            <td style="border: 1px solid #000; padding: 8px;"><strong>Nominated Supervisor</strong></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000; padding: 8px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Primary contact</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->providerContact .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Telephone</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->providerTelephone .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Mobile</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->providerMobile .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Fax</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->providerFax .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Email</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->providerEmail .'</td>
+                    </tr>
+                </table>
+            </td>
+            <td style="border: 1px solid #000; padding: 8px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Name</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->supervisorName .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Telephone</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->supervisorTelephone .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Mobile</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->supervisorMobile .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Fax</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->supervisorFax .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Email</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->supervisorEmail .'</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <tr>
+            <td colspan="2" style="border: 1px solid #000; padding: 8px;"><strong>Postal address (if different to physical location of service)</strong></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000; padding: 8px; width: 50%;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Street</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->postalStreet .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Suburb</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->postalSuburb .'</td>
+                    </tr>
+                </table>
+            </td>
+            <td style="border: 1px solid #000; padding: 8px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>State/territory</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->postalState .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Postcode</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->postalPostcode .'</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td colspan="1" style="border: 1px solid #000; padding: 8px;"><strong>Educational leader</strong></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000; padding: 8px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Name</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->eduLeaderName .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Telephone</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->eduLeaderTelephone .'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px;border: 1px solid black;"><strong>Email</strong></td>
+						<td style="padding: 4px; border: 1px solid black;">'. $record->eduLeaderEmail .'</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+';
+
+$mpdf->WriteHTML($servicedetailsformpage);
+
+
+//--------------------------
+
+//----service form's next page ------
+$mpdf->AddPage('', '', '', '', '', 10, 10, 25, 25, 15, 15);
+
+$serviceformnextpage = '
+<div style="font-family: Arial, sans-serif;">
+    <h2 style="color: #00427A; margin-bottom: 5px;">Additional information about your service</h2>
+    <p style="margin-top: 0; margin-bottom: 20px;">The following information will assist the regulatory authority to plan the assessment visit.</p>
+    
+    <div style="border: 1px solid #000; margin-bottom: -1px;">
+        <div style="padding: 10px;">
+            <div style="font-weight: normal;">Provide additional information about your service—parking, school holiday dates, pupil-free days, etc.</div>
+            <div style="height: 100px;"></div>
+        </div>
+    </div>
+
+    <div style="border: 1px solid #000; margin-bottom: -1px;">
+        <div style="padding: 10px;">
+            <div style="font-weight: normal;">How are the children grouped at your service?</div>
+            <div style="height: 100px;"></div>
+        </div>
+    </div>
+
+    <div style="border: 1px solid #000; margin-bottom: -1px;">
+        <div style="padding: 10px;">
+            <div style="font-weight: normal;">Write the name and position of person(s) responsible for submitting this Quality Improvement Plan (e.g. Cheryl Smith, Nominated Supervisor)</div>
+            <div style="height: 100px;"></div>
+        </div>
+    </div>
+
+    <div style="border: 1px solid #000;">
+        <div style="padding: 10px;">
+            <div style="font-weight: normal;">For family day care services, indicate the number of educators currently registered in the service and attach a list of the educators and their addresses.</div>
+            <div style="margin-top: 10px;">
+                <span style="font-weight: normal;">No. of educators:</span>
+                <input type="text" style="border: 1px solid #ccc; width: 100px; margin-left: 5px;">
+            </div>
+        </div>
+    </div>
+</div>
+';
+
+$mpdf->WriteHTML($serviceformnextpage);
+
+//-------------------
+
+
+//another next page of service form ------------------
+$mpdf->AddPage('', '', '', '', '', 10, 10, 25, 25, 15, 15);
+
+$serviceformanotherpage = '
+<div style="font-family: Arial, sans-serif;">
+    <h2 style="color: #00427A; margin-bottom: 5px;">Service statement of philosophy</h2>
+    <p style="margin-top: 0; margin-bottom: 20px;">Please insert your service\'s statement of philosophy here.</p>
+    
+    <div style="border: 1px solid #000;">
+        <div style="height: 400px;">' . $record->philosophyStatement .'</div>
+    </div>
+</div>
+';
+
+$mpdf->WriteHTML($serviceformanotherpage);
+
+//--------------------------------------------
+
+
+$mpdf->AddPage('', '', '', '', '', 10, 10, 25, 25, 15, 15);
+
+// Add the rest of the content
+$contentHtml = $this->prepareHTML($json);
+$mpdf->WriteHTML($contentHtml);
+
+	
+				// Generate unique file name
+				$pdfId = uniqid() . '_qip.pdf';
+				$filePath = FCPATH . 'assets/' . $pdfId;
+				
+				// Save PDF to the assets directory
+				$mpdf->Output($filePath, 'F');
+				$baseapiurl = BASE_API_URL;
+				$FileName = $baseapiurl.'assets/'.$pdfId;
+				
+				$data = array(
+					'Status' => 'SUCCESS',
+					'Message' => 'PDF Created Successfully',
+					'FileName' => $FileName,
+				);
+				http_response_code(200);
+				echo json_encode($data, JSON_UNESCAPED_SLASHES);
+				exit;
+			} else {
+				echo json_encode(array("Status" => "ERROR", "Message" => "Invalid User Account!"));
+			}
+		} else {
+			echo json_encode(array("Status" => "ERROR", "Message" => "Invalid Headers Sent!"));
+		}
+	}
+	
+	private function prepareIntroductionPage($imgname)
+	{
+		// CSS styles for the introduction page
+		$styles = '
+			<style>
+				.intro-page {
+					background-color: #2e86c1;
+					color: white;
+					height: 100%;
+					padding: 40px;
+					text-align: center;
+				}
+				.logo {
+					width:220px;
+					height:180px;
+					max-width: 800px;
+					margin-bottom: 100px;
+					margin-top: 150px;
+				}
+				.main-title {
+					font-size: 32px;
+					font-weight: bold;
+					margin-bottom: 60px;
+				}
+				.sub-title {
+					font-size: 26px;
+					font-weight:bold;
+					margin-top: 80px;
+				}
+				.sub-title2 {
+					font-size: 22px;
+					font-weight:bold;
+					margin-top: 80px;
+				}
+			</style>
+		';
+	
+		// HTML content for the introduction page
+		$html = $styles . '
+			<div class="intro-page">
+            <img src="' . htmlspecialchars($imgname) . '" class="logo" alt="ACECQA Logo">
+				<div class="main-title">Quality Improvement Plan template</div>
+				<div class="sub-title" style="color:black;">National Quality Standard</div>
+
+				<div class="sub-title2" style="color:black;">Updated on Jan 2025</div>
+			</div>
+		';
+	
+		return $html;
+	}
+	
+	private function prepareHTML($apiData)
+	{
+		$html = '<h1>Quality Inspection Report</h1>';
+		foreach ($apiData->selectedOptions as $option) {
+			// Extract quality area (qa1, qa2, etc.)
+			preg_match('/qa(\d+)_/', $option, $matches);
+			$qualityAreaId = $matches[1];
+	
+			// Fetch data from database
+			$records = $this->db->where('qipid', $apiData->id)
+				->where('standardId', $qualityAreaId)
+				->get('qip_standard_values')
+				->result();
+	
+			// Create a section for each quality area
+			$html .= '<h2>Quality Area: QA' . $qualityAreaId . '</h2>';
+			$html .= '<table border="1" cellpadding="5" cellspacing="0">';
+			$html .= '<tr><th>Val1</th><th>Val2</th><th>Val3</th></tr>';
+	
+			foreach ($records as $record) {
+				$html .= '<tr>';
+				$html .= '<td>' . $record->val1 . '</td>';
+				$html .= '<td>' . $record->val2 . '</td>';
+				$html .= '<td>' . $record->val3 . '</td>';
+				$html .= '</tr>';
+			}
+	
+			$html .= '</table><br><pagebreak />';
+		}
+	
+		return $html;
+	}
+
+
+
+
+
+
+
+
+
 }

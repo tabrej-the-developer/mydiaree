@@ -160,7 +160,7 @@
                         <a type="button" class="btn btn-primary btn-lg top-right-button" href="<?= $newObsUrl; ?>">ADD NEW</a>
                         
                         <?php } ?>
-                        
+                        <button id="checkDraftObservationsBtn" class="btn btn-outline-danger" style="margin-left:5px;">Draft Observations</button>
                     </div>
                     
                     <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
@@ -169,12 +169,13 @@
                                 <a href="<?= base_url('Dashboard'); ?>">Dashboard</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Observation List</li>
+                        
+
                         </ol>
                     </nav>
                     <div class="separator mb-5"></div>
                 </div>
             </div>
-            <button id="checkDraftObservationsBtn" class="btn btn-outline-danger" style="margin-left:1081px;margin-bottom:10px;">Check Draft Observations</button>
 
             <div class="row" id="observations-list">
                 <?php 
@@ -520,7 +521,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-danger" onclick="deleteSelectedObservations()">Delete Selected</button>
                 <button type="button" class="btn btn-outline-success" onclick="publishSelectedObservations()">Publish Selected</button>
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

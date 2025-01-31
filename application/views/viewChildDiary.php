@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/select2.min.css" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/select2-bootstrap.min.css" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/main.css?v=1.0.0"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         .drop-down{
             border: 1px solid #008ecc!important;
@@ -163,35 +164,44 @@
                                             <div class="form-group">
                                                 <label>Time</label>
                                                 <br>
+                                                
                                                 <?php
-                                                    if(empty($cobj->breakfast->startTime)){
-                                                        $hour = 1;
-                                                        $mins = 00;
-                                                    } else {
-                                                        $time = explode(":",$cobj->breakfast->startTime);
-                                                        $hour = str_replace("h","",$time[0]);
-                                                        $mins = str_replace("m","",$time[1]);
-                                                    } 
-                                                ?>
-                                                <input type="number" min="1" max="12" value="<?php echo $hour; ?>" name="bfhour" class="form-hour form-number" id="bfhour"> H : <input type="number" min="0" max="59" value="<?php echo $mins; ?>" name="bfmins" id="bfmins" class="form-mins form-number"> M
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Item</label>
-                                                <br>
-                                                <select name="bfitem" id="bfitem" class="form-control select2-single select2-hidden-accessible modal-form-control" data-width="100%" tabindex="-1" aria-hidden="true">
-                                                    <?php 
-                                                        foreach ($breakfast as $key => $bf) {
-                                                            if ($bf->itemName == $cobj->breakfast->item) {
-                                                    ?>
-                                                    <option value="<?php echo $bf->itemName; ?>" selected><?php echo $bf->itemName; ?></option>
-                                                    <?php
-                                                        } else {
-                                                    ?>
-                                                    <option value="<?php echo $bf->itemName; ?>"><?php echo $bf->itemName; ?></option>
-                                                    <?php } } ?>
-                                                </select>
-                                            </div>
+                                   if (empty($cobj->breakfast->startTime)) {
+                                  date_default_timezone_set('Australia/Sydney');
+
+                                         // Get the current hour and minute
+                                            $hour = date('G'); // 'G' gives the hour in 24-hour format without leading zeros
+                                            $mins = date('i'); // 'i' gives the minutes with leading zeros
+                                        } else {
+                                     $time = explode(":", $cobj->breakfast->startTime);
+                                          $hour = str_replace("h", "", $time[0]);
+                                     $mins = str_replace("m", "", $time[1]);
+                              }
+                                                 ?>
+
+                                          <input type="number" min="0" max="24" value="<?php echo $hour; ?>" name="bfhour" class="form-hour form-number" id="bfhour"> H : 
+                                           <input type="number" min="0" max="59" value="<?php echo $mins; ?>" name="bfmins" id="bfmins" class="form-mins form-number"> M  
+                                          &nbsp;<i class="fa-solid fa-clock"></i><input type="time" name="bfTime" id="bfTime" style="margin-left:3px;" value="<?php echo sprintf('%02d:%02d', $hour, $mins); ?>">                                        
+                                  </div>
+                                         
+                                  <div class="form-group">
+    <label>Item</label>
+    <br>
+    <select name="bfitem" id="bfitem" class="form-control select2-single select2-hidden-accessible modal-form-control" data-width="100%" tabindex="-1" aria-hidden="true">
+        <?php 
+        foreach ($breakfast as $key => $bf) {
+            // Check if $cobj and $cobj->breakfast exist and have an item property
+            $selected = (isset($cobj) && isset($cobj->breakfast) && $cobj->breakfast->item == $bf->itemName) ? 'selected' : '';
+        ?>
+            <option value="<?php echo htmlspecialchars($bf->itemName); ?>" <?php echo $selected; ?>>
+                <?php echo htmlspecialchars($bf->itemName); ?>
+            </option>
+        <?php } ?>
+    </select>
+</div>
                                         </div>
+                                                       
+
                                         <div class="col-4">
                                             <div class="form-group">
                                                 <?php
@@ -235,6 +245,11 @@
                                     </div>
                                 </div>
                             </div>
+
+
+
+
+
                             <div class="card mb-2">
                                 <div class="card-body">
                                     <h3 class="card-title">Morning Tea</h3>
@@ -246,8 +261,11 @@
                                                 <?php
 
                                                     if(empty($cobj->morningtea->startTime)){
-                                                        $hour = 1;
-                                                        $mins = 00;
+                                                        date_default_timezone_set('Australia/Sydney');
+
+                                                        // Get the current hour and minute
+                                                        $hour = date('G'); // 'G' gives the hour in 24-hour format without leading zeros
+                                                        $mins = date('i'); // 'i' gives the minutes with leading zeros
                                                     } else {
                                                         $time = explode(":",$cobj->morningtea->startTime);
                                                         $hour = str_replace("h","",$time[0]);
@@ -255,7 +273,11 @@
                                                     }
                                                     
                                                 ?>
-                                                <input type="number" min="1" max="12" value="<?php echo $hour; ?>" name="mthour" id="mthour"  class="form-hour form-number"> H : <input type="number" min="0" max="59" value="<?php echo $mins; ?>" name="mtmins" id="mtmins" class="form-mins form-number"> M
+                                                <input type="number" min="0" max="24" value="<?php echo $hour; ?>" name="mthour" id="mthour"  class="form-hour form-number"> H : 
+                                                <input type="number" min="0" max="59" value="<?php echo $mins; ?>" name="mtmins" id="mtmins" class="form-mins form-number"> M 
+                                                &nbsp;<i class="fa-solid fa-clock"></i><input type="time" name="mtTime" id="mtTime" style="margin-left:3px;" value="<?php echo sprintf('%02d:%02d', $hour, $mins); ?>">                                          
+                                            </div>
+
                                             </div>
                                             <!-- <div class="form-group">
                                                 <label>Item</label>
@@ -281,7 +303,7 @@
                                                     <?php #} } } ?>
                                                 </select>
                                             </div> -->
-                                        </div>
+                                       
                                         <div class="col-4">
                                             <div class="form-group">
                                                 <?php
@@ -336,15 +358,20 @@
                                                 <br>
                                                 <?php
                                                     if(empty($cobj->lunch->startTime)){
-                                                        $hour = 1;
-                                                        $mins = 00;
+                                                        date_default_timezone_set('Australia/Sydney');
+
+                                                        // Get the current hour and minute
+                                                        $hour = date('G'); // 'G' gives the hour in 24-hour format without leading zeros
+                                                        $mins = date('i'); // 'i' gives the minutes with leading zeros
                                                     } else {
                                                         $time = explode(":",$cobj->lunch->startTime);
                                                         $hour = str_replace("h","",$time[0]);
                                                         $mins = str_replace("m","",$time[1]);
                                                     }
                                                 ?>
-                                                <input type="number" min="1" max="12" value="<?php echo $hour; ?>" name="lnhour" id="lnhour"  class="form-hour form-number"> H : <input type="number" min="0" max="59" value="<?php echo $mins; ?>" name="lnmins" id="lnmins" class="form-mins form-number"> M
+                                                <input type="number" min="0" max="24" value="<?php echo $hour; ?>" name="lnhour" id="lnhour"  class="form-hour form-number"> H : 
+                                                <input type="number" min="0" max="59" value="<?php echo $mins; ?>" name="lnmins" id="lnmins" class="form-mins form-number"> M
+                                                &nbsp;<i class="fa-solid fa-clock"></i>&nbsp;<input type="time" name="lnTime" id="lnTime" value="<?php echo sprintf('%02d:%02d', $hour, $mins); ?>">
                                             </div>
                                             <div class="form-group">
                                                 <label>Item</label>
@@ -448,8 +475,8 @@
                                                         ?>
                                                         <label>Time</label>
                                                         <br>
-                                                        <input type="number" min="1" max="12" name="slshour[]" id="slshour" class="form-hour from-hour form-number" value="<?php echo $shour; ?>"> H : <input type="number" min="0" max="59" name="slsmins[]" id="slsmins" class="form-mins from-mins form-number" value="<?php echo $smins; ?>"> M to
-                                                        <input type="number" min="1" max="12" name="slehour[]" id="slehour" class="form-hour to-hour form-number" value="<?php echo $ehour; ?>"> H : <input type="number" min="0" max="59" name="slemins[]" id="slemins" class="form-mins to-mins form-number" value="<?php echo $emins; ?>"> M
+                                                        <input type="number" min="0" max="24" name="slshour[]" id="slshour" class="form-hour from-hour form-number" value="<?php echo $shour; ?>"> H : <input type="number" min="0" max="59" name="slsmins[]" id="slsmins" class="form-mins from-mins form-number" value="<?php echo $smins; ?>"> M to
+                                                        <input type="number" min="0" max="24" name="slehour[]" id="slehour" class="form-hour to-hour form-number" value="<?php echo $ehour; ?>"> H : <input type="number" min="0" max="59" name="slemins[]" id="slemins" class="form-mins to-mins form-number" value="<?php echo $emins; ?>"> M
                                                     </div>
                                                 </div>
                                                 <div class="col-7">
@@ -481,8 +508,8 @@
                                                     <div class="form-group">
                                                         <label>Time</label>
                                                         <br>
-                                                        <input type="number" min="1" max="12" name="slshour[]" id="slshour" class="form-hour from-hour form-number" value=""> H : <input type="number" min="0" max="59" name="slsmins[]" id="slsmins" class="form-mins from-mins form-number" value=""> M to
-                                                        <input type="number" min="1" max="12" name="slehour[]" id="slehour" class="form-hour to-hour form-number" value=""> H : <input type="number" min="0" max="59" name="slemins[]" id="slemins" class="form-mins to-mins form-number" value=""> M
+                                                        <input type="number" min="0" max="24" name="slshour[]" id="slshour" class="form-hour from-hour form-number" value=""> H : <input type="number" min="0" max="59" name="slsmins[]" id="slsmins" class="form-mins from-mins form-number" value=""> M to
+                                                        <input type="number" min="0" max="2" name="slehour[]" id="slehour" class="form-hour to-hour form-number" value=""> H : <input type="number" min="0" max="59" name="slemins[]" id="slemins" class="form-mins to-mins form-number" value=""> M
                                                     </div>
                                                 </div>
                                                 <div class="col-md-8 col-sm-12">
@@ -511,8 +538,11 @@
                                             <div class="form-group">
                                                 <?php
                                                 if(empty($cobj->afternoontea->startTime)){
-                                                    $hour = 1;
-                                                    $mins = 00;
+                                                    date_default_timezone_set('Australia/Sydney');
+
+                                                    // Get the current hour and minute
+                                                    $hour = date('G'); // 'G' gives the hour in 24-hour format without leading zeros
+                                                    $mins = date('i'); // 'i' gives the minutes with leading zeros
                                                 } else {
                                                     $time = explode(":",$cobj->afternoontea->startTime);
                                                     $hour = str_replace("h","",$time[0]);
@@ -522,7 +552,10 @@
                                                 ?>
                                                 <label>Time</label>
                                                 <br>
-                                                <input type="number" min="1" max="12" name="athour" id="athour" class="form-hour form-number" value="<?php echo $hour; ?>"> H : <input type="number" min="0" max="59" id="atmins" name="atmins" class="form-mins form-number" value="<?php echo $mins; ?>"> M
+                                                <input type="number" min="0" max="24" name="athour" id="athour" class="form-hour form-number" value="<?php echo $hour; ?>"> H : 
+                                                <input type="number" min="0" max="59" id="atmins" name="atmins" class="form-mins form-number" value="<?php echo $mins; ?>"> M
+                                                &nbsp;<i class="fa-solid fa-clock"></i><input type="time" name="atTime" id="atTime" style="margin-left:3px;" value="<?php echo sprintf('%02d:%02d', $hour, $mins); ?>">                                   
+                                                </div>
                                             </div>
                                             <!-- <div class="form-group">
                                                 <label>Item</label>
@@ -547,7 +580,7 @@
                                                     <?php #} } }?>
                                                 </select>
                                             </div> -->
-                                        </div>
+                                       
                                         <div class="col-4">
                                             <div class="form-group">
                                                 <?php
@@ -596,12 +629,30 @@
                                 <div class="card-body">
                                     <h3 class="card-title">Late Snacks</h3>
                                     <div class="row">
-                                        <div class="col-4">
-                                            <div class="form-group">
+                                    <div class="col-4">
+                                             <div class="form-group">
+                                            <?php
+                                                if(empty($cobj->snack->startTime)){
+                                                    date_default_timezone_set('Australia/Sydney');
+
+                                                    // Get the current hour and minute
+                                                    $hour = date('G'); // 'G' gives the hour in 24-hour format without leading zeros
+                                                    $mins = date('i'); // 'i' gives the minutes with leading zeros
+                                                } else {
+                                                    $time = explode(":",$cobj->snack->startTime);
+                                                    $hour = str_replace("h","",$time[0]);
+                                                    $mins = str_replace("m","",$time[1]);
+                                                }
+
+                                                ?>
                                                 <label>Time</label>
                                                 <br>
-                                                <input type="number" min="1" max="12" value="1" name="lshour" id="lshour" class="form-hour form-number"> H : <input type="number" min="0" max="59" value="00" name="lsmins" class="form-mins form-number"> M
-                                            </div>
+                                                <input type="number" min="0" max="24" name="lshour" id="lshour" class="form-hour form-number" value="<?php echo $hour; ?>"> H : 
+                                                <input type="number" min="0" max="59"  name="lsmins" id="lsmins" class="form-mins form-number" value="<?php echo $mins; ?>"> M
+                                                &nbsp;<i class="fa-solid fa-clock"></i><input type="time" name="lsTime" id="lsTime" style="margin-left:3px;" value="<?php echo sprintf('%02d:%02d', $hour, $mins); ?>">                                        
+
+                                            </div>  
+                                      
                                             <div class="form-group">
                                                 <label>Item</label>
                                                     <br>
@@ -680,7 +731,8 @@
                                                 <div class="form-group">
                                                     <label>Time</label>
                                                     <br>
-                                                    <input type="number" min="1" max="12" value="1" name="sshour[]" id="sshour" class="form-hour from-hour form-number"> H : <input type="number" min="0" max="59" value="00" name="ssmins[]" id="ssmins" class="form-mins from-mins form-number"> M
+                                                    <input type="number" min="0" max="24" value="1" name="sshour[]" id="sshour" class="form-hour from-hour form-number"> H : 
+                                                    <input type="number" min="0" max="59" value="00" name="ssmins[]" id="ssmins" class="form-mins from-mins form-number"> M
                                                 </div>
                                             </div>
                                             <div class="col-md-8 col-sm-12">
@@ -709,7 +761,7 @@
                                                         ?>
                                                         <label>Time</label>
                                                         <br>
-                                                        <input type="number" min="1" max="12" value="<?php echo $hour; ?>" name="sshour[]" id="sshour" class="form-hour from-hour"> H : <input type="number" min="0" max="59" value="<?php echo $mins; ?>" name="ssmins[]" id="ssmins" class="form-mins from-mins"> M
+                                                        <input type="number" min="0" max="24" value="<?php echo $hour; ?>" name="sshour[]" id="sshour" class="form-hour from-hour"> H : <input type="number" min="0" max="59" value="<?php echo $mins; ?>" name="ssmins[]" id="ssmins" class="form-mins from-mins"> M
                                                     </div>
                                                 </div>
                                                 <div class="col-md-7 col-sm-12">
@@ -741,9 +793,11 @@
                                         } ?>
                                     </div>
                                 </div>
+                             <?php    if(empty($sunscreen->startTime)){ ?>
                                 <div class="text-right">
                                     <button type="button" class="btn btn-outline-primary add-sunscreen-row mt-2 mb-1 mr-4">Add</button>
                                 </div>
+                                <?php } ?>
                             </div>
                         </div>
 
@@ -770,7 +824,7 @@
                         <div class="col-4">
                             <div class="form-group">
                                 <label>Time</label><br>
-                                <input type="number" min="1" max="12" value="<?php echo $hour; ?>" name="hour[]" class="form-hour from-hour form-number"> H :
+                                <input type="number" min="0" max="24" value="<?php echo $hour; ?>" name="hour[]" class="form-hour from-hour form-number"> H :
                                 <input type="number" min="0" max="59" value="<?php echo $minute; ?>" name="mins[]" class="form-mins from-mins form-number"> M
                             </div>
                             <div class="form-group">
@@ -813,7 +867,7 @@
                     <div class="col-4">
                         <div class="form-group">
                             <label>Time</label><br>
-                            <input type="number" min="1" max="12" value="1" name="hour[]" class="form-hour from-hour form-number"> H :
+                            <input type="number" min="0" max="24" value="1" name="hour[]" class="form-hour from-hour form-number"> H :
                             <input type="number" min="0" max="59" value="00" name="mins[]" class="form-mins from-mins form-number"> M
                         </div>
                         <div class="form-group">
@@ -887,7 +941,7 @@
             $('#lsitem').select2();
 
             $(document).on("click",".add-sleep-row",function(){
-                $(".sleep-block-row").append('<div class="row" style="padding: 5px 15px;margin-top: 5px;"><div class="col-sm-4"><div class="form-group"> <label>Time</label> <br> <input type="number" min="1" max="12" name="slshour[]" id="slshour" class="form-hour from-hour form-number" value="1"> H : <input type="number" min="0" max="59" name="slsmins[]" id="slsmins" class="form-mins from-mins form-number" value="00"> M to <input type="number" min="1" max="12" name="slehour[]" id="slehour" class="form-hour to-hour form-number" value="1"> H : <input type="number" min="0" max="59" name="slemins[]" id="slemins" class="form-mins to-mins" value="00"> M</div></div><div class="col-sm-4" style="height:50px;position: relative;"><div class="form-group"> <label for="slcomments">Comments</label> <input name="slcomments[]" class="form-control modal-form-control" id="slcomments"></div></div><div class="col-sm-4" style="padding-top: 1.5rem;"> <button class="btn btn-danger btn-sm pull-right btn-default btnRed btn-small remove-sunscreen-row">Remove</button></div></div>');
+                $(".sleep-block-row").append('<div class="row" style="padding: 5px 15px;margin-top: 5px;"><div class="col-sm-4"><div class="form-group"> <label>Time</label> <br> <input type="number" min="0" max="24" name="slshour[]" id="slshour" class="form-hour from-hour form-number" value="1"> H : <input type="number" min="0" max="59" name="slsmins[]" id="slsmins" class="form-mins from-mins form-number" value="00"> M to <input type="number" min="1" max="12" name="slehour[]" id="slehour" class="form-hour to-hour form-number" value="1"> H : <input type="number" min="0" max="59" name="slemins[]" id="slemins" class="form-mins to-mins" value="00"> M</div></div><div class="col-sm-4" style="height:50px;position: relative;"><div class="form-group"> <label for="slcomments">Comments</label> <input name="slcomments[]" class="form-control modal-form-control" id="slcomments"></div></div><div class="col-sm-4" style="padding-top: 1.5rem;"> <button class="btn btn-danger btn-sm pull-right btn-default btnRed btn-small remove-sunscreen-row">Remove</button></div></div>');
             });
 
             $(document).on("click",".remove-sleep-row",function(){
@@ -895,7 +949,7 @@
             });
 
             $(document).on("click",".add-sunscreen-row",function(){
-                $(".sunscreen-block").append('<div class="row" style=""><div class="col-md-4 col-sm-12"><div class="form-group"> <label>Time</label> <br> <input type="number" min="1" max="12" value="1" name="sshour[]" id="sshour" class="form-hour from-hour form-number"> H : <input type="number" min="0" max="59" value="00" name="ssmins[]" id="ssmins" class="form-mins from-mins form-number"> M</div></div><div class="col-md-7 col-sm-12" style="height:50px;position: relative;"><div class="form-group"> <label for="sscomments">Comments</label> <input name="sscomments[]" class="form-control modal-form-control form-number" id="sscomments"></div></div><div class="col-md-1 col-sm-12" style="padding-top: 1.5rem;"> <button type="button" class="btn btn-outline-danger btn-sm pull-right btn-default btnRed btn-small remove-sunscreen-row">Remove</button></div></div>');
+                $(".sunscreen-block").append('<div class="row" style=""><div class="col-md-4 col-sm-12"><div class="form-group"> <label>Time</label> <br> <input type="number" min="0" max="24" value="1" name="sshour[]" id="sshour" class="form-hour from-hour form-number"> H : <input type="number" min="0" max="59" value="00" name="ssmins[]" id="ssmins" class="form-mins from-mins form-number"> M</div></div><div class="col-md-7 col-sm-12" style="height:50px;position: relative;"><div class="form-group"> <label for="sscomments">Comments</label> <input name="sscomments[]" class="form-control modal-form-control form-number" id="sscomments"></div></div><div class="col-md-1 col-sm-12" style="padding-top: 1.5rem;"> <button type="button" class="btn btn-outline-danger btn-sm pull-right btn-default btnRed btn-small remove-sunscreen-row">Remove</button></div></div>');
             });
 
             $(document).on("click",".remove-sunscreen-row",function(){
@@ -909,7 +963,7 @@
             <div class="col-4">
                 <div class="form-group">
                     <label>Time</label><br>
-                    <input type="number" min="1" max="12" value="1" name="hour[]" class="form-hour from-hour form-number"> H :
+                    <input type="number" min="0" max="24" value="1" name="hour[]" class="form-hour from-hour form-number"> H :
                     <input type="number" min="0" max="59" value="00" name="mins[]" class="form-mins from-mins form-number"> M
                 </div>
                 <div class="form-group">
@@ -938,7 +992,7 @@
                 </div>
             </div>
             <div class="col-12 text-right">
-                <button type="button" class="btn btn-outline-danger btn-sm remove-toileting-row mt-2 mb-1">Remove</button>
+                <button type="button" class="btn btn-outline-danger btn-sm remove-toileting-row mt-2 mb-1" style="margin-right:20px;">Remove</button>
             </div>
         </div>
     `);
@@ -963,4 +1017,49 @@
             <?php } ?>
         });
     </script>
+
+
+
+
+
+<script>
+    // Function to handle time synchronization for a specific group
+function setupTimeGroup(timePickerId, hourInputId, minsInputId) {
+    const timePicker = document.getElementById(timePickerId);
+    const hourInput = document.getElementById(hourInputId);
+    const minsInput = document.getElementById(minsInputId);
+
+    if (!timePicker || !hourInput || !minsInput) {
+        console.error(`One or more elements not found for group: ${timePickerId}`);
+        return;
+    }
+
+    // Update hour and minute inputs when time picker changes
+    timePicker.addEventListener('change', function () {
+        const time = this.value.split(':');
+        hourInput.value = time[0];
+        minsInput.value = time[1];
+    });
+
+    // Update time picker when hour or minute inputs change
+    hourInput.addEventListener('change', function () {
+        timePicker.value = `${hourInput.value.padStart(2, '0')}:${minsInput.value.padStart(2, '0')}`;
+    });
+
+    minsInput.addEventListener('change', function () {
+        timePicker.value = `${hourInput.value.padStart(2, '0')}:${minsInput.value.padStart(2, '0')}`;
+    });
+}
+
+// Set up time synchronization for each group
+setupTimeGroup('bfTime', 'bfhour', 'bfmins'); // Breakfast
+setupTimeGroup('mtTime', 'mthour', 'mtmins'); // Morning Tea
+setupTimeGroup('lnTime', 'lnhour', 'lnmins'); // Lunch
+setupTimeGroup('atTime', 'athour', 'atmins'); // Afternoon Tea
+setupTimeGroup('lsTime', 'lshour', 'lsmins'); // Lunch Snack
+
+</script>
+
+
+
 </html>

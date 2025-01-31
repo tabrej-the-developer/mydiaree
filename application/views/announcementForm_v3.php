@@ -276,7 +276,9 @@
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/moment.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/perfect-scrollbar.min.js?v=1.0.0"></script>
     <!-- <script src="<?= base_url('assets/v3'); ?>/js/vendor/ckeditor5-build-classic/ckeditor.js"></script> -->
-    <script src="https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js"></script>
+    <!-- <script src="https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js"></script> -->
+    <script src="https://cdn.ckeditor.com/4.22.1/full-all/ckeditor.js"></script>
+
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/mousetrap.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/bootstrap-datepicker.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/dore.script.js?v=1.0.0"></script>
@@ -300,19 +302,26 @@
 
 
             CKEDITOR.replace('about', {
-                toolbar: [{
-                    name: 'document',
-                    items: ['Undo', 'Redo']
-                },
-                {
-                    name: 'basicstyles',
-                    items: ['Bold', 'Italic', 'Strike', 'Format']
-                },
-                {
-                    name: 'links',
-                    items: ['Link', 'Unlink', 'NumberedList', 'BulletedList']
-                }]
-            });
+    plugins: 'basicstyles,undo,link,wysiwygarea,toolbar,format,list',
+    contentsCss: [
+        'https://cdn.ckeditor.com/4.22.1/full-all/contents.css',
+        'https://ckeditor.com/docs/ckeditor4/4.22.1/examples/assets/mentions/contents.css' // Optional, if you want to include mentions styling
+    ],
+    height: 150,
+    toolbar: [{
+            name: 'document',
+            items: ['Undo', 'Redo']
+        },
+        {
+            name: 'basicstyles',
+            items: ['Bold', 'Italic', 'Strike', 'Format']
+        },
+        {
+            name: 'links',
+            items: ['Link', 'Unlink', 'NumberedList', 'BulletedList']
+        }
+    ]
+});
 
             $(document).on('click', "#select-all-child", function() {           
                 //check if this checkbox is checked or not

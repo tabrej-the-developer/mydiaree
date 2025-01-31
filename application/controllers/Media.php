@@ -39,6 +39,9 @@ class Media extends CI_Controller {
 			if ($httpcode=="200") {
 				$data = [];
 				$data = json_decode($server_output);
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
 				$data->centerid = $centerid;
 				
 				$this->load->view("mediaList_v4",$data);

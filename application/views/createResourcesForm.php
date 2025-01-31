@@ -122,7 +122,9 @@
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/glide.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/dore.script.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/scripts.js?v=1.0.0"></script>
-    <script src="https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js"></script> 
+    <!-- <script src="https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js"></script>  -->
+	<script src="https://cdn.ckeditor.com/4.22.1/full-all/ckeditor.js"></script>
+
 </body>
 <script>
 	$(document).ready(function(){
@@ -202,71 +204,73 @@
 			$(this).parent().remove();
 		});
 
-	    var users = <?= $users; ?>,tags = <?= $tags; ?>;
+		var users = <?= $users; ?>, tags = <?= $tags; ?>;
 
-		CKEDITOR.replace('txtDesc', {
-			plugins: 'mentions,basicstyles,undo,link,wysiwygarea,toolbar,format,list',
-			contentsCss: [
-			  	'http://cdn.ckeditor.com/4.16.2/full-all/contents.css',
-			  	'https://ckeditor.com/docs/ckeditor4/4.16.2/examples/assets/mentions/contents.css'
-			],
-			height: 150,
-			toolbar: [{
-			    name: 'document',
-			    items: ['Undo', 'Redo']
-			},
-			{
-			    name: 'basicstyles',
-			    items: ['Bold', 'Italic', 'Strike', 'Format']
-			},
-			{
-			    name: 'links',
-			    items: ['Link', 'Unlink', 'NumberedList', 'BulletedList']
-			}],
-			extraAllowedContent: '*[*]{*}(*)',
-			mentions: [{  
-				feed: dataFeed,
-					itemTemplate: '<li data-id="{id}">' +
-					   '<strong class="username">{name}</strong>' +
-					   '</li>',
-					outputTemplate: '<a href="user_{id}">{name}</a>',
-					minChars: 0
-				},
-				{
-					feed: tagsFeed,
-					marker: '#',
-					itemTemplate: '<li data-id="{id}"><strong>{title}</strong></li>',
-					outputTemplate: '<a href="#tags_{rid}" data-tagid="{rid}" data-type="{type}" data-toggle="modal" data-target="#tagsModal">#{title}</a>',
-					minChars: 0
-				}
-			]
-		});
+CKEDITOR.replace('txtDesc', {
+    plugins: 'mentions,basicstyles,undo,link,wysiwygarea,toolbar,format,list',
+    contentsCss: [
+        'https://cdn.ckeditor.com/4.22.1/full-all/contents.css',
+        'https://ckeditor.com/docs/ckeditor4/4.22.1/examples/assets/mentions/contents.css'
+    ],
+    height: 150,
+    toolbar: [{
+            name: 'document',
+            items: ['Undo', 'Redo']
+        },
+        {
+            name: 'basicstyles',
+            items: ['Bold', 'Italic', 'Strike', 'Format']
+        },
+        {
+            name: 'links',
+            items: ['Link', 'Unlink', 'NumberedList', 'BulletedList']
+        }
+    ],
+    extraAllowedContent: '*[*]{*}(*)',
+    mentions: [{
+            feed: dataFeed,
+            itemTemplate: '<li data-id="{id}">' +
+                '<strong class="username">{name}</strong>' +
+                '</li>',
+            outputTemplate: '<a href="user_{id}">{name}</a>',
+            minChars: 0
+        },
+        {
+            feed: tagsFeed,
+            marker: '#',
+            itemTemplate: '<li data-id="{id}"><strong>{title}</strong></li>',
+            outputTemplate: '<a href="#tags_{rid}" data-tagid="{rid}" data-type="{type}" data-toggle="modal" data-target="#tagsModal">#{title}</a>',
+            minChars: 0
+        }
+    ]
+});
 
-		function dataFeed(opts, callback) {
-	        var matchProperty = 'name',
-	        data = users.filter(function(item) {
-	          return item[matchProperty].indexOf(opts.query.toLowerCase()) == 0;
-	        });
-	        data = data.sort(function(a, b) {
-	            return a[matchProperty].localeCompare(b[matchProperty], undefined, {
-		            sensitivity: 'accent'
-		        });
-	        });
-	        callback(data);
-	    }
+function dataFeed(opts, callback) {
+    var matchProperty = 'name',
+        data = users.filter(function(item) {
+            return item[matchProperty].indexOf(opts.query.toLowerCase()) == 0;
+        });
+    data = data.sort(function(a, b) {
+        return a[matchProperty].localeCompare(b[matchProperty], undefined, {
+            sensitivity: 'accent'
+        });
+    });
+    callback(data);
+}
 
-	    function tagsFeed(opts, callback) {
-	        var matchProperty = 'title',
-	        data = tags.filter(function(item) {
-	            return item[matchProperty].indexOf(opts.query.toLowerCase()) == 0;
-	        });
-		    data = data.sort(function(a, b) {
-		        return a[matchProperty].localeCompare(b[matchProperty], undefined, {
-		            sensitivity: 'accent'
-		        });
-		    });
-	        callback(data);
-	    }
+function tagsFeed(opts, callback) {
+    var matchProperty = 'title',
+        data = tags.filter(function(item) {
+            return item[matchProperty].indexOf(opts.query.toLowerCase()) == 0;
+        });
+    data = data.sort(function(a, b) {
+        return a[matchProperty].localeCompare(b[matchProperty], undefined, {
+            sensitivity: 'accent'
+        });
+    });
+    callback(data);
+}
+
 	});
 </script>	
 </html>

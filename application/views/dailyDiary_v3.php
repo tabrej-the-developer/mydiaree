@@ -407,7 +407,7 @@
                                                     if (isset($cobj->sunscreen) && is_array($cobj->sunscreen)) {
                                                         foreach ($cobj->sunscreen as $toiletEntry) {
                                                             // Display the startTime for each entry
-                                                            // echo "Start Time: " . htmlspecialchars($toiletEntry->startTime) . "<br>";
+                                                            echo  htmlspecialchars($toiletEntry->startTime) . "<br>";
                                                 
                                                             // Parse the startTime
                                                             if (preg_match('/(\d+)h:(\d+)m/', $toiletEntry->startTime, $matches)) {
@@ -425,7 +425,7 @@
                                                     $remainingMinutes = $totalMinutes2 % 60;
                                                 
                                                     // Display the total time
-                                                    echo  $totalHours . "h:" . str_pad($remainingMinutes, 2, '0', STR_PAD_LEFT) . "m<br>";
+                                                    // echo  "Total Time " . $totalHours . "h:" . str_pad($remainingMinutes, 2, '0', STR_PAD_LEFT) . "m<br>";
                                                 }
                                             ?>
                                         </td>
@@ -444,7 +444,7 @@
                                                     if (isset($cobj->toileting) && is_array($cobj->toileting)) {
                                                         foreach ($cobj->toileting as $toiletEntry) {
                                                             // Display the startTime for each entry
-                                                            // echo "Start Time: " . htmlspecialchars($toiletEntry->startTime) . "<br>";
+                                                            echo   htmlspecialchars($toiletEntry->startTime) . "<br>";
                                                 
                                                             // Parse the startTime
                                                             if (preg_match('/(\d+)h:(\d+)m/', $toiletEntry->startTime, $matches)) {
@@ -462,7 +462,7 @@
                                                     $remainingMinutes = $totalMinutes % 60;
                                                 
                                                     // Display the total time
-                                                    echo  $totalHours . "h:" . str_pad($remainingMinutes, 2, '0', STR_PAD_LEFT) . "m<br>";
+                                                    // echo  "Total Time " .  $totalHours . "h:" . str_pad($remainingMinutes, 2, '0', STR_PAD_LEFT) . "m<br>";
                                                 }
                                             ?>
                                         </td>
@@ -552,6 +552,8 @@
         </div>
     </main>
 
+
+
     <!-- Modal Section -->
     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="foodModal" id="foodModal">
       <div class="modal-dialog" role="document">
@@ -567,7 +569,17 @@
                     <div class="form-group">
                         <label>Time</label>
                         <br>
-                        <input type="number" min="0" max="12" value="1" name="hour" class="form-hour form-number"> H : <input type="number" min="0" max="59" value="0" name="mins" class="form-mins form-number"> M
+                        <?php
+date_default_timezone_set('Australia/Sydney');
+
+// Get the current hour and minute
+$hour = date('G'); // 'G' gives the hour in 24-hour format without leading zeros
+$mins = date('i'); // 'i' gives the minutes with leading zeros
+?>
+                        <input type="number" min="0" max="24" value="<?php echo $hour; ?>"  name="hour" class="form-hour form-number"> H : 
+                        <input type="number" min="0" max="59"  name="mins" value="<?php echo $mins; ?>" class="form-mins form-number"> M
+                        &nbsp;<i class="fa-solid fa-clock"></i>&nbsp;<input type="time" name="bfTime" id="bfTime" value="<?php echo sprintf('%02d:%02d', $hour, $mins); ?>">
+
                     </div>
                     <div class="form-group common-item">
                         <label>Item</label>
@@ -1043,5 +1055,41 @@
         //     });
         // });
     </script>
+
+
+    <script>
+// Function to synchronize time picker with hour and minute inputs
+function syncModalTimePicker() {
+    const hourInput = document.querySelector('#foodModal input[name="hour"]');
+    const minsInput = document.querySelector('#foodModal input[name="mins"]');
+    const timePicker = document.querySelector('#foodModal input[name="bfTime"]');
+
+    if (!hourInput || !minsInput || !timePicker) {
+        console.error('One or more elements not found in the modal.');
+        return;
+    }
+
+    // Update hour and minute inputs when time picker changes
+    timePicker.addEventListener('change', function () {
+        const [hour, mins] = this.value.split(':');
+        hourInput.value = hour;
+        minsInput.value = mins;
+    });
+
+    // Update time picker when hour or minute inputs change
+    hourInput.addEventListener('change', function () {
+        timePicker.value = `${hourInput.value.padStart(2, '0')}:${minsInput.value.padStart(2, '0')}`;
+    });
+
+    minsInput.addEventListener('change', function () {
+        timePicker.value = `${hourInput.value.padStart(2, '0')}:${minsInput.value.padStart(2, '0')}`;
+    });
+}
+
+// Call the function to sync the modal time inputs
+syncModalTimePicker();
+</script>
+
+
 </body>
 </html>
