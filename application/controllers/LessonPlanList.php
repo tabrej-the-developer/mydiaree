@@ -593,6 +593,49 @@ class LessonPlanList extends CI_Controller {
       }
     }
 
+    public function deleteTemplate($template_id) {
+      if ($this->session->has_userdata('LoginId')) {
+          // Prepare the payload
+          $payload = [
+              'template_id' => $template_id,
+              'userid' => $this->session->userdata('LoginId') // Include userid in the payload
+          ];
+  
+          $url = BASE_API_URL . 'Programplanlist/deletetemplates';
+          $ch = curl_init($url);
+          curl_setopt($ch, CURLOPT_URL, $url);
+          curl_setopt($ch, CURLOPT_POST, 1);
+          curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload)); // Send the correct payload
+          curl_setopt($ch, CURLOPT_HTTPHEADER, [
+              'X-Device-Id: ' . $this->session->userdata('X-Device-Id'),
+              'X-Token: ' . $this->session->userdata('AuthToken'),
+              'Content-Type: application/json' // Specify JSON content type
+          ]);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+          $server_output = curl_exec($ch);
+          $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+          curl_close($ch);
+  
+          if ($httpcode == 200) { 
+              $jsonOutput = json_decode($server_output, true); // Decode the JSON response
+              if ($jsonOutput['success']) {
+                  // Success: Show a success message or redirect
+                  header('Content-Type: application/json'); // Set JSON header
+                  echo json_encode(['success' => true, 'message' => 'Template deleted successfully.']);
+              } else {
+                  // Failure: Show an error message
+                  echo json_encode(['success' => false, 'message' => 'Failed to delete template.']);
+              }
+          } else {
+              // Handle other HTTP status codes (e.g., 401 Unauthorized)
+              echo json_encode(['success' => false, 'message' => 'Unauthorized or server error.']);
+          }
+      } else {
+          // Redirect to login if the user is not logged in
+          $this->load->view('welcome');
+      }
+  }
+
     public function view($id = NULL)
     { 
       if($this->session->has_userdata('LoginId')){

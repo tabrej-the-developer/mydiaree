@@ -903,5 +903,56 @@ class Programplanlist extends CI_Controller{
 		echo json_encode($data);
 	}
 
+
+	public function deletetemplates() {
+		$headers = $this->input->request_headers();
+	
+		// Validate headers
+		if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
+			// Authenticate the user
+			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
+	
+			// Decode the JSON payload
+			$json = json_decode(file_get_contents('php://input'));
+	
+			// Validate payload and user
+			if ($json != null && $res != null && $res->userid == $json->userid) {
+				// Start a transaction
+				$this->db->trans_start();
+	
+				// Delete from template_programplanlist_content table
+				$this->db->where('template_id', $json->template_id);
+				$this->db->delete('template_programplanlist_content');
+	
+				// Delete from template_programplanlist_header table
+				$this->db->where('template_id', $json->template_id);
+				$this->db->delete('template_programplanlist_header');
+	
+				// Complete the transaction
+				$this->db->trans_complete();
+	
+				// Check if the transaction was successful
+				if ($this->db->trans_status() === FALSE) {
+					// If there was an error, return a failure response
+					http_response_code(500); // Internal Server Error
+					echo json_encode(['success' => false, 'message' => 'Failed to delete template.']);
+				} else {
+					// If successful, return a success response
+					http_response_code(200); // OK
+					header('Content-Type: application/json'); // Set JSON header
+					echo json_encode(['success' => true, 'message' => 'Template deleted successfully.']);
+				}
+			} else {
+				// Unauthorized: User ID doesn't match or invalid payload
+				http_response_code(401); // Unauthorized
+				echo json_encode(['success' => false, 'message' => 'User ID doesn\'t match or invalid payload.']);
+			}
+		} else {
+			// Unauthorized: Invalid headers
+			http_response_code(401); // Unauthorized
+			echo json_encode(['success' => false, 'message' => 'Invalid headers sent.']);
+		}
+	}
+
 }
 ?>

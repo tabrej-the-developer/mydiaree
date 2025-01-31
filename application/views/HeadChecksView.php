@@ -209,13 +209,20 @@
                                                 $i=1;
                                                 if (empty($headChecks)) {
                                                 ?>
+
+<?php
+date_default_timezone_set('Australia/Sydney');
+$hour = date('G'); // Current hour
+$mins = date('i'); // Current minute
+?>
                                                 <div class="form-row rowInnerHeadCheck w-100" >
                                                     <div class="form-group col-md-3 col-sm-12">
                                                         <label>Time</label>
                                                         <br>
-                                                        <input type="number" min="1" max="12" value="1" name="hour[]" class="form-hour form-number w-40" id="hour"> H : 
-                                                        <input type="number" min="00" max="59" value="00" name="mins[]" id="mins" class="form-mins form-number w-40"> M
-                                                    </div>
+        <input type="number" min="0" max="24" value="<?php echo $hour; ?>" name="hour[]" class="form-hour form-number w-40"> H : 
+        <input type="number" min="00" max="59" value="<?php echo $mins; ?>" name="mins[]" class="form-mins form-number w-40"> M
+        &nbsp;<i class="fa-solid fa-clock"></i>&nbsp;<input type="time" name="timePicker[]" class="form-time" value="<?php echo sprintf('%02d:%02d', $hour, $mins); ?>">
+                                                     </div>
                                                     <div class="form-group col-md-3 col-sm-12">
                                                         <label>Head Count</label>
                                                         <input type="number" class="form-control" name="headCount[]" value="">
@@ -246,9 +253,9 @@
                                                 <?php
                                                 } else {
                                                     foreach ($headChecks as $key => $hc) { 
-                                                        if(empty($hc->time)){
-                                                            $hour = 1;
-                                                            $mins = 00;
+                                                        if (empty($hc->time)) {
+                                                            $hour = date('G'); // Current hour
+                                                            $mins = date('i'); // Current minute
                                                         } else {
                                                             $time = explode(":",$hc->time);
                                                             $hour = str_replace("h","",$time[0]);
@@ -259,8 +266,10 @@
                                                     <div class="form-group col-md-3 col-sm-12">
                                                         <label>Time</label>
                                                         <br>
-                                                        <input type="number" min="1" max="12" name="hour[]" class="form-hour w-40 form-number" id="hour" value="<?php echo $hour; ?>"> H : <input type="number" min="00" max="59"name="mins[]" id="mins" class="form-mins form-number w-40" value="<?php echo $mins; ?>"> M
-                                                    </div>
+        <input type="number" min="0" max="24" name="hour[]" class="form-hour w-40 form-number" value="<?php echo $hour; ?>"> H : 
+        <input type="number" min="00" max="59" name="mins[]" class="form-mins form-number w-40" value="<?php echo $mins; ?>"> M
+        &nbsp;<i class="fa-solid fa-clock"></i>&nbsp;<input type="time" name="timePicker[]" class="form-time" value="<?php echo sprintf('%02d:%02d', $hour, $mins); ?>">
+          </div>
                                                     <div class="form-group col-md-3 col-sm-12">
                                                         <label>Head Count</label>
                                                         <input type="number" class="form-control" name="headCount[]" value="<?php echo $hc->headcount; ?>">
@@ -273,12 +282,6 @@
                                                         <label>Comments</label>
                                                         <input type="text" class="form-control commentField" name="comments[]" value="<?php echo $hc->comments; ?>">
                                                     </div>
-                                                    
-                                                    <!-- <div class="form-group lastGroup col-md-1 col-sm-12" style="margin-top: 38px;">
-                                                        <a href="#!" class="btn-outline-primary add-btn">
-                                                            <span class="simple-icon-plus"></span>
-                                                        </a>
-                                                    </div> -->
                                                     <?php if ($i!=1 && $date == date("Y-m-d")) { ?>
                                                         <div class="btn-group ">
                                                             <div class="form-group lastGroup col-md-1 col-sm-12" style="margin-top: 38px;">
@@ -307,14 +310,7 @@
                                                     } }
                                                 ?>
                                             </div>
-                                            <!-- <div class="form-group text-right" style="margin-top: 20px;">
-                                                <?php# if ($i==1) {
-                                                   # if(isset($_GET['date'])?$_GET['date']:$_GET['date']=date("d-m-Y")){
-                                                   # if($_GET['date'] == date("d-m-Y")){ ?>
-                                                    <button type="button" class="btn btn-outline-primary my-2 add-btn"> + New</button>
-                                                <?php #} } }?>
-                                                    <button class="btn btn-outline-success" id="save_headcheck" type="button">Save</button>
-                                            </div> -->
+                                     
                                         </div>
                                     </div>
                                 </div>
@@ -341,13 +337,88 @@
 <script>
 	$(document).ready(function(){
 
-		$('.add-btn').on('click',function(){
-			$("#form-fields").append('<div class="row rowInnerHeadCheck form-row w-100"><div class="form-group col-md-2 col-sm-12"> <label>Time</label> <br> <input type="number" min="1" max="12" value="" name="hour[]" class="form-hour form-number w-40" id="hour"> H : <input type="number" min="00" max="59" value="" name="mins[]" id="mins" class="form-mins form-number w-40"> M</div><div class="form-group col-md-3 col-sm-12"> <label>Head Count</label> <input type="number" class="form-control" name="headCount[]"></div><div class="form-group col-md-3 col-sm-12"> <label>Signature</label> <input type="text" class="form-control" name="signature[]"></div><div class="form-group commentGroup col-md-3 col-sm-12"> <label>Comments</label> <input type="text" class="form-control commentField" name="comments[]"></div><div class="btn-group" style="display:contents;"><div class="form-group lastGroup col-md-1 col-sm-12" style="margin-top: 28px;"><a href="#!" class="btn btn-outline-danger minus-btn btn-block" style="width: fit-content;">Remove</a></div></div></div></div>');
-		});
+   // Function to synchronize time picker with hour and minute inputs
+function syncTimePicker(row) {
+    const hourInput = row.querySelector('.form-hour');
+    const minsInput = row.querySelector('.form-mins');
+    const timePicker = row.querySelector('.form-time');
 
-		$(document).on('click','.minus-btn',function(){
-			$(this).closest(".row").remove();
-		});
+    if (!hourInput || !minsInput || !timePicker) {
+        console.error('One or more elements not found in the row.');
+        return;
+    }
+
+    // Update hour and minute inputs when time picker changes
+    timePicker.addEventListener('change', function () {
+        const [hour, mins] = this.value.split(':');
+        hourInput.value = hour;
+        minsInput.value = mins;
+    });
+
+    // Update time picker when hour or minute inputs change
+    hourInput.addEventListener('change', function () {
+        timePicker.value = `${hourInput.value.padStart(2, '0')}:${minsInput.value.padStart(2, '0')}`;
+    });
+
+    minsInput.addEventListener('change', function () {
+        timePicker.value = `${hourInput.value.padStart(2, '0')}:${minsInput.value.padStart(2, '0')}`;
+    });
+}
+
+// Apply synchronization to all existing rows on page load
+document.querySelectorAll('.rowInnerHeadCheck, .InnerHeadCheck').forEach(row => {
+    syncTimePicker(row);
+});
+
+// Add button click event
+$('.add-btn').on('click', function () {
+    const currentTime = new Date().toLocaleTimeString('en-AU', { timeZone: 'Australia/Sydney', hour12: false, hour: '2-digit', minute: '2-digit' });
+    const [hour, mins] = currentTime.split(':');
+
+    const newRow = `
+        <div class="row rowInnerHeadCheck form-row w-100">
+            <div class="form-group col-md-3 col-sm-12">
+                <label>Time</label>
+                <br>
+                <input type="number" min="0" max="24" value="${hour}" name="hour[]" class="form-hour form-number w-40"> H : 
+                <input type="number" min="00" max="59" value="${mins}" name="mins[]" class="form-mins form-number w-40"> M
+                &nbsp;<i class="fa-solid fa-clock"></i>&nbsp;<input type="time" name="timePicker[]" class="form-time" value="${currentTime}">
+            </div>
+            <div class="form-group col-md-3 col-sm-12">
+                <label>Head Count</label>
+                <input type="number" class="form-control" name="headCount[]">
+            </div>
+            <div class="form-group col-md-3 col-sm-12">
+                <label>Signature</label>
+                <input type="text" class="form-control" name="signature[]">
+            </div>
+            <div class="form-group commentGroup col-md-3 col-sm-12">
+                <label>Comments</label>
+                <input type="text" class="form-control commentField" name="comments[]">
+            </div>
+            <div class="btn-group" style="display:contents;">
+                <div class="form-group lastGroup col-md-1 col-sm-12" style="margin-top: 28px;">
+                    <a href="#!" class="btn btn-outline-danger minus-btn btn-block" style="width: fit-content;">Remove</a>
+                </div>
+            </div>
+        </div>
+    `;
+
+    $('#form-fields').append(newRow);
+
+    // Sync time picker for the new row
+    const addedRow = $('#form-fields .rowInnerHeadCheck').last()[0];
+    syncTimePicker(addedRow);
+});
+
+// Remove button click event
+$(document).on('click', '.minus-btn', function () {
+    $(this).closest('.rowInnerHeadCheck, .InnerHeadCheck').remove();
+});
+
+		// $(document).on('click','.minus-btn',function(){
+		// 	$(this).closest(".row").remove();
+		// });
 
 		$(document).on('change','#centerId',function(){
 			var centerId = $(this).val();

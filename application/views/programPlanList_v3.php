@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/bootstrap-datepicker3.min.css?v=1.0.0" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/main.css?v=1.0.0" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/dore.light.blueolympic.min.css?v=1.0.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <style>
         .list-thumbnail{
@@ -295,21 +297,24 @@ $(document).ready(function() {
                     }
 
                     response.forEach(function(template) {
-                        let templateCard = `
-                            <div class="col-md-4 mb-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h6 class="card-title">${template.template_name}</h6>
-                                        <a href="<?= base_url('lessonPlanList/templateload/') ?>${template.template_id}" 
-                                           class="btn btn-primary btn-sm">
-                                            Use Template
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        container.append(templateCard);
-                    });
+    let templateCard = `
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">${template.template_name}</h6>
+                    <a href="<?= base_url('lessonPlanList/templateload/') ?>${template.template_id}" 
+                       class="btn btn-primary btn-sm">
+                        Use Template
+                    </a>
+                    <span class="delete-icon" data-template-id="${template.template_id}" style="cursor: pointer; color: red; float: right;">
+                        <i class="fas fa-trash"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    `;
+    container.append(templateCard);
+});
                 },
                 error: function() {
                     $('#templateContainer').html('<div class="col-12 text-center text-danger">Failed to load templates</div>');
@@ -319,6 +324,55 @@ $(document).ready(function() {
     });
 });
 </script>
+
+<script>
+    $(document).on('click', '.delete-icon', function() {
+    let templateId = $(this).data('template-id');
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Send AJAX request to delete the template
+            $.ajax({
+                url: '<?= base_url('lessonPlanList/deleteTemplate/') ?>' + templateId,
+                type: 'DELETE',
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your template has been deleted.',
+                            'success'
+                        ).then(() => {
+                            // Reload the page or remove the card from the DOM
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                           'There was an error deleting the template.',
+                            'error'
+                        );
+                    }
+                },
+                error: function() {
+                    Swal.fire(
+                        'Error!',
+                        'There was an error deleting the template.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+});
+    </script>
 
 </body>
 </html>
