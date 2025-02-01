@@ -226,11 +226,12 @@ class Lessonplan extends CI_Controller {
         // print_r($centerIds);
         // exit;
           if($_POST['usertype']=='Superadmin'){
-            $_POST['centerid']='0';
+            $_POST['centerid']=$centerIds[0]->id;
           }else{
             $_POST['centerid']=$centerIds[0]->id;
           } 
-          
+          // print_r($_POST);
+          // exit;
           
           $url = BASE_API_URL.'lessonplan/getlessonstatusdetails';
           

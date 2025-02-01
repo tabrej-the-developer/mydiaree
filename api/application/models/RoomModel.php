@@ -296,15 +296,15 @@ public function getRoomsByUserId($userid, $centerid, $filter_name = null)
     $sql = "SELECT r.id, r.name, r.capacity, r.color, r.status, u.name AS userName
             FROM room r
             LEFT JOIN users u ON u.userid = r.userId
-            WHERE r.centerid = ? AND r.id IN ($subquery)";
-    
+            WHERE r.centerid = ? AND (r.id IN ($subquery) OR r.userId = ?)";
+
     // If a filter name is provided, add it to the query
     if (!empty($filter_name)) {
         $sql .= " AND r.name LIKE ?";
         $filter_name = "%$filter_name%";
-        $query = $this->db->query($sql, [$centerid, $filter_name]);
+        $query = $this->db->query($sql, [$centerid, $userid, $filter_name]);
     } else {
-        $query = $this->db->query($sql, [$centerid]);
+        $query = $this->db->query($sql, [$centerid, $userid]);
     }
 
     // Return the result as an array of objects

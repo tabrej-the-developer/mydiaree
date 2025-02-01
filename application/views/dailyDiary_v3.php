@@ -636,7 +636,12 @@ $mins = date('i'); // 'i' gives the minutes with leading zeros
         </div>
       </div>
     </div>
-
+   
+   <?php
+date_default_timezone_set('Australia/Sydney');
+$hour = date('G'); // Current hour
+$mins = date('i'); // Current minute
+?>
     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="toiletingModal" id="toiletingModal">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -647,13 +652,15 @@ $mins = date('i'); // 'i' gives the minutes with leading zeros
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body"> 
                     <div class="form-group">
                         <label>Time</label>
                         <br>
-                        <input type="number" min="0" max="12" value="1" name="hour" class="form-hour form-hour-toilet form-number"> H : <input type="number" min="0" max="59" value="00" name="mins" class="form-mins form-mins-toilet form-number"> M 
+                        <input type="number" min="0" max="24" value="<?php echo $hour; ?>" name="hour" class="form-hour form-hour-toilet form-number"> H : 
+                        <input type="number" min="0" max="59" value="<?php echo $mins; ?>" name="mins" class="form-mins form-mins-toilet form-number"> M
+                        &nbsp;<i class="fa-solid fa-clock"></i>&nbsp;<input type="time" name="timePicker" id="timePicker" class="form-time" value="<?php echo sprintf('%02d:%02d', $hour, $mins); ?>">
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="nappy">Nappy</label>
                         <input type="text" class="form-control modal-form-control" name="nappy" id="nappy">
                     </div>
@@ -664,7 +671,16 @@ $mins = date('i'); // 'i' gives the minutes with leading zeros
                     <div class="form-group">
                         <label for="toilet">Toilet</label>
                         <input type="text" class="form-control modal-form-control" name="toilet" id="toilet">
-                    </div>
+                    </div> -->
+                    <div class="form-group">
+                                <label for="nappy_status">Nappy Status</label><br>
+                                    <select class="form-control modal-form-control" name="nappy_status" id="nappy_status">
+                                <option value="Dry">Dry</option>
+                             <option value="Wet">Wet</option>
+                                 <option value="Soiled">Soiled</option>
+                                  </select>
+                       </div>   
+
                     <div class="form-group">
                         <label for="signature">Signature</label>
                         <input type="text" class="form-control modal-form-control" name="signature" id="signature">
@@ -681,7 +697,11 @@ $mins = date('i'); // 'i' gives the minutes with leading zeros
         </div>
       </div>
     </div>
-
+    <?php
+date_default_timezone_set('Australia/Sydney');
+$hour = date('G'); // Current hour
+$mins = date('i'); // Current minute
+?>
     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="sunscreenModal" id="sunscreenModal">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -696,7 +716,9 @@ $mins = date('i'); // 'i' gives the minutes with leading zeros
                     <div class="form-group">
                         <label>Time</label>
                         <br>
-                        <input type="number" min="0" max="12" value="1" name="hour" class="form-hour form-hour-ss form-number"> H : <input type="number" min="0" max="59" value="00" name="mins" class="form-mins form-mins-ss form-number"> M 
+                        <input type="number" min="0" max="24" value="<?php echo $hour; ?>" name="hour" class="form-hour form-hour-ss form-number"> H : 
+                        <input type="number" min="0" max="59" value="<?php echo $mins; ?>" name="mins" class="form-mins form-mins-ss form-number"> M
+                        &nbsp;<i class="fa-solid fa-clock"></i>&nbsp;<input type="time" name="timePicker" id="timePickerSs" class="form-time" value="<?php echo sprintf('%02d:%02d', $hour, $mins); ?>">
                     </div>
                     <div class="form-group">
                         <label for="comments">Comments</label>
@@ -874,9 +896,10 @@ $mins = date('i'); // 'i' gives the minutes with leading zeros
                 var hour = $(".form-hour-toilet").val();
                 var mins = $(".form-mins-toilet").val();
                 var startTime = hour+"h:"+mins+"m";
-                var nappy = $("#nappy").val();
-                var potty = $("#potty").val();
-                var toilet = $("#toilet").val();
+                var nappy_status = $("#nappy_status").val();
+                // var nappy = $("#nappy").val();
+                // var potty = $("#potty").val();
+                // var toilet = $("#toilet").val();
                 var signature = $("#signature").val();
                 var childids = [];
                 $("input[name='childids[]']").each(function(){
@@ -887,12 +910,13 @@ $mins = date('i'); // 'i' gives the minutes with leading zeros
                 var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
                 var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                 var createdAt = date+' '+time;
-                var diarydate = '<?= isset($_GET['date'])?$_GET['date']:$date; ?>';
+                var diarydate = '<?= isset($_GET['date'])?$_GET['date']:$date; ?>';  
                 $.ajax({
                     traditional:true,
                     type: "POST",
                     url: "<?php echo base_url().'dailyDiary/addToiletingRecord'; ?>",
-                    data: {"userid":<?php echo $this->session->userdata('LoginId');?>,'startTime':startTime,'nappy':nappy,'comments':comments,'signature':signature,'potty':potty,'toilet':toilet,'diarydate':diarydate,'childid':JSON.stringify(childids)},
+                    // data: {"userid":<?php echo $this->session->userdata('LoginId');?>,'startTime':startTime,'nappy':nappy,'comments':comments,'signature':signature,'potty':potty,'toilet':toilet,'diarydate':diarydate,'childid':JSON.stringify(childids)},
+                    data: {"userid":<?php echo $this->session->userdata('LoginId');?>,'startTime':startTime,'nappy_status':nappy_status,'comments':comments,'signature':signature,'diarydate':diarydate,'childid':JSON.stringify(childids)},
                     success: function(msg){
                       var res = jQuery.parseJSON(msg);
                       if (res.Status == "SUCCESS") {
@@ -1089,7 +1113,70 @@ function syncModalTimePicker() {
 // Call the function to sync the modal time inputs
 syncModalTimePicker();
 </script>
+<script>
+function syncToiletingTimePicker() {
+    const hourInput = document.querySelector('.form-hour-toilet');
+    const minsInput = document.querySelector('.form-mins-toilet');
+    const timePicker = document.querySelector('#timePicker');
 
+    if (!hourInput || !minsInput || !timePicker) {
+        console.error('One or more elements not found in the toileting modal.');
+        return;
+    }
 
+    // Update hour and minute inputs when time picker changes
+    timePicker.addEventListener('change', function () {
+        const [hour, mins] = this.value.split(':');
+        hourInput.value = hour;
+        minsInput.value = mins;
+    });
+
+    // Update time picker when hour or minute inputs change
+    hourInput.addEventListener('change', function () {
+        timePicker.value = `${hourInput.value.padStart(2, '0')}:${minsInput.value.padStart(2, '0')}`;
+    });
+
+    minsInput.addEventListener('change', function () {
+        timePicker.value = `${hourInput.value.padStart(2, '0')}:${minsInput.value.padStart(2, '0')}`;
+    });
+}
+
+// Call the function to sync the toileting modal time inputs
+syncToiletingTimePicker();
+    
+</script>
+
+<script>
+    // Function to synchronize time picker with hour and minute inputs
+function syncSunscreenTimePicker() {
+    const hourInput = document.querySelector('.form-hour-ss');
+    const minsInput = document.querySelector('.form-mins-ss');
+    const timePicker = document.querySelector('#timePickerSs');
+
+    if (!hourInput || !minsInput || !timePicker) {
+        console.error('One or more elements not found in the sunscreen modal.');
+        return;
+    }
+
+    // Update hour and minute inputs when time picker changes
+    timePicker.addEventListener('change', function () {
+        const [hour, mins] = this.value.split(':');
+        hourInput.value = hour;
+        minsInput.value = mins;
+    });
+
+    // Update time picker when hour or minute inputs change
+    hourInput.addEventListener('change', function () {
+        timePicker.value = `${hourInput.value.padStart(2, '0')}:${minsInput.value.padStart(2, '0')}`;
+    });
+
+    minsInput.addEventListener('change', function () {
+        timePicker.value = `${hourInput.value.padStart(2, '0')}:${minsInput.value.padStart(2, '0')}`;
+    });
+}
+
+// Call the function to sync the sunscreen modal time inputs
+syncSunscreenTimePicker();
+    </script>
 </body>
 </html>

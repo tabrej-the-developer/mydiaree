@@ -1746,11 +1746,192 @@ $mpdf->WriteHTML($serviceformanotherpage);
 //--------------------------------------------
 
 
+
+
+//
+$mpdf->AddPage('', '', '', '', '', 10, 10, 25, 25, 15, 15);
+$quality1stpage ='
+<div style="font-family: Arial, sans-serif;">
+    <h2 style="color: #000; font-size: 18px; margin-bottom: 15px;">Quality Area 1: Educational program and practice</h2>
+    
+    <p style="color: #000; font-size: 14px; line-height: 1.4; margin-bottom: 15px;">
+        This quality area of the <i>National Quality Standard</i> focuses on ensuring that the educational program and practice is stimulating and engaging and enhances children\'s learning and development. In school age care services, the program nurtures the development of life skills and complements children\'s experiences, opportunities and relationships at school, at home and in the community.
+    </p>
+    
+    <p style="color: #000; font-size: 14px; line-height: 1.4; margin-bottom: 20px;">
+        Additional information and resources about Quality Area 1 are available in the <a href="#" style="color: #0000FF; text-decoration: underline;">Guide to the National Quality Framework</a> and the <a href="#" style="color: #0000FF; text-decoration: underline;">ACECQA website</a>.
+    </p>
+    
+    <h3 style="color: #000; font-size: 16px; margin-bottom: 15px;">Quality Area 1: Standards and elements</h3>
+    
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <tr>
+            <td colspan="3" style="background-color: #90EE90; padding: 8px; border: 1px solid #000;">
+                <strong>Standard 1.1</strong> The educational program enhances each child\'s learning and development.
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #000; width: 25%;"><strong>Approved learning framework</strong></td>
+            <td style="padding: 8px; border: 1px solid #000; width: 15%;">Element 1.1.1</td>
+            <td style="padding: 8px; border: 1px solid #000;">Curriculum decision-making contributes to each child\'s learning and development outcomes in relation to their identity, connection with community, wellbeing, confidence as learners and effectiveness as communicators.</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #000;"><strong>Child-centred</strong></td>
+            <td style="padding: 8px; border: 1px solid #000;">Element 1.1.2</td>
+            <td style="padding: 8px; border: 1px solid #000;">Each child\'s current knowledge, strengths, ideas, culture, abilities and interests are the foundation of the program.</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #000;"><strong>Program learning opportunities</strong></td>
+            <td style="padding: 8px; border: 1px solid #000;">Element 1.1.3</td>
+            <td style="padding: 8px; border: 1px solid #000;">All aspects of the program, including routines, are organised in ways that maximise opportunities for each child\'s learning.</td>
+        </tr>
+        
+        <tr>
+            <td colspan="3" style="background-color: #90EE90; padding: 8px; border: 1px solid #000;">
+                <strong>Standard 1.2</strong> Educators facilitate and extend each child\'s learning and development.
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #000;"><strong>Intentional teaching</strong></td>
+            <td style="padding: 8px; border: 1px solid #000;">Element 1.2.1</td>
+            <td style="padding: 8px; border: 1px solid #000;">Educators are deliberate, purposeful, and thoughtful in their decisions and actions.</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #000;"><strong>Responsive teaching and scaffolding</strong></td>
+            <td style="padding: 8px; border: 1px solid #000;">Element 1.2.2</td>
+            <td style="padding: 8px; border: 1px solid #000;">Educators respond to children\'s ideas and play and extend children\'s learning through open-ended questions, interactions and feedback.</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #000;"><strong>Child directed learning</strong></td>
+            <td style="padding: 8px; border: 1px solid #000;">Element 1.2.3</td>
+            <td style="padding: 8px; border: 1px solid #000;">Each child\'s agency is promoted, enabling them to make choices and decisions that influence events and their world.</td>
+        </tr>
+        
+        <tr>
+            <td colspan="3" style="background-color: #90EE90; padding: 8px; border: 1px solid #000;">
+                <strong>Standard 1.3</strong> Educators and co-ordinators take a planned and reflective approach to implementing the program for each child.
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #000;"><strong>Assessment and planning cycle</strong></td>
+            <td style="padding: 8px; border: 1px solid #000;">Element 1.3.1</td>
+            <td style="padding: 8px; border: 1px solid #000;">Each child\'s learning and development is assessed or evaluated as part of an ongoing cycle of observation, analysing learning, documentation, planning, implementation and reflection.</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #000;"><strong>Critical reflection</strong></td>
+            <td style="padding: 8px; border: 1px solid #000;">Element 1.3.2</td>
+            <td style="padding: 8px; border: 1px solid #000;">Critical reflection on children\'s learning and development, both as individuals and in groups, drives program planning and implementation.</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #000;"><strong>Information for families</strong></td>
+            <td style="padding: 8px; border: 1px solid #000;">Element 1.3.3</td>
+            <td style="padding: 8px; border: 1px solid #000;">Families are informed about the program and their child\'s progress.</td>
+        </tr>
+    </table>
+</div>';
+
+
+$mpdf->WriteHTML($quality1stpage);
+
+//----------------------
 $mpdf->AddPage('', '', '', '', '', 10, 10, 25, 25, 15, 15);
 
-// Add the rest of the content
-$contentHtml = $this->prepareHTML($json);
-$mpdf->WriteHTML($contentHtml);
+$quality2ndpage ='<div style="font-family: Arial, sans-serif;">
+<h2 style="color: #8B4513; font-size: 18px; margin-bottom: 15px;">National Law and National Regulations underpinning Quality Area 1</h2>
+
+<p style="color: #000; font-size: 14px; line-height: 1.4; margin-bottom: 20px;">
+	The table below shows the sections of the National Law and National Regulations underpinning Quality Area 1 and lists the most relevant element of the NQS associated with each section and regulation. Please note that this table serves as a guide only and regulatory authorities have flexibility in how they assign non-compliance with the National Law and National Regulations against the quality areas, standards and elements of the NQS.
+</p>
+
+<table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+	<tr style="background-color: #f0f0f0;">
+		<th style="padding: 8px; border: 1px solid #000; width: 25%; text-align: left;">National Law and National Regulations</th>
+		<th style="padding: 8px; border: 1px solid #000; text-align: left;">Associated element</th>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000;">Section 51(1)(b)</td>
+		<td style="padding: 8px; border: 1px solid #000;">1.1.1</td>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;">Conditions on service approval (educational and developmental needs of children)</td>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;"></td>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000;">Section 168</td>
+		<td style="padding: 8px; border: 1px solid #000;">1.1.1, 1.1.2</td>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;">Offence relating to required programs</td>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;"></td>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000;">Regulation 73</td>
+		<td style="padding: 8px; border: 1px solid #000;">1.1.1</td>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;">Educational program</td>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;"></td>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000;">Regulation 74</td>
+		<td style="padding: 8px; border: 1px solid #000;">1.3.1</td>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;">Documenting of child assessments or evaluations for delivery of educational program</td>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;"></td>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000;">Regulation 75</td>
+		<td style="padding: 8px; border: 1px solid #000;">1.3.3</td>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;">Information about educational program to be kept available</td>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;"></td>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000;">Regulation 76</td>
+		<td style="padding: 8px; border: 1px solid #000;">1.3.3</td>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;">Information about educational program to be given to parents</td>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;"></td>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000;">Regulation 274A<br>NSW</td>
+		<td style="padding: 8px; border: 1px solid #000;">1.3.1</td>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;">Programs for children over preschool age</td>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;"></td>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000;">Regulation 289A<br>NT</td>
+		<td style="padding: 8px; border: 1px solid #000;">1.3.1</td>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;">Programs for children over preschool age</td>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;"></td>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000;">Regulation 298A<br>Queensland</td>
+		<td style="padding: 8px; border: 1px solid #000;">1.3.1</td>
+	</tr>
+	<tr>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;">Programs for children over preschool age</td>
+		<td style="padding: 8px; border: 1px solid #000; background-color: #fff;"></td>
+	</tr>
+</table>
+</div>';
+
+$mpdf->WriteHTML($quality2ndpage);
+
+//-----------------------------
+
+// $mpdf->AddPage('', '', '', '', '', 10, 10, 25, 25, 15, 15);
+
+// // Add the rest of the content
+// $contentHtml = $this->prepareHTML($json);
+// $mpdf->WriteHTML($contentHtml);
 
 	
 				// Generate unique file name

@@ -361,7 +361,7 @@ class DailyDiary extends CI_Controller {
 					$data['last_rec_ids'] = [];
 					foreach ($json->childids as $key=>$childid) {
 						$json->childid = $childid;
-						$last_rec_id = $this->ddm->addSunscreenRecord($json);
+						$last_rec_id = $this->ddm->addSunscreenRecord2($json);
 						array_push($data['last_rec_ids'], $last_rec_id);
 					}
 					$data['Status'] = "SUCCESS";

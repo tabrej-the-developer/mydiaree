@@ -195,10 +195,11 @@ class DailyDiaryModel extends CI_Model {
             'childid' => $data->childid,
             'diarydate' => $diarydate,
             'startTime' => $data->startTime[$i],
-            'nappy' => $data->nappy[$i] ?? null,
-            'potty' => $data->potty[$i] ?? null,
-            'toilet' => $data->toilet[$i] ?? null,
+            // 'nappy' => $data->nappy[$i] ?? null,
+            // 'potty' => $data->potty[$i] ?? null,
+            // 'toilet' => $data->toilet[$i] ?? null,
             'signature' => $data->signature[$i] ?? null,
+            'status' => $data->nappy_status[$i] ?? null,
             'comments' => $data->comments[$i] ?? null,
             'createdBy' => $data->userid,
             'createdAt' => date('Y-m-d H:i:s')
@@ -250,6 +251,42 @@ public function addSunscreenRecord($data)
     
     return $this->db->affected_rows();
 }
+
+public function addSunscreenRecord2($data)
+{
+    if (isset($data->diarydate)) {
+        $diarydate = date('Y-m-d', strtotime($data->diarydate));
+    } else {
+        $diarydate = date("Y-m-d");
+    }
+
+    $insert_batch = [];
+
+    foreach ($data->childids as $childid) {
+        // Delete existing records for this child and date
+        $this->db->delete('dailydiarysunscreen', ['childid' => $childid, 'diarydate' => $diarydate]);
+
+        // Prepare new entry
+        $ins_data = [
+            'childid'   => $childid,
+            'diarydate' => $diarydate,
+            'startTime' => $data->startTime,
+            'comments'  => $data->comments,
+            'createdBy' => $data->userid,
+            'createdAt' => date('Y-m-d H:i:s')
+        ];
+
+        $insert_batch[] = $ins_data;
+    }
+
+    // Insert multiple records
+    if (!empty($insert_batch)) {
+        $this->db->insert_batch("dailydiarysunscreen", $insert_batch);
+    }
+
+    return $this->db->affected_rows();
+}
+
 
 	public function getChildInfo($childid)
 	{

@@ -201,6 +201,10 @@ class DailyDiary extends CI_Controller {
 	{
 		if($this->session->has_userdata('LoginId')){
 			$data = $this->input->post();
+			$data['startTime'] = [$data['startTime']];
+
+			// print_r($data);
+			// exit;
 			$data['childids'] = json_decode($data['childid']);
 			unset($data['childid']);
 			$url = BASE_API_URL."DailyDiary/addToiletingRecord/";
@@ -229,6 +233,8 @@ class DailyDiary extends CI_Controller {
 			$data['childids'] = json_decode($data['childid']);
 			unset($data['childid']);
 			$data['userid'] = $this->session->userdata('LoginId');
+			// print_r($data);
+			// exit;
 			$url = BASE_API_URL."DailyDiary/addSunscreenRecord/";
 			
 			$ch = curl_init($url);
@@ -280,7 +286,7 @@ class DailyDiary extends CI_Controller {
 				$data = json_decode($server_output);
 				// echo "<pre>";
 				// print_r($data);
-				// exit;
+				// exit;  
 				$data->centerid = $centerid;
 				$this->load->view('viewChildDiary', $data);
 			}
@@ -373,9 +379,10 @@ class DailyDiary extends CI_Controller {
 				}
 			}
 			
-		    $data['toileting']['nappy'] = $data['nappy'];
-		    $data['toileting']['potty'] = $data['potty'];
-		    $data['toileting']['toilet'] = $data['toilet'];
+		    // $data['toileting']['nappy'] = $data['nappy'];
+		    // $data['toileting']['potty'] = $data['potty'];
+		    $data['toileting']['nappy_status'] = $data['nappy_status'];
+		    // $data['toileting']['toilet'] = $data['toilet'];
 		    $data['toileting']['signature'] = $data['signature'];
 		    $data['toileting']['comments'] = $data['ttcomments'];
 		    $data['toileting']['userid'] = $data['userid'];
