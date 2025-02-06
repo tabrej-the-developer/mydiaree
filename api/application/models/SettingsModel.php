@@ -195,7 +195,7 @@ class SettingsModel extends CI_Model {
 				"gender"=>$data['gender'], 
 				"title"=>$data['title'],
 				"imageUrl"=>$data['image_name'], 
-				"userType"=>"Staff"
+				"userType"=>$data['userType']
 			);
 			$this->db->update('users', $updateData, ['userid'=>$userid]);
 			return $userid;
@@ -211,7 +211,7 @@ class SettingsModel extends CI_Model {
 				"gender"=>$data['gender'], 
 				"title"=>$data['title'],
 				"imageUrl"=>$data['image_name'], 
-				"userType"=>"Staff",
+				"userType"=>$data['userType'],
 				"password"=>$data['password']
 			);
 			$this->db->insert('users', $insData);

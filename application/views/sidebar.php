@@ -192,6 +192,13 @@
                             <span class="d-inline-block">Parent Settings</span>
                         </a>
                     </li>
+                    
+                    <li>
+                        <a href="<?php echo base_url('Settings/superadminSettings'); ?>">
+                            <span class="d-inline-block">Super-Admin Settings</span>
+                        </a>
+                    </li>
+
                     <li>
                         <a href="<?php echo base_url('Settings/childGroups'); ?>">
                             <span class="d-inline-block">Child Groups</span>

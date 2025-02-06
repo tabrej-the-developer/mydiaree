@@ -374,11 +374,137 @@ class Settings extends CI_Controller {
 			curl_close($ch);
 			if($httpcode == 200){
 				$data = json_decode($server_output);
+				// echo "<pre>";
+				// print_r($data); 
+				// echo "</pre>";
+				// exit;
 				$data->centerid = $centerid;
 				$this->load->view('userSettings-newui',$data);
 			} else if($httpcode == 401){
 				return 'error';
 			}
+		}else{
+			redirect("Welcome");
+		}
+	}
+
+
+	public function addsuperadmin() {
+		// Check if request is AJAX
+		if (!$this->input->is_ajax_request()) {
+			exit('No direct script access allowed');
+		}
+		$this->load->database();
+
+		// $data = $this->input->post();
+		// echo "<pre>";
+		// print_r($data);
+		// exit;
+		// Start transaction
+		$this->db->trans_start();
+	
+		try {
+			// Handle image upload if provided
+			$imageUrl = '';
+			if (!empty($_FILES['imageUrl']['name'])) {
+				$config['upload_path'] = './api/assets/media/';
+				$config['allowed_types'] = 'gif|jpg|jpeg|png';
+				$config['max_size'] = 2048; // 2MB max
+	
+				$this->load->library('upload', $config);
+				
+				if (!$this->upload->do_upload('imageUrl')) {
+					throw new Exception($this->upload->display_errors());
+				}
+				
+				$uploadData = $this->upload->data();
+				$imageUrl = $uploadData['file_name'];
+			}else{
+				$imageUrl = null;
+			}
+	
+			// Prepare user data
+			$userData = [
+				'username' => $this->input->post('username'),
+				'emailid' => $this->input->post('emailid'),
+				'password' =>  sha1($this->input->post('password')),
+				'contactNo' => $this->input->post('contactNo'),
+				'name' => $this->input->post('name'),
+				'dob' => $this->input->post('dob'),
+				'gender' => $this->input->post('gender'),
+				'title' => $this->input->post('title'),
+				'imageUrl' => $imageUrl,
+				'userType' => 'Superadmin'
+			];
+			
+			// Insert user data
+			$this->db->insert('users', $userData);
+			$userId = $this->db->insert_id();
+	
+			// Prepare center data
+			$centerData = [
+				'centerName' => $this->input->post('centerName'),
+				'adressStreet' => $this->input->post('adressStreet'),
+				'addressCity' => $this->input->post('addressCity'),
+				'addressState' => $this->input->post('addressState'),
+				'addressZip' => $this->input->post('addressZip')
+			];
+	
+			// Insert center data
+			$this->db->insert('centers', $centerData);
+			$centerId = $this->db->insert_id();
+	
+			// Link user to center
+			$userCenterData = [
+				'userid' => $userId,
+				'centerid' => $centerId
+			];
+			$this->db->insert('usercenters', $userCenterData);
+	
+			// Complete transaction
+			$this->db->trans_complete();
+	
+			if ($this->db->trans_status() === FALSE) {
+				throw new Exception('Transaction failed');
+			}
+	
+			echo json_encode(['status' => 'success']);
+	
+		} catch (Exception $e) {
+			// Rollback transaction
+			$this->db->trans_rollback();
+			
+			echo json_encode([
+				'status' => 'error',
+				'message' => $e->getMessage()
+			]);
+		}
+	}
+
+
+	public function superadminSettings(){
+		if ($this->session->has_userdata("LoginId")) {
+			if($this->session->userdata("UserType") != "Superadmin" ){
+				redirect('Welcome');
+			}
+			if($this->session->userdata("LoginId") != 1 ){
+				redirect('Welcome');
+			}
+             
+			$this->load->database();
+			$query = $this->db->where('userType', 'Superadmin')
+			->where('userid !=', 1)
+			->get('users');  // Assuming your table name is 'users'
+
+             $data['users'] = $query->result();
+             $data['title'] = 'Superadmin Settings';
+
+       	// echo "<pre>";
+        // print_r($data); 
+        // echo "</pre>";
+        // exit;
+		$this->load->view('superadminsetting',$data);
+
 		}else{
 			redirect("Welcome");
 		}

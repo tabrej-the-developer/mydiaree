@@ -264,7 +264,9 @@
 												<div class="form-group">
 													<label for="usertype">Usertype</label>
 													<select class="form-control" id="usertype" name="userType" readonly>
-														<option value="Staff" selected>Staff</option>
+													<option value="Superadmin"<?= ($userdata->userType == "Superadmin")?'selected':''; ?>>Superadmin</option>	
+													<option value="Staff"<?= ($userdata->userType == "Staff")?'selected':''; ?>>Staff</option>	
+														<!-- <option value="Staff" selected>Staff</option> -->
 													</select>
 												</div>
 											</div>
