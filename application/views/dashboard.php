@@ -116,10 +116,10 @@
                                         </a>
                                     </div>
                                     <div class="col-md-4 mb-4">
-                                        <a href="<?= base_url("Room"); ?>" class="card">
+                                        <a href="<?= base_url("dailyDiary"); ?>" class="card">
                                             <div class="card-body text-center">
                                                 <i class="iconsminds-students"></i>
-                                                <p class="card-text mb-0 title">Students</p>
+                                                <p class="card-text mb-0 title">Children</p>
                                                 <p class="lead text-center"><?php  $childrenCount; ?></p>
                                             </div>
                                         </a>
@@ -128,7 +128,7 @@
                                         <a href="<?= base_url("Settings/userSettings"); ?>" class="card">
                                             <div class="card-body text-center">
                                                 <i class="simple-icon-people"></i>
-                                                <p class="card-text mb-0 title">Staffs</p>
+                                                <p class="card-text mb-0 title">Educators</p>
                                                 <p class="lead text-center"><?php  $staffCount; ?></p>
                                             </div>
                                         </a>

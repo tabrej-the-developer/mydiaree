@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Topbar | Mykronicle v2</title>
+    <title>Topbar | Mydiaree v2</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?= base_url('assets/css/v2/styles.css');?>" rel="stylesheet">
 
@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/v2/component-custom-switch.min.css');?>"/>
     <link rel="stylesheet" href="<?= base_url('assets/css/v2/main.css');?>"/>
     <link rel="stylesheet" href="<?= base_url('assets/css/v2/dore.light.bluenavy.min.css');?>" />
-    <!-- <link rel="stylesheet" href="http://localhost/Mykronicle_v2/css/dore.light.bluenavy.min.css" /> -->
+    <!-- <link rel="stylesheet" href="http://localhost/Mydiaree_v2/css/dore.light.bluenavy.min.css" /> -->
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <!-- Font Awesome JS -->
@@ -58,7 +58,7 @@
         </a>
     </div>
     <a class="navbar-logo" href="#">
-        <img class="d-block d-xs-none" style="width:200px; height:50px; background-color: gray; padding: 10px; border-radius: 20px; box-shadow: 0px 3px 18px #888888;" src="<?php echo base_url('/assets/images/Mykronicle-logo-white.png'); ?>">
+        <img class="d-block d-xs-none" style="width:200px; height:50px; background-color: gray; padding: 10px; border-radius: 20px; box-shadow: 0px 3px 18px #888888;" src="<?php echo base_url('/assets/images/Mydiaree-logo-white.png'); ?>">
     </a>                                                    
     <div class="navbar-right">
         <div class="header-icons d-inline-block align-middle">

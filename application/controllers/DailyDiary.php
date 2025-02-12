@@ -64,7 +64,7 @@ class DailyDiary extends CI_Controller {
             if(isset($_GET['roomid'])){
                 $data['roomid'] = $_GET['roomid'];
             }
-
+			
 			$data['userid'] = $this->session->userdata("LoginId");
           
 			$url = BASE_API_URL.'dailyDiary/getDailyDiary';
@@ -82,14 +82,24 @@ class DailyDiary extends CI_Controller {
 			//print_r($server_output); exit;
 			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			curl_close($ch);
+// 			echo "<pre>";
+// print_r($server_output);
+// exit;
+			// echo "<pre>";
+			// 	print_r(json_decode($server_output)); 
+			// 	exit;
 			if($httpcode == 200){
-				$data = new stdClass();
 				$data = json_decode($server_output);
+				
+				if (!is_object($data)) {
+					$data = new stdClass(); // Ensure $data is an object
+				}
+			
 				$data->centerid = $centerid;
-                // echo "<pre>";
-				// print_r($data); 
-				// exit;
-				$this->load->view('dailyDiary_v3',$data);
+				
+				
+				
+				$this->load->view('dailyDiary_v3', $data);
 			}
 			else if($httpcode == 401){
 				return 'error';

@@ -51,6 +51,7 @@
 
             <div class="dropdown-menu dropdown-menu-right mt-3">
                 <a class="dropdown-item" href="<?php echo base_url('logout'); ?>">Sign out</a>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#uploadImageModal">Change Profile Pic</a>
             </div>
         </div>
     </div>
@@ -304,3 +305,125 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<!-- Modal -->
+<div class="modal fade" id="uploadImageModal" tabindex="-1" role="dialog" aria-labelledby="uploadImageModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadImageModalLabel">Upload Profile Picture</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="imageUploadForm">
+                    <input type="hidden" id="userId" value="<?= $this->session->userdata('LoginId'); ?>">
+
+                    <!-- Image Preview -->
+                    <div class="form-group text-center">
+                        <img id="imagePreview" src="<?= base_url(); ?>api/assets/media/<?php echo $this->session->userdata('ImgUrl');?>" width="100" height="100" style="border-radius: 50%;" />
+                    </div>
+
+                    <!-- Upload Guidelines -->
+                    <div class="alert alert-info">
+                        <strong>Upload Guidelines:</strong><br>
+                        - Supported formats: <b>JPG, JPEG, PNG, GIF, WEBP, HEIC, HEIF</b> <br>
+                        - Maximum size: <b>2MB</b>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="file" class="form-control-file" id="profileImage" accept="image/*">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function() {
+        // Allowed file extensions
+        var allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic', 'heif'];
+
+        // Preview Image
+        $("#profileImage").change(function() {
+            var file = this.files[0];
+
+            if (file) {
+                var fileName = file.name;
+                var fileSize = file.size / 1024 / 1024; // Convert to MB
+                var fileExt = fileName.split('.').pop().toLowerCase();
+
+                // Validate file extension
+                if (!allowedExtensions.includes(fileExt)) {
+                    Swal.fire("Invalid File", "Please upload a valid image format (JPG, JPEG, PNG, GIF, WEBP, HEIC, HEIF)", "error");
+                    $(this).val(''); // Clear file input
+                    return;
+                }
+
+                // Validate file size
+                if (fileSize > 2) {
+                    Swal.fire("File Too Large", "Image size must be under 2MB", "error");
+                    $(this).val(''); // Clear file input
+                    return;
+                }
+
+                // Display preview
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $("#imagePreview").attr("src", e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle Upload
+        $("#imageUploadForm").submit(function(e) {
+            e.preventDefault();
+
+            var formData = new FormData();
+            formData.append("imageUrl", $("#profileImage")[0].files[0]);
+            formData.append("userId", $("#userId").val());
+
+            $.ajax({
+                url: "<?= base_url('Settings/uploadProfileImage'); ?>",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
+                    Swal.fire({
+                        title: "Uploading...",
+                        text: "Please wait while we upload your image.",
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                },
+                success: function(response) {
+                    Swal.close();
+                    var res = JSON.parse(response);
+                    if (res.status === "success") {
+                        Swal.fire("Success!", res.message, "success").then(() => {
+                            location.reload(); // Reload to reflect the new image
+                        });
+                    } else {
+                        Swal.fire("Error!", res.message, "error");
+                    }
+                },
+                error: function() {
+                    Swal.fire("Error!", "Something went wrong. Please try again.", "error");
+                }
+            });
+        });
+    });
+</script>
+

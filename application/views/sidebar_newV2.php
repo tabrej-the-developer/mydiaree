@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Sidebar | Mykronicle</title>
+    <title>Sidebar | Mydiaree</title>
 </head>
 
 <body id="app-container" class="menu-default" style="background-color: #f8f8f8; top: -35px;">

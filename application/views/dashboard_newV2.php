@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard_New | Mykronicle v2</title>  
+    <title>Dashboard_New | Mydiaree v2</title>  
 </head>
 <body id="app-container" class="menu-default" style="background-color: #f8f8f8; top: -35px; bottom:0px;">
 <?php $this->load->view('topbar_newV2'); ?>    

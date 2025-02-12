@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Program Plan List | Mykronicle</title>
+    <title>Program Plan List | Mydiaree</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/font/iconsmind-s/css/iconsminds.css?v=1.0.0" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/font/simple-line-icons/css/simple-line-icons.css?v=1.0.0" />
@@ -99,11 +99,11 @@
                 ?>
                 <div class="col">
                     <div class="text-center">
-                        <h6 class="mb-4">Ooops... looks like we don't have enough data!</h6>
-                        <p class="mb-0 text-muted text-small mb-0">Error code</p>
+                        <h6 class="mb-4">You don't have any Program Plans, Create New Program Plans.....</h6>
+                        <!-- <p class="mb-0 text-muted text-small mb-0">Error code</p>
                         <p class="display-1 font-weight-bold mb-5">
                             200
-                        </p>
+                        </p> -->
                         <a href="<?= base_url('dashboard'); ?>" class="btn btn-primary btn-lg btn-shadow">GO BACK HOME</a>
                     </div>
                 </div>

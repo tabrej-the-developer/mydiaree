@@ -8,7 +8,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Create Reflection | Mykronicle</title>
+    <title>Create Reflection | Mydiaree</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js?id=1234"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 

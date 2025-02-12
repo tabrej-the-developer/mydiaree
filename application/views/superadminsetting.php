@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Settings | Mykronicle v2</title>
+    <title>User Settings | Mydiaree v2</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js?v=1.0.0"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 

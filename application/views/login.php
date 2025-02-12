@@ -4,7 +4,7 @@
 	<meta name='viewport' content='width=device-width, initial-scale=1'>
 	<link rel="stylesheet" href="<?php echo base_url('assets/css/style_new.css'); ?>">
 	<link rel="stylesheet" href="<?php echo base_url('assets/css/login.css'); ?>">
-	<title>Welcome to MY Mykronicle</title>
+	<title>Welcome to MY Mydiaree</title>
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap');
 		@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&display=swap');

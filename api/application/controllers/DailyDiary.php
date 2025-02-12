@@ -23,14 +23,17 @@ class DailyDiary extends CI_Controller {
 
 	public function getDailyDiary()
 	{
+
 		$headers = $this->input->request_headers();
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+		
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$userid = $json->userid;
 				$userArr = $this->LoginModel->getUserFromId($json->userid);
-
+				// print_r($userArr);
+				// exit;
 				if(empty($json->centerid)) {
 					$userCentersArr = $this->ddm->getUserCenters($userid);
 					$centerid = $userCentersArr[0]->centerid;
@@ -65,6 +68,8 @@ class DailyDiary extends CI_Controller {
 				$data['centerid'] = $centerid;
 				$data['date'] = $date;
 				$data['roomid'] = $roomid;
+				// print_r($data['roomid']);
+				// exit;
 				$data['roomname'] = $roomname;
 				$data['roomcolor'] = $roomcolor;
 				$data['rooms'] = $getCenterRoomsArr;
@@ -78,14 +83,16 @@ class DailyDiary extends CI_Controller {
 
 				$getSettings = $this->ddm->getCenterDDSettings($centerid);
 				if(empty($getSettings)){
-					$getSettings->breakfast = 1;
-					$getSettings->morningtea = 1;
-					$getSettings->lunch = 1;
-					$getSettings->sleep = 1;
-					$getSettings->afternoontea = 1;
-					$getSettings->latesnacks = 1;
-					$getSettings->sunscreen = 1;
-					$getSettings->toileting = 1;
+					$getSettings = new stdClass(); 
+					$getSettings->id = "1";
+					$getSettings->breakfast = "1";
+					$getSettings->morningtea = "1";
+					$getSettings->lunch = "1";   
+					$getSettings->sleep = "1";
+					$getSettings->afternoontea = "1";
+					$getSettings->latesnacks = "1";
+					$getSettings->sunscreen = "1";
+					$getSettings->toileting = "1";
 				}
 				$data['childs'] = $childsArr;
 				foreach ($childsArr as $child => $cobj) {

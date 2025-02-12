@@ -460,6 +460,22 @@ class Settings extends CI_Controller {
 				'centerid' => $centerId
 			];
 			$this->db->insert('usercenters', $userCenterData);
+
+			 // Prepare daily diary settings data
+			 $diarySettingsData = [
+				'centerid' => $centerId,
+				'breakfast' => 1,
+				'morningtea' => 1,
+				'lunch' => 1,
+				'sleep' => 1,
+				'afternoontea' => 1,
+				'latesnacks' => 1,
+				'sunscreen' => 1,
+				'toileting' => 1
+			];
+	
+			// Insert daily diary settings
+			$this->db->insert('dailydiarysettings', $diarySettingsData);
 	
 			// Complete transaction
 			$this->db->trans_complete();
@@ -528,6 +544,9 @@ class Settings extends CI_Controller {
 				));
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				$server_output = curl_exec($ch);
+				// echo "<pre>";
+				// 	print_r($server_output);
+				// 	exit; 
 				$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 				if($httpcode == 200){
 					$data = json_decode($server_output);
@@ -2192,6 +2211,55 @@ class Settings extends CI_Controller {
 			redirect("Welcome");
 		}
 	}
+
+
+
+public function uploadProfileImage()
+{
+    try {
+		$this->load->database();
+        $userId = $this->input->post('userId');
+        if (!$userId) {
+            throw new Exception("User ID is required.");
+        }
+
+        // Handle image upload
+        if (!empty($_FILES['imageUrl']['name'])) {
+            $config['upload_path'] = './api/assets/media/';
+            $config['allowed_types'] = 'gif|jpg|jpeg|png|webp|heic|heif'; // Updated supported types
+            $config['max_size'] = 2048; // 2MB max
+            $config['file_name'] = 'profile_' . time(); // Rename to prevent duplicates
+
+            $this->load->library('upload', $config);
+
+            if (!$this->upload->do_upload('imageUrl')) {
+                throw new Exception($this->upload->display_errors());
+            }
+
+            $uploadData = $this->upload->data();
+            $imageUrl = $uploadData['file_name'];
+
+            // Update user record
+            $this->db->where('userid', $userId);
+            $this->db->update('users', ['imageUrl' => $imageUrl]);
+
+            // Update session with new image
+            $this->session->set_userdata('ImgUrl', $imageUrl);
+
+            echo json_encode(['status' => 'success', 'message' => 'Profile picture updated successfully!']);
+        } else {
+            throw new Exception("No file uploaded.");
+        }
+    } catch (Exception $e) {
+        echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+    }
+}
+
+
+
+
+
+
 	
 }
 

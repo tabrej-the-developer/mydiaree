@@ -642,6 +642,28 @@ class SettingsModel extends CI_Model {
 		return $q->row();
 	}
 
+	public function getAllCentersByUserCenters($userAssignedCenters) {
+        if (!empty($userAssignedCenters)) {
+            $centerIds = array_map(function($center) {
+                return $center->centerid;
+            }, $userAssignedCenters);
+            
+            $this->db->from('centers');
+            $this->db->where_in('id', $centerIds);
+            $query = $this->db->get();
+            return $query->result();
+        }
+        return array();
+    }
+
+	public function getUserAssignedCenters($userid) {
+        $this->db->select('centerid');
+        $this->db->from('usercenters');
+        $this->db->where('userid', $userid);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
 	public function insertCenterJournalTabs($data='')
 	{
 		$array = [

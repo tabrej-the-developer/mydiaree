@@ -369,10 +369,16 @@ class Settings extends CI_Controller {
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			// print_r($json);
+			// exit;
 			if($json != null && $res != null && $res->userid == $json->userid){
 				$recordId = $json->recordId;				
 				$userData = $this->SettingsModel->getUsersDetails($recordId);
-				$allcenters = $this->SettingsModel->getAllCenters();
+				// $allcenters = $this->SettingsModel->getAllCenters();
+				$userAssignedCenters = $this->SettingsModel->getUserAssignedCenters($json->userid);
+
+				$allcenters = $this->SettingsModel->getAllCentersByUserCenters($userAssignedCenters);
+
 				foreach ($allcenters as $key => $obj) {
 					$check = $this->SettingsModel->checkUserCenter($recordId,$obj->id);
 					if ($check) {
@@ -381,7 +387,9 @@ class Settings extends CI_Controller {
 						$obj->selected = "";
 					}
 				}
-
+                
+				// print_r($allcenters);
+				// exit;
 				$data['Status'] = "SUCCESS";
 				$data['userdata'] = $userData;
 				$data['centers']= $allcenters;

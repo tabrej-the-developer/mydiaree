@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add Users | Mykronicle</title>
+    <title>Add Users | Mydiaree</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<script type="text/javascript" src="<?php echo base_url('assets/js/vendor/jquery/jquery.min.js?id=1234'); ?>"></script>
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/font/iconsmind-s/css/iconsminds.css?id=1234" />

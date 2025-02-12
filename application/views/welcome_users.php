@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Welcome to Mykronicle</title>
+	<title>Welcome to Mydiaree</title>
 	<meta name='viewport' content='width=device-width, initial-scale=1'>
 	<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 	<link rel="stylesheet" href="<?php echo base_url('assets/css/login.css'); ?>">

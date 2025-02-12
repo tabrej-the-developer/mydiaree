@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Observation List | Mykronicle</title>
+    <title>Observation List | Mydiaree</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/font/iconsmind-s/css/iconsminds.css?v=1.1.1" />
@@ -237,11 +237,11 @@
                 <?php } }else{ ?>
                 <div class="col">
                     <div class="text-center">
-                        <h6 class="mb-4">Ooops... No Observations Found!</h6>
-                        <p class="mb-0 text-muted text-small mb-0">Error code</p>
-                        <p class="display-1 font-weight-bold mb-5">
-                            200
-                        </p>
+                        <h6 class="mb-4">You don't have any Observations, Create New Observations.....</h6>
+                        <!-- <p class="mb-0 text-muted text-small mb-0">Error code</p> -->
+                        <!-- <p class="display-1 font-weight-bold mb-5"> -->
+                            <!-- 200 -->
+                        <!-- </p> -->
                         <a href="<?= base_url('dashboard'); ?>" class="btn btn-primary btn-lg btn-shadow">GO BACK HOME</a>
                     </div>
                 </div>
