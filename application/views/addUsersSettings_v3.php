@@ -222,7 +222,8 @@
 										<div class="col">
 											<div class="form-group">
 												<label for="dob">Date of Birth</label>
-												<input type="text" class="form-control datepicker" id="dob" name="dob" value="<?= isset($userdata->dob)?$userdata->dob:""; ?>">
+												<input type="text" class="form-control datepicker" id="dob" name="dob" 
+       value="<?= isset($userdata->dob) ? date('d-m-Y', strtotime($userdata->dob)) : ""; ?>">
 											</div>
 										</div>
 									</div>
@@ -424,124 +425,130 @@
 
 		
 			var allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic', 'heif'];
-        var cropper;
-        var selectedFile;
-        var croppedBlob;
+    var cropper;
+    var selectedFile;
+    var croppedBlob;
+    var hasExistingImage = $('#img-holder img').length > 0;
 
-        $("#fileUpload").change(function () {
-            var input = $(this)[0];
-            if (input.files && input.files[0]) {
-                selectedFile = input.files[0];
+    $("#fileUpload").change(function () {
+        var input = $(this)[0];
+        if (input.files && input.files[0]) {
+            selectedFile = input.files[0];
+            hasExistingImage = false;  // Reset flag when new file is selected
 
-                var fileName = selectedFile.name;
-                var fileSize = selectedFile.size / 1024 / 1024; // Convert to MB
-                var fileExt = fileName.split('.').pop().toLowerCase();
+            var fileName = selectedFile.name;
+            var fileSize = selectedFile.size / 1024 / 1024; // Convert to MB
+            var fileExt = fileName.split('.').pop().toLowerCase();
 
-                // Validate file extension
-                if (!allowedExtensions.includes(fileExt)) {
-                    Swal.fire("Invalid File", "Only JPG, JPEG, PNG, GIF, WEBP, HEIC, HEIF images are allowed.", "error");
-                    $(this).val(''); // Clear file input
-                    return;
-                }
-
-                // Validate file size (Max 2MB)
-                if (fileSize > 2) {
-                    Swal.fire("File Too Large", "Image size must be under 2MB.", "error");
-                    $(this).val(''); // Clear file input
-                    return;
-                }
-
-                // Read and preview image
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#img-holder').html('<img id="imageCropper" src="' + e.target.result + '" style="max-width:100%;"/>');
-
-                    // Initialize Cropper
-                    var image = document.getElementById('imageCropper');
-                    if (cropper) {
-                        cropper.destroy();
-                    }
-                    cropper = new Cropper(image, {
-                        aspectRatio: 1, // Square crop
-                        viewMode: 1,
-                        minContainerWidth: 300,
-                        minContainerHeight: 300,
-                    });
-
-                    // Show Crop Button
-                    $("#cropBtn").remove();
-                    $("#img-holder").after('<button type="button" id="cropBtn" class="btn btn-success mt-2">Crop Image</button>');
-                };
-                reader.readAsDataURL(selectedFile);
-            }
-        });
-
-        // Handle Crop
-        $(document).on("click", "#cropBtn", function () {
-            var canvas = cropper.getCroppedCanvas({
-                width: 200,
-                height: 200
-            });
-
-            // Convert to Blob
-            canvas.toBlob(function (blob) {
-                croppedBlob = blob; // Store cropped image for later upload
-
-                // Show preview of cropped image
-                var previewUrl = URL.createObjectURL(blob);
-                $('#img-holder').html('<img src="' + previewUrl + '" width="120px" height="120px"/>');
-
-                // Remove Crop button after cropping
-                $("#cropBtn").remove();
-            }, "image/jpeg");
-        });
-
-        // Handle Form Submission
-        $('#save-staff').on('submit', function (event) {
-            event.preventDefault();
-
-            if (!croppedBlob) {
-                Swal.fire("Error!", "Please crop the image before submitting.", "error");
+            // Validate file extension
+            if (!allowedExtensions.includes(fileExt)) {
+                Swal.fire("Invalid File", "Only JPG, JPEG, PNG, GIF, WEBP, HEIC, HEIF images are allowed.", "error");
+                $(this).val(''); // Clear file input
                 return;
             }
 
-            var formdata = new FormData(this);
-            formdata.append("image", croppedBlob, "cropped-image.jpg");
+            // Validate file size (Max 2MB)
+            if (fileSize > 2) {
+                Swal.fire("File Too Large", "Image size must be under 2MB.", "error");
+                $(this).val(''); // Clear file input
+                return;
+            }
 
-            $.ajax({
-                url: $('#save-staff').attr('action'),
-                type: 'POST',
-                data: formdata,
-                processData: false,
-                contentType: false,
-                beforeSend: function () {
-                    Swal.fire({
-                        title: "Uploading...",
-                        text: "Please wait while we upload your image.",
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
-                },
-                success: function (response) {
-                    Swal.close();
-                    var res = JSON.parse(response);
-                    if (res.Status === "SUCCESS") {
-                        Swal.fire("Success!", res.Message, "success").then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire("Error!", res.Message, "error");
-                    }
-                },
-                error: function () {
-                    Swal.fire("Error!", "Something went wrong. Please try again.", "error");
+            // Read and preview image
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#img-holder').html('<img id="imageCropper" src="' + e.target.result + '" style="max-width:100%;"/>');
+
+                // Initialize Cropper
+                var image = document.getElementById('imageCropper');
+                if (cropper) {
+                    cropper.destroy();
                 }
-            });
-        });
+                cropper = new Cropper(image, {
+                    aspectRatio: 1, // Square crop
+                    viewMode: 1,
+                    minContainerWidth: 300,
+                    minContainerHeight: 300,
+                });
+
+                // Show Crop Button
+                $("#cropBtn").remove();
+                $("#img-holder").after('<button type="button" id="cropBtn" class="btn btn-success mt-2">Crop Image</button>');
+            };
+            reader.readAsDataURL(selectedFile);
+        }
     });
 
+    // Handle Crop
+    $(document).on("click", "#cropBtn", function () {
+        var canvas = cropper.getCroppedCanvas({
+            width: 200,
+            height: 200
+        });
+
+        // Convert to Blob
+        canvas.toBlob(function (blob) {
+            croppedBlob = blob; // Store cropped image for later upload
+
+            // Show preview of cropped image
+            var previewUrl = URL.createObjectURL(blob);
+            $('#img-holder').html('<img src="' + previewUrl + '" width="120px" height="120px"/>');
+
+            // Remove Crop button after cropping
+            $("#cropBtn").remove();
+        }, "image/jpeg");
+    });
+
+    // Handle Form Submission
+    $('#save-staff').on('submit', function (event) {
+        event.preventDefault();
+
+        // Only check for cropped image if a new file was uploaded
+        if (!hasExistingImage && !croppedBlob) {
+            Swal.fire("Error!", "Please crop the image before submitting.", "error");
+            return;
+        }
+
+        var formdata = new FormData(this);
+        
+        // Only append the cropped blob if a new image was uploaded and cropped
+        if (croppedBlob) {
+            formdata.append("image", croppedBlob, "cropped-image.jpg");
+        }
+
+        $.ajax({
+            url: $('#save-staff').attr('action'),
+            type: 'POST',
+            data: formdata,
+            processData: false,
+            contentType: false,
+            beforeSend: function () {
+                Swal.fire({
+                    title: "Uploading...",
+                    text: "Please wait while we upload your image.",
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+            },
+            success: function (response) {
+                Swal.close();
+                var res = JSON.parse(response);
+                if (res.Status === "SUCCESS") {
+                    Swal.fire("Success!", res.Message, "success").then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire("Error!", res.Message, "error");
+                }
+            },
+            error: function () {
+                Swal.fire("Error!", "Something went wrong. Please try again.", "error");
+            }
+        });
+    });
+});
 		
 
 		$(document).on('keyup','#empCode',function(){

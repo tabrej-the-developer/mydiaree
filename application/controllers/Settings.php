@@ -368,6 +368,10 @@ class Settings extends CI_Controller {
 			));
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$server_output = curl_exec($ch);
+			// echo "<pre>";
+			// print_r($server_output); 
+			// echo "</pre>";
+			// exit;
 			//var_dump($server_output); exit;
 			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			

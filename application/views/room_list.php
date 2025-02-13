@@ -151,7 +151,7 @@
                         <?php 
                             
                             
-                            if ($addRoom == 1) {
+                            if ($addRoom == 1) { 
                         ?>
                         <button type="button" class="btn btn-primary btn-lg top-right-button add-room" data-toggle="modal" data-target="#roomModal">ADD NEW</button>
                         <?php } ?>
@@ -207,7 +207,7 @@
                                 <div class="mb-3 d-flex d-flex-custom">
                                     <div class="room-info d-flex d-flex-custom">
                                         <input type="checkbox" class="rooms" id="<?= "check_".$counter; ?>" name="rooms[]" value="<?php echo $room->id; ?>"> &nbsp;
-                                        <a href="<?= base_url('room/getForm?id=' . $room->id); ?>" style="color: <?php echo $room->color; ?>;">
+                                        <a href="<?= base_url('room/getForm?id=' . $room->id. '&centerId='. $defcenter ); ?>" style="color: <?php echo $room->color; ?>;">
                                             <h3 class="card-title">
                                                 <?php echo ucfirst($room->name); ?> <span><?= ($room->status != "Active")?'('.$room->status.')':''; ?></span>
                                             </h3>

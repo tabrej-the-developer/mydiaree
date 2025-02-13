@@ -53,7 +53,9 @@ class Room extends CI_Controller
 
                 if ($loadProg == 1) {
                     $filter_type = ['filter_type' => 'staff','centerid'=>$centerid];
-                    $educators = $this->roomModel->getUser($filter_type);
+                    // $educators = $this->roomModel->getUser($filter_type);
+                    $educators = $this->roomModel->getUser2($filter_type);
+
                     // print_r($user_id);exit;
                     $rooms = [];
                     if($userArr->userType == "Superadmin"){
@@ -164,12 +166,15 @@ class Room extends CI_Controller
 
 
 
-    public function getEducatorsList($userId, $roomId) {
+    public function getEducatorsList($userId, $roomId, $centerId) {
         // Validate user session/token here if needed
         
         // Get all staff users
-        $filter_type = ['filter_type' => 'staff'];
-        $all_educators = $this->roomModel->getUser($filter_type);
+        // $filter_type = ['filter_type' => 'staff'];
+        $filter_type = ['filter_type' => 'staff','centerid'=>$centerId];
+        // $all_educators = $this->roomModel->getUser($filter_type);
+        $all_educators = $this->roomModel->getUser2($filter_type);
+
         
         // Get assigned staff for this room
         $assigned_staff = $this->roomModel->getRoomStaff2($roomId);

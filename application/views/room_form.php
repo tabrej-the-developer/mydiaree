@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/bootstrap.min.css?v=1.1.0" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/perfect-scrollbar.css?v=1.1.0" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/main.css?v=1.1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <style>
         .d-flex-custom{
             align-items: center;
@@ -195,6 +197,7 @@
                         </div>
                         <?php } ?>
                     </div>
+                    
                 </div>
                 <div class="tab-pane fade" id="second" role="tabpanel" aria-labelledby="second-tab">
                     <div class="row">
@@ -290,18 +293,21 @@
                             <input type="text" name="lastname" id="lastname" placeholder="Enter last name" class="form-control" required>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="dob">Date of Birth *</label>
-                            <span class="text-danger error_dob"></span>
-                            <input type="date" name="dob" id="dob" data-date-format="YYYY-MM-DD" value="" class="form-control bs-datepicker" onkeydown="return false" required>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="doj">Date of Join *</label>
-                            <span class="text-danger error_doj"></span>
-                            <input type="date" name="startDate" id="doj" data-date-format="YYYY-MM-DD" value="" class="form-control" onkeydown="return false" required>
-                        </div>
-                    </div> 
+
+                  
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label for="dob">Date of Birth *</label>
+        <span class="text-danger error_dob"></span>
+        <input type="text" name="dob" id="dob" value="" class="form-control date-input" required>
+    </div>
+    <div class="form-group col-md-6">
+        <label for="doj">Date of Join *</label>
+        <span class="text-danger error_doj"></span>
+        <input type="text" name="startDate" id="doj" value="" class="form-control date-input" required>
+    </div>
+</div>
+
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="gender">Gender *</label>
@@ -450,7 +456,9 @@
             $("#rooms-list").empty();
 
             var _childIds = [];
-            var roomId = <?= $_GET['id']; ?>;
+            const urlParams = new URLSearchParams(window.location.search);
+            var roomId = urlParams.get('id');
+           
             var userid = <?= $this->session->userdata('LoginId'); ?>;
 
             $.each($('.child-checkbox:checked'), function(index, val) {
@@ -492,13 +500,27 @@
 
 
     function loadEducators() {
-    const urlParams = new URLSearchParams(window.location.search);
+        const queryString = window.location.search; // e.g., "?id=1251376692&centerId=104"
+    
+    // Create a URLSearchParams object to easily parse the query string
+    const urlParams = new URLSearchParams(queryString);
+    
+    // Extract roomId and centerId
     const roomId = urlParams.get('id');
+    const centerId = urlParams.get('centerId');
+    
+    // Log the values to verify
+    console.log('roomId:', roomId);
+    console.log('centerId:', centerId);
+
 
     $.ajax({
         url: '<?= base_url("room/manageEducators") ?>',
         type: 'GET',
-        data: { roomId: roomId },
+         data: { 
+            roomId: roomId,
+            centerId: centerId 
+        },
         success: function(response) {
             const data = typeof response === 'string' ? JSON.parse(response) : response;
             console.log(data);
@@ -588,6 +610,36 @@ $(document).ready(function() {
 </script>
 
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    flatpickr(".date-input", {
+        dateFormat: "d-m-Y", // Set date format
+        allowInput: true,    // Allow manual typing
+        static: true,        // Ensures the calendar stays near the input
+        appendTo: document.body, // Fixes the positioning inside modals
+    });
 
+    // Auto-format while typing (DD-MM-YYYY)
+    document.querySelectorAll(".date-input").forEach(input => {
+        input.addEventListener("input", function (e) {
+            let value = this.value.replace(/\D/g, ""); // Remove non-numeric characters
+            if (value.length > 2) value = value.slice(0, 2) + "-" + value.slice(2);
+            if (value.length > 5) value = value.slice(0, 5) + "-" + value.slice(5);
+            this.value = value.slice(0, 10); // Max length of 10 chars (DD-MM-YYYY)
+        });
+    });
+});
+
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector("#form-child").addEventListener("submit", function (event) {
+        let button = document.querySelector(".btn-add-child");
+        button.disabled = true;
+        button.innerHTML = "Submitting...";
+    });
+});
+    </script>
 
 </html>

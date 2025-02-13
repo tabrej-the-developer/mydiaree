@@ -426,8 +426,9 @@ class Room extends CI_Controller {
 	public function manageEducators() {
 		if($this->session->has_userdata('LoginId')) {
 			$roomId = $this->input->get('roomId');
+			$centerId = $this->input->get('centerId');
 			
-			$url = BASE_API_URL."/room/getEducatorsList/".$this->session->userdata('LoginId')."/".$roomId;
+			$url = BASE_API_URL."/room/getEducatorsList/".$this->session->userdata('LoginId')."/".$roomId."/".$centerId;
 			
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_URL, $url);

@@ -166,6 +166,33 @@ class roomModel extends CI_Model
         }        
     }
 
+    public function getUser2($filters = [])
+{
+    $this->db->distinct();
+    $this->db->select('u.userid, u.name, u.imageUrl, u.status');
+    $this->db->from('usercenters uc');
+    $this->db->join('users u', 'uc.userid = u.userid');
+
+    if (!empty($filters['centerid'])) {
+        $this->db->where('uc.centerid', $filters['centerid']);
+    }
+
+    if (!empty($filters['filter_type']) && $filters['filter_type'] == 'staff') {
+        $this->db->where('u.userType', 'Staff');
+    }
+
+    if (!empty($filters['exclude_userid'])) {
+        $this->db->where('u.userid !=', $filters['exclude_userid']);
+    }
+
+    if (!empty($filters['order'])) {
+        $this->db->order_by('u.userid', strtoupper($filters['order']));
+    }
+
+    $query = $this->db->get();
+    return $query->result();
+}
+
     public function getUser($data = [])
     {
         $this->load->database();
