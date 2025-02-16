@@ -179,7 +179,7 @@
                                     ?>
                                     <img alt="Profile" src="<?= $img; ?>" class="img-thumbnail border-0 rounded-circle m-4 list-thumbnail align-self-center">
                                 </a>
-                                <div class=" d-flex flex-grow-1 min-width-zero">
+                                <div class=" d-flex flex-grow-1 min-width-zero" style="width:909px;">
                                     <div class="card-body pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
                                         <div class="min-width-zero">
                                             <a href="<?= base_url('room/editChild?id='.$id.'&childId='.$child->id); ?>">
@@ -225,7 +225,7 @@
                                     ?>
                                     <img alt="Profile" src="<?= $image; ?>" class="img-thumbnail border-0 rounded-circle m-4 list-thumbnail align-self-center">
                                 </a>
-                                <div class=" d-flex flex-grow-1 min-width-zero">
+                                <div class=" d-flex flex-grow-1 min-width-zero" style="width:909px;">
                                     <div class="card-body pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
                                         <div class="min-width-zero">
                                             <a href="#">

@@ -18,7 +18,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="split1 right rightCont">
 		<div class="logoMykronicle"><img src="<?php echo base_url('assets/images/MYDIAREE-new-logo.png'); ?>"></div>
 		
-	<div class="midCont">	
+	<div class="midCont" style="max-height:500px;overflow-y:auto;">	
 		<div class="page-sub-title">Choose an account</div>
 		</br>
 		<div class="mainRowRightPart">
