@@ -219,7 +219,7 @@
                                             <i class="simple-icon-options-vertical"></i>
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="dropdown-<?= $counter; ?>">
-                                            <a class="dropdown-item view-room" href="<?= base_url('room/getForm?id=' . $room->id); ?>">View</a>
+                                            <a class="dropdown-item view-room" href="<?= base_url('room/getForm?id=' . $room->id. '&centerId='. $defcenter); ?>">View</a>
                                             <?php if($editRoom == 1){ ?>
                                             <a class="dropdown-item edit-room" href="#!" data-roomid="<?= $room->id; ?>" data-toggle="modal" data-target="#roomModal">Edit</a>
                                             <?php } ?>
