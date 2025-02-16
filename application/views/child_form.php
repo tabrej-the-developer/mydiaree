@@ -66,10 +66,10 @@
                                         <a href="#" style="color: dimgray;">Dashboard</a>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a href="#" style="color: dimgray;">Rooms List</a>
+                                    <a href="<?= base_url('Room/getList?centerid=' . (isset($centerid) ? $centerid : null)); ?>" style="color: dimgray;">Rooms List</a>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a href="#" style="color: dimgray;">View Rooms</a>
+                                        <a href="<?= base_url('Room/getForm?id='.$id.'&centerId='.(isset($centerid) ? $centerid : null)); ?>" style="color: dimgray;">View Rooms</a>
                                     </li>
                                     <li class="breadcrumb-item active" aria-current="page">Edit Child</li>
                                 </ol>
@@ -164,7 +164,7 @@
                                                 </select>
                                             </div>
                                         </div>
-
+<input type="hidden" value="<?= isset($centerid)?$centerid:null; ?>" name="centerId">
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label for="daysAttending">Days Attending *</label>			

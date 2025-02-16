@@ -280,6 +280,7 @@
                 </div>
                 <form action="<?= base_url('Room/addChild'); ?>" id="form-child" method="post" enctype="multipart/form-data" autocomplete="off">
                 <input type="hidden" name="id" value="<?= $_GET['id']; ?>">
+                <input type="hidden" value="<?= isset($centerid)?$centerid:null; ?>" name="centerId">
                 <div class="modal-body">
                     <div class="form-row">
                         <div class="form-group col-md-6">
@@ -392,6 +393,26 @@
 <script>
     const BASE_URL = "<?= base_url(); ?>";
 </script>
+
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get the query string from the URL
+            const queryString = window.location.search;
+            
+            // Create a URLSearchParams object to easily parse the query string
+            const urlParams = new URLSearchParams(queryString);
+            
+            // Extract roomId and centerId
+            const roomId = urlParams.get('id');
+            const centerId = urlParams.get('centerId');
+            
+            // Set values to hidden input fields
+            document.getElementById("roomId").value = roomId || "";
+            document.getElementById("centerId").value = centerId || "";
+        });
+    </script>
+
+
 <script>
     $(document).ready(function(){
         //$('.btn-delete-child').on('click', function() {

@@ -54,7 +54,7 @@ class Room extends CI_Controller {
 			{
 				$this->load->helper('form');
 			    $data = $this->input->post();
-				//print_r($data); exit;
+				// print_r($data); exit;
 				$data['userid'] = $this->session->userdata('LoginId');
 				$data['image'] =($_FILES['file']['tmp_name'])?base64_encode(file_get_contents($_FILES['file']['tmp_name'])):'';
 				$data['imageName'] =($_FILES['file']['name'])?$_FILES['file']['name']:'';
@@ -84,12 +84,12 @@ class Room extends CI_Controller {
 				//echo $httpcode; exit;
 				if($httpcode == 200){
 					$jsonOutput = json_decode($server_output);
-					redirect('room/getForm?id='.$data['id']);
+					redirect('room/getForm?id='.$data['id'].'&centerId='.$data['centerId']);
 				} else if ($httpcode == 401){
-					redirect('room/getForm?id='.$data['id'].'&status=error');
+					redirect('room/getForm?id='.$data['id'].'&centerId='.$data['centerId'].'&status=error');
 				}
 			}else{
-				redirect('room/getForm?id='.$data['id']);
+				redirect('room/getForm?id='.$data['id'].'&centerId='.$data['centerId']);
 			}
 		}else{
 			redirect('welcome');
@@ -129,7 +129,7 @@ class Room extends CI_Controller {
 			    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 				if($httpcode == 200){
 					$jsonOutput = json_decode($server_output);
-					redirect('room/getForm?id='.$_GET['id']);
+					redirect('room/getForm?id='.$_GET['id'].'&centerId='.$data['centerId']);
 				  curl_close($$ch);
 				}
 				else if($httpcode == 401){
