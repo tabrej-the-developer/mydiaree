@@ -172,7 +172,7 @@
 
                        
 
-                        <div class="btn-group mr-1 my-2">
+                        <div class="btn-group mr-1">
                             <?php 
                           
                                 if(empty($rooms)){
