@@ -461,70 +461,155 @@ class Room extends CI_Controller
 
     public function getRoomDetails($user_id, $roomId = null, $order = 'ASC')
     {
-        $headers = $this->input->request_headers();
-        if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
-            $res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
-            $json = json_decode(file_get_contents('php://input'));
-            if ($user_id != null && $res != null && $res->userid == $user_id) {
-
-                if($roomId != null){
-                    $data['room'] = $this->roomModel->getRoom($roomId);
-                }
-
-                if (empty($json->filter_groups) && empty($json->filter_status) && empty($json->filter_gender)) {
-                    $filter_data = [
-                        'filter_room' => $roomId,
-                        'order' => $order,
-                    ];
-                } else {
-                    $filter_data = [
-                        'filter_room' => $roomId,
-                        'filter_groups' => isset($json->filter_groups) ? $json->filter_groups : null,
-                        'filter_status' => $json->filter_status,
-                        'filter_gender' => $json->filter_gender,
-                        'order' => $order
-                    ];
-                }
-
-                $data['roomChilds'] = [];
-
-                if($roomId != null){
-                    $occupancy = [ "Mon"=>0,"Tue"=>0,"Wed"=>0,"Thu"=>0,"Fri"=>0];
-                    $roomChilds = $this->roomModel->getRoomChilds($filter_data);
-                    foreach ($roomChilds as $roomChild) {
-                        $occup = str_split($roomChild->daysAttending);
-                        $occupancy['Mon'] = $occupancy['Mon'] + $occup[0];
-                        $occupancy['Tue'] = $occupancy['Tue'] + $occup[1];
-                        $occupancy['Wed'] = $occupancy['Wed'] + $occup[2];
-                        $occupancy['Thu'] = $occupancy['Thu'] + $occup[3];
-                        $occupancy['Fri'] = $occupancy['Fri'] + $occup[4];
-                        $roomChild->recentobs = $this->roomModel->getRecentObs($roomChild->id);
-                        $observations = $this->roomModel->getChildObs($roomChild->id);
-                        $draft = 0;
-                        $pub = 0;
-                        foreach ($observations as $observation) {
-                            if ($observation->status == 'Published') {
-                                $pub++;
-                            } else {
-                                $draft++;
-                            }
-                        }
-                        $roomChild->draft = $draft;
-                        $roomChild->pub = $pub;
-                        $data['roomChilds'][] = $roomChild;
-                    }
-                    $data['room']->occupancy = $occupancy;
-                }
-                $data['roomStaff'] = $this->roomModel->getRoomStaff($roomId);
-                $data['groups'] = $this->roomModel->getChildGrops();
-                $filter_type = ['filter_type' => 'staff'];
-                $data['users'] = $this->roomModel->getUser($filter_type);
-                $data['Status'] = "SUCCESS";
-                echo json_encode($data);
+        try {
+            $headers = $this->input->request_headers();
+            
+            // Validate headers
+            if (!$this->_validateHeaders($headers)) {
+                $this->_sendErrorResponse(401, 'Invalid or missing headers');
+                return;
             }
-        } else {
-            http_response_code(401);
+    
+            // Validate user
+            $res = $this->LoginModel->getAuthUserId(
+                $headers['X-Device-Id'],
+                $headers['X-Token']
+            );
+            
+            if (!$res || $res->userid != $user_id) {
+                $this->_sendErrorResponse(401, 'Unauthorized access');
+                return;
+            }
+    
+            // Get and validate input data
+            $json = json_decode(file_get_contents('php://input'));
+            if (!$json) {
+                $this->_sendErrorResponse(400, 'Invalid input data');
+                return;
+            }
+    
+            // Get room data
+            $data = [];
+            if ($roomId !== null) {
+                $data['room'] = $this->roomModel->getRoom($roomId);
+                if (!$data['room']) {
+                    $this->_sendErrorResponse(404, 'Room not found');
+                    return;
+                }
+            }
+    
+            // Prepare filter data
+            $filter_data = $this->_prepareFilterData($json, $roomId, $order);
+    
+            // Process room children
+            $data = $this->_processRoomChildren($data, $roomId, $filter_data);
+    
+            // Get additional data
+            $data['roomStaff'] = $this->roomModel->getRoomStaff($roomId);
+            $data['groups'] = $this->roomModel->getChildGrops();
+            $data['users'] = $this->roomModel->getUser(['filter_type' => 'staff']);
+            
+            // Send success response
+            $this->_sendSuccessResponse($data);
+    
+        } catch (Exception $e) {
+            log_message('error', 'Error in getRoomDetails: ' . $e->getMessage());
+            $this->_sendErrorResponse(500, 'Internal server error');
         }
+    }
+    
+    // Helper methods for API Controller
+    private function _validateHeaders($headers)
+    {
+        return $headers !== null && 
+               array_key_exists('X-Device-Id', $headers) && 
+               array_key_exists('X-Token', $headers);
+    }
+    
+    private function _prepareFilterData($json, $roomId, $order)
+    {
+        if (empty($json->filter_groups) && 
+            empty($json->filter_status) && 
+            empty($json->filter_gender)) {
+            return [
+                'filter_room' => $roomId,
+                'order' => $order,
+            ];
+        }
+    
+        return [
+            'filter_room' => $roomId,
+            'filter_groups' => isset($json->filter_groups) ? 
+                $json->filter_groups : null,
+            'filter_status' => $json->filter_status,
+            'filter_gender' => $json->filter_gender,
+            'order' => $order
+        ];
+    }
+    
+    private function _processRoomChildren($data, $roomId, $filter_data)
+    {
+        $data['roomChilds'] = [];
+        
+        if ($roomId !== null) {
+            $occupancy = ["Mon"=>0, "Tue"=>0, "Wed"=>0, "Thu"=>0, "Fri"=>0];
+            $roomChilds = $this->roomModel->getRoomChilds($filter_data);
+            
+            foreach ($roomChilds as $roomChild) {
+                $this->_updateOccupancy($occupancy, $roomChild);
+                $this->_processChildObservations($roomChild);
+                $data['roomChilds'][] = $roomChild;
+            }
+            
+            $data['room']->occupancy = $occupancy;
+        }
+        
+        return $data;
+    }
+    
+    private function _updateOccupancy(&$occupancy, $roomChild)
+    {
+        $occup = str_split($roomChild->daysAttending);
+        $days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+        
+        foreach ($days as $index => $day) {
+            $occupancy[$day] += $occup[$index];
+        }
+    }
+    
+    private function _processChildObservations($roomChild)
+    {
+        $roomChild->recentobs = $this->roomModel->getRecentObs($roomChild->id);
+        $observations = $this->roomModel->getChildObs($roomChild->id);
+        
+        $draft = 0;
+        $pub = 0;
+        
+        foreach ($observations as $observation) {
+            if ($observation->status == 'Published') {
+                $pub++;
+            } else {
+                $draft++;
+            }
+        }
+        
+        $roomChild->draft = $draft;
+        $roomChild->pub = $pub;
+    }
+    
+    private function _sendErrorResponse($code, $message)
+    {
+        http_response_code($code);
+        echo json_encode([
+            'Status' => 'ERROR',
+            'Message' => $message
+        ]);
+    }
+    
+    private function _sendSuccessResponse($data)
+    {
+        $data['Status'] = 'SUCCESS';
+        echo json_encode($data);
     }
 
     public function getChildForm($user_id, $roomId = null, $childId = null)

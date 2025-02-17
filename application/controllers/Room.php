@@ -344,81 +344,134 @@ class Room extends CI_Controller {
 
 	public function getForm()
 	{
-	   if($this->session->has_userdata('LoginId')){
-		    $id=isset($_GET['id'])?$_GET['id']:null;
-			$order=isset($_GET['order'])?$_GET['order']:'ASC';
-			$type=isset($_GET['type'])?$_GET['type']:'';
-			if(!empty($_GET['filter_groups']))
-			{
-				$filter_groups=explode(",",$_GET['filter_groups']);
-			}else{
-				$filter_groups=array();
-			}
-			$data['filter_groups']=$filter_groups;
+		if (!$this->session->has_userdata('LoginId')) {
+			redirect('welcome');
+			return;
+		}
+	
+		try {
+			$id = $this->input->get('id', TRUE);
+			$order = $this->input->get('order', TRUE) ?? 'ASC';
+			$type = $this->input->get('type', TRUE) ?? '';
 			
-			if(!empty($_GET['filter_status']))
-			{
-				$filter_status=explode(",",$_GET['filter_status']);
-			}else{
-				$filter_status=array();
-			}
-			$data['filter_status']=$filter_status;
+			// Process filter groups
+			$data['filter_groups'] = !empty($_GET['filter_groups']) ? 
+				explode(",", $_GET['filter_groups']) : [];
 			
-			if(!empty($_GET['filter_gender']))
-			{
-				$filter_gender=explode(",",$_GET['filter_gender']);
-			}else{
-				$filter_gender=array();
-			}
-			$data['filter_gender']=$filter_gender;
-
-		    $url = BASE_API_URL."room/getRoomDetails/".$this->session->userdata('LoginId')."/".$id."/".$order;
-			$ch = curl_init($url);
-			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-			curl_setopt($ch, CURLOPT_URL, $url);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-				'X-Device-Id: '.$this->session->userdata('X-Device-Id'),
-				'X-Token: '.$this->session->userdata('AuthToken')
-			));
-			$server_output = curl_exec($ch);
-			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-			curl_close($ch);
-			if($httpcode == 200){
-				$jsonOutput=json_decode($server_output);
-				$data=$jsonOutput;
-				$data->centerid = $jsonOutput->room->centerid;
-				$data->id=$id;
-				$data->type=$type;
-				$data->filter_groups=$filter_groups;
-				$data->filter_status=$filter_status;
-				$data->filter_gender=$filter_gender;
-				$url='';
-				if ($order == 'ASC') {
-					$url .= '&order=DESC';
-					$data->order='';
-				} else {
-					$url .= '&order=ASC';
-					$data->order='&order=DESC';
-				}
+			// Process filter status
+			$data['filter_status'] = !empty($_GET['filter_status']) ? 
+				explode(",", $_GET['filter_status']) : [];
+			
+			// Process filter gender
+			$data['filter_gender'] = !empty($_GET['filter_gender']) ? 
+				explode(",", $_GET['filter_gender']) : [];
+	
+			$url = BASE_API_URL . "room/getRoomDetails/" . 
+				   $this->session->userdata('LoginId') . "/" . $id . "/" . $order;
+	
+			$headers = [
+				'X-Device-Id: ' . $this->session->userdata('X-Device-Id'),
+				'X-Token: ' . $this->session->userdata('AuthToken')
+			];
+	
+			$response = $this->_makeApiRequest($url, $data, $headers);
+	
+			if ($response['success']) {
+				$jsonOutput = $response['data'];
 				
-				if($type)
-				{
-					$url.='&type=filter';
-				}
+				// Prepare view data
+				$viewData = $this->_prepareViewData($jsonOutput, $id, $type, 
+					$data['filter_groups'], $data['filter_status'], 
+					$data['filter_gender'], $order);
 				
-				$data->sort_name=base_url('room/getForm?id='.$id.$url);
-			    $this->load->view('room_form',$data);
+				$this->load->view('room_form', $viewData);
+			} else {
+				// Handle different error types
+				switch ($response['code']) {
+					case 401:
+						redirect('welcome');
+						break;
+					case 404:
+						show_error('Room not found', 404);
+						break;
+					default:
+						show_error($response['message'], 500);
+						break;
+				}
 			}
-			else if($httpcode == 401){
-				redirect('welcome');
-			}
-			
-	   }else{
-		redirect('welcome');
-	   }	
+		} catch (Exception $e) {
+			log_message('error', 'Error in getForm: ' . $e->getMessage());
+			show_error('An unexpected error occurred', 500);
+		}
 	}
+	
+	// Helper method for API requests
+	private function _makeApiRequest($url, $data, $headers)
+	{
+		$ch = curl_init($url);
+		
+		curl_setopt_array($ch, [
+			CURLOPT_POST => 1,
+			CURLOPT_POSTFIELDS => json_encode($data),
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_HTTPHEADER => $headers,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_CONNECTTIMEOUT => 10
+		]);
+	
+		$server_output = curl_exec($ch);
+		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		
+		if (curl_errno($ch)) {
+			curl_close($ch);
+			return [
+				'success' => false,
+				'code' => 500,
+				'message' => 'Curl error: ' . curl_error($ch)
+			];
+		}
+		
+		curl_close($ch);
+		
+		return [
+			'success' => $httpcode === 200,
+			'code' => $httpcode,
+			'data' => json_decode($server_output),
+			'message' => $httpcode !== 200 ? 'API request failed' : ''
+		];
+	}
+	
+	// Helper method to prepare view data
+	private function _prepareViewData($jsonOutput, $id, $type, $filter_groups, 
+		$filter_status, $filter_gender, $order)
+	{
+		$data = $jsonOutput;
+		$data->centerid = $jsonOutput->room->centerid;
+		$data->id = $id;
+		$data->type = $type;
+		$data->filter_groups = $filter_groups;
+		$data->filter_status = $filter_status;
+		$data->filter_gender = $filter_gender;
+		
+		// Prepare sorting URL
+		$url = '';
+		if ($order == 'ASC') {
+			$url .= '&order=DESC';
+			$data->order = '';
+		} else {
+			$url .= '&order=ASC';
+			$data->order = '&order=DESC';
+		}
+		
+		if ($type) {
+			$url .= '&type=filter';
+		}
+		
+		$data->sort_name = base_url('room/getForm?id=' . $id . $url);
+		
+		return $data;
+	}
+	
 
 
 	
