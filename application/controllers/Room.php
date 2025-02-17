@@ -388,9 +388,6 @@ class Room extends CI_Controller {
 			if($httpcode == 200){
 				$jsonOutput=json_decode($server_output);
 				$data=$jsonOutput;
-				echo "<pre>";
-				print_r($data);
-				 die;
 				$data->centerid = $jsonOutput->room->centerid;
 				$data->id=$id;
 				$data->type=$type;
