@@ -404,7 +404,7 @@ class Room extends CI_Controller {
 			show_error('An unexpected error occurred', 500);
 		}
 	}
-	
+	   
 	// Helper method for API requests
 	private function _makeApiRequest($url, $data, $headers)
 	{

@@ -540,7 +540,7 @@ class Room extends CI_Controller
         return [
             'filter_room' => $roomId,
             'filter_groups' => isset($json->filter_groups) ? 
-                $json->filter_groups : null,
+                $json->filter_groups : null,    
             'filter_status' => $json->filter_status,
             'filter_gender' => $json->filter_gender,
             'order' => $order
@@ -584,7 +584,7 @@ class Room extends CI_Controller
         
         $draft = 0;
         $pub = 0;
-        
+          
         foreach ($observations as $observation) {
             if ($observation->status == 'Published') {
                 $pub++;
