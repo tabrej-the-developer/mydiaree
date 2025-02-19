@@ -537,8 +537,8 @@ class Settings extends CI_Controller {
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
 			if($json != null && $res != null && $res->userid == $json->userid){
-				$parentStats = $this->SettingsModel->getParentStats();
-				$parents = $this->SettingsModel->getParentDetails();
+				$parentStats = $this->SettingsModel->getUserStatsParent($json->centerid);
+				$parents = $this->SettingsModel->getCenterUsersParent($json->centerid,NULL,NULL);
 				$data['Status'] = "SUCCESS";
 				$data['parentStats'] = $parentStats;
 				$data['parents'] = $parents;
@@ -568,7 +568,13 @@ class Settings extends CI_Controller {
 					$parentData = $this->SettingsModel->getParentDetails($recordId);
 					$parentData->children = $this->SettingsModel->getParentChild($recordId);
 				}
-				$children = $this->SettingsModel->getChildren();
+				// $children = $this->SettingsModel->getChildren();
+				if($json->superadmin == 1){
+					$children = $this->SettingsModel->getChildren2($json->userid);
+				}else{
+					$children = $this->SettingsModel->getChildren3($json->userid);
+				}
+				
 				$data['Status'] = "SUCCESS";
 				$data['children'] = $children;
 				if (isset($parentData)) {
@@ -600,9 +606,13 @@ class Settings extends CI_Controller {
 					$this->SettingsModel->updateParent($json);
 					$recordId = $json->recordId;
 					$this->SettingsModel->removeParentRelations($json->recordId);
+					$this->SettingsModel->removeUserCenterMapping($recordId);
 				}else{
 					$recordId = $this->SettingsModel->saveParent($json);
 				}
+
+				$this->SettingsModel->addUserCenterMapping($recordId, $json->centerid);
+
 
 				foreach ($json->relation as $relation => $rel) {
 					$this->SettingsModel->addRelation($rel->childid,$recordId,$rel->relation);

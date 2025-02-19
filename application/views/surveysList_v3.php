@@ -100,9 +100,9 @@
                 ?>
                 <div class="col">
                     <div class="text-center">
-                        <h6 class="mb-4">Ooops... looks like we don't have enough data!</h6>
-                        <p class="mb-0 text-muted text-small mb-0">Error code</p>
-                        <p class="display-1 font-weight-bold mb-5"> 200 </p>
+                        <h6 class="mb-4">Don't have any Survey Data..... Create Add New</h6>
+                        <!-- <p class="mb-0 text-muted text-small mb-0">Error code</p>
+                        <p class="display-1 font-weight-bold mb-5"> 200 </p> -->
                         <a href="<?= base_url('dashboard'); ?>" class="btn btn-primary btn-lg btn-shadow">GO BACK HOME</a>
                     </div>
                 </div>

@@ -80,6 +80,25 @@ class SettingsModel extends CI_Model {
 		return $data;
 	}
 
+
+	public function getUserStatsParent($centerid=NULL)
+	{
+		$total_staff_sql = "SELECT * FROM `users` WHERE userType = 'Parent' AND userid IN (SELECT DISTINCT(userid) FROM `usercenters` WHERE centerid = $centerid)";
+		$totalParents = $this->db->query($total_staff_sql);
+
+		$active_users_sql = "SELECT * FROM `users` WHERE userType = 'Parent' AND status = 'ACTIVE' AND userid IN (SELECT DISTINCT(userid) FROM `usercenters` WHERE centerid = $centerid)";
+		$activeParents = $this->db->query($active_users_sql);
+
+		$inactive_users_sql = "SELECT * FROM `users` WHERE userType = 'Parent' AND status = 'IN-ACTIVE' AND userid IN (SELECT DISTINCT(userid) FROM `usercenters` WHERE centerid = $centerid)";
+		$inactiveParents = $this->db->query($inactive_users_sql);
+
+		$pending_users_sql = "SELECT * FROM `users` WHERE userType = 'Parent' AND status = 'PENDING' AND userid IN (SELECT DISTINCT(userid) FROM `usercenters` WHERE centerid = $centerid)";
+		$pendingParents = $this->db->query($pending_users_sql);
+
+		$data = ["totalParents"=>$totalParents->num_rows(),"activeParents"=>$activeParents->num_rows(),"inactiveParents"=>$inactiveParents->num_rows(),"pendingParents"=>$pendingParents->num_rows()];
+		return $data;
+	}
+
 	public function getUserDetails($data)
 	{	
 		$groups = "";
@@ -261,6 +280,27 @@ class SettingsModel extends CI_Model {
 		return $query->result();
 	}
 
+
+
+
+	public function getCenterUsersParent($centerid='', $userid='', $order=NULL)
+	{
+		if (empty($userid)) {
+			$sql = "SELECT DISTINCT(u.userid), u.name, u.imageUrl, u.status, u.dob FROM `usercenters` uc INNER JOIN `users` u ON uc.userid = u.userid WHERE uc.centerid = $centerid AND u.userType='Parent'";
+		} else {
+			$sql = "SELECT DISTINCT(u.userid), u.name, u.imageUrl, u.status, u.dob FROM `usercenters` uc INNER JOIN `users` u ON uc.userid = u.userid WHERE uc.centerid = $centerid AND u.userType='Parent' AND u.userid != $userid";
+		}
+
+		if($order != NULL) {
+			$sql .= " ORDER BY u.userid " . strtoupper($order);
+		}
+
+		$query = $this->db->query($sql);
+		return $query->result();
+	}
+
+
+
 	public function getPermissionColumns()
 	{
 		$sql = "SELECT `COLUMN_NAME` AS columns FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='Mykronicle' AND `TABLE_NAME`='permissions'";
@@ -403,6 +443,50 @@ class SettingsModel extends CI_Model {
 		return $query->result();
 	}
 
+	public function getChildren2($adminId)
+	{
+		// Select specific columns
+		$this->db->select('id, name');
+	
+		// Add a WHERE clause to filter by createdBy
+		$this->db->where('createdBy', $adminId);
+	
+		// Execute the query
+		$query = $this->db->get("child");
+	
+		// Return the result as an array of objects
+		return $query->result();
+	}
+
+	public function getChildren3($adminId)
+{
+    // Step 1: Get all roomid values from room_staff where staffid = $adminId
+    $this->db->select('roomid');
+    $this->db->where('staffid', $adminId);
+    $room_staff_query = $this->db->get('room_staff');
+
+    // Extract roomid values into an array
+    $room_ids = array();
+    if ($room_staff_query->num_rows() > 0) {
+        foreach ($room_staff_query->result() as $row) {
+            $room_ids[] = $row->roomid;
+        }
+    }
+
+    // If no roomids are found, return an empty array
+    if (empty($room_ids)) {
+        return array();
+    }
+
+    // Step 2: Get all children from the child table where room matches any roomid
+    $this->db->select('id, name');
+    $this->db->where_in('room', $room_ids); // Use where_in to match any roomid
+    $child_query = $this->db->get('child');
+
+    // Return the result as an array of objects
+    return $child_query->result();
+}
+
 	public function getParentChild($parentId)
 	{
 		$query = $this->db->query("SELECT * FROM `childparent` WHERE parentid = $parentId");
@@ -426,6 +510,23 @@ class SettingsModel extends CI_Model {
 		$insert_id = $this->db->insert_id();
 		return $insert_id;
 	}
+
+
+	public function addUserCenterMapping($userid, $centerid)
+{
+    $data = [
+        'userid' => $userid,
+        'centerid' => $centerid
+    ];
+    $this->db->insert('usercenters', $data);
+}
+
+// Method to remove user-center mapping
+public function removeUserCenterMapping($userid)
+{
+    $this->db->where('userid', $userid);
+    $this->db->delete('usercenters');
+}
 
 	public function updateParent($data)
 	{

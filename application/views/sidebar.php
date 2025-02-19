@@ -44,7 +44,7 @@
             <button class="btn btn-empty p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span>
                     <!-- <img alt="Profile Picture" src="<?= base_url(); ?>assets/v3/img/profiles/l-1.jpg" /> -->
-                    <img alt="Profile Picture" src="<?= base_url(); ?>api/assets/media/<?php echo $this->session->userdata('ImgUrl'); ?>" style="width: 80px !important; margin-right: 10px !important;border-radius:0px !important;margin-left:0px !important;" />
+                    <img alt="Profile Picture" src="<?= base_url(); ?>api/assets/media/<?php echo $this->session->userdata('ImgUrl'); ?>" style="margin-right: 10px !important;border-radius:0px !important;margin-left:0px !important;" />
                 </span>
                 <span class="name"><?php echo $this->session->userdata('Name');?></span>
             </button>

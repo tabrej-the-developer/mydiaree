@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/select2-bootstrap.min.css" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/bootstrap-datepicker3.min.css" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/main.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         .list-thumbnail{
             height: 150px;
@@ -47,6 +48,23 @@
             cursor: pointer;
         }
     </style>
+    <style>
+        .roomEducators {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between images */
+}
+
+.educator-img {
+    width: 40px; /* Adjust size as needed */
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover; /* Ensures image fills the circle */
+    border: 2px solid #ddd; /* Optional: Border around images */
+}
+
+        </style>
 </head>
 
 <body id="app-container" class="menu-default show-spinner">
@@ -246,12 +264,22 @@
                                         <i class="iconsminds-reddit"></i>
                                         <?php echo sprintf("%02d", count($room->childs)); ?> Children
                                     </div>
+                                    <div class="roomEducators">
+                                    <i class="fa-solid fa-users-viewfinder"></i>Educators
+        <?php if (!empty($room->educators)) : ?>
+            <?php foreach ($room->educators as $educator) : ?>
+                <img src="<?php echo base_url("api/assets/media/" . $educator->imageUrl); ?>" 
+                     alt="Educator" class="educator-img">
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div><br>
                                     <div class="roomLeader" >
                                         <i class="simple-icon-people"></i>
                                        
                                         <?php echo $room->userName ? ucfirst($room->userName) : ''; ?> (Lead)
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>

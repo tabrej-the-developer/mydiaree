@@ -70,6 +70,8 @@ class Room extends CI_Controller
                         $filter_data = ['filter_room' => $room->id];
                         $childs = $this->roomModel->getRoomChilds($filter_data);
                         $room->childs = $childs;
+                        $room->educators = $this->roomModel->getEducatorsByRoomId($room->id);
+
                     }
                     $data['Status'] = 'SUCCESS';
                     $data['rooms'] = $rooms;

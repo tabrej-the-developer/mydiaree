@@ -67,6 +67,8 @@
 												<input type="text" class="form-control" id="name" name="name" value="<?php echo isset($parents->name)?$parents->name:""; ?>">
 											</div>
 										</div>
+										<input type="hidden" name="centerid" value="<?php echo $centerid; ?>">
+
 										<div class="col-md-4">
 											<div class="form-group">
 												<label for="Gender">Gender</label>
@@ -111,7 +113,11 @@
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<label for="password">Password</label>
+											<?php if (isset($_GET['recordId'])) { ?>
+												<label for="password">Password -<span style="color:green;">Optional (Fill only if you want to change Password otherwise remain Empty)</span></label>
+												<?php }else{ ?>
+													<label for="password">Password</label>
+													<?php } ?>
 												<input type="text" class="form-control" id="password" name="password" value="">
 											</div>
 										</div>

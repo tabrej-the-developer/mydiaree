@@ -345,6 +345,10 @@ class Settings extends CI_Controller {
 				$data['order'] = NULL;
 			}
 
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
+
 			// if (isset($_POST['filter'])) {
 			// 	if (isset($_POST['groups'])) {
 			// 		$data['groups'] = $_POST['groups'];
@@ -768,7 +772,24 @@ class Settings extends CI_Controller {
 	{
 		if ($this->session->has_userdata("LoginId")) {
 
+			// if($this->session->userdata("UserType") != "Superadmin" ){
+			// 	redirect('Welcome');
+			// }
+			if(isset($_GET['centerid'])){
+				$get = $this->input->get();
+				$centerid = $get['centerid'];
+			}else{
+				$center = $this->session->userdata("centerIds");
+				$centerid = $center[0]->id;
+			}
+			$data['centerid'] = $centerid;
+
 			$data['userid'] = $this->session->userdata("LoginId");
+
+			// echo "<pre>";
+			// print_r($data);
+			// exit;
+
 			if (isset($_GET["order"])) {
 				$data['order'] = $_GET["order"];
 			}
@@ -786,7 +807,11 @@ class Settings extends CI_Controller {
 			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			if($httpcode == 200){
 				$data = json_decode($server_output);
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
 				curl_close ($ch);
+				$data->centerid = $centerid;
 				$this->load->view('parentSettings_v3',$data);
 			} else if($httpcode == 401){
 				return 'error';
@@ -803,7 +828,24 @@ class Settings extends CI_Controller {
 			if (isset($_GET['recordId'])) {
 				$data['recordId'] = $_GET['recordId'];
 			}
+
+			 // Get the centerid from the URL query string
+			 $centerid = $this->input->get('centerid');
+
+			 // Pass the centerid to the view
+			 $data['centerid'] = $centerid;
+
+			if($this->session->userdata("UserType") != "Superadmin" ){
+				$data['superadmin'] = 0;
+			}else{
+                $data['superadmin'] = 1;
+			}
+
 			$data['userid'] = $this->session->userdata("LoginId");
+			// echo "<pre>";
+			// 	print_r($data);
+			// 	exit;
+			
 			$url = BASE_API_URL.'Settings/getParentDetails';
 
 			$ch = curl_init($url);
@@ -820,6 +862,10 @@ class Settings extends CI_Controller {
 			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			if($httpcode == 200){
 				$data = json_decode($server_output);
+				$data->centerid = $centerid;
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
 				curl_close ($ch);
 				$this->load->view('addParentSettings_v3',$data);
 			}
@@ -827,6 +873,7 @@ class Settings extends CI_Controller {
 			redirect("Welcome");
 		}
 	}
+	
 	public function saveParentDetails()
 	{
 		if ($this->session->has_userdata("LoginId")) {
@@ -843,6 +890,8 @@ class Settings extends CI_Controller {
 			$data = $_POST;
 			$data['relation'] = $relation;
 			$data['userid'] = $this->session->userdata("LoginId");
+			// print_r($data);
+			// exit;
 			$url = BASE_API_URL.'Settings/saveParentDetails';
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_URL,$url);
@@ -867,6 +916,7 @@ class Settings extends CI_Controller {
 			redirect("Welcome");
 		}
 	}
+
 	public function childGroups()
 	{
 		if ($this->session->has_userdata("LoginId")) {

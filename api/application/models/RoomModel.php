@@ -385,6 +385,21 @@ public function getRoomsByUserId($userid, $centerid, $filter_name = null)
         return $query->result();
     }
 
+
+    public function getEducatorsByRoomId($room_id) {
+        $this->load->database();
+    
+        $sql = "SELECT users.userid, users.name, users.gender, users.imageUrl 
+                FROM room_staff 
+                LEFT JOIN users ON users.userid = room_staff.staffid 
+                WHERE room_staff.roomid = ?";
+    
+        $query = $this->db->query($sql, [$room_id]);
+    
+        return !empty($query->result()) ? $query->result() : []; // Returns an empty array if no data
+    }
+    
+
     public function getRoomStaff($id)
     {
         $this->load->database();

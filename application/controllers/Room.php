@@ -66,6 +66,9 @@ class Room extends CI_Controller {
 				$fri = isset($data['fri'])?$data['fri']:"0";
 
 				$data['daysAttending'] = $mon.$tue.$wed.$thu.$fri;
+
+				// print_r($data);
+				// exit;
 				
 				$url = BASE_API_URL.'room/createChild';
 				$ch = curl_init($url);
@@ -609,6 +612,9 @@ class Room extends CI_Controller {
 				$child_arr = json_decode($childData);
 				$data->child_arr = $child_arr->records;
 				$data->centerid = $jsonOutput->centerid;
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
 			    $this->load->view('child_form',$data);
 			}
 			else if($httpcode == 401){

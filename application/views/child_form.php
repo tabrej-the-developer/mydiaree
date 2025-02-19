@@ -168,13 +168,38 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label for="daysAttending">Days Attending *</label>			
-                                                <div class="flexCheck">
-                                                    <input type="checkbox" name="mon" value="1" id="Monday" checked><label for="Monday">&nbsp;Monday</label>&nbsp;&nbsp;
-                                                    <input type="checkbox" name="tue" value="1" id="Tuesday" checked><label for="Tuesday">&nbsp;Tuesday</label>&nbsp;&nbsp;
-                                                    <input type="checkbox" name="wed" value="1" id="Wednesday" checked><label for="Wednesday">&nbsp;Wednesday</label>&nbsp;&nbsp;
-                                                    <input type="checkbox" name="thu" value="1" id="Thursday" checked><label for="Thursday">&nbsp;Thursday</label>&nbsp;&nbsp;
-                                                    <input type="checkbox" name="fri" value="1" id="Friday" checked><label for="Friday">&nbsp;Friday</label>&nbsp;&nbsp;
-                                                </div>
+                                               
+                                                <?php
+
+                                                $days = str_split($child->daysAttending);
+
+// Assign each day to an index
+$daysMap = [
+    'mon' => isset($days[0]) && $days[0] == '1',
+    'tue' => isset($days[1]) && $days[1] == '1',
+    'wed' => isset($days[2]) && $days[2] == '1',
+    'thu' => isset($days[3]) && $days[3] == '1',
+    'fri' => isset($days[4]) && $days[4] == '1',
+];
+?>
+
+<div class="flexCheck">
+    <input type="checkbox" name="mon" value="1" id="Monday" <?= $daysMap['mon'] ? 'checked' : '' ?>>
+    <label for="Monday">&nbsp;Monday</label>&nbsp;&nbsp;
+
+    <input type="checkbox" name="tue" value="1" id="Tuesday" <?= $daysMap['tue'] ? 'checked' : '' ?>>
+    <label for="Tuesday">&nbsp;Tuesday</label>&nbsp;&nbsp;
+
+    <input type="checkbox" name="wed" value="1" id="Wednesday" <?= $daysMap['wed'] ? 'checked' : '' ?>>
+    <label for="Wednesday">&nbsp;Wednesday</label>&nbsp;&nbsp;
+
+    <input type="checkbox" name="thu" value="1" id="Thursday" <?= $daysMap['thu'] ? 'checked' : '' ?>>
+    <label for="Thursday">&nbsp;Thursday</label>&nbsp;&nbsp;
+
+    <input type="checkbox" name="fri" value="1" id="Friday" <?= $daysMap['fri'] ? 'checked' : '' ?>>
+    <label for="Friday">&nbsp;Friday</label>&nbsp;&nbsp;
+</div>
+
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <img class="text-left rounded-circle" onClick="updImg();" id="blah"  style="height: 110.92px;width: 103px;" src="<?php if(isset($child->imageUrl) && $child->imageUrl) {echo $child->imageUrl; } else { echo base_url('assets/images/icons/uploadimage.png'); } ?>">

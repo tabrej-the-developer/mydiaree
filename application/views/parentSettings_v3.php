@@ -124,11 +124,53 @@
 
 <body id="app-container" class="menu-default show-spinner">
 <?php $this->load->view('sidebar'); ?> 
-	<main>
+<main data-centerid="<?= $centerid; ?>">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
                     <h1>Parent Settings</h1>
+
+					<div class="text-zero top-right-button-container d-flex flex-row">
+                        <div class="btn-group mr-1">
+                            <?php 
+                                $dupArr = [];
+                                $centersList = $this->session->userdata("centerIds");
+                                if (empty($centersList)) {
+                            ?>
+                            <div class="btn btn-outline-primary btn-lg dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> EMPTY CENTER </div>
+                            <?php
+                                }else{
+                                    if (isset($_GET['centerid'])) {
+                                        foreach($centersList as $key => $center){
+                                            if ( ! in_array($center, $dupArr)) {
+                                                if ($_GET['centerid']==$center->id) {
+                            ?>
+                            <div class="btn btn-outline-primary btn-lg dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <?= strtoupper($center->centerName); ?> </div>
+                            <?php
+                                                }
+                                            }
+                                            array_push($dupArr, $center);
+                                        }
+                                    } else {
+                            ?>
+                            <div class="btn btn-outline-primary btn-lg dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <?= strtoupper($centersList[0]->centerName); ?> </div>
+                            <?php
+                                    }
+                                }
+
+                                if (!empty($centersList)) {
+                            ?>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <?php foreach($centersList as $key => $center){ ?>
+                                    <a class="dropdown-item" href="<?= current_url() . '?centerid=' . $center->id; ?>">
+                                        <?= strtoupper($center->centerName); ?>
+                                    </a>
+                                <?php } ?>
+                            </div>
+                            <?php } ?>
+                        </div>
+	                </div>
+
                     <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
                         <ol class="breadcrumb pt-0">
                             <li class="breadcrumb-item">
@@ -205,7 +247,7 @@
 				              		<img src="<?php echo base_url("assets/images/icons/sort.svg"); ?>" alt="sort">
 				            	</div>
 				          	</a>
-				          	<a href="<?= base_url("Settings/addParent"); ?>" class="btn btn-primary">
+				          	<a href="<?= base_url("Settings/addParent") . '?centerid=' . $centerid; ?>" class="btn btn-primary">
 				          		<span class="simple-icon-plus"></span> Add Parent
 				          	</a>
 				        </div>
@@ -218,10 +260,10 @@
 				<?php foreach ($parents as $key => $pobj) { ?>
 				<div class="col-md-4">
 					<div class="card d-flex flex-row mb-4">
-		                <a class="d-flex" href="<?= base_url("Settings/addParent")."?recordId=".$pobj->userid; ?>">
+		                <a class="d-flex" href="<?= base_url("Settings/addParent")."?recordId=".$pobj->userid."&centerid=".$centerid; ?>">
 		                	<?php 
 								if (empty($pobj->imageUrl)) {
-									$image = "https://via.placeholder.com/120x120.png?text=No+Image";
+									$image = "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png";
 								} else {
 									$image = base_url("api/assets/media/").$pobj->imageUrl;
 								}
@@ -231,7 +273,7 @@
 		                <div class="d-flex flex-grow-1 min-width-zero">
 		                    <div class="card-body pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
 		                        <div class="min-width-zero">
-		                            <a href="<?= base_url("Settings/addParent")."?recordId=".$pobj->userid; ?>">
+		                            <a href="<?= base_url("Settings/addParent")."?recordId=".$pobj->userid."&centerid=".$centerid; ?>">
 		                                <p class="list-item-heading mb-1 truncate"><?= ucwords(strtolower($pobj->name)); ?></p>
 		                            </a>
 		                            <ul class="list-unstyled">
