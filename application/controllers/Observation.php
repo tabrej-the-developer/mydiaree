@@ -1819,6 +1819,7 @@ class Observation extends CI_Controller {
 				$centerid = $cen[0]->id;
 			}
 
+			
 			// echo $centerid;die;
 			// if ($this->session->userdata('UserType')!="Parent") {
 			// 	if (isset($_GET['centerid'])) {
@@ -1831,6 +1832,8 @@ class Observation extends CI_Controller {
 
 			if($_SERVER['REQUEST_METHOD']=='POST')
 			{
+				
+				
 				$url1='';
 				$this->load->helper('form');
 				$data=[];
@@ -2102,6 +2105,8 @@ class Observation extends CI_Controller {
 
 	public function getNewForm($get_child=NULL)
 	{
+
+	
 		if($this->session->has_userdata('LoginId')){
 		    $data['userid'] = $this->session->userdata('LoginId');
 		    $userid = $this->session->userdata('LoginId');
@@ -2115,12 +2120,19 @@ class Observation extends CI_Controller {
 
 			if ($this->session->userdata('UserType')!="Parent") {
 				$data['centerid'] = $centerid;
+				// print_r($data['centerid']);
+				// exit;
 		    	$url = BASE_API_URL . 'observation/getChildren?centerId='.$data['centerid'].'&userid='.$data['userid'];
 			}else{				
 				$data['parentid'] = $this->session->userdata('LoginId');
 		    	$url = BASE_API_URL . 'observation/getChildren?parentId='.$data['parentid'].'&userid='.$data['userid'];
 			}
+           
+$centerid = 1;
 
+
+			// print_r($centerid);
+			// 	exit;
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_URL,$url);
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
@@ -2130,6 +2142,9 @@ class Observation extends CI_Controller {
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$server_output = curl_exec($ch);
 			$apidata = json_decode($server_output);
+			// echo "<pre>";
+			// print_r($apidata);
+			// exit;
 			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);			
 			if($httpcode == 200){
 				curl_close($ch);
@@ -2150,7 +2165,10 @@ class Observation extends CI_Controller {
 				$data['dev_sub_activites']=$this->getDevelopmentalMilestoneSubActivites($centerid);
 				$data['dev_extras']=$this->getDevelopmentalMilestoneExtras($centerid);
 				$data['type']=isset($_GET['type'])?$_GET['type']:'observation';
-
+				
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
 				if (isset($assmntSetting->montessori) && $assmntSetting->montessori == 1) {
 					$data['sub_type']=isset($_GET['sub_type'])?$_GET['sub_type']:'Montessori';
 				} elseif (isset($assmntSetting->eylf) && $assmntSetting->eylf == 1) {

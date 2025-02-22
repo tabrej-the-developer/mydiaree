@@ -329,8 +329,8 @@
 												<?php } ?>
 												
 											</div>
-											<label class="file-upload-field" for="fileUpload">
-												<i class="simple-icon-plus"></i><span>Upload</span>
+											<label class="file-upload-field" for="fileUpload" style="min-width: 82px;max-height: 20px;">
+												<i class="simple-icon-plus"></i><span></span>
 											</label>
 											<input type="file" name="image" id="fileUpload" class="form-control-hidden" accept="image/*">
 										</div>
@@ -473,7 +473,7 @@
 
                 // Show Crop Button
                 $("#cropBtn").remove();
-                $("#img-holder").after('<button type="button" id="cropBtn" class="btn btn-success mt-2">Crop Image</button>');
+                $("#img-holder").after('<button type="button" id="cropBtn" class="btn btn-success mt-2" style="min-width:110px;">Crop Image</button>');
             };
             reader.readAsDataURL(selectedFile);
         }

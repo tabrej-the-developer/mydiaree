@@ -118,7 +118,7 @@
 												<?php }else{ ?>
 													<label for="password">Password</label>
 													<?php } ?>
-												<input type="text" class="form-control" id="password" name="password" value="">
+												<input type="password" class="form-control" id="password" name="password" value="">
 											</div>
 										</div>
 									</div>

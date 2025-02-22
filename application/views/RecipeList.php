@@ -513,6 +513,7 @@
 									<i class="fa fa-plus"></i>
 									<span>Upload</span>
 								</label>
+								<div style="font-size: 14px;display:flex;font-family: auto;align-items: center;color: green;font-weight: 600;">Under 5 MB Only</div>
 							</div>
 							<input type="file" name="image[]" id="itemImages" class="form-control-hidden" multiple>
 						</div>
@@ -524,6 +525,8 @@
 									<i class="fa fa-plus"></i>
 									<span>Upload</span>
 								</label>
+								<div style="font-size: 14px;display:flex;font-family: auto;align-items: center;color: green;font-weight: 600;">Under 10 MB Only</div>
+
 							</div>
 							<input type="file" name="video[]" id="itemVideos" class="form-control-hidden" multiple>
 						</div>
@@ -646,82 +649,96 @@
 				}
 			});
 
-			//holding images 
 			$("#itemImages").on('change', function () {
-				$(".img-preview").remove();
-		         //Get count of selected files
-		         var countFiles = $(this)[0].files.length;
-		         var allGood = true;
-		         var mainHolder = $("#img-holder");
-		         var image_holder_name = "img-preview-"+i;
-		         // image_holder_name.empty();
-		         for (var i = 0; i < countFiles; i++) {
-		         var imgPath = $(this)[0].files[i].name;
-		         var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-		         // var image_holder = $("#img-preview-"+i);
-		         // console.log(image_holder);
-		         
-		         if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
-		                if (typeof (FileReader) != "undefined") {
-		                //loop for each file selected for uploaded.
-		                    var image_holder = $("#img-preview-"+i);
-		                      var reader = new FileReader();
-		                      reader.onload = function (e) {
-		                        mainHolder.append(`<div class="img-preview"><img class="thumb-image" src="${e.target.result}"><span class="image-remove text-danger"><i class="simple-icon-close"></i></span></div>`)
-		                      }
-		                    reader.readAsDataURL($(this)[0].files[i]);
-		                }
-		             } else {
-		                allGood = false;
-		                break;
-		                alert("This browser does not support FileReader.");
-		             }
-		         } 
-		         if(!allGood){
-		             alert("Pls select only images and videos");
-		         }
-		    });
+    $(".img-preview").remove();
+    //Get count of selected files
+    var countFiles = $(this)[0].files.length;
+    var allGood = true;
+    var mainHolder = $("#img-holder");
+    var maxImageSize = 5 * 1024 * 1024; // 5MB in bytes
 
-		    $("#itemVideos").on('change', function() {
-				$(".vid-preview").remove();
-				$("#vid-holder").empty();
-		         //Get count of selected files
-		         var countFiles = $(this)[0].files.length;
-		         var allGood = true;
-		         var mainHolder = $("#vid-holder");
-		         for (var i = 0; i < countFiles; i++) {
-		         var vidPath = $(this)[0].files[i].name;
-		         var extn = vidPath.substring(vidPath.lastIndexOf('.') + 1).toLowerCase();
-		         // var image_holder = $("#img-preview-"+i);
-		         // console.log(image_holder);
-		         var video_holder_name = "vid-preview-"+i;
-		         // video_holder_name.empty();
-		         if(extn == "mkv" || extn == "3gp" || extn == "mp4") {
-		             if (typeof (FileReader) != "undefined") {
-		                //loop for each file selected for uploaded.
-		                    var video_holder = $("#vid-preview-"+i);
-							var reader = new FileReader();
-							reader.onload = function (e) {
-							mainHolder.append(`<div class="vid-preview">
-							                    <video class="thumb-video" controls>
-							                      <source src="${e.target.result}" type="video/mp4">
-							                    </video>
-							                    <span class="video-remove text-danger"><i class="simple-icon-close"></i></span>
-							                  </div>`)
+    for (var i = 0; i < countFiles; i++) {
+        var file = $(this)[0].files[i];
+        var imgPath = file.name;
+        var fileSize = file.size;
+        var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+        
+        // Check file size
+        if (fileSize > maxImageSize) {
+            alert(`Image ${imgPath} exceeds 5MB size limit`);
+            allGood = false;
+            break;
+        }
+        
+        if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg" || extn == "heif" || extn == "hevc") {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    mainHolder.append(`<div class="img-preview">
+                        <img class="thumb-image" src="${e.target.result}">
+                        <span class="image-remove text-danger"><i class="simple-icon-close"></i></span>
+                    </div>`);
+                }
+                reader.readAsDataURL(file);
+            }
+        } else {
+            allGood = false;
+            alert("Please select only images");
+            break;
+        }
+    } 
+    
+    if(!allGood) {
+        $(this).val(''); // Clear the input if validation fails
+    }
+});
 
-							}
-		                    reader.readAsDataURL($(this)[0].files[i]);
-		                }
-		            } else {
-		               allGood = false;
-		               break;
-		                 alert("This browser does not support FileReader.");
-		            }
-		         } 
-		         if(!allGood){
-		             alert("Pls select only videos");
-		         }
-		    });
+$("#itemVideos").on('change', function() {
+    $(".vid-preview").remove();
+    $("#vid-holder").empty();
+    //Get count of selected files
+    var countFiles = $(this)[0].files.length;
+    var allGood = true;
+    var mainHolder = $("#vid-holder");
+    var maxVideoSize = 10 * 1024 * 1024; // 10MB in bytes
+
+    for (var i = 0; i < countFiles; i++) {
+        var file = $(this)[0].files[i];
+        var vidPath = file.name;
+        var fileSize = file.size;
+        var extn = vidPath.substring(vidPath.lastIndexOf('.') + 1).toLowerCase();
+
+        // Check file size
+        if (fileSize > maxVideoSize) {
+            alert(`Video ${vidPath} exceeds 10MB size limit`);
+            allGood = false;
+            break;
+        }
+
+        if(extn == "mkv" || extn == "3gp" || extn == "mp4" || extn == "m4v" || extn == "mov") {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    mainHolder.append(`<div class="vid-preview">
+                        <video class="thumb-video" controls>
+                            <source src="${e.target.result}" type="video/mp4">
+                        </video>
+                        <span class="video-remove text-danger"><i class="simple-icon-close"></i></span>
+                    </div>`);
+                }
+                reader.readAsDataURL(file);
+            }
+        } else {
+            allGood = false;
+            alert("Please select only videos");
+            break;
+        }
+    } 
+    
+    if(!allGood) {
+        $(this).val(''); // Clear the input if validation fails
+    }
+});
 
 		    $(document).on('click','.image-remove',function(){
 		        var imgArr = $('#itemImages')[0].files;
