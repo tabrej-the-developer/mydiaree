@@ -572,6 +572,22 @@ class Settings extends CI_Controller {
 		}
 	}
 
+
+	public function send_email() {
+        $this->load->library('email');
+
+        $this->email->from('support@mydiaree.com', 'My Diaree Support');
+        $this->email->to('tabrezk294@gmail.com');
+        $this->email->subject('Test Email from CodeIgniter 3');
+        $this->email->message('This is a test email from CodeIgniter 3 using GoDaddy SMTP.');
+
+        if ($this->email->send()) {
+            echo 'Email sent successfully!';
+        } else {
+            echo $this->email->print_debugger(); // Print errors if any
+        }
+    }
+
 	public function saveUsersDetails()
 	{	
 		
@@ -873,6 +889,37 @@ class Settings extends CI_Controller {
 			redirect("Welcome");
 		}
 	}
+
+
+
+	public function deleteUser() {
+		$this->load->database();
+
+        $userid = $this->input->post('userid');
+
+        // Delete from users table
+        $this->db->where('userid', $userid);
+        $this->db->delete('users');
+
+        // Delete from usercenters table
+        $this->db->where('userid', $userid);
+        $this->db->delete('usercenters');
+
+		if ($this->db->affected_rows() > 0) {
+			// If deletion is successful
+			$response = ['success' => true];
+		} else {
+			// If deletion fails
+			$response = ['success' => false];
+		}
+	
+		// Send JSON response
+		$this->output
+			->set_content_type('application/json') // Set the response content type to JSON
+			->set_output(json_encode($response));
+    }
+
+
 	
 	public function saveParentDetails()
 	{

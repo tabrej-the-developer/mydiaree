@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/bootstrap-datepicker3.min.css?v=1.0.0" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/main.css?v=1.0.0" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/dore.light.blueolympic.min.css?v=1.0.0" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
 	<style>
@@ -260,6 +261,9 @@
 				<?php foreach ($parents as $key => $pobj) { ?>
 				<div class="col-md-4">
 					<div class="card d-flex flex-row mb-4">
+
+				
+
 		                <a class="d-flex" href="<?= base_url("Settings/addParent")."?recordId=".$pobj->userid."&centerid=".$centerid; ?>">
 		                	<?php 
 								if (empty($pobj->imageUrl)) {
@@ -271,6 +275,7 @@
 		                    <img alt="Profile" src="<?= $image;?>" class="img-thumbnail border-0 rounded-circle m-4 list-thumbnail align-self-center">
 		                </a>
 		                <div class="d-flex flex-grow-1 min-width-zero">
+						
 		                    <div class="card-body pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
 		                        <div class="min-width-zero">
 		                            <a href="<?= base_url("Settings/addParent")."?recordId=".$pobj->userid."&centerid=".$centerid; ?>">
@@ -286,6 +291,12 @@
 								    </ul>
 		                        </div>
 		                    </div>
+
+							<div style="margin-right: 15px;margin-top: 10px;">
+    <a href="#" class="delete-link" data-userid="<?= $pobj->userid; ?>">
+        <i class="fa-solid fa-trash fa-fade" style="color: #ff1605;"></i>
+    </a>
+</div>
 		                </div>
 		            </div>
 				</div>
@@ -308,5 +319,60 @@
 			
 		});
 	</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+<script>
+$(document).ready(function() {
+    $('.delete-link').on('click', function(e) {
+        e.preventDefault();
+        var userId = $(this).data('userid');
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '<?= base_url("Settings/deleteUser"); ?>',
+                    type: 'POST',
+                    data: { userid: userId },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire(
+                                'Deleted!',
+                                'The user has been deleted.',
+                                'success'
+                            ).then(() => {
+                                location.reload(); // Reload the page after deletion
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'There was an error deleting the user.',
+                                'error'
+                            );
+                        }
+                    },
+                    error: function() {
+                        Swal.fire(
+                            'Error!',
+                            'There was an error deleting the user.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    });
+});
+</script>
+
 </body>
 </html>

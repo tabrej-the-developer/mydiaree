@@ -5,6 +5,25 @@
     }
 }
 </style>
+
+<style>
+.main-menu .active {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.sub-menu .active {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.scroll {
+    overflow-y: auto;
+}
+
+.sub-menu ul {
+    display: none;
+}
+    </style>
+
 <nav class="navbar fixed-top " style="padding-bottom: 0px; padding-top: 0px; height: 70px; ">
     <div class="d-flex align-items-center navbar-left col-6">
         <a href="#" class="menu-button d-none d-md-block">
@@ -76,23 +95,23 @@
                             <i class="iconsminds-notepad"></i>QIP
                         </a>
                     </li>
-                    <li>
+                    <li  class="<?= (strpos($_SERVER['REQUEST_URI'], 'room/getList') === TRUE ? 'active' : ''); ?>">
                         <a href="<?php echo base_url('room'); ?>">
                             <i class="iconsminds-building"></i>Rooms
                         </a>
                     </li>
-                    <li>
+                    <li  class="<?= (strpos($_SERVER['REQUEST_URI'], 'lessonPlanList/programPlanList') === TRUE ? 'active' : ''); ?>">
                         <a href="<?php echo base_url('lessonPlanList/programPlanList'); ?>">
                             <i class="iconsminds-testimonal"></i>Program Plan
                         </a>
                     </li>
-                    <li>
+                    <li  class="<?= (strpos($_SERVER['REQUEST_URI'], 'ServiceDetails') === TRUE ? 'active' : ''); ?>">
                         <a href="<?php echo base_url('ServiceDetails'); ?>">
                             <i class="iconsminds-receipt-4"></i>Service Details
                         </a>
                     </li>
                     <?php } ?>
-                    <li>
+                    <li  class="<?= (strpos($_SERVER['REQUEST_URI'], 'Media') === TRUE ? 'active' : ''); ?>">
                         <a href="<?php echo base_url('Media'); ?>">
                             <i class="iconsminds-photo-album-2"></i>Media
                         </a>
@@ -108,7 +127,7 @@
                         </a>
                     </li>
                     <?php if($this->session->userdata("UserType")!="Parent"){ ?>
-                    <li>
+                    <li  class="<?= (strpos($_SERVER['REQUEST_URI'], 'Resources') === TRUE ? 'active' : ''); ?>">
                         <a href="<?php echo base_url('Resources'); ?>">
                             <i class="iconsminds-eci-icon"></i>Resources
                         </a>
@@ -120,7 +139,7 @@
                         </a>
                     </li>
                     <?php if($this->session->userdata("UserType")!="Parent"){ ?>
-                    <li>
+                    <li  class="<?= (strpos($_SERVER['REQUEST_URI'], 'dashboard') === TRUE ? 'active' : ''); ?>">
                         <a href="<?php echo base_url('Reflections'); ?>">
                             <i class="iconsminds-reset"></i>Reflections
                         </a>
@@ -427,3 +446,115 @@
     });
 </script>
 
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the body element
+    const body = document.getElementById('app-container');
+
+    // Set the initial body class to ensure submenus are hidden
+    body.className = "menu-default ltr rounded menu-sub-hidden sub-hidden";
+
+    // Select all submenus and hide them on page load
+    const submenus = document.querySelectorAll('.sub-menu ul');
+    submenus.forEach(submenu => {
+        submenu.style.display = 'none';
+    });
+
+    // Show submenu only when parent is clicked
+    const mainMenuItems = document.querySelectorAll('.main-menu a[href^="#"]');
+
+    mainMenuItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetSubmenu = document.querySelector(`[data-link="${targetId}"]`);
+
+            if (targetSubmenu) {
+                const isVisible = targetSubmenu.style.display === 'none';
+
+                // Hide all submenus first
+                submenus.forEach(submenu => {
+                    submenu.style.display = 'none';
+                });
+
+                
+
+                // Toggle target submenu
+                if (isVisible) {
+                    targetSubmenu.style.display = 'none';
+                    body.className = "menu-default ltr rounded menu-sub-hidden sub-hidden"; // Hidden state
+                } else {
+                    targetSubmenu.style.display = 'block';
+                    body.className = "ltr rounded menu-default menu-sub-hidden sub-show-temporary"; // Visible state
+                }
+            }
+        });
+    });
+
+    
+
+    // Function to handle active state and scrolling
+    function handleActiveMenuItem() {
+        const currentPath = window.location.pathname;
+        let activeMainItem = null;
+        let activeSubItem = null;
+
+        // Check main menu items
+        document.querySelectorAll('.main-menu a').forEach(item => {
+            const href = item.getAttribute('href');
+            if (href && !href.startsWith('#')) {
+                const cleanHref = href.replace('<?php echo base_url(); ?>', '');
+                if (currentPath.includes(cleanHref)) {
+                    item.parentElement.classList.add('active');
+                    activeMainItem = item.parentElement;
+                }
+            }
+        });
+
+        // Check submenu items
+        document.querySelectorAll('.sub-menu a').forEach(item => {
+            const href = item.getAttribute('href');
+            if (href) {
+                const cleanHref = href.replace('<?php echo base_url(); ?>', '');
+                if (currentPath.includes(cleanHref)) {
+                    // Find parent submenu and main menu item
+                    const parentSubmenu = item.closest('ul');
+                    if (parentSubmenu) {
+                        const dataLink = parentSubmenu.getAttribute('data-link');
+                        const mainMenuItem = document.querySelector(`.main-menu a[href="#${dataLink}"]`);
+                        if (mainMenuItem) {
+                            // Add active classes
+                            mainMenuItem.parentElement.classList.add('active');
+                            item.parentElement.classList.add('active');
+                            activeSubItem = item.parentElement;
+                            activeMainItem = mainMenuItem.parentElement;
+                        }
+                    }
+                }
+            }
+        });
+
+        // Scroll to active main menu item
+        if (activeMainItem) {
+            const mainScroll = activeMainItem.closest('.scroll');
+            if (mainScroll) {
+                setTimeout(() => {
+                    const topPos = activeMainItem.offsetTop - (mainScroll.clientHeight / 2);
+                    mainScroll.scrollTo({
+                        top: Math.max(0, topPos)
+                    });
+                }, 100);
+            }
+        }
+    }
+
+    // Initialize when page loads
+    handleActiveMenuItem();
+
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', handleActiveMenuItem);
+});
+
+</script>

@@ -4,6 +4,8 @@
 	<meta name='viewport' content='width=device-width, initial-scale=1'>
 	<link rel="stylesheet" href="<?php echo base_url('assets/css/style_new.css'); ?>">
 	<link rel="stylesheet" href="<?php echo base_url('assets/css/login.css'); ?>">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
 	<title>Login</title>
 	<style>
 		/* @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap');
@@ -179,16 +181,20 @@
 								<input type="text" class="form-control" name="username" placeholder="Employee Code" value="<?php echo isset($email)?$email:''; ?>" id="username">
 								<div class="unErrMsg text-danger"></div>
 							</div>
+							
 							<div class="form-group">
-								<!-- <label for="pin">PIN</label>
-								<br> -->
-								<input type="text" name="pin[]" class="pin" maxlength="1" fieldType="pin">
-								<input type="text" name="pin[]" class="pin" maxlength="1" fieldType="pin">
-								<input type="text" name="pin[]" class="pin" maxlength="1" fieldType="pin">
-								<input type="text" name="pin[]" class="pin" maxlength="1" fieldType="pin">
-								
-								<p class="pinErrMsg text-danger"></p>
-							</div>
+    <div style="display: flex; align-items: center;">
+        <input type="password" name="pin[]" class="pin" maxlength="1" fieldType="pin">
+        <input type="password" name="pin[]" class="pin" maxlength="1" fieldType="pin">
+        <input type="password" name="pin[]" class="pin" maxlength="1" fieldType="pin">
+        <input type="password" name="pin[]" class="pin" maxlength="1" fieldType="pin">
+        <span class="toggle-password" style="cursor: pointer; margin-left: 10px;">
+            <i class="fa fa-eye-slash" style="color:black;"></i>
+        </span>
+    </div>
+    <p class="pinErrMsg text-danger"></p>
+</div>
+
 							<?php } ?>	
 							<?php 
 							if(!empty($errorText)){ ?>
@@ -334,5 +340,27 @@
 			}
 			}
 	</script>
+
+<script>
+    document.querySelector('.toggle-password').addEventListener('click', function() {
+        let pins = document.querySelectorAll('.pin');
+        let icon = this.querySelector('i');
+
+        pins.forEach(pin => {
+            if (pin.type === "password") {
+                pin.type = "text";
+				icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            } else {
+                pin.type = "password";
+				icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+             
+            }
+        });
+    });
+</script>
+
+
 </body>
 </html>

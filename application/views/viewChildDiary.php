@@ -212,23 +212,28 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label>Item</label>
-                                            <br>
-                                            <select name="bfitem" id="bfitem"
-                                                class="form-control select2-single select2-hidden-accessible modal-form-control"
-                                                data-width="100%" tabindex="-1" aria-hidden="true">
-                                                <?php 
+    <label>Item</label>
+    <br>
+    <select name="bfitem[]" id="bfitem"
+        class="form-control select2-single select2-hidden-accessible modal-form-control"
+        data-width="100%" multiple="multiple" tabindex="-1" aria-hidden="true">
+        
+        <?php 
+        // Decode the stored JSON data
+        $selectedItems = isset($cobj) && isset($cobj->breakfast) ? json_decode($cobj->breakfast->item, true) : [];
+
         foreach ($breakfast as $key => $bf) {
-            // Check if $cobj and $cobj->breakfast exist and have an item property
-            $selected = (isset($cobj) && isset($cobj->breakfast) && $cobj->breakfast->item == $bf->itemName) ? 'selected' : '';
+            // Check if the item exists in the selected items array
+            $selected = (is_array($selectedItems) && in_array($bf->itemName, $selectedItems)) ? 'selected' : '';
         ?>
-                                                <option value="<?php echo htmlspecialchars($bf->itemName); ?>"
-                                                    <?php echo $selected; ?>>
-                                                    <?php echo htmlspecialchars($bf->itemName); ?>
-                                                </option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
+            <option value="<?php echo htmlspecialchars($bf->itemName); ?>" <?php echo $selected; ?>>
+                <?php echo htmlspecialchars($bf->itemName); ?>
+            </option>
+        <?php } ?>
+    </select>
+</div>
+
+
                                     </div>
 
 
@@ -420,34 +425,31 @@
                                                 name="lnTime" id="lnTime"
                                                 value="<?php echo sprintf('%02d:%02d', $hour, $mins); ?>">
                                         </div>
+                                        
                                         <div class="form-group">
-                                            <label>Item</label>
-                                            <br>
-                                            <select name="lnitem" id="lnitem"
-                                                class="form-control select2-single select2-hidden-accessible modal-form-control"
-                                                data-width="100%" tabindex="-1" aria-hidden="true">
-                                                <?php 
-                                                        if (empty($cobj->lunch->item)) {
-                                                            foreach ($lunch as $key => $lunchObj){
-                                                    ?>
-                                                <option value="<?php echo $lunchObj->itemName; ?>">
-                                                    <?php echo $lunchObj->itemName; ?></option>
-                                                <?php
-                                                            }
-                                                        } else {
-                                                            foreach ($lunch as $key => $lunchObj) {
-                                                                if ($lunchObj->itemName == $cobj->lunch->item) {
-                                                    ?>
-                                                <option value="<?php echo $lunchObj->itemName; ?>" selected>
-                                                    <?php echo $lunchObj->itemName; ?></option>
-                                                <?php
-                                                                } else {
-                                                    ?>
-                                                <option value="<?php echo $lunchObj->itemName; ?>">
-                                                    <?php echo $lunchObj->itemName; ?></option>
-                                                <?php } } } ?>
-                                            </select>
-                                        </div>
+    <label>Item</label>
+    <br>
+    <select name="lnitem[]" id="lnitem"
+        class="form-control select2-single select2-hidden-accessible modal-form-control"
+        data-width="100%" multiple="multiple" tabindex="-1" aria-hidden="true">
+
+        <?php 
+        // Decode the stored JSON data for lunch items
+        $selectedLunchItems = isset($cobj->lunch->item) ? json_decode($cobj->lunch->item, true) : [];
+
+        foreach ($lunch as $key => $lunchObj) {
+            // Check if the item exists in the selected items array
+            $selected = (is_array($selectedLunchItems) && in_array($lunchObj->itemName, $selectedLunchItems)) ? 'selected' : '';
+        ?>
+            <option value="<?php echo htmlspecialchars($lunchObj->itemName); ?>" <?php echo $selected; ?>>
+                <?php echo htmlspecialchars($lunchObj->itemName); ?>
+            </option>
+        <?php } ?>
+    </select>
+</div>
+
+
+
                                     </div>
                                     <div class="col-4">
                                         <div class="form-group">
@@ -752,33 +754,29 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label>Item</label>
-                                            <br>
-                                            <select name="lsitem" id="lsitem"
-                                                class="form-control select2-single select2-hidden-accessible modal-form-control"
-                                                data-width="100%" tabindex="-1" aria-hidden="true">
-                                                <?php 
-                                                    if (empty($cobj->snack->item)) {
-                                                        foreach ($snack as $key => $snObj) {
-                                                    ?>
-                                                <option value="<?php echo $snObj->itemName; ?>">
-                                                    <?php echo $snObj->itemName; ?></option>
-                                                <?php
-                                                        }
-                                                    } else {					        		
-                                                        foreach ($snack as $key => $snObj) {
-                                                            if ($snObj->itemName == $cobj->snack->item) {
-                                                    ?>
-                                                <option value="<?php echo $snObj->itemName; ?>" selected>
-                                                    <?php echo $snObj->itemName; ?></option>
-                                                <?php
-                                                            } else {
-                                                    ?>
-                                                <option value="<?php echo $snObj->itemName; ?>">
-                                                    <?php echo $snObj->itemName; ?></option>
-                                                <?php } } }?>
-                                            </select>
-                                        </div>
+    <label>Item</label>
+    <br>
+    <select name="lsitem[]" id="lsitem"
+        class="form-control select2-single select2-hidden-accessible modal-form-control"
+        data-width="100%" multiple="multiple" tabindex="-1" aria-hidden="true">
+
+        <?php 
+        // Decode the stored JSON data for snack items
+        $selectedSnackItems = isset($cobj->snack->item) ? json_decode($cobj->snack->item, true) : [];
+
+        foreach ($snack as $key => $snObj) {
+            // Check if the item exists in the selected items array
+            $selected = (is_array($selectedSnackItems) && in_array($snObj->itemName, $selectedSnackItems)) ? 'selected' : '';
+        ?>
+            <option value="<?php echo htmlspecialchars($snObj->itemName); ?>" <?php echo $selected; ?>>
+                <?php echo htmlspecialchars($snObj->itemName); ?>
+            </option>
+        <?php } ?>
+    </select>
+</div>
+
+
+
                                     </div>
                                     <div class="col-4">
                                         <div class="form-group">

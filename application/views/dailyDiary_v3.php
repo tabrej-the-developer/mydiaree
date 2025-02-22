@@ -123,12 +123,15 @@
     </style>
 </head>
 <body id="app-container" class="menu-default show-spinner">
+<div id="center-data" data-centerid="<?php echo $centerid ?>"></div>
     <?php $this->load->view('sidebar'); ?>
-    <main data-centerid="<?= isset($_GET['centerid'])?$_GET['centerid']:$centerid; ?>">
+    <main data-centerid="<?= isset($centerid)?$centerid:$centerid; ?>">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
                     <h1>Daily Diary </h1>
+       
+
                    
                     <div class="text-zero top-right-button-container d-flex flex-row">
                         <div class="btn-group mr-1">
@@ -307,8 +310,8 @@
                                                 <img src="<?= $childImage; ?>" class="img-thumbnail border-0 mx-1 rounded-circle list-thumbnail x-small" alt="">
                                             </label>
                                             <?php
-                                                if(isset($_GET['centerid'])){
-                                                    $centerid = $_GET['centerid'];
+                                                if(isset($centerid)){
+                                                    $centerid = $centerid;
                                                 }else{
                                                     $centerid = 1;
                                                 }
@@ -583,7 +586,7 @@ $mins = date('i'); // 'i' gives the minutes with leading zeros
                     </div>
                     <div class="form-group common-item">
                         <label>Item</label>
-                        <select name="item" id="item" class="form-control select2-single" data-width="100%">
+                        <select name="item[]" id="item" class="form-control select2-single" multiple="multiple" data-width="100%">
                         </select>
                     </div>
                     <div class="form-group common-item">
@@ -747,6 +750,7 @@ $mins = date('i'); // Current minute
     <script>
         $(document).ready(function(){
             var type = "";
+            var centerid = $("#center-data").data("centerid");
             //when add button clicked for food 
             $(document).on("click",".btn-add",function(){
                 var title = $(this).data("title");
@@ -766,7 +770,7 @@ $mins = date('i'); // Current minute
                         $("#foodModal").find(".common-item").show();
                         $('#item').select2({
                             ajax: { 
-                                url: "<?= base_url('dailyDiary/getItems'); ?>/"+type,
+                                url: "<?= base_url('dailyDiary/getItems'); ?>/" + type + "?centerid=" + centerid, // Pass centerid in the URL
                                 type: "post",
                                 dataType: 'json',
                                 delay: 250,
@@ -815,6 +819,7 @@ $mins = date('i'); // Current minute
                     childids.push(this.value);
                 });
                 var item = $("#item").val();
+                console.log(item);
                 var qty = $("#qty").val();
                 var comments = $("#comments").val();
                 var calories = $("#calories").val();
@@ -828,7 +833,7 @@ $mins = date('i'); // Current minute
                     traditional:true,
                     type: "POST",
                     url: "<?= base_url().'dailyDiary/addFoodRecord'; ?>",
-                    data: {'startTime':startTime,'item':item,'qty':qty,'comments':comments,'diarydate':diarydate,'childid':JSON.stringify(childids),'type':type,'calories':calories},
+                    data: {'startTime':startTime,'item':JSON.stringify(item),'qty':qty,'comments':comments,'diarydate':diarydate,'childid':JSON.stringify(childids),'type':type,'calories':calories},
                     success: function(msg){
                         var res = jQuery.parseJSON(msg);
                         if (res.Status == "SUCCESS") {

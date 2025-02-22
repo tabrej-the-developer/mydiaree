@@ -64,6 +64,17 @@ class DailyDiary extends CI_Controller {
             if(isset($_GET['roomid'])){
                 $data['roomid'] = $_GET['roomid'];
             }
+
+			if($this->session->userdata("UserType") != "Superadmin" ){
+				$data['superadmin'] = 0;
+			}else{
+                $data['superadmin'] = 1;
+			}
+
+
+			// echo "<pre>";
+			// print_r($data);
+			// exit;
 			
 			$data['userid'] = $this->session->userdata("LoginId");
           
@@ -82,14 +93,15 @@ class DailyDiary extends CI_Controller {
 			//print_r($server_output); exit;
 			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			curl_close($ch);
-// 			echo "<pre>";
-// print_r($server_output);
-// exit;
+
 			// echo "<pre>";
 			// 	print_r(json_decode($server_output)); 
 			// 	exit;
 			if($httpcode == 200){
 				$data = json_decode($server_output);
+							// echo "<pre>";
+                            // print_r($data);
+                            // exit;
 				
 				if (!is_object($data)) {
 					$data = new stdClass(); // Ensure $data is an object
@@ -97,6 +109,9 @@ class DailyDiary extends CI_Controller {
 			
 				$data->centerid = $centerid;
 				
+				// echo "<pre>";
+                //             print_r($data);
+                //             exit;
 				
 				
 				$this->load->view('dailyDiary_v3', $data);
@@ -122,6 +137,12 @@ class DailyDiary extends CI_Controller {
 			if (!empty($this->input->post('searchTerm'))) {
 				$data['searchTerm'] = $this->input->post('searchTerm');
 			}
+
+			$data['centerid'] = $this->input->get('centerid') ?? $this->input->post('centerid');
+
+			// echo "<pre>";
+			// print_r($data);
+			// exit;
 			$url = BASE_API_URL."DailyDiary/getItems/";
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_URL,$url);
@@ -144,6 +165,11 @@ class DailyDiary extends CI_Controller {
 					$resp['text'] = $obj->itemName;
 					array_push($response, $resp);
 				}
+   
+				// echo "<pre>";
+                // print_r($response);
+                // exit;
+
 				echo json_encode($response);
 			}
 			
@@ -160,7 +186,11 @@ class DailyDiary extends CI_Controller {
 		if($this->session->has_userdata('LoginId')){
 			$data = $this->input->post();
 			$data['childids'] = json_decode($data['childid']);
+			// $data['item'] = json_decode($data['item']);
 			unset($data['childid']);
+
+			// print_r($data);
+			// exit;
 
 			$data['userid'] = $this->session->userdata("LoginId");	
             // echo json_encode($data); die();	
@@ -279,6 +309,10 @@ class DailyDiary extends CI_Controller {
 			$data['userid'] = $this->session->userdata("LoginId");
 			$data['date'] = $this->input->get("date");
 			$data['childid'] = $this->input->get("childid");
+			$data['centerid'] = $centerid;
+			// echo "<pre>";
+			// 	print_r($data);
+			// 	exit;  
 			$url = BASE_API_URL."DailyDiary/viewChildDiary/";
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_URL,$url);
@@ -331,7 +365,7 @@ class DailyDiary extends CI_Controller {
 			$data['breakfast']['childid'] = $data['childid'];
 			$data['breakfast']['diarydate'] = $data['diarydate'];
 			$data['breakfast']['startTime'] = $data['bfhour']."h:".$data['bfmins']."m";
-			$data['breakfast']['item'] = $data['bfitem'];
+			$data['breakfast']['item'] = !empty($data['bfitem']) ? json_encode($data['bfitem']) : NULL;
 			$data['breakfast']['calories'] = $data['bfcalories'];
 		    $data['breakfast']['qty'] = $data['bfqty'];
 		    $data['breakfast']['comments'] = $data['bfcomments'];
@@ -351,7 +385,7 @@ class DailyDiary extends CI_Controller {
 		    $data['lunch']['childid'] = $data['childid'];
 			$data['lunch']['diarydate'] = $data['diarydate'];
 			$data['lunch']['startTime'] = $data['lnhour']."h:".$data['lnmins']."m";
-			$data['lunch']['item'] = $data['lnitem'];
+			$data['lunch']['item'] = !empty($data['lnitem']) ? json_encode($data['lnitem']) : NULL;
 			$data['lunch']['calories'] = $data['lncalories'];
 		    $data['lunch']['qty'] = $data['lnqty'];
 		    $data['lunch']['comments'] = $data['lncomments'];
@@ -371,7 +405,7 @@ class DailyDiary extends CI_Controller {
 		    $data['snack']['childid'] = $data['childid'];
 			$data['snack']['diarydate'] = $data['diarydate'];
 			$data['snack']['startTime'] = $data['lshour']."h:".$data['lsmins']."m";
-			$data['snack']['item'] = empty($data['lsitem'])?NULL:$data['lsitem'];
+			$data['snack']['item'] = !empty($data['lsitem']) ? json_encode($data['lsitem']) : NULL;
 			$data['snack']['calories'] = $data['lscalories'];
 		    $data['snack']['qty'] = $data['lsqty'];
 		    $data['snack']['comments'] = $data['lscomments'];
@@ -425,7 +459,7 @@ class DailyDiary extends CI_Controller {
 			}
 				// echo "<pre>";
 				// print_r($data);
-				// print_r($roomid);     
+				// // print_r($roomid);     
 				// exit();
 			$url = BASE_API_URL."DailyDiary/updateChildDailyDiary/";
 			$ch = curl_init($url);

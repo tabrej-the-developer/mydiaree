@@ -593,6 +593,55 @@ class LessonPlanList extends CI_Controller {
       }
     }
 
+    public function viewProgramplanCreatepage() {
+      if ($this->session->has_userdata('LoginId')) {
+          $centerid = $this->input->get('centerid');
+          $userid = $this->session->userdata('LoginId');
+          $usertype = $this->session->userdata('UserType');
+  
+          $admin = ($usertype == "Superadmin") ? 1 : 0;
+  
+          // Fetch room data
+          if ($admin == 1) {
+              // Superadmin: Get all rooms for the center
+              $rooms = $this->db->where('centerid', $centerid)->get('room')->result();
+          } else {
+              // Normal user: Get room IDs from room_staff where staffid = $userid
+              $room_ids = $this->db->select('roomid')->where('staffid', $userid)->get('room_staff')->result_array();
+              $room_ids = array_column($room_ids, 'roomid');
+              
+              if (!empty($room_ids)) {
+                  $rooms = $this->db->where_in('id', $room_ids)->get('room')->result();
+              } else {
+                  $rooms = [];
+              }
+          }
+  
+          // Fetch user data
+          $user_ids = $this->db->select('userid')->where('centerid', $centerid)->get('usercenters')->result_array();
+          $user_ids = array_column($user_ids, 'userid');
+  
+          if (!empty($user_ids)) {
+              $users = $this->db->where_in('userid', $user_ids)->get('users')->result();
+          } else {
+              $users = [];
+          }
+  
+          // Load view with data
+          $data = [
+              'rooms' => $rooms,
+              'users' => $users
+          ];
+          // echo "<pre>";
+          // print_r($data);
+          // exit;
+          $this->load->view('programplanprintpage', $data);
+      } else { 
+          $this->load->view('welcome');
+      }
+  }
+  
+
     public function deleteTemplate($template_id) {
       if ($this->session->has_userdata('LoginId')) {
           // Prepare the payload

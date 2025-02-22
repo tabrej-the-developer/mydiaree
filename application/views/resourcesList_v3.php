@@ -53,12 +53,12 @@
                     <?php if(empty($resources)){ ?> 
                     <div class="col">
                         <div class="text-center">
-                            <h6 class="mb-4">Ooops... looks like we don't have enough data!</h6>
-                            <p class="mb-0 text-muted text-small mb-0">Error code</p>
+                            <h6 class="mb-4">You Don't have any Resources data..... Add New!</h6>
+                            <!-- <p class="mb-0 text-muted text-small mb-0">Error code</p>
                             <p class="display-1 font-weight-bold mb-5">
-                                200
+                                200 -->
                                 <!-- <img src="<?= base_url('api/assets/media/Asset 2.png'); ?>"> -->
-                            </p>
+                            <!-- </p> -->
                             <a href="<?= base_url('dashboard'); ?>" class="btn btn-primary btn-lg btn-shadow">GO BACK HOME</a>
                         </div>
                     </div>       

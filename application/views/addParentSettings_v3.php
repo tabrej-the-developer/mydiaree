@@ -95,8 +95,8 @@
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-												<label for="dob">Date of Birth</label>
-												<input type="text" class="form-control" id="dob" name="dob" value="<?= isset($parents->dob)?$parents->dob:""; ?>">
+												<label for="dob">Date of Birth - <span style="color:red;">Format</span><span style="color:green;"> dd-mm-yyyy</span> (use "-")</label>
+												<input type="text" class="form-control" id="dob" name="dob" value="<?= isset($parents->dob)?date('d-m-Y',strtotime($parents->dob)):""; ?>" >
 											</div>
 										</div>
 										<div class="col-md-4">

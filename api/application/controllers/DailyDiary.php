@@ -43,10 +43,17 @@ class DailyDiary extends CI_Controller {
 				// print_r($json);
 				// exit;
 				if (empty($json->roomid)) {
+					if($json->superadmin == 1){
 					$getCenterRoomsArr = $this->ddm->getRooms($centerid);
 					$roomid = empty($getCenterRoomsArr[0]->id)?NULL:$getCenterRoomsArr[0]->id;
 					$roomname = empty($getCenterRoomsArr[0]->name)?NULL:$getCenterRoomsArr[0]->name;
 					$roomcolor = empty($getCenterRoomsArr[0]->color)?NULL:$getCenterRoomsArr[0]->color;
+					}else{
+					$getCenterRoomsArr = $this->ddm->getRooms2($json->userid);
+					$roomid = empty($getCenterRoomsArr[0]->id)?NULL:$getCenterRoomsArr[0]->id;
+					$roomname = empty($getCenterRoomsArr[0]->name)?NULL:$getCenterRoomsArr[0]->name;
+					$roomcolor = empty($getCenterRoomsArr[0]->color)?NULL:$getCenterRoomsArr[0]->color;
+					}
 					// print_r($getCenterRoomsArr);
 					//  exit;
 				} else {
@@ -54,7 +61,11 @@ class DailyDiary extends CI_Controller {
 					$getRoom = $this->ddm->getRooms(NULL,$roomid);
 					$roomname = $getRoom[0]->name;
 					$roomcolor = $getRoom[0]->color;
+					if($json->superadmin == 1){
 					$getCenterRoomsArr = $this->ddm->getRooms($centerid);
+					}else{
+						$getCenterRoomsArr = $this->ddm->getRooms2($json->userid);
+					}
 					// print_r($getCenterRoomsArr);
 					//  exit;
 				}
@@ -158,6 +169,7 @@ class DailyDiary extends CI_Controller {
 
 					$search = isset($json->searchTerm) ? $json->searchTerm : null;
 					$type = isset($json->type) ? $json->type : null;
+					$centerid = isset($json->centerid) ? $json->centerid : null;
 
 					if (strtoupper($type)=="BREAKFAST") {
 						$table = "dailydiarybreakfast";
@@ -172,7 +184,8 @@ class DailyDiary extends CI_Controller {
 					}
 
 					
-					$data['items'] = $this->ddm->getItems($search,$type);
+					// $data['items'] = $this->ddm->getItems($search,$type);
+					$data['items'] = $this->ddm->getItems($search,$type,$centerid);
 					
 					http_response_code(200);
 					$data['Status'] = "SUCCESS";
@@ -461,10 +474,10 @@ class DailyDiary extends CI_Controller {
 				}	
 				$data['Status'] = "SUCCESS";
 				$data['child'] = $child;
-				$data['breakfast'] = $this->ddm->getRecipes("breakfast");
-				$data['tea'] = $this->ddm->getRecipes("tea");
-				$data['lunch'] = $this->ddm->getRecipes("lunch");
-				$data['snack'] = $this->ddm->getRecipes("snacks");
+				$data['breakfast'] = $this->ddm->getRecipes("breakfast", $json->centerid);
+				$data['tea'] = $this->ddm->getRecipes("tea", $json->centerid);
+				$data['lunch'] = $this->ddm->getRecipes("lunch", $json->centerid);
+				$data['snack'] = $this->ddm->getRecipes("snacks", $json->centerid);
 			} else {
 				http_response_code(401);
 				$data['Status'] = "ERROR";

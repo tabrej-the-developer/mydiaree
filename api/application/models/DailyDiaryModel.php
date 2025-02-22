@@ -27,6 +27,30 @@ class DailyDiaryModel extends CI_Model {
 		return $query->result();
 	}
 
+	public function getRooms2($userid) {
+        $this->load->database();
+
+        // Raw SQL to get all room IDs where staffid = $userid
+        $sql = "SELECT roomid FROM room_staff WHERE staffid = ?";
+        $query = $this->db->query($sql, [$userid]);
+
+        // Fetch room IDs
+        $roomIds = array_column($query->result_array(), 'roomid');
+
+        if (empty($roomIds)) {
+            return []; // Return empty array if no rooms found
+        }
+
+        // Convert array to comma-separated string for SQL query
+        $roomIdString = implode(',', array_map('intval', $roomIds));
+
+        // Raw SQL to get all rooms with matching room IDs
+        $sql = "SELECT * FROM room WHERE id IN ($roomIdString)";
+        $query = $this->db->query($sql);
+
+        return $query->result(); // Return room data
+    }
+
 	public function getChildsFromRoom($roomid)
 	{
 		$query = $this->db->get_where("child",array("room"=>$roomid));
@@ -118,10 +142,39 @@ class DailyDiaryModel extends CI_Model {
 		return $query->result(); // Changed from row() to result() to return all matching rows as an array
 	}
 
-	public function getItems($search=null,$type=null){
-		$query = $this->db->query("SELECT * FROM `recipes` WHERE itemName LIKE '%$search%' AND `type` = '".$type."'");
+	// public function getItems($search=null,$type=null){
+	// 	$query = $this->db->query("SELECT * FROM `recipes` WHERE itemName LIKE '%$search%' AND `type` = '".$type."'");
+	// 	return $query->result();
+	// }
+
+	public function getItems($search = null, $type = null, $centerid = null) {
+		$sql = "SELECT * FROM `recipes` WHERE 1=1";
+	
+		$params = [];
+	
+		// Add search condition if provided
+		if (!empty($search)) {
+			$sql .= " AND `itemName` LIKE ?";
+			$params[] = "%$search%";
+		}
+	
+		// Add type condition if provided
+		if (!empty($type)) {
+			$sql .= " AND `type` = ?";
+			$params[] = $type;
+		}
+	
+		// Add centerid condition if provided
+		if (!empty($centerid)) {
+			$sql .= " AND `centerid` = ?";
+			$params[] = $centerid;
+		}
+	
+		// Execute query with binding to prevent SQL injection
+		$query = $this->db->query($sql, $params);
 		return $query->result();
 	}
+	
 
 	public function addFoodRecord($data,$table)
 	{	
@@ -303,15 +356,22 @@ public function addSunscreenRecord2($data)
 		}
 	}
 
-	public function getRecipes($type=NULL)
-	{
-		if ($type==NULL) {
-			$query = $this->db->get("recipes");
-		} else {
-			$query = $this->db->get_where("recipes",array('type'=>strtoupper($type)));
-		}
-		return $query->result();
-	}
+	public function getRecipes($type = NULL, $centerid = NULL)
+{
+    $this->db->from("recipes");
+
+    if ($type !== NULL) {
+        $this->db->where("type", strtoupper($type));
+    }
+
+    if ($centerid !== NULL) {
+        $this->db->where("centerid", $centerid);
+    }
+
+    $query = $this->db->get();
+    return $query->result();
+}
+
 
 	public function getCenterRooms($centerid)
 	{
