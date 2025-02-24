@@ -340,7 +340,7 @@
 
         <div class="footer">
         <div>1 Capricorn Road, Truganina, VIC 3029 </div>
-        <img src="<?= base_url(); ?>api/assets/media/footer_down.png ?>" style="background-size: contain;background-repeat: no-repeat; position: relative;width:100%;">
+        <img src="<?= base_url(); ?>api/assets/media/footer_down.png" style="background-size: contain;background-repeat: no-repeat; position: relative;width:100%;">
 
           
         </div>
@@ -351,7 +351,7 @@
         <div class="header">
             <!-- <div class="corner-decoration top-left"></div> -->
             <!-- <div class="corner-decoration top-right"></div> -->
-            <img src="<?= base_url(); ?>api/assets/media/profile_1739442700.jpeg ?>" alt="NextGen Montessori Logo">
+            <img src="<?= base_url(); ?>api/assets/media/profile_1739442700.jpeg" alt="NextGen Montessori Logo">
         </div>
 
         <div class="outdoor-section">
@@ -408,7 +408,7 @@
 
         <div class="footer">
             1 Capricorn Road, Truganina, VIC 3029
-            <img src="<?= base_url(); ?>api/assets/media/footer_down.png ?>" style="background-size: contain;background-repeat: no-repeat; position: relative;width:100%;">
+            <img src="<?= base_url(); ?>api/assets/media/footer_down.png" style="background-size: contain;background-repeat: no-repeat; position: relative;width:100%;">
 
         </div>
     </div>
