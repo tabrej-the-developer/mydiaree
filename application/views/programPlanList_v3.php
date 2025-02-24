@@ -82,7 +82,7 @@
     <button class="btn btn-outline-primary" style="margin-left:5px;">Add Templates</button>
 </a>
 
-<a href="<?= base_url('lessonPlanList/viewProgramplanCreatepage').'?centerid='.$centerid; ?>">
+<a href="<?= base_url('lessonPlanList/viewProgramplanCreateformpage').'?centerid='.$centerid; ?>">
     <button class="btn btn-outline-primary" style="margin-left:5px;">Add ProgramPlan</button>
 </a>
                     </div>
