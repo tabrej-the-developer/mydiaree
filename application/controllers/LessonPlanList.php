@@ -593,7 +593,7 @@ class LessonPlanList extends CI_Controller {
       }
     }
 
-    public function viewProgramplanCreatepage() {
+    public function viewProgramplanCreateformpage() {
       if ($this->session->has_userdata('LoginId')) {
           $centerid = $this->input->get('centerid');
           $userid = $this->session->userdata('LoginId');
@@ -630,16 +630,238 @@ class LessonPlanList extends CI_Controller {
           // Load view with data
           $data = [
               'rooms' => $rooms,
-              'users' => $users
+              'users' => $users,
+              'centerid' => $centerid,
+              'user_id' => $userid
           ];
           // echo "<pre>";
           // print_r($data);
           // exit;
-          $this->load->view('programplanprintpage', $data);
+          $this->load->view('viewProgramplanCreateformpage', $data);
       } else { 
           $this->load->view('welcome');
       }
   }
+
+
+  public function get_room_users() {
+    $room_id = $this->input->post('room_id');
+    $center_id = $this->input->post('center_id');
+    
+    // First get staffids from room_staff table
+    $this->db->select('staffid');
+    $this->db->from('room_staff');
+    $this->db->where('roomid', $room_id);
+    $staff_query = $this->db->get();
+    
+    if ($staff_query->num_rows() > 0) {
+        // Get all staffids in an array
+        $staff_ids = array_column($staff_query->result_array(), 'staffid');
+        
+        // Now get user details from users table
+        $this->db->select('userid, name'); // Add any other required fields
+        $this->db->from('users');
+        $this->db->where_in('userid', $staff_ids);
+        $users_query = $this->db->get();
+        
+        // Format the data for response
+        $users = array();
+        foreach ($users_query->result() as $user) {
+            $users[] = array(
+                'id' => $user->userid,
+                'name' => $user->name
+            );
+        }
+        
+        echo json_encode($users);
+    } else {
+        echo json_encode(array());
+    }
+}
+
+public function get_room_children() {
+  $room_id = $this->input->post('room_id');
+  $center_id = $this->input->post('center_id');
+  
+  // Get children with separate name fields
+  $this->db->select('id, name, lastname');
+  $this->db->from('child');
+  $this->db->where('room', $room_id);
+  $query = $this->db->get();
+  
+  // Format the data for the dropdown
+  $children = array();
+  foreach ($query->result() as $child) {
+      $children[] = array(
+          'id' => $child->id,
+          'name' => $child->name . ' ' . $child->lastname
+      );
+  }
+  
+  echo json_encode($children);
+}
+
+
+
+
+
+
+public function save_program_planinDB() {
+  // Get the posted data
+  $data = $this->input->post();
+  
+  // Load form validation library
+  $this->load->library('form_validation');
+  
+  // Set validation rules
+  $this->form_validation->set_rules('room', 'Room', 'required');
+  $this->form_validation->set_rules('users[]', 'Educators', 'required');
+  $this->form_validation->set_rules('children[]', 'Children', 'required');
+  $this->form_validation->set_rules('practical_life', 'Practical Life', 'required');
+  $this->form_validation->set_rules('sensorial', 'Sensorial', 'required');
+  $this->form_validation->set_rules('math', 'Math', 'required');
+  $this->form_validation->set_rules('language', 'Language', 'required');
+  $this->form_validation->set_rules('culture', 'Culture', 'required');
+  $this->form_validation->set_rules('art_craft', 'Art & Craft', 'required');
+  $this->form_validation->set_rules('eylf', 'EYLF', 'required');
+  $this->form_validation->set_rules('outdoor_experiences', 'Outdoor Experiences', 'required');
+  
+  // Check validation
+  if ($this->form_validation->run() == FALSE) {
+      // Return validation errors
+      $response = array(
+          'status' => 'error',
+          'message' => validation_errors()
+      );
+  } else {
+      // Convert arrays to comma-separated strings or JSON
+      $educators = isset($data['users']) && is_array($data['users']) ? implode(',', $data['users']) : '';
+      $children = isset($data['children']) && is_array($data['children']) ? implode(',', $data['children']) : '';
+      
+      // Prepare data for database insert
+      $insert_data = array(
+          'room_id' => $data['room'],
+          'months' => $data['months'],
+          'centerid' => $data['centerid'],
+          'created_by' => $data['user_id'],
+          'educators' => $educators,  // Stored as comma-separated IDs
+          'children' => $children,    // Stored as comma-separated IDs
+          'practical_life' => $data['practical_life'],
+          'focus_area' => $data['focus_area'],
+          'practical_life_experiences' => $data['practical_life_experiences'],
+          'sensorial' => $data['sensorial'],
+          'sensorial_experiences' => $data['sensorial_experiences'],
+          'math' => $data['math'],
+          'math_experiences' => $data['math_experiences'],
+          'language' => $data['language'], 
+          'language_experiences' => $data['language_experiences'],
+          'culture' => $data['culture'],
+          'culture_experiences' => $data['culture_experiences'],
+          'art_craft' => $data['art_craft'],
+          'art_craft_experiences' => $data['art_craft_experiences'],
+          'eylf' => $data['eylf'],
+          'outdoor_experiences' => $data['outdoor_experiences'],
+          'inquiry_topic' => $data['inquiry_topic'],
+          'sustainability_topic' => $data['sustainability_topic'],
+          'special_events' => $data['special_events'],
+          'children_voices' => $data['children_voices'],
+          'families_input' => $data['families_input'],
+          'group_experience' => $data['group_experience'],
+          'spontaneous_experience' => $data['spontaneous_experience'],
+          'mindfulness_experiences' => $data['mindfulness_experiences'],
+          'created_at' => date('Y-m-d H:i:s')
+      );
+      
+      // Insert data into the database
+      $result = $this->db->insert('programplantemplatedetailsadd', $insert_data);
+      
+      if ($result) {
+        $plan_id = $this->db->insert_id();
+
+        // Set success flash message
+        $this->session->set_flashdata('success', 'Program plan saved successfully');
+    
+        // Send the redirect URL in the response
+        $response = array(
+            'success' => true,
+            'redirect_url' => base_url('LessonPlanList/programplanprintpage/' . $plan_id)
+        );
+      } else {
+          $response = array(
+              'status' => 'error',
+              'message' => 'Database error occurred. Please try again.'
+          );
+      }
+  }
+  
+  // Return JSON response
+  echo json_encode($response);
+}
+
+public function programplanprintpage($id) {
+  if (!$this->session->has_userdata('LoginId')) {
+      // Redirect to login if not logged in
+      $this->load->view('welcome');
+      return;
+  }
+
+  // Fetch program plan by ID
+  $plan = $this->db->get_where('programplantemplatedetailsadd', ['id' => $id])->row_array();
+
+  if (!$plan) {
+      show_404(); // Show error if plan not found
+      return;
+  }
+
+  $month_name = strtoupper(date('F', mktime(0, 0, 0, $plan['months'], 1)));
+
+
+
+  // Get room name
+  $room = $this->db->get_where('room', ['id' => $plan['room_id']])->row_array();
+  $room_name = $room ? $room['name'] : 'Unknown Room';
+
+  // Get educator names
+  $educator_ids = explode(',', $plan['educators']);
+  if (!empty($educator_ids)) {
+      $this->db->select('name');
+      $this->db->from('users');
+      $this->db->where_in('userid', $educator_ids);
+      $educators = $this->db->get()->result_array();
+      $educator_names = implode(',', array_column($educators, 'name'));
+  } else {
+      $educator_names = 'No Educators';
+  }
+
+  // Get child names
+  $child_ids = explode(',', $plan['children']);
+  if (!empty($child_ids)) {
+      $this->db->select('name');
+      $this->db->from('child');
+      $this->db->where_in('id', $child_ids);
+      $children = $this->db->get()->result_array();
+      $children_names = implode(',', array_column($children, 'name'));
+  } else {
+      $children_names = 'No Children';
+  }
+
+  // Pass data to the view
+  $data = [
+      'plan' => $plan,
+      'room_name' => $room_name,
+      'educator_names' => $educator_names,
+      'children_names' => $children_names,
+      'month_name' => $month_name
+  ];
+
+  // echo "<pre>";
+  // print_r($data);
+  // exit;
+
+  $this->load->view('programplanprintpage', $data);
+}
+
+
   
 
     public function deleteTemplate($template_id) {

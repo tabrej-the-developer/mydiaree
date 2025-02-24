@@ -8,6 +8,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Select2 JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>NextGen Montessori Program Plan</title>
     <style>
         body { 
@@ -33,7 +34,8 @@
 
         .header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-top: 50px;
+    margin-bottom: 30px;
     position: relative;
     /* padding: 20px; */
     border-radius: 10px;
@@ -76,7 +78,7 @@
         }
 
         .main-content-row td {
-            height: 400px;
+            height: 380px;
         }
 
         .focus-area {
@@ -142,8 +144,31 @@
             cursor: pointer;
         }
 
+        .back-button{
+            position: fixed;
+            top: 70px;
+            right: 30px;
+            padding: 10px 20px;
+            background-color: #2ee9ef;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .topdivs {
+            min-height:250px;
+        }
+
+        .bottomdivs{
+            margin-top:10px;
+        }
+
         @media print {
             .print-button {
+                display: none;
+            }
+            .back-button {
                 display: none;
             }
 
@@ -159,7 +184,7 @@
             }
 
             @page {
-                size: A4;
+                size: A3;
                 margin: 0;
             }
 
@@ -221,20 +246,20 @@
 </head>
 <body>
     
-    <button onclick="window.print()" class="print-button">Print Pages</button>
+    <button onclick="window.print()" class="print-button">Print Pages&nbsp;<i class="fa-solid fa-print fa-beat-fade"></i></button>
+    <button onclick="window.history.back()" class="back-button"><i class="fa-solid fa-arrow-left fa-beat"></i>&nbsp;Go Back</button>
+
 
     <!-- Page 1 -->
     <div class="page"> 
       
 
         <div class="header">
-            <!-- <div class="corner-decoration top-left"></div> -->
-            <!-- <div class="corner-decoration top-right"></div> -->
-            <!-- <img src="<?= base_url(); ?>api/assets/media/header_top.png ?>"> -->
-            <img src="<?= base_url(); ?>api/assets/media/profile_1739442700.jpeg ?>" alt="NextGen Montessori Logo">
+
+            <img src="<?= base_url(); ?>api/assets/media/profile_1739442700.jpeg" alt="NextGen Montessori Logo">
         </div>
 
-        <div class="program-title">PROGRAM PLAN Month</div>
+        <div class="program-title">PROGRAM PLAN <span style="color:#22b1c4;"><?php echo $month_name?></span></div>
 
         <table>
             <tr class="room-name-row">
@@ -242,38 +267,29 @@
                 
                 <td colspan="3">
         <!-- Hidden select for functionality -->
-        <select id="room" name="room[]" multiple class="select2-multiple screen-only">
-            <?php foreach($rooms as $room): ?>
-                <option value="<?php echo $room->id; ?>">
-                    <?php echo $room->name; ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-        
-        <!-- Print-friendly display -->
-        <span id="printable-rooms" class="print-only"></span>
-    </td>
+        <?php echo $room_name ?>
+                </td>
+
                 <td rowspan="2" style="font-weight: bold; min-width: 60px;" class="focus-area">Focus Area</td>
-                <td rowspan="2" style="min-width: 120px;"></td>
+                <td rowspan="2" style="min-width: 120px;">     <?php echo isset($plan['focus_area']) ? htmlspecialchars($plan['focus_area'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?></td>
             </tr>
+
             <tr class="educators-row">
-    <td colspan="1" style="font-weight: bold;">Educators</td>
-    <td colspan="3">
-        <!-- Hidden select for functionality -->
-        <select id="educators" name="educators[]" multiple class="select2-multiple screen-only">
-            <?php foreach($users as $user): ?>
-                <?php if($user->userType == 'Staff'): ?>
-                    <option value="<?php echo $user->userid; ?>">
-                        <?php echo $user->name; ?>
-                    </option>
-                <?php endif; ?>
-                <?php endforeach; ?>
-            </select>
-        
-        <!-- Print-friendly display -->
-        <span id="printable-educators" class="print-only"></span>
-    </td>
-</tr>
+                <td colspan="1" style="font-weight: bold;">Educators</td>
+   
+                 <td colspan="3"> 
+                 <?php echo $educator_names ?>
+                 </td>
+           </tr>
+
+            <tr class="educators-row">
+                <td colspan="1" style="font-weight: bold;">Children</td>
+   
+                 <td colspan="5"> 
+                 <?php echo $children_names ?>
+                 </td>
+           </tr>
+
             <tr>
                 <th>Practical Life</th>
                 <th>Sensorial</th>
@@ -284,28 +300,42 @@
             </tr>
             <tr class="main-content-row">
                 <td>
+                    <div class="topdivs"> <?php echo isset($plan['practical_life']) ? htmlspecialchars($plan['practical_life'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?></div>
                     <div class="planned-experiences">Planned experiences:</div>
+                    <div class="bottomdivs">  <?php echo isset($plan['practical_life_experiences']) ? htmlspecialchars($plan['practical_life_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?> </div>
                 </td>
                 <td>
+                    <div class="topdivs"> <?php echo isset($plan['sensorial']) ? htmlspecialchars($plan['sensorial'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?></div>
                     <div class="planned-experiences">Planned experiences:</div>
+                    <div class="bottomdivs">  <?php echo isset($plan['sensorial_experiences']) ? htmlspecialchars($plan['sensorial_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?> </div>
                 </td>
                 <td>
+                    <div class="topdivs"> <?php echo isset($plan['math']) ? htmlspecialchars($plan['math'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?></div>
                     <div class="planned-experiences">Planned experiences:</div>
+                    <div class="bottomdivs">  <?php echo isset($plan['math_experiences']) ? htmlspecialchars($plan['math_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?> </div>
                 </td>
                 <td>
+                    <div class="topdivs"> <?php echo isset($plan['language']) ? htmlspecialchars($plan['language'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?></div>
                     <div class="planned-experiences">Planned experiences:</div>
+                    <div class="bottomdivs">  <?php echo isset($plan['language_experiences']) ? htmlspecialchars($plan['language_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?> </div>
                 </td>
                 <td>
+                    <div class="topdivs"> <?php echo isset($plan['culture']) ? htmlspecialchars($plan['culture'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?></div>
                     <div class="planned-experiences">Planned experiences:</div>
+                    <div class="bottomdivs">  <?php echo isset($plan['culture_experiences']) ? htmlspecialchars($plan['culture_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?> </div>
                 </td>
                 <td>
+                    <div class="topdivs"> <?php echo isset($plan['art_craft']) ? htmlspecialchars($plan['art_craft'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?></div>
                     <div class="planned-experiences">Planned experiences:</div>
+                    <div class="bottomdivs">  <?php echo isset($plan['art_craft_experiences']) ? htmlspecialchars($plan['art_craft_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?> </div>
                 </td>
+            
             </tr>
         </table>
 
         <div class="eylf-section">
             <div class="section-label" style="margin:10px;">EYLF:</div>
+            <div style="margin:10px;">  <?php echo isset($plan['eylf']) ? htmlspecialchars($plan['eylf'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?>   </div>
         </div>
 
         <div class="footer">
@@ -326,18 +356,22 @@
 
         <div class="outdoor-section">
             <div class="section-label">Outdoor Experiences:</div>
+            <div style="margin:10px;">  <?php echo isset($plan['outdoor_experiences']) ? htmlspecialchars($plan['outdoor_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?>   </div>
         </div>
 
         <table>
             <tr>
                 <td style="width: 33%;height: 150px;">
                     <div class="section-label">Inquiry Topic:</div>
+                    <div style="margin:10px;">  <?php echo isset($plan['inquiry_topic']) ? htmlspecialchars($plan['inquiry_topic'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?>   </div>
                 </td>
                 <td style="width: 33%;height: 150px;">
                     <div class="section-label">Sustainability Topic:</div>
+                    <div style="margin:10px;">  <?php echo isset($plan['sustainability_topic']) ? htmlspecialchars($plan['sustainability_topic'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?>   </div>
                 </td>
                 <td style="width: 33%;height: 150px;">
                     <div class="section-label">Special Events:</div>
+                    <div style="margin:10px;">  <?php echo isset($plan['special_events']) ? htmlspecialchars($plan['special_events'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?>   </div>
                 </td>
             </tr>
         </table>
@@ -346,9 +380,11 @@
             <tr>
                 <td colspan="3" style=" height: 150px;">
                     <div class="section-label">Children's Voices:</div>
+                    <div style="margin:10px;">  <?php echo isset($plan['children_voices']) ? htmlspecialchars($plan['children_voices'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?>   </div>
                 </td>
                 <td style="">
                     <div class="section-label">Families Input:</div>
+                    <div style="margin:10px;">  <?php echo isset($plan['families_input']) ? htmlspecialchars($plan['families_input'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?>   </div>
                 </td>
             </tr>
         </table>
@@ -357,12 +393,15 @@
             <tr>
                 <td style="width: 33%; height: 150px;">
                     <div class="section-label">Group Experience:</div>
+                    <div style="margin:10px;">  <?php echo isset($plan['group_experience']) ? htmlspecialchars($plan['group_experience'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?>   </div>
                 </td>
                 <td style="width: 33%;">
                     <div class="section-label">Spontaneous Experience:</div>
+                    <div style="margin:10px;">  <?php echo isset($plan['spontaneous_experience']) ? htmlspecialchars($plan['spontaneous_experience'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?>   </div>
                 </td>
                 <td style="width: 33%;">
                     <div class="section-label">Mindfulness Experiences:</div>
+                    <div style="margin:10px;">  <?php echo isset($plan['mindfulness_experiences']) ? htmlspecialchars($plan['mindfulness_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?>   </div>
                 </td>
             </tr>
         </table>
