@@ -489,6 +489,10 @@ class DailyDiary extends CI_Controller {
 			if($httpcode == 200){
 				curl_close ($ch);
 				$data = json_decode($server_output);
+
+				if (!$data) {
+					$data = new stdClass(); // Create an empty object if $data is null
+				}
 				// echo "<pre>";
 				// print_r($data);   
 				// exit();
