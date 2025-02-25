@@ -437,6 +437,10 @@ class DailyDiary extends CI_Controller {
 
 			$sleepCount = count($data['slcomments']);
 			for($i=0;$i<$sleepCount;$i++){
+				if (empty($data['slcomments'][$i])) {
+					continue;
+				}
+			
 				$slp['childid'] = $data['childid'];
 				$slp['diarydate'] = $data['diarydate'];
 				$slp['startTime'] = $data['slshour'][$i]."h:".$data['slsmins'][$i]."m";
@@ -449,6 +453,9 @@ class DailyDiary extends CI_Controller {
 
 			$ssCount = count($data['sscomments']);
 			for($i=0;$i<$ssCount;$i++){
+				if (empty($data['sscomments'][$i])) {
+					continue; // Skip if comment is empty
+				}
 				$ss['childid'] = $data['childid'];
 				$ss['diarydate'] = $data['diarydate'];
 				$ss['startTime'] = $data['sshour'][$i]."h:".$data['ssmins'][$i]."m";
@@ -458,8 +465,7 @@ class DailyDiary extends CI_Controller {
 				array_push($data['sunscreen'], $ss);
 			}
 				// echo "<pre>";
-				// print_r($data);
-				// // print_r($roomid);     
+				// print_r($data);   
 				// exit();
 			$url = BASE_API_URL."DailyDiary/updateChildDailyDiary/";
 			$ch = curl_init($url);
@@ -476,6 +482,9 @@ class DailyDiary extends CI_Controller {
 			if($httpcode == 200){
 				curl_close ($ch);
 				$data = json_decode($server_output);
+				// echo "<pre>";
+				// print_r($data);   
+				// exit();
 				$data->centerid = $centerid;
 				$redUrl = base_url('dailyDiary/list').'?centerid='.$data->centerid.'&roomid='.$roomid;
 				redirect($redUrl);

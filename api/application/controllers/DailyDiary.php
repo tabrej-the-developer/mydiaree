@@ -499,14 +499,31 @@ class DailyDiary extends CI_Controller {
 			$json = json_decode(file_get_contents('php://input'));
 			if($json!= null && $res != null && $res->userid == $json->userid){
 
-				$bfRecords = $this->ddm->addFoodRecord($json->breakfast,"dailydiarybreakfast");
+				if (!empty($json->breakfast->item)) {
+					$bfRecords = $this->ddm->addFoodRecord($json->breakfast, "dailydiarybreakfast");
+				}
+
+				if (!empty($json->morningtea->comments)) {
 				$mtRecords = $this->ddm->addFoodRecord($json->morningtea,"dailydiarymorningtea");
+				}
+
+                if (!empty($json->lunch->item)) {
 				$lnRecords = $this->ddm->addFoodRecord($json->lunch,"dailydiarylunch");
+				}
+
+				if (!empty($json->afternoontea->comments)) {
 				$atRecords = $this->ddm->addFoodRecord($json->afternoontea,"dailydiaryafternoontea");
+				}
+
+				if (!empty($json->snack->item)) {
 				$snRecords = $this->ddm->addFoodRecord($json->snack,"dailydiarysnacks");
-				$ttRecords = $this->ddm->addToiletingRecord($json->toileting);
+				}
 
+				if (!empty(array_filter($json->toileting->signature))) {
+					$ttRecords = $this->ddm->addToiletingRecord($json->toileting);
+				}
 
+              
 				$i = 0;
 				foreach ($json->sleep as $slp) {
 					if ($i==0) {
@@ -516,9 +533,11 @@ class DailyDiary extends CI_Controller {
 					}
 					$i++; 
 				}
+			    
 				
+			
 				$ssRecords = $this->ddm->addSunscreenRecord($json->sunscreen);
-
+				
 				// $j = 0;
 				// foreach ($json->sunscreen as $ss) {
 				// 	if ($j==0) {
