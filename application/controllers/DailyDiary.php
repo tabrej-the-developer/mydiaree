@@ -347,6 +347,7 @@ class DailyDiary extends CI_Controller {
 		if($this->session->has_userdata('LoginId')){
 			$datetime = date('Y-m-d h:i:s');
 			$data=[];
+
 			if(!empty($this->input->get())){
 				$get = $this->input->get();
 				$centerid = $get['centerid'];
@@ -357,6 +358,12 @@ class DailyDiary extends CI_Controller {
             if(isset($_GET['roomid'])){
                 $roomid = $_GET['roomid'];
             }
+
+			$centerid = $centerid;
+
+			// 	echo "<pre>";	
+            // print_r($centerid);  
+			// exit;
 			$data = $this->input->post();
 			// echo "<pre>";	
             // print_r($data);  
