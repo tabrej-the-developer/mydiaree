@@ -27,10 +27,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // $config['base_url'] = 'https://stage.todquest.com/mykronicle101/';
 
 // server url
-// $config['base_url'] = 'https://mydiaree.com/';
+$config['base_url'] = 'https://mydiaree.com/';
 
 //local host url
-$config['base_url'] = 'http://localhost/mydiaree/'; 
+// $config['base_url'] = 'http://localhost/mydiaree/'; 
 
 /*
 |--------------------------------------------------------------------------
