@@ -48,9 +48,9 @@ defined('FOPEN_READ_WRITE_CREATE')              OR define('FOPEN_READ_WRITE_CREA
 defined('FOPEN_WRITE_CREATE_STRICT')            OR define('FOPEN_WRITE_CREATE_STRICT', 'xb');
 defined('FOPEN_READ_WRITE_CREATE_STRICT')       OR define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
 
-defined('BASE_API_URL')       OR define('BASE_API_URL', 'https://mydiaree.com/api/');
+// defined('BASE_API_URL')       OR define('BASE_API_URL', 'https://mydiaree.com/api/');
 //for local 
-// defined('BASE_API_URL')       OR define('BASE_API_URL', 'http://localhost/mydiaree/api/');
+defined('BASE_API_URL')       OR define('BASE_API_URL', 'http://localhost/mydiaree/api/');
 
 /*
 |--------------------------------------------------------------------------

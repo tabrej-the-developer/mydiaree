@@ -49,9 +49,9 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /vendor/
 /writable/
 /.env
-/api/application/config/config.php
-/api/application/config/constants.php
-/api/application/config/database.php
-/application/config/config.php
-/application/config/constants.php
-/application/config/database.php
+api/application/config/config.php
+api/application/config/constants.php
+api/application/config/database.php
+application/config/config.php
+application/config/constants.php
+application/config/database.php
