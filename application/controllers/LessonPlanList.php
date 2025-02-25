@@ -547,51 +547,149 @@ class LessonPlanList extends CI_Controller {
       }
     }
 
+    // public function programPlanList()  
+    // {
+    //   if($this->session->has_userdata('LoginId')){
+    //       $json=[];
+    //       $json['created']=$this->session->userdata('LoginId');
+    //       $json['usertype']=$this->session->userdata('UserType');
+    //       $json['userid']=$this->session->userdata('LoginId');
+    //       if (isset($_GET['centerid'])) {
+    //         $centerid = strip_tags(trim(stripslashes($_GET['centerid'])));
+    //       }else{
+    //         $center = $this->session->userdata("centerIds");
+    //         if (empty($center)) {
+    //           $centerid = 0;
+    //         }else{
+    //           $centerid = $center[0]->id;
+    //         }
+    //       }
+    //       $json['centerid']=$centerid;
+
+    //       $url = BASE_API_URL.'Programplanlist/show_details';
+    //       $ch = curl_init($url);
+    //       curl_setopt($ch, CURLOPT_URL,$url);
+    //       curl_setopt($ch, CURLOPT_POST, 1);
+    //       curl_setopt($ch, CURLOPT_POSTFIELDS,json_encode($json));
+    //       curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    //         'X-Device-Id: '.$this->session->userdata('X-Device-Id'),
+    //         'X-Token: '.$this->session->userdata('AuthToken')
+    //       ));
+    //       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //       $server_output = curl_exec($ch);
+    //       $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    //       curl_close($ch);
+    //       if($httpcode == 200){
+    //         $jsonOutput = json_decode($server_output);
+    //         $data['page_content'] = $jsonOutput->get_program_details;
+    //         $data['centerid'] = $centerid;
+    //         $data['permission'] = $jsonOutput->permission;
+    //         $this->load->view('programPlanList_v3',$data);
+    //       }else{
+    //         redirect("Welcome");
+    //       }
+    //   }else{ 
+    //     $this->load->view('welcome');
+    //   }
+    // }
+
+
+
     public function programPlanList()  
-    {
-      if($this->session->has_userdata('LoginId')){
-          $json=[];
-          $json['created']=$this->session->userdata('LoginId');
-          $json['usertype']=$this->session->userdata('UserType');
-          $json['userid']=$this->session->userdata('LoginId');
-          if (isset($_GET['centerid'])) {
+{
+    if($this->session->has_userdata('LoginId')){
+        $data = [];
+        $data['created'] = $this->session->userdata('LoginId');
+        $data['usertype'] = $this->session->userdata('UserType');
+        $data['userid'] = $this->session->userdata('LoginId');
+        
+        if (isset($_GET['centerid'])) {
             $centerid = strip_tags(trim(stripslashes($_GET['centerid'])));
-          }else{
+        } else {
             $center = $this->session->userdata("centerIds");
             if (empty($center)) {
-              $centerid = 0;
-            }else{
-              $centerid = $center[0]->id;
+                $centerid = 0;
+            } else {
+                $centerid = $center[0]->id;
             }
-          }
-          $json['centerid']=$centerid;
-
-          $url = BASE_API_URL.'Programplanlist/show_details';
-          $ch = curl_init($url);
-          curl_setopt($ch, CURLOPT_URL,$url);
-          curl_setopt($ch, CURLOPT_POST, 1);
-          curl_setopt($ch, CURLOPT_POSTFIELDS,json_encode($json));
-          curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'X-Device-Id: '.$this->session->userdata('X-Device-Id'),
-            'X-Token: '.$this->session->userdata('AuthToken')
-          ));
-          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-          $server_output = curl_exec($ch);
-          $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-          curl_close($ch);
-          if($httpcode == 200){
-            $jsonOutput = json_decode($server_output);
-            $data['page_content'] = $jsonOutput->get_program_details;
-            $data['centerid'] = $centerid;
-            $data['permission'] = $jsonOutput->permission;
-            $this->load->view('programPlanList_v3',$data);
-          }else{
-            redirect("Welcome");
-          }
-      }else{ 
+        }
+        $data['centerid'] = $centerid;
+        
+        // Get program plan data using direct DB query
+        $this->db->select('ppd.*, u.name as creator_name, r.name as room_name');
+        $this->db->from('programplantemplatedetailsadd as ppd');
+        $this->db->join('users as u', 'u.userid = ppd.created_by', 'left');
+        $this->db->join('room as r', 'r.id = ppd.room_id', 'left');
+        $this->db->where('ppd.centerid', $centerid);
+        $this->db->order_by('ppd.created_at', 'DESC'); // Change 'created_at' to the column you want to sort by
+        $query = $this->db->get();
+        
+        $data['program_plans'] = $query->result();
+        
+        // Helper function for month conversion (directly in controller)
+        $data['get_month_name'] = function($month_number) {
+            $months = array(
+                1 => 'January',
+                2 => 'February',
+                3 => 'March',
+                4 => 'April',
+                5 => 'May',
+                6 => 'June',
+                7 => 'July',
+                8 => 'August',
+                9 => 'September',
+                10 => 'October',
+                11 => 'November',
+                12 => 'December'
+            );
+            
+            return isset($months[$month_number]) ? $months[$month_number] : '';
+        };
+        
+        $this->load->view('programPlanList_v4', $data);
+    } else { 
         $this->load->view('welcome');
-      }
     }
+}
+
+
+public function deletedataofprogramplan()
+{
+    // Check if user is logged in
+    if (!$this->session->has_userdata('LoginId')) {
+        echo json_encode(['status' => 'error', 'message' => 'You must be logged in to perform this action']);
+        return;
+    }
+    
+    // Check if it's an AJAX request
+    if (!$this->input->is_ajax_request()) {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
+        return;
+    }
+    
+    // Get the program ID from POST data
+    $program_id = $this->input->post('program_id');
+    
+    if (!$program_id) {
+        echo json_encode(['status' => 'error', 'message' => 'Program ID is required']);
+        return;
+    }
+    
+    try {
+        // Delete the program plan
+        $this->db->where('id', $program_id);
+        $result = $this->db->delete('programplantemplatedetailsadd');
+        
+        if ($result) {
+            echo json_encode(['status' => 'success', 'message' => 'Program plan deleted successfully']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to delete program plan']);
+        }
+    } catch (Exception $e) {
+        echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()]);
+    }
+}
+
 
     public function viewProgramplanCreateformpage() {
       if ($this->session->has_userdata('LoginId')) {
@@ -709,94 +807,76 @@ public function get_room_children() {
 public function save_program_planinDB() {
   // Get the posted data
   $data = $this->input->post();
-  
-  // Load form validation library
-  $this->load->library('form_validation');
-  
-  // Set validation rules
-  $this->form_validation->set_rules('room', 'Room', 'required');
-  $this->form_validation->set_rules('users[]', 'Educators', 'required');
-  $this->form_validation->set_rules('children[]', 'Children', 'required');
-  $this->form_validation->set_rules('practical_life', 'Practical Life', 'required');
-  $this->form_validation->set_rules('sensorial', 'Sensorial', 'required');
-  $this->form_validation->set_rules('math', 'Math', 'required');
-  $this->form_validation->set_rules('language', 'Language', 'required');
-  $this->form_validation->set_rules('culture', 'Culture', 'required');
-  $this->form_validation->set_rules('art_craft', 'Art & Craft', 'required');
-  $this->form_validation->set_rules('eylf', 'EYLF', 'required');
-  $this->form_validation->set_rules('outdoor_experiences', 'Outdoor Experiences', 'required');
-  
-  // Check validation
-  if ($this->form_validation->run() == FALSE) {
-      // Return validation errors
+
+  // Validate required fields
+  if (empty($data['room']) || empty($data['months']) || empty($data['users']) || empty($data['children'])) {
       $response = array(
           'status' => 'error',
-          'message' => validation_errors()
+          'message' => 'room_id, months, educators, and children fields are required.'
+      );
+      echo json_encode($response);
+      return;
+  }
+
+  // Convert arrays to comma-separated strings
+  $educators = is_array($data['users']) ? implode(',', $data['users']) : NULL;
+  $children = is_array($data['children']) ? implode(',', $data['children']) : NULL;
+
+  // Prepare data for database insert
+  $insert_data = array(
+      'room_id' => $data['room'],
+      'months' => $data['months'],
+      'centerid' => $data['centerid'] ?? NULL,
+      'created_by' => $data['user_id'] ?? NULL,
+      'educators' => $educators,
+      'children' => $children,
+      'practical_life' => $data['practical_life'] ?? NULL,
+      'focus_area' => $data['focus_area'] ?? NULL,
+      'practical_life_experiences' => $data['practical_life_experiences'] ?? NULL,
+      'sensorial' => $data['sensorial'] ?? NULL,
+      'sensorial_experiences' => $data['sensorial_experiences'] ?? NULL,
+      'math' => $data['math'] ?? NULL,
+      'math_experiences' => $data['math_experiences'] ?? NULL,
+      'language' => $data['language'] ?? NULL,
+      'language_experiences' => $data['language_experiences'] ?? NULL,
+      'culture' => $data['culture'] ?? NULL,
+      'culture_experiences' => $data['culture_experiences'] ?? NULL,
+      'art_craft' => $data['art_craft'] ?? NULL,
+      'art_craft_experiences' => $data['art_craft_experiences'] ?? NULL,
+      'eylf' => $data['eylf'] ?? NULL,
+      'outdoor_experiences' => $data['outdoor_experiences'] ?? NULL,
+      'inquiry_topic' => $data['inquiry_topic'] ?? NULL,
+      'sustainability_topic' => $data['sustainability_topic'] ?? NULL,
+      'special_events' => $data['special_events'] ?? NULL,
+      'children_voices' => $data['children_voices'] ?? NULL,
+      'families_input' => $data['families_input'] ?? NULL,
+      'group_experience' => $data['group_experience'] ?? NULL,
+      'spontaneous_experience' => $data['spontaneous_experience'] ?? NULL,
+      'mindfulness_experiences' => $data['mindfulness_experiences'] ?? NULL,
+      'created_at' => date('Y-m-d H:i:s')
+  );
+
+  // Insert data into the database
+  $result = $this->db->insert('programplantemplatedetailsadd', $insert_data);
+
+  if ($result) {
+      $plan_id = $this->db->insert_id();
+
+      $response = array(
+          'success' => true,
+          'redirect_url' => base_url('LessonPlanList/programplanprintpage/' . $plan_id)
       );
   } else {
-      // Convert arrays to comma-separated strings or JSON
-      $educators = isset($data['users']) && is_array($data['users']) ? implode(',', $data['users']) : '';
-      $children = isset($data['children']) && is_array($data['children']) ? implode(',', $data['children']) : '';
-      
-      // Prepare data for database insert
-      $insert_data = array(
-          'room_id' => $data['room'],
-          'months' => $data['months'],
-          'centerid' => $data['centerid'],
-          'created_by' => $data['user_id'],
-          'educators' => $educators,  // Stored as comma-separated IDs
-          'children' => $children,    // Stored as comma-separated IDs
-          'practical_life' => $data['practical_life'],
-          'focus_area' => $data['focus_area'],
-          'practical_life_experiences' => $data['practical_life_experiences'],
-          'sensorial' => $data['sensorial'],
-          'sensorial_experiences' => $data['sensorial_experiences'],
-          'math' => $data['math'],
-          'math_experiences' => $data['math_experiences'],
-          'language' => $data['language'], 
-          'language_experiences' => $data['language_experiences'],
-          'culture' => $data['culture'],
-          'culture_experiences' => $data['culture_experiences'],
-          'art_craft' => $data['art_craft'],
-          'art_craft_experiences' => $data['art_craft_experiences'],
-          'eylf' => $data['eylf'],
-          'outdoor_experiences' => $data['outdoor_experiences'],
-          'inquiry_topic' => $data['inquiry_topic'],
-          'sustainability_topic' => $data['sustainability_topic'],
-          'special_events' => $data['special_events'],
-          'children_voices' => $data['children_voices'],
-          'families_input' => $data['families_input'],
-          'group_experience' => $data['group_experience'],
-          'spontaneous_experience' => $data['spontaneous_experience'],
-          'mindfulness_experiences' => $data['mindfulness_experiences'],
-          'created_at' => date('Y-m-d H:i:s')
+      $response = array(
+          'status' => 'error',
+          'message' => 'Database error occurred. Please try again.'
       );
-      
-      // Insert data into the database
-      $result = $this->db->insert('programplantemplatedetailsadd', $insert_data);
-      
-      if ($result) {
-        $plan_id = $this->db->insert_id();
-
-        // Set success flash message
-        $this->session->set_flashdata('success', 'Program plan saved successfully');
-    
-        // Send the redirect URL in the response
-        $response = array(
-            'success' => true,
-            'redirect_url' => base_url('LessonPlanList/programplanprintpage/' . $plan_id)
-        );
-      } else {
-          $response = array(
-              'status' => 'error',
-              'message' => 'Database error occurred. Please try again.'
-          );
-      }
   }
-  
+
   // Return JSON response
   echo json_encode($response);
 }
+
 
 public function programplanprintpage($id) {
   if (!$this->session->has_userdata('LoginId')) {

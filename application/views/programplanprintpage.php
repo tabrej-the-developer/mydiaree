@@ -247,8 +247,9 @@
 <body>
     
     <button onclick="window.print()" class="print-button">Print Pages&nbsp;<i class="fa-solid fa-print fa-beat-fade"></i></button>
-    <button onclick="window.history.back()" class="back-button"><i class="fa-solid fa-arrow-left fa-beat"></i>&nbsp;Go Back</button>
-
+    <button onclick="window.location.href='<?= base_url('LessonPlanList/programPlanList') ?>'" class="back-button">
+    <i class="fa-solid fa-arrow-left fa-beat"></i>&nbsp;Go Back
+</button>
 
     <!-- Page 1 -->
     <div class="page"> 
