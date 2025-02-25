@@ -853,7 +853,7 @@ public function save_program_planinDB() {
       'group_experience' => $data['group_experience'] ?? NULL,
       'spontaneous_experience' => $data['spontaneous_experience'] ?? NULL,
       'mindfulness_experiences' => $data['mindfulness_experiences'] ?? NULL,
-      'created_at' => date('Y-m-d H:i:s')
+      'created_at' => date('Y-m-d H:i:s', strtotime('now Australia/Sydney'))
   );
 
   // Insert data into the database
