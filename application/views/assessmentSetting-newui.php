@@ -130,7 +130,7 @@
 									
 								?>
 								<form action="<?= base_url("Settings/saveAsmntSettings"); ?>" method="post">
-									<input type="hidden" name="centerid" value="<?= isset($Settings->centerid)?$Settings->centerid:$_GET['centerid']; ?>">
+								<input type="hidden" name="centerid" value="<?= isset($Settings->centerid) ? $Settings->centerid : (isset($_GET['centerid']) ? $_GET['centerid'] : ''); ?>">
 									<div class="assessmentCheck">
 										<label for="Montessori" >
 											<span class="assessmentCheckName"><a href="<?= $montUrl; ?>">Montessori</a></span>

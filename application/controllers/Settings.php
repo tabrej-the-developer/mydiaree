@@ -1477,9 +1477,15 @@ class Settings extends CI_Controller {
 			curl_close($ch);
 			if($httpcode == 200){
 				$json = json_decode($server_output);
+				// echo "<pre>";
+				// print_r($json);
+				// exit;
 				$this->load->view('assessmentSetting-newui', $json);
 			} else if ($httpcode == 401){
 				$json = json_decode($server_output);
+				// echo "<pre>";
+				// print_r($json);
+				// exit;
 				$this->load->view('assessmentSetting-newui', $json);
 			}
 		}else{

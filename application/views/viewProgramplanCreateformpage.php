@@ -15,6 +15,43 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
+    <!-- Add this CSS to your <head> section or include in your CSS file -->
+<style>
+    .eylf-tree .list-group-item {
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+    }
+    
+    .eylf-framework {
+        background-color: #f8f9fa;
+    }
+    
+    .eylf-outcomes-container {
+        background-color: #ffffff;
+        padding-left: 2rem;
+    }
+    
+    .eylf-outcome {
+        background-color: #ffffff;
+        padding-left: 4rem;
+    }
+    
+    .eylf-activity {
+        background-color: #ffffff;
+        padding-left: 6rem;
+    }
+    
+    .toggle-icon {
+        cursor: pointer;
+        width: 20px;
+        text-align: center;
+    }
+    
+    .toggle-icon.expanded i {
+        transform: rotate(90deg);
+    }
+</style>
 </head>
 
 <body id="app-container" class="menu-default show-spinner">
@@ -133,10 +170,19 @@
                         <h5>Additional Experiences</h5>
                     </div>
                     <div class="card-body">
-                        <div class="form-group mb-3">
-                            <label for="eylf">EYLF</label>
-                            <textarea class="form-control" id="eylf" name="eylf" rows="3"></textarea>
-                        </div>
+                        
+                    <div class="form-group mb-3">
+    <label for="eylf">EYLF</label>
+    <div class="input-group">
+        <textarea class="form-control" id="eylf" name="eylf" rows="3" readonly></textarea>
+        <div class="input-group-append">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#eylfModal">
+                <i class="fa fa-search"></i> Select EYLF
+            </button>
+        </div>
+    </div>
+</div>
+
 
                         <div class="form-group mb-3">
                             <label for="outdoor_experiences">Outdoor Experiences</label>
@@ -195,6 +241,106 @@
 
 
 </main>
+
+
+
+
+<!-- EYLF Modal -->
+<div class="modal fade" id="eylfModal" tabindex="-1" role="dialog" aria-labelledby="eylfModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eylfModalLabel">Select EYLF</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="max-height:500px;overflow-y:auto;">
+                <div class="eylf-tree">
+                    <ul class="list-group">
+                        <!-- Main EYLF Framework -->
+                        <li class="list-group-item eylf-framework">
+                            <div class="d-flex align-items-center">
+                                <span class="mr-2 toggle-icon" data-toggle="collapse" data-target="#eylfFramework">
+                                    <i class="fa fa-chevron-right"></i>
+                                </span>
+                                <span>Early Years Learning Framework (EYLF) - Australia (V2.0 2022)</span>
+                            </div>
+                            
+                            <!-- EYLF Framework content -->
+                            <div id="eylfFramework" class="collapse mt-2">
+                                <ul class="list-group">
+                                    <!-- EYLF Learning Outcomes -->
+                                    <li class="list-group-item eylf-outcomes-container">
+                                        <div class="d-flex align-items-center">
+                                            <span class="mr-2 toggle-icon" data-toggle="collapse" data-target="#eylfOutcomes">
+                                                <i class="fa fa-chevron-right"></i>
+                                            </span>
+                                            <span>EYLF Learning Outcomes</span>
+                                        </div>
+                                        
+                                        <!-- List of all outcomes -->
+                                        <div id="eylfOutcomes" class="collapse mt-2">
+                                            <ul class="list-group">
+                                                <?php foreach ($eylf_outcomes as $outcome) : ?>
+                                                <li class="list-group-item eylf-outcome">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="mr-2 toggle-icon" data-toggle="collapse" data-target="#outcome<?= $outcome->id ?>">
+                                                            <i class="fa fa-chevron-right"></i>
+                                                        </span>
+                                                        <span><?= $outcome->title ?> - <?= $outcome->name ?></span>
+                                                    </div>
+                                                    
+                                                    <!-- Activities for this outcome -->
+                                                    <div id="outcome<?= $outcome->id ?>" class="collapse mt-2">
+                                                        <ul class="list-group">
+                                                            <?php foreach ($outcome->activities as $activity) : ?>
+                                                            <li class="list-group-item eylf-activity">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input eylf-activity-checkbox"
+                                                                           type="checkbox"
+                                                                           value="<?= $activity->id ?>"
+                                                                           id="activity<?= $activity->id ?>"
+                                                                           data-outcome-id="<?= $outcome->id ?>"
+                                                                           data-outcome-title="<?= $outcome->title ?>"
+                                                                           data-outcome-name="<?= $outcome->name ?>"
+                                                                           data-activity-title="<?= $activity->title ?>">
+                                                                    <label class="form-check-label" for="activity<?= $activity->id ?>">
+                                                                        <?= $activity->title ?>
+                                                                    </label>
+                                                                </div>
+                                                            </li>
+                                                            <?php endforeach; ?>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    
+                                    <!-- You can add EYLF Practices and EYLF Principles here if needed -->
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveEylfSelections">Save selections</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/jquery-3.3.1.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/bootstrap.bundle.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/moment.min.js?v=1.0.0"></script>
@@ -254,26 +400,122 @@
         e.preventDefault();
         
         $.ajax({
-    url: '<?= base_url("LessonPlanList/save_program_planinDB"); ?>',
-    type: 'POST',
-    data: $(this).serialize(),
-    success: function(response) {
-        const result = JSON.parse(response);
-        if (result.success) {
+                url: '<?= base_url("LessonPlanList/save_program_planinDB"); ?>',
+                type: 'POST',
+               data: $(this).serialize(),
+            success: function(response) {
+           const result = JSON.parse(response);
+            if (result.success) {
             window.location.href = result.redirect_url;
-        } else {
+           } else {
             alert('Error saving program plan. Please try again.');
         }
-    },
-    error: function() {
+       },
+     error: function() {
         alert('An error occurred while processing your request.');
-    }
-});
-    });
-});
+     }
+           });
+       });
+      });
     </script>
 
 
+<script>
+$(document).ready(function() {
+    // Toggle menu items and rotate chevron - make each toggle independent
+    $('.toggle-icon').on('click', function(e) {
+        // Prevent the event from bubbling up
+        e.stopPropagation();
+        
+        // Toggle only the clicked icon's expanded class
+        $(this).toggleClass('expanded');
+        
+        // Change only this icon
+        if ($(this).hasClass('expanded')) {
+            $(this).find('i').removeClass('fa-chevron-right').addClass('fa-chevron-down');
+        } else {
+            $(this).find('i').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+        }
+        
+        // Toggle the collapse that this icon controls
+        const targetId = $(this).data('target');
+        $(targetId).collapse('toggle');
+    });
+    
+    // When collapsible elements show/hide - only affect the direct parent toggle
+    $('.collapse').on('show.bs.collapse', function(e) {
+        // Stop event propagation to avoid triggering parent collapses
+        e.stopPropagation();
+        
+        // Only find the toggle icon that directly controls this collapse
+        const toggleIcon = $('[data-target="#' + $(this).attr('id') + '"]');
+        toggleIcon.addClass('expanded').find('i').removeClass('fa-chevron-right').addClass('fa-chevron-down');
+    }).on('hide.bs.collapse', function(e) {
+        // Stop event propagation
+        e.stopPropagation();
+        
+        // Only find the toggle icon that directly controls this collapse
+        const toggleIcon = $('[data-target="#' + $(this).attr('id') + '"]');
+        toggleIcon.removeClass('expanded').find('i').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+    });
+    
+    // Prevent collapse events from triggering multiple collapses
+    $('.collapse').on('show.bs.collapse hide.bs.collapse', function(e) {
+        // Only trigger for the element that received the click
+        if (e.target !== this) {
+            e.stopPropagation();
+        }
+    });
+    
+    // Save EYLF selections - rest of the code remains the same
+    $('#saveEylfSelections').on('click', function() {
+        var selectedActivities = [];
+        
+        $('.eylf-activity-checkbox:checked').each(function() {
+            var activityId = $(this).val();
+            var outcomeId = $(this).data('outcome-id');
+            var outcomeTitle = $(this).data('outcome-title');
+            var outcomeName = $(this).data('outcome-name');
+            var activityTitle = $(this).data('activity-title');
+            
+            selectedActivities.push({
+                activityId: activityId,
+                outcomeId: outcomeId,
+                outcomeTitle: outcomeTitle,
+                outcomeName: outcomeName,
+                activityTitle: activityTitle
+            });
+        });
+        
+        // Format the selected activities for display in the textarea
+        var formattedText = '';
+        if (selectedActivities.length > 0) {
+            selectedActivities.forEach(function(item, index) {
+                formattedText += item.outcomeTitle + ' - ' + item.outcomeName + ': ' + item.activityTitle;
+                if (index < selectedActivities.length - 1) {
+                    formattedText += '\n';
+                }
+            });
+        }
+        
+        // Set the formatted text in the textarea
+        $('#eylf').val(formattedText);
+        
+        // Store the raw data in a hidden input for form submission
+        if (!$('#eylfData').length) {
+            $('<input>').attr({
+                type: 'hidden',
+                id: 'eylfData',
+                name: 'eylfData'
+            }).appendTo('form');
+        }
+        $('#eylfData').val(JSON.stringify(selectedActivities));
+        
+        // Close the modal
+        $('#eylfModal').modal('hide');
+    });
+});
+</script>
 
 
 

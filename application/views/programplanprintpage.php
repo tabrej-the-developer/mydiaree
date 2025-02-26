@@ -336,8 +336,11 @@
 
         <div class="eylf-section">
             <div class="section-label" style="margin:10px;">EYLF:</div>
-            <div style="margin:10px;">  <?php echo isset($plan['eylf']) ? htmlspecialchars($plan['eylf'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?>   </div>
-        </div>
+            <div style="margin:10px;">
+    <?php 
+    echo isset($plan['eylf']) ? nl2br(htmlspecialchars($plan['eylf'], ENT_QUOTES, 'UTF-8')) : 'N/A'; 
+    ?>
+</div>        </div>
 
         <div class="footer">
         <div>1 Capricorn Road, Truganina, VIC 3029 </div>

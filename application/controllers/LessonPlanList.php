@@ -724,13 +724,32 @@ public function deletedataofprogramplan()
           } else {
               $users = [];
           }
+
+           // Fetch EYLF Outcomes
+        $eylf_outcomes = $this->db->select('id, title, name')
+        ->order_by('title', 'ASC')
+        ->get('eylfoutcome')
+        ->result();
+
+// Fetch EYLF Activities for each outcome
+$outcomes_with_activities = [];
+foreach ($eylf_outcomes as $outcome) {
+$activities = $this->db->select('id, outcomeId, title')
+           ->where('outcomeId', $outcome->id)
+           ->get('eylfactivity')
+           ->result();
+
+$outcome->activities = $activities;
+$outcomes_with_activities[] = $outcome;
+}
   
           // Load view with data
           $data = [
               'rooms' => $rooms,
               'users' => $users,
               'centerid' => $centerid,
-              'user_id' => $userid
+              'user_id' => $userid,
+              'eylf_outcomes' => $outcomes_with_activities
           ];
           // echo "<pre>";
           // print_r($data);
