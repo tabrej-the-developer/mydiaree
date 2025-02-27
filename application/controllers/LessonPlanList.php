@@ -696,6 +696,10 @@ public function deletedataofprogramplan()
           $centerid = $this->input->get('centerid');
           $userid = $this->session->userdata('LoginId');
           $usertype = $this->session->userdata('UserType');
+          $planid = $this->input->get('planid');
+          // print_r($planid);
+          // exit;
+
   
           $admin = ($usertype == "Superadmin") ? 1 : 0;
   
@@ -742,14 +746,41 @@ $activities = $this->db->select('id, outcomeId, title')
 $outcome->activities = $activities;
 $outcomes_with_activities[] = $outcome;
 }
-  
+
+$plan_data = null;
+$selected_educators = [];
+$selected_children = [];
+
+// If planid is provided, fetch plan data for editing
+if ($planid) {
+    $plan_data = $this->db->where('id', $planid)
+                        ->get('programplantemplatedetailsadd')
+                        ->row();
+    
+    if ($plan_data) {
+        // Process educators and children IDs
+        if (!empty($plan_data->educators)) {
+            $selected_educators = explode(',', $plan_data->educators);
+        }
+        
+        if (!empty($plan_data->children)) {
+            $selected_children = explode(',', $plan_data->children);
+        }
+    }
+}
+
+
           // Load view with data
           $data = [
               'rooms' => $rooms,
               'users' => $users,
               'centerid' => $centerid,
               'user_id' => $userid,
-              'eylf_outcomes' => $outcomes_with_activities
+              'eylf_outcomes' => $outcomes_with_activities,
+              'plan_data' => $plan_data,
+              'selected_educators' => $selected_educators,
+              'selected_children' => $selected_children,
+              'is_edit' => !empty($planid)
           ];
           // echo "<pre>";
           // print_r($data);

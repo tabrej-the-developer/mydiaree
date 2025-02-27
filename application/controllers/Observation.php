@@ -2308,6 +2308,70 @@ $centerid = 1;
 	}
 
 
+	public function addmilestones() {
+		$this->load->database();
+        // Check if it's an AJAX request
+        if (!$this->input->is_ajax_request()) {
+            show_error('No direct script access allowed');
+            return;
+        }
+        
+        // Get form data
+        $milestoneid = $this->input->post('milestoneid');
+        $name = $this->input->post('name');
+        
+        // Validate data
+        if (empty($milestoneid) || empty($name)) {
+            $response = array(
+                'status' => 'error',
+                'message' => 'Please provide all required fields'
+            );
+            echo json_encode($response);
+            return;
+        }
+        
+        // Insert into devmilestonesub table using direct query
+        $milestone_data = array(
+            'milestoneid' => $milestoneid,
+            'name' => $name
+        );
+        
+        $this->db->insert('devmilestonesub', $milestone_data);
+        
+        if ($this->db->affected_rows() > 0) {
+            $insert_id = $this->db->insert_id();
+            
+            // Insert into devmilestonesubaccess table using direct query
+            $access_data = array(
+                'idsubactivity' => $insert_id,
+                'centerid' => 1
+            );
+            
+            $this->db->insert('devmilestonesubaccess', $access_data);
+            
+            if ($this->db->affected_rows() > 0) {
+                $response = array(
+                    'status' => 'success',
+                    'message' => 'Milestone added successfully'
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'message' => 'Error adding milestone access'
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'message' => 'Error adding milestone'
+            );
+        }
+        
+        echo json_encode($response);
+    }
+
+
+
 	public function getDraftObservations() {
 		if($this->session->has_userdata('LoginId')) {
 			$url = BASE_API_URL."/observation/getDraftObservations/".$this->session->userdata('LoginId');

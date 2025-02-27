@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/south-street/jquery-ui.css"> 
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/main.css?v=1.0.0" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/dore.light.blueolympic.min.css?v=1.0.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
         .tag{
             color:  #ffffff;
@@ -373,6 +375,38 @@
         }
     ?>
     <main data-centerid="<?= isset($observation->centerid)?$observation->centerid:null; ?>">
+
+
+
+    <!-- <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Add Milestone</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="milestoneForm">
+                            <div class="mb-3">
+                                <label for="milestoneid" class="form-label">Milestone ID</label>
+                                <input type="number" class="form-control" id="milestoneid" value="17" name="milestoneid" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                        <div id="successMessage" class="alert alert-success mt-3" style="display: none;">
+                            Milestone added successfully!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
@@ -2739,5 +2773,45 @@ document.addEventListener('DOMContentLoaded', function() {
              });
     });
     </script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#milestoneForm').on('submit', function(e) {
+            e.preventDefault();
+            
+            $.ajax({
+                url: '<?php echo base_url("Observation/addmilestones"); ?>',
+                type: 'POST',
+                data: {
+                    milestoneid: $('#milestoneid').val(),
+                    name: $('#name').val()
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if(response.status == 'success') {
+                        // Show success message
+                        $('#successMessage').show();
+                        
+                        // Clear the form
+                        $('#milestoneForm')[0].reset();
+                        
+                        // Hide success message after 3 seconds
+                        setTimeout(function() {
+                            $('#successMessage').hide();
+                        }, 3000);
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('An error occurred: ' + error);
+                }
+            });
+        });
+    });
+    </script>
+
+
 </body>
 </html>

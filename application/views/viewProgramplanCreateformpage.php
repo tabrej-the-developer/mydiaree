@@ -66,33 +66,43 @@
             <h4 class="card-title">Create Program Plan</h4>
             <form id="programPlanForm" method="post">
 
-            <div class="form-group mb-4">
-                    <label for="months">Select Month</label>
-                    <select class="form-control" id="months" name="months" required>
-                        <option value="">Select Month</option>
-                        <?php
-                        $months = [
-                            '01' => 'January', '02' => 'February', '03' => 'March', '04' => 'April',
-                            '05' => 'May', '06' => 'June', '07' => 'July', '08' => 'August',
-                            '09' => 'September', '10' => 'October', '11' => 'November', '12' => 'December'
-                        ];
-                        foreach ($months as $key => $month): ?>
-                            <option value="<?= $key ?>"><?= $month ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+            <?php if(isset($plan_data) && $plan_data): ?>
+        <input type="hidden" name="plan_id" value="<?= $plan_data->id ?>">
+    <?php endif; ?>
+         
+            <input type="hidden" name="centerid" id="centerid" value="<?= isset($centerid)?$centerid:null; ?>";>
+<input type="hidden" name="user_id" id="user_id" value="<?= isset($user_id)?$user_id:null; ?>";>
+
+          
+<div class="form-group mb-4">
+        <label for="months">Select Month</label>
+        <select class="form-control" id="months" name="months" required>
+            <option value="">Select Month</option>
+            <?php
+            $months = [
+                '01' => 'January', '02' => 'February', '03' => 'March', '04' => 'April',
+                '05' => 'May', '06' => 'June', '07' => 'July', '08' => 'August',
+                '09' => 'September', '10' => 'October', '11' => 'November', '12' => 'December'
+            ];
+            foreach ($months as $key => $month): ?>
+                <option value="<?= $key ?>" <?= (isset($plan_data) && $plan_data->months == $key) ? 'selected' : '' ?>><?= $month ?></option>
+            <?php endforeach; ?>
+        </select>
+    
+    </div>
 
 
                 <!-- Room Selection -->
-                <div class="form-group mb-4">
-                    <label for="room">Select Room</label>
-                    <select class="form-control" id="room" name="room" required>
-                        <option value="">Select Room</option>
-                        <?php foreach($rooms as $room): ?>
-                            <option value="<?= $room->id ?>"><?= $room->name ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+               <!-- Room Selection -->
+    <div class="form-group mb-4">
+        <label for="room">Select Room</label>
+        <select class="form-control" id="room" name="room" required>
+            <option value="">Select Room</option>
+            <?php foreach($rooms as $room): ?>
+                <option value="<?= $room->id ?>" <?= (isset($plan_data) && $plan_data->room_id == $room->id) ? 'selected' : '' ?>><?= $room->name ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
 
                 <!-- Users Multiple Selection -->
                 <div class="form-group mb-4">
@@ -101,8 +111,7 @@
                         <!-- Options will be populated via AJAX -->
                     </select>
                 </div>
-<input type="hidden" name="centerid" id="centerid" value="<?= isset($centerid)?$centerid:null; ?>";>
-<input type="hidden" name="user_id" id="user_id" value="<?= isset($user_id)?$user_id:null; ?>";>
+
                 <!-- Children Multiple Selection -->
                 <div class="form-group mb-4">
                     <label for="children">Select Children</label>
@@ -118,48 +127,48 @@
 
                     <div class="form-group mb-3">
                             <label>Focus Areas</label>
-                            <input type="text" class="form-control" name="focus_area" placeholder="Focus Area">
+                            <input type="text" class="form-control" name="focus_area" placeholder="Focus Area" value="<?= isset($plan_data) ? $plan_data->focus_area : '' ?>">
                         </div>
                         <!-- Practical Life -->
                         <div class="form-group mb-3">
                             <label>Practical Life</label>
-                            <input type="text" class="form-control" name="practical_life" placeholder="Practical Life">
-                            <input type="text" class="form-control mt-2" name="practical_life_experiences" placeholder="Planned experiences">
+                            <input type="text" class="form-control" name="practical_life" value="<?= isset($plan_data) ? $plan_data->practical_life : '' ?>" placeholder="Practical Life">
+                            <input type="text" class="form-control mt-2" name="practical_life_experiences" value="<?= isset($plan_data) ? $plan_data->practical_life_experiences : '' ?>" placeholder="Planned experiences">
                         </div>
 
                         <!-- Sensorial -->
                         <div class="form-group mb-3">
                             <label>Sensorial</label>
-                            <input type="text" class="form-control" name="sensorial" placeholder="Sensorial">
-                            <input type="text" class="form-control mt-2" name="sensorial_experiences" placeholder="Planned experiences">
+                            <input type="text" class="form-control" name="sensorial" value="<?= isset($plan_data) ? $plan_data->sensorial : '' ?>" placeholder="Sensorial">
+                            <input type="text" class="form-control mt-2" name="sensorial_experiences" value="<?= isset($plan_data) ? $plan_data->sensorial_experiences : '' ?>" placeholder="Planned experiences">
                         </div>
 
                         <!-- Math -->
                         <div class="form-group mb-3">
                             <label>Math</label>
-                            <input type="text" class="form-control" name="math" placeholder="Math">
-                            <input type="text" class="form-control mt-2" name="math_experiences" placeholder="Planned experiences">
+                            <input type="text" class="form-control" name="math" value="<?= isset($plan_data) ? $plan_data->math : '' ?>" placeholder="Math">
+                            <input type="text" class="form-control mt-2" name="math_experiences" value="<?= isset($plan_data) ? $plan_data->math_experiences : '' ?>" placeholder="Planned experiences">
                         </div>
 
                         <!-- Language -->
                         <div class="form-group mb-3">
                             <label>Language</label>
-                            <input type="text" class="form-control" name="language" placeholder="Language">
-                            <input type="text" class="form-control mt-2" name="language_experiences" placeholder="Planned experiences">
+                            <input type="text" class="form-control" name="language" value="<?= isset($plan_data) ? $plan_data->language : '' ?>" placeholder="Language">
+                            <input type="text" class="form-control mt-2" name="language_experiences" value="<?= isset($plan_data) ? $plan_data->language_experiences : '' ?>" placeholder="Planned experiences">
                         </div>
 
                         <!-- Culture -->
                         <div class="form-group mb-3">
                             <label>Culture</label>
-                            <input type="text" class="form-control" name="culture" placeholder="Culture">
-                            <input type="text" class="form-control mt-2" name="culture_experiences" placeholder="Planned experiences">
+                            <input type="text" class="form-control" name="culture" value="<?= isset($plan_data) ? $plan_data->culture : '' ?>" placeholder="Culture">
+                            <input type="text" class="form-control mt-2" name="culture_experiences" value="<?= isset($plan_data) ? $plan_data->culture_experiences : '' ?>" placeholder="Planned experiences">
                         </div>
 
                         <!-- Art & Craft -->
                         <div class="form-group mb-3">
                             <label>Art & Craft</label>
-                            <input type="text" class="form-control" name="art_craft" placeholder="Art & Craft">
-                            <input type="text" class="form-control mt-2" name="art_craft_experiences" placeholder="Planned experiences">
+                            <input type="text" class="form-control" name="art_craft" value="<?= isset($plan_data) ? $plan_data->art_craft : '' ?>" placeholder="Art & Craft">
+                            <input type="text" class="form-control mt-2" name="art_craft_experiences" value="<?= isset($plan_data) ? $plan_data->art_craft_experiences : '' ?>" placeholder="Planned experiences">
                         </div>
                     </div>
                 </div>
@@ -174,7 +183,7 @@
                     <div class="form-group mb-3">
     <label for="eylf">EYLF</label>
     <div class="input-group">
-        <textarea class="form-control" id="eylf" name="eylf" rows="3" readonly></textarea>
+    <textarea class="form-control" id="eylf" name="eylf" rows="3" readonly><?= isset($plan_data) ? $plan_data->eylf : '' ?></textarea>
         <div class="input-group-append">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#eylfModal">
                 <i class="fa fa-search"></i> Select EYLF
@@ -186,54 +195,59 @@
 
                         <div class="form-group mb-3">
                             <label for="outdoor_experiences">Outdoor Experiences</label>
-                            <textarea class="form-control" id="outdoor_experiences" name="outdoor_experiences" rows="3"></textarea>
+                            <textarea class="form-control" id="outdoor_experiences" name="outdoor_experiences" rows="3"><?= isset($plan_data) ? $plan_data->outdoor_experiences : '' ?></textarea>
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="inquiry_topic">Inquiry Topic</label>
-                            <textarea class="form-control" id="inquiry_topic" name="inquiry_topic" rows="3"></textarea>
+                            <textarea class="form-control" id="inquiry_topic" name="inquiry_topic"  rows="3"><?= isset($plan_data) ? $plan_data->inquiry_topic : '' ?></textarea>
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="sustainability_topic">Sustainability Topic</label>
-                            <textarea class="form-control" id="sustainability_topic" name="sustainability_topic" rows="3"></textarea>
+                            <textarea class="form-control" id="sustainability_topic" name="sustainability_topic" rows="3"><?= isset($plan_data) ? $plan_data->sustainability_topic : '' ?></textarea>
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="special_events">Special Events</label>
-                            <textarea class="form-control" id="special_events" name="special_events" rows="3"></textarea>
+                            <textarea class="form-control" id="special_events" name="special_events" rows="3"><?= isset($plan_data) ? $plan_data->special_events : '' ?></textarea>
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="children_voices">Children's Voices</label>
-                            <textarea class="form-control" id="children_voices" name="children_voices" rows="3"></textarea>
+                            <textarea class="form-control" id="children_voices" name="children_voices"  rows="3"><?= isset($plan_data) ? $plan_data->children_voices : '' ?></textarea>
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="families_input">Families Input</label>
-                            <textarea class="form-control" id="families_input" name="families_input" rows="3"></textarea>
+                            <textarea class="form-control" id="families_input" name="families_input"  rows="3"><?= isset($plan_data) ? $plan_data->families_input : '' ?></textarea>
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="group_experience">Group Experience</label>
-                            <textarea class="form-control" id="group_experience" name="group_experience" rows="3"></textarea>
+                            <textarea class="form-control" id="group_experience" name="group_experience" rows="3"><?= isset($plan_data) ? $plan_data->group_experience : '' ?></textarea>
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="spontaneous_experience">Spontaneous Experience</label>
-                            <textarea class="form-control" id="spontaneous_experience" name="spontaneous_experience" rows="3"></textarea>
+                            <textarea class="form-control" id="spontaneous_experience" name="spontaneous_experience" rows="3"><?= isset($plan_data) ? $plan_data->spontaneous_experience : '' ?></textarea>
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="mindfulness_experiences">Mindfulness Experiences</label>
-                            <textarea class="form-control" id="mindfulness_experiences" name="mindfulness_experiences" rows="3"></textarea>
+                            <textarea class="form-control" id="mindfulness_experiences" name="mindfulness_experiences"  rows="3"><?= isset($plan_data) ? $plan_data->mindfulness_experiences : '' ?></textarea>
                         </div>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <?php if(isset($plan_data) && $plan_data): ?>
+               
+                <?php else: ?>
+                    <div class="form-group">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
+                <?php endif; ?>
+                
             </form>
         </div>
     </div>
@@ -356,68 +370,112 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 
-    <script>
-        $(document).ready(function () {
-            $('.select2').select2();
-
-            // Fetch users and children based on room selection
-            $('#room').change(function () {
-                let roomId = $(this).val();
-                let centerId = $('main').data('centerid');
-
-                if (roomId) {
-                    $.ajax({
-                        url: '<?= base_url("LessonPlanList/get_room_users"); ?>',
-                        method: 'POST',
-                        data: { room_id: roomId, center_id: centerId },
-                        success: function (response) {
-                            let users = JSON.parse(response);
-                            $('#users').empty();
-                            users.forEach(user => {
-                                $('#users').append(new Option(user.name, user.id));
-                            });
-                        }
-                    });
-
-                    $.ajax({
-                        url: '<?= base_url("LessonPlanList/get_room_children"); ?>',
-                        method: 'POST',
-                        data: { room_id: roomId, center_id: centerId },
-                        success: function (response) {
-                            let children = JSON.parse(response);
-                            $('#children').empty();
-                            children.forEach(child => {
-                                $('#children').append(new Option(child.name, child.id));
-                            });
-                        }
-                    });
+<script>
+$(document).ready(function () {
+    // Initialize Select2
+    $('.select2').select2();
+    
+    // Store selected educators and children for edit mode
+    var selectedEducators = <?= json_encode($selected_educators) ?>;
+    var selectedChildren = <?= json_encode($selected_children) ?>;
+    
+    // Function to load educators with pre-selection
+    function loadEducators(roomId, centerId) {
+        $.ajax({
+            url: '<?= base_url("LessonPlanList/get_room_users"); ?>',
+            method: 'POST',
+            data: { room_id: roomId, center_id: centerId },
+            success: function (response) {
+                let users = JSON.parse(response);
+                $('#users').empty();
+                
+                users.forEach(user => {
+                    let option = new Option(user.name, user.id, false, false);
+                    $('#users').append(option);
+                });
+                
+                // For edit mode: pre-select educators
+                if (selectedEducators.length > 0) {
+                    $('#users').val(selectedEducators).trigger('change');
                 }
-            });
-     
+            }
+        });
+    }
+    
+    // Function to load children with pre-selection
+    function loadChildren(roomId, centerId) {
+        $.ajax({
+            url: '<?= base_url("LessonPlanList/get_room_children"); ?>',
+            method: 'POST',
+            data: { room_id: roomId, center_id: centerId },
+            success: function (response) {
+                let children = JSON.parse(response);
+                $('#children').empty();
+                
+                children.forEach(child => {
+                    let option = new Option(child.name, child.id, false, false);
+                    $('#children').append(option);
+                });
+                
+                // For edit mode: pre-select children
+                if (selectedChildren.length > 0) {
+                    $('#children').val(selectedChildren).trigger('change');
+                }
+            }
+        });
+    }
 
+    // Fetch users and children based on room selection
+    $('#room').change(function () {
+        let roomId = $(this).val();
+        let centerId = $('#centerid').val();
 
-        $('#programPlanForm').on('submit', function(e) {
+        if (roomId) {
+            loadEducators(roomId, centerId);
+            loadChildren(roomId, centerId);
+        }
+    });
+    
+    // If in edit mode, trigger room change to load educators and children
+    <?php if(isset($plan_data) && $plan_data): ?>
+        // Trigger room change event to load educators and children
+        let roomId = '<?= $plan_data->room_id ?>';
+        let centerId = '<?= $centerid ?>';
+        
+        if (roomId) {
+            loadEducators(roomId, centerId);
+            loadChildren(roomId, centerId);
+        }
+    <?php endif; ?>
+
+    // Form submission handler
+    $('#programPlanForm').on('submit', function(e) {
         e.preventDefault();
         
-        $.ajax({
-                url: '<?= base_url("LessonPlanList/save_program_planinDB"); ?>',
-                type: 'POST',
-               data: $(this).serialize(),
-            success: function(response) {
-           const result = JSON.parse(response);
-            if (result.success) {
-            window.location.href = result.redirect_url;
-           } else {
-            alert('Error saving program plan. Please try again.');
+        // If month field is disabled for edit mode, ensure the value is included
+        if ($('#months').prop('disabled')) {
+            // The hidden input field already handles this
         }
-       },
-     error: function() {
-        alert('An error occurred while processing your request.');
-     }
-           });
-       });
-      });
-    </script>
+        
+        $.ajax({
+            url: '<?= base_url("LessonPlanList/save_program_planinDB"); ?>',
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                const result = JSON.parse(response);
+                if (result.success) {
+                    window.location.href = result.redirect_url;
+                } else {
+                    alert('Error saving program plan. Please try again.');
+                }
+            },
+            error: function() {
+                alert('An error occurred while processing your request.');
+            }
+        });
+    });
+});
+</script>
 
 
 <script>

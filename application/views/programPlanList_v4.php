@@ -334,7 +334,7 @@
                                                     <a href="<?php echo base_url('LessonPlanList/programplanprintpage/'.$plan->id); ?>" class="btn btn-sm btn-info">
                                                         <i class="fa-solid fa-print animated-icon"></i> Print
                                                     </a>
-                                                    <a href="#" class="btn btn-sm btn-primary">
+                                                    <a href="<?php echo base_url('LessonPlanList/viewProgramplanCreateformpage'."?centerid=".$centerid."&planid=".$plan->id); ?>" class="btn btn-sm btn-primary">
                                                         <i class="fa-solid fa-pen-to-square animated-icon"></i> Edit
                                                     </a>
                                                     <button type="button" class="btn btn-sm btn-danger delete-program" data-id="<?php echo $plan->id; ?>">
