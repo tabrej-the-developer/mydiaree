@@ -241,7 +241,12 @@
                 </div>
 
                 <?php if(isset($plan_data) && $plan_data): ?>
-               
+                   
+                    <div class="form-group">
+        <button type="submit" class="btn btn-primary" id="updateBtn">Update</button>
+       &nbsp;&nbsp;&nbsp; <button type="button" class="btn btn-info" style="background-color:#2eefb7;border-color:#2eefb7;color:black;" id="saveAsNewBtn">Save as New Data</button>
+    </div>
+
                 <?php else: ?>
                     <div class="form-group">
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -354,7 +359,6 @@
 
 
 
-
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/jquery-3.3.1.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/bootstrap.bundle.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/moment.min.js?v=1.0.0"></script>
@@ -362,10 +366,12 @@
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/mousetrap.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/dore.script.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/scripts.js?v=1.0.0"></script>
+  
 
     </body>
 
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+   
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
@@ -474,6 +480,17 @@ $(document).ready(function () {
             }
         });
     });
+
+
+    $('#saveAsNewBtn').on('click', function() {
+    // Remove the plan_id from the form before submission
+    $('#programPlanForm input[name="plan_id"]').remove();
+    
+    // Submit the form
+    $('#programPlanForm').submit();
+               });
+
+
 });
 </script>
 

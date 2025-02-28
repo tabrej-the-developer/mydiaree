@@ -389,7 +389,7 @@
                         <form id="milestoneForm">
                             <div class="mb-3">
                                 <label for="milestoneid" class="form-label">Milestone ID</label>
-                                <input type="number" class="form-control" id="milestoneid" value="17" name="milestoneid" required>
+                                <input type="number" class="form-control" id="milestoneid" value="44" name="milestoneid" required>
                             </div>
                             <div class="mb-3">
                                 <label for="name" class="form-label">Name</label>
@@ -1005,40 +1005,40 @@
                                                                                                      if (!empty($obsMilestones)) {
                                                                                                         foreach ($obsMilestones as $key => $obsDev) {
                                                                                                            if ($obsDev->devMilestoneId==$dev_sub_activity->id) {
-                                                                                                              if ($obsDev->assessment=="Not Observed") {
+                                                                                                              if ($obsDev->assessment=="Introduced") {
                                                                                                   ?>
-                                                                                                  <option value="Not Observed" selected>Not Observed</option>
-                                                                                                  <option value="Not Interested">Not Interested</option>
-                                                                                                  <option value="Not Calculated">Not Calculated</option>
+                                                                                                  <option value="Introduced" selected>Introduced</option>
+                                                                                                  <option value="Working towards">Working towards</option>
+                                                                                                  <option value="Achieved">Achieved</option>
                                                                                                   <?php
-                                                                                                              } else if($obsDev->assessment=="Not Interested"){
+                                                                                                              } else if($obsDev->assessment=="Working towards"){
                                                                                                   ?>
-                                                                                                  <option value="Not Observed">Not Observed</option>
-                                                                                                  <option value="Not Interested" selected>Not Interested</option>
-                                                                                                  <option value="Not Calculated">Not Calculated</option>
+                                                                                                  <option value="Introduced">Introduced</option>
+                                                                                                  <option value="Working towards" selected>Working towards</option>
+                                                                                                  <option value="Achieved">Achieved</option>
                                                                                                   <?php 
-                                                                                                              }else if($obsDev->assessment=="Not Calculated"){
+                                                                                                              }else if($obsDev->assessment=="Achieved"){
                                                                                                   ?>
-                                                                                                  <option value="Not Observed">Not Observed</option>
-                                                                                                  <option value="Not Interested">Not Interested</option>
-                                                                                                  <option value="Not Calculated" selected>Not Calculated</option>
+                                                                                                  <option value="Introduced">Introduced</option>
+                                                                                                  <option value="Working towards">Working towards</option>
+                                                                                                  <option value="Achieved" selected>Achieved</option>
                                                                                                   <?php
                                                                                                               }else{
                                                                                                   ?>
                                                                                                   <option>--Select Option--</option>
-                                                                                                  <option value="Not Observed">Not Observed</option>
-                                                                                                  <option value="Not Interested">Not Interested</option>
-                                                                                                  <option value="Not Calculated">Not Calculated</option>
+                                                                                                  <option value="Introduced">Introduced</option>
+                                                                                                  <option value="Working towards">Working towards</option>
+                                                                                                  <option value="Achieved">Achieved</option>
                                                                                                   <?php
                                                                                                               }
                                                                                                            }
-                                                                                                        }
+                                                                                                        }  
                                                                                                      }else{
                                                                                                   ?>
                                                                                                   <option>--Select Option--</option>
-                                                                                                  <option value="Not Observed">Not Observed</option>
-                                                                                                  <option value="Not Interested">Not Interested</option>
-                                                                                                  <option value="Not Calculated">Not Calculated</option>
+                                                                                                  <option value="Introduced">Introduced</option>
+                                                                                                  <option value="Working towards">Working towards</option>
+                                                                                                  <option value="Achieved">Achieved</option>
                                                                                                   <?php   } ?>
                                                                                                </select>
                                                                                             </div>

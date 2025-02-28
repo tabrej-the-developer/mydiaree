@@ -309,6 +309,7 @@
                                     <th>Room</th>
                                     <th>Created By</th>
                                     <th>Created Date</th>
+                                    <th>Updated Date</th>
                                     <th width="240">Actions</th>
                                 </tr>
                             </thead>
@@ -327,6 +328,12 @@
                                                 <?php 
                                                 $created_date = new DateTime($plan->created_at);
                                                 echo $created_date->format('d M Y / H:i'); 
+                                                ?>
+                                            </td>
+                                            <td>
+                                                <?php 
+                                                $updated_at = new DateTime($plan->updated_at);
+                                                echo $updated_at->format('d M Y / H:i'); 
                                                 ?>
                                             </td>
                                             <td>

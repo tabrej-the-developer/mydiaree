@@ -858,6 +858,8 @@ public function save_program_planinDB() {
   // Get the posted data
   $data = $this->input->post();
 
+ 
+
   // Validate required fields
   if (empty($data['room']) || empty($data['months']) || empty($data['users']) || empty($data['children'])) {
       $response = array(
@@ -872,8 +874,8 @@ public function save_program_planinDB() {
   $educators = is_array($data['users']) ? implode(',', $data['users']) : NULL;
   $children = is_array($data['children']) ? implode(',', $data['children']) : NULL;
 
-  // Prepare data for database insert
-  $insert_data = array(
+  // Prepare data for database insert or update
+  $program_data = array(
       'room_id' => $data['room'],
       'months' => $data['months'],
       'centerid' => $data['centerid'] ?? NULL,
@@ -902,31 +904,54 @@ public function save_program_planinDB() {
       'families_input' => $data['families_input'] ?? NULL,
       'group_experience' => $data['group_experience'] ?? NULL,
       'spontaneous_experience' => $data['spontaneous_experience'] ?? NULL,
-      'mindfulness_experiences' => $data['mindfulness_experiences'] ?? NULL,
-      'created_at' => date('Y-m-d H:i:s', strtotime('now Australia/Sydney'))
+      'mindfulness_experiences' => $data['mindfulness_experiences'] ?? NULL
   );
 
-  // Insert data into the database
-  $result = $this->db->insert('programplantemplatedetailsadd', $insert_data);
-
-  if ($result) {
-      $plan_id = $this->db->insert_id();
-
-      $response = array(
-          'success' => true,
-          'redirect_url' => base_url('LessonPlanList/programplanprintpage/' . $plan_id)
-      );
+  // Check if plan_id exists to determine whether to update or insert
+  if (!empty($data['plan_id'])) {
+      // Update existing record
+      $program_data['updated_at'] = date('Y-m-d H:i:s', strtotime('now Australia/Sydney'));
+      
+      $this->db->where('id', $data['plan_id']);
+      $result = $this->db->update('programplantemplatedetailsadd', $program_data);
+      
+      if ($result) {
+          $plan_id = $data['plan_id'];
+          $response = array(
+              'success' => true,
+              'message' => 'Program plan updated successfully',
+              'redirect_url' => base_url('LessonPlanList/programplanprintpage/' . $plan_id)
+          );
+      } else {
+          $response = array(
+              'status' => 'error',
+              'message' => 'Error updating program plan. Please try again.'
+          );
+      }
   } else {
-      $response = array(
-          'status' => 'error',
-          'message' => 'Database error occurred. Please try again.'
-      );
+      // Insert new record
+      $program_data['created_at'] = date('Y-m-d H:i:s', strtotime('now Australia/Sydney'));
+      
+      $result = $this->db->insert('programplantemplatedetailsadd', $program_data);
+      
+      if ($result) {
+          $plan_id = $this->db->insert_id();
+          $response = array(
+              'success' => true,
+              'message' => 'Program plan created successfully',
+              'redirect_url' => base_url('LessonPlanList/programplanprintpage/' . $plan_id)
+          );
+      } else {
+          $response = array(
+              'status' => 'error',
+              'message' => 'Error creating program plan. Please try again.'
+          );
+      }
   }
 
   // Return JSON response
   echo json_encode($response);
 }
-
 
 public function programplanprintpage($id) {
   if (!$this->session->has_userdata('LoginId')) {
