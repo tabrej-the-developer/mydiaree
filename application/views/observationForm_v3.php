@@ -276,6 +276,10 @@
         color: #333;
     }
 
+    .activity-title{
+        width: 350px;
+    }
+
     /* Box styling */
     .custom-subactivity .subactivity-box {
         padding: 10px;
@@ -882,7 +886,7 @@
                                                                             ?>
                                                                             <div class="border">
                                                                                 <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#<?= $target; ?>" aria-expanded="<?= $expanded; ?>" aria-controls="<?= $target; ?>">
-                                                                                    <?= ucwords(strtolower($eylf_activity->title)); ?>
+                                                                                     <?= ucwords(strtolower($eylf_activity->title)); ?>
                                                                                 </button>
                                                                                 <div id="<?= $target; ?>" class="<?= $collapse; ?> p-4" data-parent="#<?= 'accord-'.$name; ?>">
                                                                                     <?php 
@@ -1000,7 +1004,38 @@
                                                                                                <?php echo $dev_sub_activity->name; ?>
                                                                                             </div>
                                                                                             <div class="right-col divtable">
-                                                                                               <select name="milestones[<?php echo $dev_sub_activity->id; ?>]" class="form-control devmilesub" data-devsubactid="<?php echo $dev_sub_activity->id; ?>">
+                                                                                            <select name="milestones[<?php echo $dev_sub_activity->id; ?>]" class="form-control devmilesub" data-devsubactid="<?php echo $dev_sub_activity->id; ?>">
+    <?php 
+    // Define the available options
+    $options = ["Introduced", "Working towards", "Achieved"];
+
+    // Initialize the selected value as empty
+    $selectedValue = "";
+
+    // Check if there's a matching record in $obsMilestones
+    if (!empty($obsMilestones)) {
+        foreach ($obsMilestones as $obsDev) {
+            if ($obsDev->devMilestoneId == $dev_sub_activity->id) {
+                $selectedValue = $obsDev->assessment;
+                break; // Exit loop after the first match
+            }
+        }
+    }
+
+    // Default "Select Option"
+    echo '<option value="">--Select Option--</option>';
+
+    // Loop through each option and mark the selected one
+    foreach ($options as $option) {
+        $selected = ($option == $selectedValue) ? 'selected' : '';
+        echo "<option value='$option' $selected>$option</option>";
+    }
+    ?>
+</select>
+
+
+
+                                                                                        <!-- <select name="milestones[<?php echo $dev_sub_activity->id; ?>]" class="form-control devmilesub" data-devsubactid="<?php echo $dev_sub_activity->id; ?>">
                                                                                                   <?php 
                                                                                                      if (!empty($obsMilestones)) {
                                                                                                         foreach ($obsMilestones as $key => $obsDev) {
@@ -1025,7 +1060,7 @@
                                                                                                   <?php
                                                                                                               }else{
                                                                                                   ?>
-                                                                                                  <option>--Select Option--</option>
+                                                                                                  <option value="">--Select Option--</option>
                                                                                                   <option value="Introduced">Introduced</option>
                                                                                                   <option value="Working towards">Working towards</option>
                                                                                                   <option value="Achieved">Achieved</option>
@@ -1035,12 +1070,14 @@
                                                                                                         }  
                                                                                                      }else{
                                                                                                   ?>
-                                                                                                  <option>--Select Option--</option>
+                                                                                                  <option value="">--Select Option--</option>
                                                                                                   <option value="Introduced">Introduced</option>
                                                                                                   <option value="Working towards">Working towards</option>
                                                                                                   <option value="Achieved">Achieved</option>
                                                                                                   <?php   } ?>
-                                                                                               </select>
+                                                                                                </select> -->
+
+
                                                                                             </div>
                                                                                         </div>
                                                                                         <?php  
@@ -2301,13 +2338,21 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById("form-observation").submit();
         }
 
-       function saveMilestones() {
-          var url = "<?php echo base_url('observation/addNew?type=links&id='.$id); ?>";
-          var test = url.replace(/&/g, '&');
-          document.getElementById("form-milestones").action = test;
-          document.getElementById("form-milestones").submit();
-          console.log(test);
-       }
+        function saveMilestones() {
+    var url = "<?php echo base_url('observation/addNew?type=links&id='.$id); ?>";
+    var test = url.replace(/&/g, '&');
+
+    // Remove empty selects before submission
+    document.querySelectorAll('.devmilesub').forEach(function(select) {
+        if (select.value === "") {
+            select.remove();
+        }
+    });
+
+    document.getElementById("form-milestones").action = test;
+    document.getElementById("form-milestones").submit();
+    console.log(test);
+}
 
        function myFunction() {
           var input, filter, table, tr, td, i, alltables;
