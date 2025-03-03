@@ -3057,13 +3057,14 @@ foreach ($obsMonSubArr as $monSubjects => $monsubject) {
 	}
 
 
-	public function getDraftObservations() {
+	public function getDraftObservations($loginId, $centerId) { 
 		$date = date('Y-m-d H:i:s', strtotime('-14 days'));
 		
 		// Get observations older than 14 days
 		$observations = $this->db
 			->select('id, title, date_added')
 			->where('status', 'Draft')
+			->where('centerid', $centerId)
 			->where('date_added <', $date)  
 			->get('observation')
 			->result_array();

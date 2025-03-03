@@ -735,29 +735,66 @@ public function deletedataofprogramplan()
         ->get('eylfoutcome')
         ->result();
 
-// Fetch EYLF Activities for each outcome
-$outcomes_with_activities = [];
-foreach ($eylf_outcomes as $outcome) {
-$activities = $this->db->select('id, outcomeId, title')
+             // Fetch EYLF Activities for each outcome
+            $outcomes_with_activities = [];
+            foreach ($eylf_outcomes as $outcome) {
+            $activities = $this->db->select('id, outcomeId, title')
            ->where('outcomeId', $outcome->id)
            ->get('eylfactivity')
            ->result();
 
-$outcome->activities = $activities;
-$outcomes_with_activities[] = $outcome;
-}
+          $outcome->activities = $activities;
+          $outcomes_with_activities[] = $outcome;
+           }
 
-$plan_data = null;
-$selected_educators = [];
-$selected_children = [];
 
-// If planid is provided, fetch plan data for editing
-if ($planid) {
-    $plan_data = $this->db->where('id', $planid)
+
+           $montessorisubjects = $this->db->select('idSubject, name')
+           ->order_by('idSubject', 'ASC')
+           ->get('montessorisubjects')
+           ->result();
+       
+       $montessori_activities = [];
+       
+       foreach ($montessorisubjects as $Mactivities) {
+           // Get activities for each subject
+           $Nactivities = $this->db->select('idActivity, idSubject, title')
+               ->where('idSubject', $Mactivities->idSubject)
+               ->get('montessoriactivity')
+               ->result();
+       
+           // Fetch sub-activities for each activity
+           foreach ($Nactivities as $activity) {
+               $subActivities = $this->db->select('title')
+                   ->where('idActivity', $activity->idActivity)
+                   ->get('montessorisubactivity')
+                   ->result();
+       
+               // Attach sub-activities to the activity
+               $activity->sub_activities = $subActivities;
+           }
+       
+           // Attach activities to the subject
+           $Mactivities->activities = $Nactivities;
+           $montessori_activities[] = $Mactivities;
+       }
+       
+
+
+
+
+
+        $plan_data = null;
+        $selected_educators = [];
+        $selected_children = [];
+
+       // If planid is provided, fetch plan data for editing
+      if ($planid) {
+      $plan_data = $this->db->where('id', $planid)
                         ->get('programplantemplatedetailsadd')
                         ->row();
     
-    if ($plan_data) {
+      if ($plan_data) {
         // Process educators and children IDs
         if (!empty($plan_data->educators)) {
             $selected_educators = explode(',', $plan_data->educators);
@@ -777,6 +814,7 @@ if ($planid) {
               'centerid' => $centerid,
               'user_id' => $userid,
               'eylf_outcomes' => $outcomes_with_activities,
+              'Montessori' => $montessori_activities,
               'plan_data' => $plan_data,
               'selected_educators' => $selected_educators,
               'selected_children' => $selected_children,

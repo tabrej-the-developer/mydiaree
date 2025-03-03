@@ -3,6 +3,11 @@
 defined('BASEPATH') OR exit('No direct script access allowed');  
   
 class Observation extends CI_Controller {  
+
+	function __construct() {
+		parent::__construct();
+		$this->load->database(); 
+	  }
       
     public function index()  
     {
@@ -804,6 +809,34 @@ class Observation extends CI_Controller {
 				return 'failed';
 		   }
 	    }
+	}
+
+	public function delete_observation() {
+		$observation_id = $this->input->post('observation_id');
+		
+		// Start transaction for safety
+		$this->db->trans_start();
+		
+		// Delete from all related tables
+		$this->db->where('id', $observation_id)->delete('observation');
+		$this->db->where('observationId', $observation_id)->delete('observationcomments');
+		$this->db->where('observationId', $observation_id)->delete('observationchild');
+		$this->db->where('observationId', $observation_id)->delete('observationdevmilestonesub');
+		$this->db->where('observationId', $observation_id)->delete('observationeylf');
+		$this->db->where('observationId', $observation_id)->delete('observationlinks');
+		$this->db->where('observationId', $observation_id)->delete('observationmedia');
+		$this->db->where('observationId', $observation_id)->delete('observationmontessori');
+		
+		// Complete transaction
+		$this->db->trans_complete();
+		
+		if ($this->db->trans_status() === FALSE) {
+			// Transaction failed
+			echo json_encode(['status' => 'error', 'message' => 'Delete operation failed']);
+		} else {
+			// Transaction succeeded
+			echo json_encode(['status' => 'success', 'message' => 'Observation deleted successfully']);
+		}
 	}
 
 	public function getView()
@@ -2374,7 +2407,19 @@ $centerid = 1;
 
 	public function getDraftObservations() {
 		if($this->session->has_userdata('LoginId')) {
-			$url = BASE_API_URL."/observation/getDraftObservations/".$this->session->userdata('LoginId');
+
+			if (isset($_GET['centerid'])) {
+				$centerid = $_GET['centerid'];
+			} else {
+				$cen = $this->session->userdata('centerIds');
+				$centerid = $cen[0]->id;
+			}
+		
+			
+			// $url = BASE_API_URL."/observation/getDraftObservations/".$this->session->userdata('LoginId');
+
+			$loginId = $this->session->userdata('LoginId'); // Get login ID
+            $url = BASE_API_URL . "/observation/getDraftObservations/" . $loginId . "/" . $centerid; // Append centerid to the URL
 			
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_URL, $url);

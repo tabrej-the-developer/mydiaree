@@ -189,7 +189,7 @@
                     <div class="d-flex flex-row mb-3 bg-white br-10">
                         <a class="d-block position-relative" href="<?= base_url('observation/view?id='.$obsId); ?>">
                             <?php if(empty($observation->observationsMedia)) { ?>
-                            <img src="https://via.placeholder.com/320x240?text=No+Media" alt="No Media" class="list-thumbnail border-0">
+                            <img src="https://skala.or.id/wp-content/uploads/2024/01/dummy-post-square-1-1.jpg" alt="No Media" class="list-thumbnail border-0">
                             <?php 
                                 } else{ 
                                     if($observation->observationsMediaType=='Image') {
@@ -214,7 +214,7 @@
                             <span class="badge badge-pill position-absolute badge-top-right badge-danger">DRAFT</span>
                             <?php } ?>
                         </a>
-                        <div class="pl-3 pt-2 pr-2 pb-2">
+                        <div class="pl-5 pt-2 pr-2 pb-2">
                             <a href="<?= base_url('observation/view?id='.$obsId); ?>" class="obs-link">
                                 <p class="list-item-heading">
                                     <?= substr_replace(strip_tags(html_entity_decode($observation->title)),'...',40); ?>
@@ -230,8 +230,10 @@
                             </a>
                         </div>
                        
-                        <!-- <i class="fa-solid fa-trash fa-fade"></i> -->
-                      
+                        <div class="pl-5 pt-2 pr-2 pb-2">
+                        <i class="fa-sharp fa-solid fa-trash fa-lg" style="color: #da0711;cursor:pointer;" onclick="deleteObservation(<?php echo $obsId; ?>)"></i>
+                           </div>
+
                     </div>
                 </div>
                 <?php } }else{ ?>
@@ -534,6 +536,15 @@
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/mousetrap.min.js?v=1.1.1"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/dore.script.js?v=1.1.1"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/scripts.js?v=1.1.1"></script>
+
+    <!-- jQuery CDN -->
+
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    
     <script>
         $(function() {
             function filters(){
@@ -826,5 +837,58 @@ $(document).ready(function() {
 
 
     </script>   
+
+<script>
+    function deleteObservation(observationId) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Perform AJAX delete
+            $.ajax({
+                url: '<?= base_url("observation/delete_observation") ?>',
+                type: 'POST',
+                data: {
+                    observation_id: observationId
+                },
+                success: function(response) {
+                    let res = JSON.parse(response);
+                    if(res.status === 'success') {
+                        Swal.fire(
+                            'Deleted!',
+                            'Observation has been deleted.',
+                            'success'
+                        ).then(() => {
+                            // Reload the page after deletion
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            'Failed to delete observation.',
+                            'error'
+                        );
+                    }
+                },
+                error: function() {
+                    Swal.fire(
+                        'Error!',
+                        'Something went wrong with the request.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+}
+    </script>
+
+
 </body>
 </html>

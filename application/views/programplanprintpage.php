@@ -301,27 +301,27 @@
             </tr>
             <tr class="main-content-row">
                 <td>
-                    <div class="topdivs"> <?php echo isset($plan['practical_life']) ? htmlspecialchars($plan['practical_life'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?></div>
+                    <div class="topdivs"> <?php echo isset($plan['practical_life']) ? nl2br(htmlspecialchars($plan['practical_life'], ENT_QUOTES, 'UTF-8')) : 'N/A'; ?></div>
                     <div class="planned-experiences">Planned experiences:</div>
                     <div class="bottomdivs">  <?php echo isset($plan['practical_life_experiences']) ? htmlspecialchars($plan['practical_life_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?> </div>
                 </td>
                 <td>
-                    <div class="topdivs"> <?php echo isset($plan['sensorial']) ? htmlspecialchars($plan['sensorial'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?></div>
+                    <div class="topdivs"> <?php echo isset($plan['sensorial']) ? nl2br(htmlspecialchars($plan['sensorial'], ENT_QUOTES, 'UTF-8')) : 'N/A'; ?></div>
                     <div class="planned-experiences">Planned experiences:</div>
                     <div class="bottomdivs">  <?php echo isset($plan['sensorial_experiences']) ? htmlspecialchars($plan['sensorial_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?> </div>
                 </td>
                 <td>
-                    <div class="topdivs"> <?php echo isset($plan['math']) ? htmlspecialchars($plan['math'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?></div>
+                    <div class="topdivs"> <?php echo isset($plan['math']) ? nl2br(htmlspecialchars($plan['math'], ENT_QUOTES, 'UTF-8')) : 'N/A'; ?></div>
                     <div class="planned-experiences">Planned experiences:</div>
                     <div class="bottomdivs">  <?php echo isset($plan['math_experiences']) ? htmlspecialchars($plan['math_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?> </div>
                 </td>
                 <td>
-                    <div class="topdivs"> <?php echo isset($plan['language']) ? htmlspecialchars($plan['language'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?></div>
+                    <div class="topdivs"> <?php echo isset($plan['language']) ? nl2br(htmlspecialchars($plan['language'], ENT_QUOTES, 'UTF-8')) : 'N/A'; ?></div>
                     <div class="planned-experiences">Planned experiences:</div>
                     <div class="bottomdivs">  <?php echo isset($plan['language_experiences']) ? htmlspecialchars($plan['language_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?> </div>
                 </td>
                 <td>
-                    <div class="topdivs"> <?php echo isset($plan['culture']) ? htmlspecialchars($plan['culture'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?></div>
+                    <div class="topdivs"> <?php echo isset($plan['culture']) ? nl2br(htmlspecialchars($plan['culture'], ENT_QUOTES, 'UTF-8')) : 'N/A'; ?></div>
                     <div class="planned-experiences">Planned experiences:</div>
                     <div class="bottomdivs">  <?php echo isset($plan['culture_experiences']) ? htmlspecialchars($plan['culture_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?> </div>
                 </td>
