@@ -406,9 +406,9 @@ class Dashboard extends CI_Controller {
             $calendarEventsJson = $this->calendarEvents();
             $getCalDetails = json_decode($calendarEventsJson);
   
-			// echo "<pre>";
-			// print_r($getCalDetails);
-			// exit;
+			echo "<pre>";
+			print_r($getCalDetails);
+			exit;
 
             // Ensure $getCalDetails is not null and is an object
             if ($getCalDetails && is_object($getCalDetails)) {
