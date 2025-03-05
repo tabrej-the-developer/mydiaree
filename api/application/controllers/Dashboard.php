@@ -151,6 +151,9 @@
 						// Staff Birth Date
 						## Staff Birthday field
 						$data['StaffBirthdays'] = $this->DashboardModel->getStaffBirthdaysM($userid);
+				echo "<pre>";
+				print_r($data['StaffBirthdays']);
+				exit;
 						// Public Holidays
 						$data['PublicHolidays'] = $this->DashboardModel->getPublicHolidaysM($userid);
 						foreach($data['PublicHolidays'] as $holiday){
