@@ -124,9 +124,9 @@ class Dashboard extends CI_Controller {
 			curl_close($ch);
 	
 			if ($httpcode == 200) {
-				echo "<pre>";
-				print_r($server_output);
-				exit;
+				// echo "<pre>";
+				// print_r($server_output);
+				// exit;
 				return $server_output;
 			} else {
 				// Return an empty JSON object if the request fails
