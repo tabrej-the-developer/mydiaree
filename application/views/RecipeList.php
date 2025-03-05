@@ -226,8 +226,17 @@
                             <?php } ?>
                         </div>
                         <?php } ?>
+
+						<div style="margin-left: 10px;margin-top: 2px;">
+    <button id="manage-ingredients-btn" class="btn btn-outline-info">Manage Ingredients</button>
+</div>
+
                     </div>
+					
                 </div>
+
+				
+
                 <div class="separator mb-5"></div>
             </div>
         </div>
@@ -251,6 +260,7 @@
     			}
     		}
     	?>
+
         <div class="row mb-3">
         	<div class="col-md-10">
         		<h4>Breakfast</h4>
@@ -306,6 +316,73 @@
 	        </div> 
 			<?php } $i++; } ?>   	
         </div>
+		<hr>
+
+
+
+
+		<div class="row mb-3">
+        	<div class="col-md-10">
+        		<h4>MORNING TEA</h4>
+        	</div>
+        	<div class="col-md-2 text-right">
+        		<?php if ($add==1) { ?>
+        		<button class="btn btn-outline-primary btn-sm add-item-btn" type="button" data-toggle="modal" data-type="MORNING_TEA" data-target="#myModal2">+ Add new</button>
+        		<?php } ?>
+        	</div>
+        </div>
+        <div class="row">
+	        <?php 
+	        	$i = 1;
+	        	foreach ($Recipes as $recipeKey => $rcp) { 
+	        		if ($rcp->type == "MORNING_TEA") {
+	        ?>
+			<div class="col-xl-3 col-lg-4 col-12 col-sm-6 mb-4">
+	            <div class="card">
+	                <div class="position-relative">
+	                    <a href="#">
+	                    	<img class="card-img-top" src="<?= BASE_API_URL.'assets/media/'.$rcp->mediaUrl; ?>" alt="Card image cap">
+	                   	</a>
+	                   	<?php if ($rcp->userType == "Parent") { ?>
+		                    <span class="badge badge-pill badge-theme-1 position-absolute badge-top-left">SUGGESTED</span>
+	                   	<?php } ?>
+	                </div>
+	                <div class="card-body">
+	                    <div class="row">
+	                        <div class="col-12">
+	                        	<?php if ($logged_user == $rcp->createdBy) { ?>
+	                        	<button id="<?= 'btnGroup-'.$i; ?>" type="button" class="btn btn-link dropdown-toggle btn-item-title " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	                                <?= $rcp->itemName; ?>
+	                            </button>
+	                            <div class="dropdown-menu" aria-labelledby="<?= 'btnGroup-'.$i; ?>">
+	                                <a class="dropdown-item load-recipe" href="#!" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $rcp->id; ?>">View</a>
+	                                <?php if ($edit==1) { ?>
+	                                <a class="dropdown-item edit-recipe-btn" href="#!" title="Edit recipe" data-toggle="modal" data-target="#myModal2" data-recipeid="<?php echo $rcp->id; ?>">Edit</a>
+		                            <?php } ?>
+
+	                                <?php if ($delete==1) { ?>
+	                                <a class="dropdown-item" href="<?= base_url("Recipe/deleteRecipe/").$rcp->id."/".$centerid; ?>">Delete</a>
+		                            <?php } ?>
+	                            </div>
+	                        	<?php }else{ ?>
+	                        	<p class="list-item-heading mb-1 pt-1 load-recipe" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $rcp->id; ?>"><?= $rcp->itemName; ?></p>
+	                        	<?php } ?>
+	                            <p class="text-muted text-small mb-0 font-weight-light">By: <?= $rcp->name; ?> (<?= $rcp->userType; ?>)</p>
+	                            <p class="text-muted text-small mb-0 font-weight-light"><?= date('d.m.Y',strtotime($rcp->createdAt)); ?></p>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div> 
+			<?php } $i++; } ?>   	
+        </div>
+		<hr>
+
+
+
+
+
+
         <div class="row mb-3">
         	<div class="col-md-10">
         		<h4>Lunch</h4>
@@ -361,6 +438,71 @@
 	        </div>
 			<?php } $i++; } ?> 
         </div>
+<hr>
+
+
+
+
+		<div class="row mb-3">
+        	<div class="col-md-10">
+        		<h4>AFTERNOON TEA</h4>
+        	</div>
+        	<div class="col-md-2 text-right">
+        		<?php if ($add==1) { ?>
+        		<button class="btn btn-outline-primary btn-sm add-item-btn" type="button" data-toggle="modal" data-type="AFTERNOON_TEA" data-target="#myModal2">+ Add new</button>
+        		<?php } ?>
+        	</div>
+        </div>
+        <div class="row">
+	        <?php 
+	        	$i = 1;
+	        	foreach ($Recipes as $recipeKey => $rcp) { 
+	        		if ($rcp->type == "AFTERNOON_TEA") {
+	        ?>
+			<div class="col-xl-3 col-lg-4 col-12 col-sm-6 mb-4">
+	            <div class="card">
+	                <div class="position-relative">
+	                    <a href="#">
+	                    	<img class="card-img-top" src="<?= BASE_API_URL.'assets/media/'.$rcp->mediaUrl; ?>" alt="Card image cap">
+	                   	</a>
+	                   	<?php if ($rcp->userType == "Parent") { ?>
+		                    <span class="badge badge-pill badge-theme-1 position-absolute badge-top-left">SUGGESTED</span>
+	                   	<?php } ?>
+	                </div>
+	                <div class="card-body">
+	                    <div class="row">
+	                        <div class="col-12">
+	                        	<?php if ($logged_user == $rcp->createdBy) { ?>
+	                        	<button id="<?= 'btnGroup-'.$i; ?>" type="button" class="btn btn-link dropdown-toggle btn-item-title " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	                                <?= $rcp->itemName; ?>
+	                            </button>
+	                            <div class="dropdown-menu" aria-labelledby="<?= 'btnGroup-'.$i; ?>">
+	                                <a class="dropdown-item load-recipe" href="#!" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $rcp->id; ?>">View</a>
+	                                <?php if ($edit==1) { ?>
+	                                <a class="dropdown-item edit-recipe-btn" href="#!" title="Edit recipe" data-toggle="modal" data-target="#myModal2" data-recipeid="<?php echo $rcp->id; ?>">Edit</a>
+		                            <?php } ?>
+
+	                                <?php if ($delete==1) { ?>
+	                                <a class="dropdown-item" href="<?= base_url("Recipe/deleteRecipe/").$rcp->id."/".$centerid; ?>">Delete</a>
+		                            <?php } ?>
+	                            </div>
+	                        	<?php }else{ ?>
+	                        	<p class="list-item-heading mb-1 pt-1 load-recipe" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $rcp->id; ?>"><?= $rcp->itemName; ?></p>
+	                        	<?php } ?>
+	                            <p class="text-muted text-small mb-0 font-weight-light">By: <?= $rcp->name; ?> (<?= $rcp->userType; ?>)</p>
+	                            <p class="text-muted text-small mb-0 font-weight-light"><?= date('d.m.Y',strtotime($rcp->createdAt)); ?></p>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div> 
+			<?php } $i++; } ?>   	
+        </div>
+		<hr>
+
+
+
+
         <div class="row mb-3">
         	<div class="col-md-10">
         		<h4>Snacks</h4>
@@ -540,6 +682,71 @@
 		</div>
 	</div>
 <!-- end Add Item Modal -->
+
+
+
+<!-- Ingredients Modal -->
+<div class="modal fade" id="ingredientsModal" tabindex="-1" role="dialog" aria-labelledby="ingredientsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ingredientsModalLabel">Manage Ingredients</h5>
+		<div style="margin-left:220px;">
+        <button type="button" class="btn btn-primary ml-auto" id="add-ingredient-btn">Add New Ingredient</button>
+		</div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="max-height:500px;overflow-y:auto;">
+        <table class="table table-striped" id="ingredients-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Ingredients will be loaded here via AJAX -->
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Ingredient Modal -->
+<div class="modal fade" id="editIngredientModal" tabindex="-1" role="dialog" aria-labelledby="editIngredientModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editIngredientModalLabel">Edit Ingredient</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="ingredient-form">
+          <input type="hidden" id="ingredient-id">
+          <div class="form-group">
+            <label for="ingredient-name">Ingredient Name</label>
+            <input type="text" class="form-control" id="ingredient-name" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="save-ingredient-btn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 	<?php $this->load->view('footer_v3'); ?>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/jquery-3.3.1.min.js?v=1.0.0"></script>
@@ -853,10 +1060,18 @@ $("#itemVideos").on('change', function() {
 		    $(document).on('click','.edit-recipe-btn', function(){
 				
 		    	var rcpId = $(this).data("recipeid");
+				var centerid = '<?= $centerid; ?>';
 
 				var form_action_url = "<?= base_url("Recipe/updateRecipe"); ?>";
 
 				$("#recipe-form").attr("action", form_action_url);
+
+				 // Ensure centerid is sent with the form
+				 if ($('#recipe-form input[name="centerid"]').length === 0) {
+        $("#recipe-form").append('<input type="hidden" name="centerid" value="' + centerid + '">');
+    } else {
+        $('#recipe-form input[name="centerid"]').val(centerid);
+    }
 
 		    	$.ajax({ 
 		    		traditional:true,
@@ -926,5 +1141,133 @@ $("#itemVideos").on('change', function() {
 			});
 		});
 	</script>
+
+<script>
+	$(document).ready(function() {
+    // Open the ingredients modal when the button is clicked
+    $("#manage-ingredients-btn").click(function() {
+        loadIngredients();
+    });
+    
+    // Add New Ingredient button handler
+    $("#add-ingredient-btn").click(function() {
+        $("#editIngredientModalLabel").text("Add New Ingredient");
+        $("#ingredient-id").val("");
+        $("#ingredient-name").val("");
+        $("#ingredientsModal").modal("hide");
+        $("#editIngredientModal").modal("show");
+    });
+    
+    // Save ingredient button handler
+    $("#save-ingredient-btn").click(function() {
+        var id = $("#ingredient-id").val();
+        var name = $("#ingredient-name").val();
+        
+        if (name.trim() === "") {
+            alert("Please enter an ingredient name");
+            return;
+        }
+        
+        var url = id ? 
+            "<?= base_url('Recipe/update') ?>" : 
+            "<?= base_url('Recipe/add') ?>";
+        
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: {
+                id: id,
+                name: name
+            },
+            success: function(response) {
+                var result = JSON.parse(response);
+                if (result.status === "success") {
+                    $("#editIngredientModal").modal("hide");
+                    $("#ingredientsModal").modal("show");
+                    loadIngredients();
+                } else {
+                    alert(result.message);
+                }
+            },
+            error: function() {
+                alert("An error occurred while saving the ingredient.");
+            }
+        });
+    });
+    
+    // Delete ingredient handler (using event delegation)
+    $(document).on("click", ".delete-ingredient", function() {
+        if (confirm("Are you sure you want to delete this ingredient?")) {
+            var id = $(this).data("id");
+            
+            $.ajax({
+                url: "<?= base_url('Recipe/delete') ?>",
+                type: "POST",
+                data: {
+                    id: id
+                },
+                success: function(response) {
+                    var result = JSON.parse(response);
+                    if (result.status === "success") {
+                        loadIngredients();
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: function() {
+                    alert("An error occurred while deleting the ingredient.");
+                }
+            });
+        }
+    });
+    
+    // Edit ingredient handler (using event delegation)
+    $(document).on("click", ".edit-ingredient", function() {
+        var id = $(this).data("id");
+        var name = $(this).data("name");
+        
+        $("#editIngredientModalLabel").text("Edit Ingredient");
+        $("#ingredient-id").val(id);
+        $("#ingredient-name").val(name);
+        $("#ingredientsModal").modal("hide");
+        $("#editIngredientModal").modal("show");
+    });
+    
+    // Function to load ingredients via AJAX
+    function loadIngredients() {
+        $.ajax({
+            url: "<?= base_url('Recipe/get_all') ?>",
+            type: "GET",
+            success: function(response) {
+                var ingredients = JSON.parse(response);
+                var html = "";
+                
+                ingredients.forEach(function(ingredient) {
+                    html += "<tr>";
+                    html += "<td>" + ingredient.id + "</td>";
+                    html += "<td>" + ingredient.name + "</td>";
+                    html += "<td>";
+                    html += "<button class='btn btn-sm btn-primary edit-ingredient' data-id='" + ingredient.id + "' data-name='" + ingredient.name + "'><i class='fa fa-edit'></i> Edit</button> ";
+                    html += "<button class='btn btn-sm btn-danger delete-ingredient' data-id='" + ingredient.id + "'><i class='fa fa-trash'></i> Delete</button>";
+                    html += "</td>";
+                    html += "</tr>";
+                });
+                
+                if (ingredients.length === 0) {
+                    html = "<tr><td colspan='3' class='text-center'>No ingredients found</td></tr>";
+                }
+                
+                $("#ingredients-table tbody").html(html);
+                $("#ingredientsModal").modal("show");
+            },
+            error: function() {
+                alert("An error occurred while loading ingredients.");
+            }
+        });
+    }
+});
+	</script>
+
+
 </body>
 </html>

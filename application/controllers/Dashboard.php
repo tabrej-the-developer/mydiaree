@@ -405,6 +405,10 @@ class Dashboard extends CI_Controller {
             // Decode calendar events
             $calendarEventsJson = $this->calendarEvents();
             $getCalDetails = json_decode($calendarEventsJson);
+  
+			// echo "<pre>";
+			// print_r($getCalDetails);
+			// exit;
 
             // Ensure $getCalDetails is not null and is an object
             if ($getCalDetails && is_object($getCalDetails)) {
@@ -486,6 +490,10 @@ class Dashboard extends CI_Controller {
 
             $data->calendar = $recs;
 
+			// echo "<pre>";	
+			// print_r($data);
+			// exit;
+
             // Load the view with the data
             $this->load->view('dashboard', $data);
         }
@@ -517,6 +525,12 @@ class Dashboard extends CI_Controller {
 			curl_close ($ch);
 			if ($httpcode == 200) {
 				$jsonOutput = json_decode($server_output);
+				if (isset($jsonOutput->events)) {
+					$jsonOutput->calendar = $jsonOutput->events; // Create new property 'calendar' with the same value as 'events'
+					unset($jsonOutput->events); // Remove the old 'events' property
+				}
+				// print_r($jsonOutput);
+				// exit;
 				$this->load->view('dashboard', $jsonOutput);
 			} else {
 				// redirect(base_url('logout'));

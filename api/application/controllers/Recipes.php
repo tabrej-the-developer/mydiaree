@@ -525,7 +525,7 @@ class Recipes extends CI_Controller {
 					// 0 - Monday // 1 - Tuesday // 2 - Wednesday // 3- Thursday // 4 - Friday
 					for($i=0;$i<5;$i++){
 					//	0 - BREAKFAST //  1 - LUNCH  //  2 - SNACKS
-						for($j=0;$j<3;$j++){
+						for($j=0;$j<5;$j++){
 							$data['Menu'][$i][$j] = [];
 						}
 					}
@@ -543,6 +543,14 @@ class Recipes extends CI_Controller {
 						}
 						if($item->mealType == 'SNACKS'){
 							array_push($data['Menu'][(date("w",strtotime($item->currentDate))-1)][2], $item);
+							$z++;
+						}
+						if($item->mealType == 'MORNING_TEA'){
+							array_push($data['Menu'][(date("w",strtotime($item->currentDate))-1)][3], $item);
+							$z++;
+						}
+						if($item->mealType == 'AFTERNOON_TEA'){
+							array_push($data['Menu'][(date("w",strtotime($item->currentDate))-1)][4], $item);
 							$z++;
 						}
 					}

@@ -142,7 +142,7 @@
              </div>
         </div>
 
-                            <input type="text" class="form-control mt-2" name="practical_life_experiences" value="<?= isset($plan_data) ? $plan_data->practical_life_experiences : '' ?>" placeholder="Planned experiences">
+                            <input type="hidden" class="form-control mt-2" name="practical_life_experiences" value="<?= isset($plan_data) ? $plan_data->practical_life_experiences : '' ?>" placeholder="Planned experiences">
                         </div>
 
                         <!-- Sensorial -->
@@ -160,7 +160,7 @@
 </div>
                            
                            
-                            <input type="text" class="form-control mt-2" name="sensorial_experiences" value="<?= isset($plan_data) ? $plan_data->sensorial_experiences : '' ?>" placeholder="Planned experiences">
+                            <input type="hidden" class="form-control mt-2" name="sensorial_experiences" value="<?= isset($plan_data) ? $plan_data->sensorial_experiences : '' ?>" placeholder="Planned experiences">
                         </div>
 
                         <!-- Math -->
@@ -176,7 +176,7 @@
     </div>
 </div>
                           
-                            <input type="text" class="form-control mt-2" name="math_experiences" value="<?= isset($plan_data) ? $plan_data->math_experiences : '' ?>" placeholder="Planned experiences">
+                            <input type="hidden" class="form-control mt-2" name="math_experiences" value="<?= isset($plan_data) ? $plan_data->math_experiences : '' ?>" placeholder="Planned experiences">
                         </div>
 
                         <!-- Language -->
@@ -192,7 +192,7 @@
     </div>
 </div>
                            
-                            <input type="text" class="form-control mt-2" name="language_experiences" value="<?= isset($plan_data) ? $plan_data->language_experiences : '' ?>" placeholder="Planned experiences">
+                            <input type="hidden" class="form-control mt-2" name="language_experiences" value="<?= isset($plan_data) ? $plan_data->language_experiences : '' ?>" placeholder="Planned experiences">
                         </div>
 
                         <!-- Culture -->
@@ -208,7 +208,7 @@
     </div>
 </div>
                           
-                            <input type="text" class="form-control mt-2" name="culture_experiences" value="<?= isset($plan_data) ? $plan_data->culture_experiences : '' ?>" placeholder="Planned experiences">
+                            <input type="hidden" class="form-control mt-2" name="culture_experiences" value="<?= isset($plan_data) ? $plan_data->culture_experiences : '' ?>" placeholder="Planned experiences">
                         </div>
 
                         <!-- Art & Craft -->
@@ -217,7 +217,7 @@
                             <label>Art & Craft</label>
                             <input type="text" class="form-control" name="art_craft" value="<?= isset($plan_data) ? $plan_data->art_craft : '' ?>" placeholder="Art & Craft">
 
-                            <input type="text" class="form-control mt-2" name="art_craft_experiences" value="<?= isset($plan_data) ? $plan_data->art_craft_experiences : '' ?>" placeholder="Planned experiences">
+                            <input type="hidden" class="form-control mt-2" name="art_craft_experiences" value="<?= isset($plan_data) ? $plan_data->art_craft_experiences : '' ?>" placeholder="Planned experiences">
                         </div>
                     </div>
                 </div>

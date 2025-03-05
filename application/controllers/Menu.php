@@ -77,6 +77,9 @@ class Menu extends CI_Controller {
 					$data['day'] = "monday";
 				}
 
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
 				$this->load->view('recipeMenu',$data);
 			}
 			if($httpcode == 401){

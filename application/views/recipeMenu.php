@@ -219,13 +219,15 @@
                 <div class="tab-content">
                     <div class="tab-pane <?= ($day=="monday")?'show active':'fade'; ?>" id="first" role="tabpanel" aria-labelledby="first-tab">
                         <div class="container-fluid">
+                           
+                        
                             <div class="row mb-3">
                                 <div class="col-md-9">
                                     <h3>Breakfast</h3>
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
-                                    <button type="button" data-toggle="modal" data-date="<?= $monday; ?>" data-day="monday" data-type="breakfast" data-target="#myModal2" class="btn btn-outline-secondary btn-sm add-item-btn">Add Item</button>
+                                    <button type="button" data-toggle="modal" data-date="<?= $monday; ?>" data-day="monday" data-type="breakfast" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -269,6 +271,62 @@
                                 </div>
                                 <?php } } ?>    
                             </div>
+                              <hr>
+
+
+
+                            <div class="row mb-3">
+                                <div class="col-md-9">
+                                    <h3>Morning Tea</h3>
+                                </div>
+                                <div class="col-md-3 text-right">
+                                    <?php if ($add==1) { ?>
+                                    <button type="button" data-toggle="modal" data-date="<?= $monday; ?>" data-day="monday" data-type="MORNING_TEA" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
+                            <div class="row rowListMenu">
+                                <?php 
+                                    if (!empty($output->Menu[0][3])) {
+                                        foreach ($output->Menu[0][3] as $key => $value) { 
+                                ?>
+                                <div class="col-xl-3 col-lg-4 col-12 col-sm-6 mb-4">
+                                    <div class="card">
+                                        <div class="position-relative">
+                                            <?php
+                                                if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
+                                                    $imgurl = base_url('api/assets/media/no-image.png');
+                                                } else {
+                                                    $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
+                                                }
+                                            ?>
+                                            <a href="#">
+                                                <img class="card-img-top" src="<?= $imgurl; ?>" alt="Card image cap">
+                                            </a>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <?php  if ($loggedUser == $value->addedBy) { ?>
+                                                    <button id="btnGroup-7" type="button" class="btn btn-link dropdown-toggle btn-item-title " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $value->recipeDetails->itemName; ?></button>
+                                                    <div class="dropdown-menu" aria-labelledby="btnGroup-7">
+                                                        <a class="dropdown-item load-recipe" href="#!" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>">View</a>
+                                                        <a class="dropdown-item delete-recipe-menu" href="#!" data-recipeid="<?php echo $value->recipeDetails->id; ?>">Delete</a>
+                                                    </div>
+                                                    <p class="text-muted text-small mb-0 font-weight-light"><?= date('d.m.Y', strtotime($value->recipeDetails->createdAt)); ?></p>
+                                                    <?php  } else { ?>
+                                                    <p class="list-item-heading mb-1 pt-1 load-recipe" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>"><?= $value->recipeDetails->itemName; ?></p>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php } } ?>    
+                            </div>
+                          <hr>
+
 
                             <div class="row mb-3">
                                 <div class="col-md-9">
@@ -276,7 +334,7 @@
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
-                                    <button type="button" data-toggle="modal" data-date="<?= $monday; ?>" data-day="monday" data-type="lunch" data-target="#myModal2" class="btn btn-outline-secondary btn-sm add-item-btn">Add Item</button>
+                                    <button type="button" data-toggle="modal" data-date="<?= $monday; ?>" data-day="monday" data-type="lunch" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -320,14 +378,69 @@
                                 </div>
                                 <?php } } ?>    
                             </div>
+                            <hr>
 
+                                  
+                            <div class="row mb-3">
+                                <div class="col-md-9">
+                                    <h3>Afternoon Tea</h3>
+                                </div>
+                                <div class="col-md-3 text-right">
+                                    <?php if ($add==1) { ?>
+                                    <button type="button" data-toggle="modal" data-date="<?= $monday; ?>" data-day="monday" data-type="AFTERNOON_TEA" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
+                            <div class="row rowListMenu">
+                                <?php 
+                                    if (!empty($output->Menu[0][4])) {
+                                        foreach ($output->Menu[0][4] as $key => $value) { 
+                                ?>
+                                <div class="col-xl-3 col-lg-4 col-12 col-sm-6 mb-4">
+                                    <div class="card">
+                                        <div class="position-relative">
+                                            <?php
+                                                if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
+                                                    $imgurl = base_url('api/assets/media/no-image.png');
+                                                } else {
+                                                    $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
+                                                }
+                                            ?>
+                                            <a href="#">
+                                                <img class="card-img-top" src="<?= $imgurl; ?>" alt="Card image cap">
+                                            </a>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <?php  if ($loggedUser == $value->addedBy) { ?>
+                                                    <button id="btnGroup-7" type="button" class="btn btn-link dropdown-toggle btn-item-title " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $value->recipeDetails->itemName; ?></button>
+                                                    <div class="dropdown-menu" aria-labelledby="btnGroup-7">
+                                                        <a class="dropdown-item load-recipe" href="#!" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>">View</a>
+                                                        <a class="dropdown-item delete-recipe-menu" href="#!" data-recipeid="<?php echo $value->recipeDetails->id; ?>">Delete</a>
+                                                    </div>
+                                                    <p class="text-muted text-small mb-0 font-weight-light"><?= date('d.m.Y', strtotime($value->recipeDetails->createdAt)); ?></p>
+                                                    <?php  } else { ?>
+                                                    <p class="list-item-heading mb-1 pt-1 load-recipe" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>"><?= $value->recipeDetails->itemName; ?></p>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php } } ?>    
+                            </div>
+
+
+                            <hr>
                             <div class="row mb-3">
                                 <div class="col-md-9">
                                     <h3>Snacks</h3>
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
-                                    <button type="button" data-toggle="modal" data-date="<?= $monday; ?>" data-day="monday" data-type="snacks" data-target="#myModal2" class="btn btn-outline-secondary btn-sm add-item-btn">Add Item</button>
+                                    <button type="button" data-toggle="modal" data-date="<?= $monday; ?>" data-day="monday" data-type="snacks" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -382,7 +495,7 @@
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
-                                    <button type="button" data-toggle="modal" data-date="<?= $tuesday; ?>" data-day="tuesday" data-type="breakfast" data-target="#myModal2" class="btn btn-outline-secondary btn-sm add-item-btn">Add Item</button>
+                                    <button type="button" data-toggle="modal" data-date="<?= $tuesday; ?>" data-day="tuesday" data-type="breakfast" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -427,13 +540,72 @@
                                 <?php } } ?>    
                             </div>
 
+
+                            <hr>
+
+
+
+<div class="row mb-3">
+    <div class="col-md-9">
+        <h3>Morning Tea</h3>
+    </div>
+    <div class="col-md-3 text-right">
+        <?php if ($add==1) { ?>
+        <button type="button" data-toggle="modal" data-date="<?= $tuesday; ?>" data-day="tuesday" data-type="MORNING_TEA" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
+        <?php } ?>
+    </div>
+</div>
+
+<div class="row rowListMenu">
+    <?php 
+        if (!empty($output->Menu[1][3])) {
+            foreach ($output->Menu[1][3] as $key => $value) { 
+    ?>
+    <div class="col-xl-3 col-lg-4 col-12 col-sm-6 mb-4">
+        <div class="card">
+            <div class="position-relative">
+                <?php
+                    if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
+                        $imgurl = base_url('api/assets/media/no-image.png');
+                    } else {
+                        $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
+                    }
+                ?>
+                <a href="#">
+                    <img class="card-img-top" src="<?= $imgurl; ?>" alt="Card image cap">
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <?php  if ($loggedUser == $value->addedBy) { ?>
+                        <button id="btnGroup-7" type="button" class="btn btn-link dropdown-toggle btn-item-title " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $value->recipeDetails->itemName; ?></button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroup-7">
+                            <a class="dropdown-item load-recipe" href="#!" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>">View</a>
+                            <a class="dropdown-item delete-recipe-menu" href="#!" data-recipeid="<?php echo $value->recipeDetails->id; ?>">Delete</a>
+                        </div>
+                        <p class="text-muted text-small mb-0 font-weight-light"><?= date('d.m.Y', strtotime($value->recipeDetails->createdAt)); ?></p>
+                        <?php  } else { ?>
+                        <p class="list-item-heading mb-1 pt-1 load-recipe" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>"><?= $value->recipeDetails->itemName; ?></p>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } } ?>    
+</div>
+<hr>
+
+
+
                             <div class="row mb-3">
                                 <div class="col-md-9">
                                     <h3>Lunch</h3>
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
-                                    <button type="button" data-toggle="modal" data-date="<?= $tuesday; ?>" data-day="tuesday" data-type="lunch" data-target="#myModal2" class="btn btn-outline-secondary btn-sm add-item-btn">Add Item</button>
+                                    <button type="button" data-toggle="modal" data-date="<?= $tuesday; ?>" data-day="tuesday" data-type="lunch" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -478,13 +650,72 @@
                                 <?php } } ?>    
                             </div>
 
+
+                            <hr>
+
+                                  
+<div class="row mb-3">
+    <div class="col-md-9">
+        <h3>Afternoon Tea</h3>
+    </div>
+    <div class="col-md-3 text-right">
+        <?php if ($add==1) { ?>
+        <button type="button" data-toggle="modal" data-date="<?= $tuesday; ?>" data-day="tuesday" data-type="AFTERNOON_TEA" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
+        <?php } ?>
+    </div>
+</div>
+
+<div class="row rowListMenu">
+    <?php 
+        if (!empty($output->Menu[1][4])) {
+            foreach ($output->Menu[1][4] as $key => $value) { 
+    ?>
+    <div class="col-xl-3 col-lg-4 col-12 col-sm-6 mb-4">
+        <div class="card">
+            <div class="position-relative">
+                <?php
+                    if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
+                        $imgurl = base_url('api/assets/media/no-image.png');
+                    } else {
+                        $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
+                    }
+                ?>
+                <a href="#">
+                    <img class="card-img-top" src="<?= $imgurl; ?>" alt="Card image cap">
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <?php  if ($loggedUser == $value->addedBy) { ?>
+                        <button id="btnGroup-7" type="button" class="btn btn-link dropdown-toggle btn-item-title " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $value->recipeDetails->itemName; ?></button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroup-7">
+                            <a class="dropdown-item load-recipe" href="#!" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>">View</a>
+                            <a class="dropdown-item delete-recipe-menu" href="#!" data-recipeid="<?php echo $value->recipeDetails->id; ?>">Delete</a>
+                        </div>
+                        <p class="text-muted text-small mb-0 font-weight-light"><?= date('d.m.Y', strtotime($value->recipeDetails->createdAt)); ?></p>
+                        <?php  } else { ?>
+                        <p class="list-item-heading mb-1 pt-1 load-recipe" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>"><?= $value->recipeDetails->itemName; ?></p>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } } ?>    
+</div>
+
+
+<hr>
+
+
                             <div class="row mb-3">
                                 <div class="col-md-9">
                                     <h3>Snacks</h3>
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
-                                    <button type="button" data-toggle="modal" data-date="<?= $tuesday; ?>" data-day="tuesday" data-type="snacks" data-target="#myModal2" class="btn btn-outline-secondary btn-sm add-item-btn">Add Item</button>
+                                    <button type="button" data-toggle="modal" data-date="<?= $tuesday; ?>" data-day="tuesday" data-type="snacks" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -539,7 +770,7 @@
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
-                                    <button type="button" data-toggle="modal" data-date="<?= $wednesday; ?>" data-day="wednesday" data-type="breakfast" data-target="#myModal2" class="btn btn-outline-secondary btn-sm add-item-btn">Add Item</button>
+                                    <button type="button" data-toggle="modal" data-date="<?= $wednesday; ?>" data-day="wednesday" data-type="breakfast" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -584,13 +815,72 @@
                                 <?php } } ?>    
                             </div>
 
+
+                            <hr>
+
+
+
+<div class="row mb-3">
+    <div class="col-md-9">
+        <h3>Morning Tea</h3>
+    </div>
+    <div class="col-md-3 text-right">
+        <?php if ($add==1) { ?>
+        <button type="button" data-toggle="modal" data-date="<?= $wednesday; ?>" data-day="wednesday" data-type="MORNING_TEA" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
+        <?php } ?>
+    </div>
+</div>
+
+<div class="row rowListMenu">
+    <?php 
+        if (!empty($output->Menu[2][3])) {
+            foreach ($output->Menu[2][3] as $key => $value) { 
+    ?>
+    <div class="col-xl-3 col-lg-4 col-12 col-sm-6 mb-4">
+        <div class="card">
+            <div class="position-relative">
+                <?php
+                    if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
+                        $imgurl = base_url('api/assets/media/no-image.png');
+                    } else {
+                        $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
+                    }
+                ?>
+                <a href="#">
+                    <img class="card-img-top" src="<?= $imgurl; ?>" alt="Card image cap">
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <?php  if ($loggedUser == $value->addedBy) { ?>
+                        <button id="btnGroup-7" type="button" class="btn btn-link dropdown-toggle btn-item-title " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $value->recipeDetails->itemName; ?></button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroup-7">
+                            <a class="dropdown-item load-recipe" href="#!" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>">View</a>
+                            <a class="dropdown-item delete-recipe-menu" href="#!" data-recipeid="<?php echo $value->recipeDetails->id; ?>">Delete</a>
+                        </div>
+                        <p class="text-muted text-small mb-0 font-weight-light"><?= date('d.m.Y', strtotime($value->recipeDetails->createdAt)); ?></p>
+                        <?php  } else { ?>
+                        <p class="list-item-heading mb-1 pt-1 load-recipe" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>"><?= $value->recipeDetails->itemName; ?></p>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } } ?>    
+</div>
+<hr>
+
+
+
                             <div class="row mb-3">
                                 <div class="col-md-9">
                                     <h3>Lunch</h3>
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
-                                    <button type="button" data-toggle="modal" data-date="<?= $wednesday; ?>" data-day="wednesday" data-type="lunch" data-target="#myModal2" class="btn btn-outline-secondary btn-sm add-item-btn">Add Item</button>
+                                    <button type="button" data-toggle="modal" data-date="<?= $wednesday; ?>" data-day="wednesday" data-type="lunch" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -635,13 +925,73 @@
                                 <?php } } ?>    
                             </div>
 
+
+                            <hr>
+
+                                  
+<div class="row mb-3">
+    <div class="col-md-9">
+        <h3>Afternoon Tea</h3>
+    </div>
+    <div class="col-md-3 text-right">
+        <?php if ($add==1) { ?>
+        <button type="button" data-toggle="modal" data-date="<?= $wednesday; ?>" data-day="wednesday" data-type="AFTERNOON_TEA" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
+        <?php } ?>
+    </div>
+</div>
+
+<div class="row rowListMenu">
+    <?php 
+        if (!empty($output->Menu[2][4])) {
+            foreach ($output->Menu[2][4] as $key => $value) { 
+    ?>
+    <div class="col-xl-3 col-lg-4 col-12 col-sm-6 mb-4">
+        <div class="card">
+            <div class="position-relative">
+                <?php
+                    if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
+                        $imgurl = base_url('api/assets/media/no-image.png');
+                    } else {
+                        $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
+                    }
+                ?>
+                <a href="#">
+                    <img class="card-img-top" src="<?= $imgurl; ?>" alt="Card image cap">
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <?php  if ($loggedUser == $value->addedBy) { ?>
+                        <button id="btnGroup-7" type="button" class="btn btn-link dropdown-toggle btn-item-title " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $value->recipeDetails->itemName; ?></button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroup-7">
+                            <a class="dropdown-item load-recipe" href="#!" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>">View</a>
+                            <a class="dropdown-item delete-recipe-menu" href="#!" data-recipeid="<?php echo $value->recipeDetails->id; ?>">Delete</a>
+                        </div>
+                        <p class="text-muted text-small mb-0 font-weight-light"><?= date('d.m.Y', strtotime($value->recipeDetails->createdAt)); ?></p>
+                        <?php  } else { ?>
+                        <p class="list-item-heading mb-1 pt-1 load-recipe" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>"><?= $value->recipeDetails->itemName; ?></p>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } } ?>    
+</div>
+
+
+<hr>
+
+
+
                             <div class="row mb-3">
                                 <div class="col-md-9">
                                     <h3>Snacks</h3>
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
-                                    <button type="button" data-toggle="modal" data-date="<?= $wednesday; ?>" data-day="wednesday" data-type="snacks" data-target="#myModal2" class="btn btn-outline-secondary btn-sm add-item-btn">Add Item</button>
+                                    <button type="button" data-toggle="modal" data-date="<?= $wednesday; ?>" data-day="wednesday" data-type="snacks" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -696,7 +1046,7 @@
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
-                                    <button type="button" data-toggle="modal" data-date="<?= $thursday; ?>" data-day="thursday" data-type="breakfast" data-target="#myModal2" class="btn btn-outline-secondary btn-sm add-item-btn">Add Item</button>
+                                    <button type="button" data-toggle="modal" data-date="<?= $thursday; ?>" data-day="thursday" data-type="breakfast" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -741,13 +1091,74 @@
                                 <?php } } ?>    
                             </div>
 
+
+
+                            <hr>
+
+
+
+<div class="row mb-3">
+    <div class="col-md-9">
+        <h3>Morning Tea</h3>
+    </div>
+    <div class="col-md-3 text-right">
+        <?php if ($add==1) { ?>
+        <button type="button" data-toggle="modal" data-date="<?= $thursday; ?>" data-day="thursday" data-type="MORNING_TEA" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
+        <?php } ?>
+    </div>
+</div>
+
+<div class="row rowListMenu">
+    <?php 
+        if (!empty($output->Menu[3][3])) {
+            foreach ($output->Menu[3][3] as $key => $value) { 
+    ?>
+    <div class="col-xl-3 col-lg-4 col-12 col-sm-6 mb-4">
+        <div class="card">
+            <div class="position-relative">
+                <?php
+                    if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
+                        $imgurl = base_url('api/assets/media/no-image.png');
+                    } else {
+                        $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
+                    }
+                ?>
+                <a href="#">
+                    <img class="card-img-top" src="<?= $imgurl; ?>" alt="Card image cap">
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <?php  if ($loggedUser == $value->addedBy) { ?>
+                        <button id="btnGroup-7" type="button" class="btn btn-link dropdown-toggle btn-item-title " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $value->recipeDetails->itemName; ?></button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroup-7">
+                            <a class="dropdown-item load-recipe" href="#!" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>">View</a>
+                            <a class="dropdown-item delete-recipe-menu" href="#!" data-recipeid="<?php echo $value->recipeDetails->id; ?>">Delete</a>
+                        </div>
+                        <p class="text-muted text-small mb-0 font-weight-light"><?= date('d.m.Y', strtotime($value->recipeDetails->createdAt)); ?></p>
+                        <?php  } else { ?>
+                        <p class="list-item-heading mb-1 pt-1 load-recipe" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>"><?= $value->recipeDetails->itemName; ?></p>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } } ?>    
+</div>
+<hr>
+
+
+
+
                             <div class="row mb-3">
                                 <div class="col-md-9">
                                     <h3>Lunch</h3>
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
-                                    <button type="button" data-toggle="modal" data-date="<?= $thursday; ?>" data-day="thursday" data-type="lunch" data-target="#myModal2" class="btn btn-outline-secondary btn-sm add-item-btn">Add Item</button>
+                                    <button type="button" data-toggle="modal" data-date="<?= $thursday; ?>" data-day="thursday" data-type="lunch" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -792,13 +1203,74 @@
                                 <?php } } ?>    
                             </div>
 
+
+
+
+                            <hr>
+
+                                  
+<div class="row mb-3">
+    <div class="col-md-9">
+        <h3>Afternoon Tea</h3>
+    </div>
+    <div class="col-md-3 text-right">
+        <?php if ($add==1) { ?>
+        <button type="button" data-toggle="modal" data-date="<?= $thursday; ?>" data-day="thursday" data-type="AFTERNOON_TEA" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
+        <?php } ?>
+    </div>
+</div>
+
+<div class="row rowListMenu">
+    <?php 
+        if (!empty($output->Menu[3][4])) {
+            foreach ($output->Menu[3][4] as $key => $value) { 
+    ?>
+    <div class="col-xl-3 col-lg-4 col-12 col-sm-6 mb-4">
+        <div class="card">
+            <div class="position-relative">
+                <?php
+                    if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
+                        $imgurl = base_url('api/assets/media/no-image.png');
+                    } else {
+                        $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
+                    }
+                ?>
+                <a href="#">
+                    <img class="card-img-top" src="<?= $imgurl; ?>" alt="Card image cap">
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <?php  if ($loggedUser == $value->addedBy) { ?>
+                        <button id="btnGroup-7" type="button" class="btn btn-link dropdown-toggle btn-item-title " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $value->recipeDetails->itemName; ?></button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroup-7">
+                            <a class="dropdown-item load-recipe" href="#!" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>">View</a>
+                            <a class="dropdown-item delete-recipe-menu" href="#!" data-recipeid="<?php echo $value->recipeDetails->id; ?>">Delete</a>
+                        </div>
+                        <p class="text-muted text-small mb-0 font-weight-light"><?= date('d.m.Y', strtotime($value->recipeDetails->createdAt)); ?></p>
+                        <?php  } else { ?>
+                        <p class="list-item-heading mb-1 pt-1 load-recipe" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>"><?= $value->recipeDetails->itemName; ?></p>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } } ?>    
+</div>
+
+
+<hr>
+
+
                             <div class="row mb-3">
                                 <div class="col-md-9">
                                     <h3>Snacks</h3>
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
-                                    <button type="button" data-toggle="modal" data-date="<?= $thursday; ?>" data-day="thursday" data-type="snacks" data-target="#myModal2" class="btn btn-outline-secondary btn-sm add-item-btn">Add Item</button>
+                                    <button type="button" data-toggle="modal" data-date="<?= $thursday; ?>" data-day="thursday" data-type="snacks" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -853,7 +1325,7 @@
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
-                                    <button type="button" data-toggle="modal" data-date="<?= $friday; ?>" data-day="friday" data-type="breakfast" data-target="#myModal2" class="btn btn-outline-secondary btn-sm add-item-btn">Add Item</button>
+                                    <button type="button" data-toggle="modal" data-date="<?= $friday; ?>" data-day="friday" data-type="breakfast" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -898,13 +1370,73 @@
                                 <?php } } ?>    
                             </div>
 
+
+                            <hr>
+
+
+
+<div class="row mb-3">
+    <div class="col-md-9">
+        <h3>Morning Tea</h3>
+    </div>
+    <div class="col-md-3 text-right">
+        <?php if ($add==1) { ?>
+        <button type="button" data-toggle="modal" data-date="<?= $friday; ?>" data-day="friday" data-type="MORNING_TEA" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
+        <?php } ?>
+    </div>
+</div>
+
+<div class="row rowListMenu">
+    <?php 
+        if (!empty($output->Menu[4][3])) {
+            foreach ($output->Menu[4][3] as $key => $value) { 
+    ?>
+    <div class="col-xl-3 col-lg-4 col-12 col-sm-6 mb-4">
+        <div class="card">
+            <div class="position-relative">
+                <?php
+                    if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
+                        $imgurl = base_url('api/assets/media/no-image.png');
+                    } else {
+                        $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
+                    }
+                ?>
+                <a href="#">
+                    <img class="card-img-top" src="<?= $imgurl; ?>" alt="Card image cap">
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <?php  if ($loggedUser == $value->addedBy) { ?>
+                        <button id="btnGroup-7" type="button" class="btn btn-link dropdown-toggle btn-item-title " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $value->recipeDetails->itemName; ?></button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroup-7">
+                            <a class="dropdown-item load-recipe" href="#!" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>">View</a>
+                            <a class="dropdown-item delete-recipe-menu" href="#!" data-recipeid="<?php echo $value->recipeDetails->id; ?>">Delete</a>
+                        </div>
+                        <p class="text-muted text-small mb-0 font-weight-light"><?= date('d.m.Y', strtotime($value->recipeDetails->createdAt)); ?></p>
+                        <?php  } else { ?>
+                        <p class="list-item-heading mb-1 pt-1 load-recipe" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>"><?= $value->recipeDetails->itemName; ?></p>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } } ?>    
+</div>
+<hr>
+
+
+
+
                             <div class="row mb-3">
                                 <div class="col-md-9">
                                     <h3>Lunch</h3>
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
-                                    <button type="button" data-toggle="modal" data-date="<?= $friday; ?>" data-day="friday" data-type="lunch" data-target="#myModal2" class="btn btn-outline-secondary btn-sm add-item-btn">Add Item</button>
+                                    <button type="button" data-toggle="modal" data-date="<?= $friday; ?>" data-day="friday" data-type="lunch" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -949,13 +1481,74 @@
                                 <?php } } ?>    
                             </div>
 
+
+
+                            <hr>
+
+                                  
+<div class="row mb-3">
+    <div class="col-md-9">
+        <h3>Afternoon Tea</h3>
+    </div>
+    <div class="col-md-3 text-right">
+        <?php if ($add==1) { ?>
+        <button type="button" data-toggle="modal" data-date="<?= $friday; ?>" data-day="friday" data-type="AFTERNOON_TEA" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
+        <?php } ?>
+    </div>
+</div>
+
+<div class="row rowListMenu">
+    <?php 
+        if (!empty($output->Menu[4][4])) {
+            foreach ($output->Menu[4][4] as $key => $value) { 
+    ?>
+    <div class="col-xl-3 col-lg-4 col-12 col-sm-6 mb-4">
+        <div class="card">
+            <div class="position-relative">
+                <?php
+                    if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
+                        $imgurl = base_url('api/assets/media/no-image.png');
+                    } else {
+                        $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
+                    }
+                ?>
+                <a href="#">
+                    <img class="card-img-top" src="<?= $imgurl; ?>" alt="Card image cap">
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <?php  if ($loggedUser == $value->addedBy) { ?>
+                        <button id="btnGroup-7" type="button" class="btn btn-link dropdown-toggle btn-item-title " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $value->recipeDetails->itemName; ?></button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroup-7">
+                            <a class="dropdown-item load-recipe" href="#!" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>">View</a>
+                            <a class="dropdown-item delete-recipe-menu" href="#!" data-recipeid="<?php echo $value->recipeDetails->id; ?>">Delete</a>
+                        </div>
+                        <p class="text-muted text-small mb-0 font-weight-light"><?= date('d.m.Y', strtotime($value->recipeDetails->createdAt)); ?></p>
+                        <?php  } else { ?>
+                        <p class="list-item-heading mb-1 pt-1 load-recipe" title="View recipe" data-toggle="modal" data-target="#myModal3" data-recipeid="<?php echo $value->recipeDetails->id; ?>"><?= $value->recipeDetails->itemName; ?></p>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } } ?>    
+</div>
+
+
+<hr>
+
+
+
                             <div class="row mb-3">
                                 <div class="col-md-9">
                                     <h3>Snacks</h3>
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
-                                    <button type="button" data-toggle="modal" data-date="<?= $friday; ?>" data-day="friday" data-type="snacks" data-target="#myModal2" class="btn btn-outline-secondary btn-sm add-item-btn">Add Item</button>
+                                    <button type="button" data-toggle="modal" data-date="<?= $friday; ?>" data-day="friday" data-type="snacks" data-target="#myModal2" class="btn btn-outline-primary btn-sm add-item-btn">Add Item</button>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -1068,7 +1661,7 @@
                 
             </div>
             <div class="modal-footer">
-                <button class="btn btn-sm btn-outline-secondary" type="button" data-dismiss="modal">Close</button>
+                <button class="btn btn-sm btn-outline-primary" type="button" data-dismiss="modal">Close</button>
                 <button class="btn btn-sm btn-primary" type="submit">Save</button>
             </div>
             </form>

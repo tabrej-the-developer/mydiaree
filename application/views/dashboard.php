@@ -41,6 +41,9 @@
             <div class="row" style="">
                 <div class="col-12">
                     <h1 style="font-size:30px">Dashboard</h1>
+                   
+                    <h1><?php echo isset($events) ? json_encode($events) : "no data "; ?><h1>
+
                     <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
                     </nav>
                     <div class="separator mb-5"></div>
@@ -181,6 +184,7 @@
         </div>
     </div>
 </main>
+
 <?php $this->load->view('footer_v3'); ?>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/jquery-3.3.1.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/bootstrap.bundle.min.js?v=1.0.0"></script>
@@ -214,7 +218,7 @@
                     prevYear: " simple-icon-control-start",
                     nextYear: " simple-icon-control-end"
                 },
-                events: <?= isset($events)?json_encode($events):"";?>
+                events: <?= isset($calendar)?json_encode($calendar):"";?>
             });
             }
         });

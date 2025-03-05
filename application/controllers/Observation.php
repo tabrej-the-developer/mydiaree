@@ -773,6 +773,7 @@ class Observation extends CI_Controller {
 				}
 				$data['get_child'] = str_replace('%20', ' ', $get_child ?: '');
 				// $data['get_child']=str_replace('%20',' ', $get_child);
+
 			    $this->load->view('observationForm_v3',$data);
 			}
 			else if($httpcode == 401){
@@ -2182,10 +2183,16 @@ $centerid = 1;
 			if($httpcode == 200){
 				curl_close($ch);
 				$assessments = $this->getAssessmentSettings($centerid);
+				// 	print_r($data['centerid']);
+				// exit;
 				$assmntSetting = $assessments->Settings;
 				$data['assessments'] = $assmntSetting;
 				$data['childs']=$apidata->child;
-				$data['groups']=json_decode($this->getGroups());
+				// $data['groups']=json_decode($this->getGroups());
+				$data['groups'] = $this->getRoomsWithChildren($data['centerid']);
+				// echo "<pre>";
+				// print_r($data['groups']);
+				// exit;
 				$data['mon_activites']=$this->getMontessoriActivites($centerid);
 				$data['mon_sub_activites']=$this->getMontessoriSubActivites($centerid);
 				$data['mon_extras']=$this->getMontessoriExtras($centerid);
@@ -2330,6 +2337,7 @@ $centerid = 1;
 				}
 				// $data['get_child']=str_replace('%20',' ', $get_child);
 				$data['get_child'] = is_null($get_child) ? '' : str_replace('%20', ' ', $get_child);
+				
 			    $this->load->view('observationForm_v3',$data);
 			}else if($httpcode == 401){
 				redirect('welcome');
@@ -2338,6 +2346,44 @@ $centerid = 1;
 		}else{
 			$this->load->view('welcome');	
 		}
+	}
+
+
+	private function getRoomsWithChildren($centerid) {
+		// Load the database if not already loaded
+		$this->load->database();
+	
+		// Fetch rooms for the given centerid
+		$rooms = $this->db->where('centerid', $centerid)->get('room')->result();
+	
+		$groups = new stdClass();
+	
+		// Loop through each room to get corresponding children
+		foreach ($rooms as $room) {
+			$roomName = $room->name;
+	
+			// Fetch children from the "child" table where "room" matches the room_id
+			$children = $this->db->where('room', $room->id)->get('child')->result();
+	
+			// Structure children data under the respective room name
+			if (!empty($children)) {
+				$groups->$roomName = array();
+				foreach ($children as $child) {
+					$groups->$roomName[] = (object) [
+						'child_name' => $child->name,
+						'dob' => $child->dob,
+						'child_id' => $child->id,
+						'group_id' => $room->id,
+						'group_name' => $roomName
+					];
+				}
+			}
+		}
+	
+		// Add status to the object
+		$groups->Status = "SUCCESS";
+	
+		return $groups;
 	}
 
 

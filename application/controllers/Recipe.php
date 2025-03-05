@@ -2,9 +2,13 @@
 
 class Recipe extends CI_Controller {
 
+	private $table = 'ingredients';
+
+
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->database();
 		
 	}
 
@@ -39,6 +43,9 @@ class Recipe extends CI_Controller {
 				$ingredientsArr = json_decode($this->getIngredients());				
 				$data->ingredients = $ingredientsArr;
 				$data->centerid = $centerid;
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
 				$this->load->view('RecipeList', $data);
 			}
 			if($httpcode == 401){
@@ -173,6 +180,11 @@ class Recipe extends CI_Controller {
 		if($this->session->has_userdata('LoginId')){
 			//data processing
 			$data = $this->input->post();
+
+			  $center_id = $data['centerid'];
+	  
+		// print_r($data);
+		// exit;
 			$data['recipe'] = htmlspecialchars($data['recipe']);
 			if (isset($_FILES)) {
 				if (isset($_FILES['image'])) {
@@ -229,7 +241,9 @@ class Recipe extends CI_Controller {
 			curl_close($ch);
 			if ($httpcode == 200) {
 				$jsonOutput = json_decode($server_output);
-				$redirect_url = base_url('Recipe')."?centerid=".$jsonOutput->Centerid."&status=success";
+				// print_r($jsonOutput);
+				// exit;
+				$redirect_url = base_url('Recipe')."?centerid=".$center_id."&status=success";
 				redirect($redirect_url);
 			}
 		}else{
@@ -322,6 +336,140 @@ class Recipe extends CI_Controller {
 			redirect("welcome");
 		}
 	}
+
+
+
+
+
+	public function get_all() {
+        // Direct DB query to get all ingredients
+        $query = $this->db->get($this->table);
+        $ingredients = $query->result_array();
+        
+        echo json_encode($ingredients);
+    }
+    
+    public function add() {
+        $name = $this->input->post('name');
+        
+        if (empty($name)) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Ingredient name is required'
+            ]);
+            return;
+        }
+        
+        // Direct DB query to insert ingredient
+        $data = array(
+            'name' => $name
+        );
+        
+        $result = $this->db->insert($this->table, $data);
+        
+        if ($result) {
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Ingredient added successfully'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Failed to add ingredient'
+            ]);
+        }
+    }
+    
+    public function update() {
+        $id = $this->input->post('id');
+        $name = $this->input->post('name');
+        
+        if (empty($id) || empty($name)) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Ingredient ID and name are required'
+            ]);
+            return;
+        }
+        
+        // Direct DB query to update ingredient
+        $data = array(
+            'name' => $name
+        );
+        
+        $this->db->where('id', $id);
+        $result = $this->db->update($this->table, $data);
+        
+        if ($result) {
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Ingredient updated successfully'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Failed to update ingredient'
+            ]);
+        }
+    }
+    
+    public function delete() {
+        $id = $this->input->post('id');
+        
+        if (empty($id)) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Ingredient ID is required'
+            ]);
+            return;
+        }
+        
+        // Direct DB query to delete ingredient
+        $this->db->where('id', $id);
+        $result = $this->db->delete($this->table);
+        
+        if ($result) {
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Ingredient deleted successfully'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Failed to delete ingredient'
+            ]);
+        }
+    }
+    
+    // Optional method to get a single ingredient by ID
+    public function get_by_id() {
+        $id = $this->input->get('id');
+        
+        if (empty($id)) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Ingredient ID is required'
+            ]);
+            return;
+        }
+        
+        // Direct DB query to get ingredient by ID
+        $this->db->where('id', $id);
+        $query = $this->db->get($this->table);
+        $ingredient = $query->row_array();
+        
+        if ($ingredient) {
+            echo json_encode($ingredient);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Ingredient not found'
+            ]);
+        }
+    }
+
+
+
 
 }
 
