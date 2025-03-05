@@ -134,7 +134,7 @@
                       
                         <label for="practical_life">Practical Life</label>
           <div class="input-group">
-       <textarea class="form-control" id="practical_life" name="practical_life" rows="3" ><?= isset($plan_data) ? $plan_data->practical_life : '' ?></textarea>
+       <textarea class="form-control" id="practical_life" name="practical_life" rows="3" readonly><?= isset($plan_data) ? $plan_data->practical_life : '' ?></textarea>
          <div class="input-group-append">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#practicalLifeModal">
             <i class="fa fa-search"></i> Select Activities
@@ -151,7 +151,7 @@
 
                         <label for="sensorial">Sensorial</label>
 <div class="input-group">
-    <textarea class="form-control" id="sensorial" name="sensorial" rows="3" ><?= isset($plan_data) ? $plan_data->sensorial : '' ?></textarea>
+    <textarea class="form-control" id="sensorial" name="sensorial" rows="3" readonly><?= isset($plan_data) ? $plan_data->sensorial : '' ?></textarea>
     <div class="input-group-append">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sensorialModal">
             <i class="fa fa-search"></i> Select Activities
@@ -164,11 +164,11 @@
                         </div>
 
                         <!-- Math -->
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3"> 
 
                         <label for="math">Math</label>
 <div class="input-group">
-    <textarea class="form-control" id="math" name="math" rows="3" ><?= isset($plan_data) ? $plan_data->math : '' ?></textarea>
+    <textarea class="form-control" id="math" name="math" rows="3" readonly><?= isset($plan_data) ? $plan_data->math : '' ?></textarea>
     <div class="input-group-append">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mathModal">
             <i class="fa fa-search"></i> Select Activities
@@ -184,7 +184,7 @@
 
                         <label for="language">Language</label>
 <div class="input-group">
-    <textarea class="form-control" id="language" name="language" rows="3" ><?= isset($plan_data) ? $plan_data->language : '' ?></textarea>
+    <textarea class="form-control" id="language" name="language" rows="3" readonly><?= isset($plan_data) ? $plan_data->language : '' ?></textarea>
     <div class="input-group-append">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#languageModal">
             <i class="fa fa-search"></i> Select Activities
@@ -200,7 +200,7 @@
                           
                         <label for="culture">Culture</label>
 <div class="input-group">
-    <textarea class="form-control" id="culture" name="culture" rows="3" ><?= isset($plan_data) ? $plan_data->culture : '' ?></textarea>
+    <textarea class="form-control" id="culture" name="culture" rows="3" readonly><?= isset($plan_data) ? $plan_data->culture : '' ?></textarea>
     <div class="input-group-append">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cultureModal">
             <i class="fa fa-search"></i> Select Activities
@@ -1094,7 +1094,6 @@ $(document).ready(function() {
             });
         });
         
-        // Format the selected activities for display in the input field
        // Format the selected activities for display in the input field
 var formattedText = '';
 if (selectedSubActivities.length > 0) {
@@ -1111,7 +1110,15 @@ if (selectedSubActivities.length > 0) {
     // Create the formatted string with each activity on a new line
     var activityStrings = [];
     for (var activity in groupedActivities) {
-        activityStrings.push(activity + " - " + groupedActivities[activity].join(', ') + ".");
+        // Start with bold activity title
+        var activityString = "**" + activity + "** - \n";
+        
+        // Add sub-activities as bulleted list
+        groupedActivities[activity].forEach(function(subActivity) {
+            activityString += "**• **" + subActivity + ".\n";
+        });
+        
+        activityStrings.push(activityString.trim());
     }
     
     formattedText = activityStrings.join('\n');
@@ -1161,27 +1168,35 @@ $('#saveSensorialSelections').on('click', function() {
         });
     });
     
-    // Format the selected activities for display in the input field
-    var formattedText = '';
-    if (selectedSubActivities.length > 0) {
-        // Group by activity
-        var groupedActivities = {};
+      // Format the selected activities for display in the input field
+var formattedText = '';
+if (selectedSubActivities.length > 0) {
+    // Group by activity
+    var groupedActivities = {};
+    
+    selectedSubActivities.forEach(function(item) {
+        if (!groupedActivities[item.activityTitle]) {
+            groupedActivities[item.activityTitle] = [];
+        }
+        groupedActivities[item.activityTitle].push(item.subActivityTitle);
+    });
+    
+    // Create the formatted string with each activity on a new line
+    var activityStrings = [];
+    for (var activity in groupedActivities) {
+        // Start with bold activity title
+        var activityString = "**" + activity + "** - \n";
         
-        selectedSubActivities.forEach(function(item) {
-            if (!groupedActivities[item.activityTitle]) {
-                groupedActivities[item.activityTitle] = [];
-            }
-            groupedActivities[item.activityTitle].push(item.subActivityTitle);
+        // Add sub-activities as bulleted list
+        groupedActivities[activity].forEach(function(subActivity) {
+            activityString += "**• **" + subActivity + ".\n";
         });
         
-        // Create the formatted string with each activity on a new line
-        var activityStrings = [];
-        for (var activity in groupedActivities) {
-            activityStrings.push(activity + " - " + groupedActivities[activity].join(', ') + ".");
-        }
-        
-        formattedText = activityStrings.join('\n');
+        activityStrings.push(activityString.trim());
     }
+    
+    formattedText = activityStrings.join('\n');
+}
     
     // Set the formatted text in the input field
     $('#sensorial').val(formattedText);
@@ -1227,27 +1242,35 @@ $('#saveMathSelections').on('click', function() {
         });
     });
     
-    // Format the selected activities for display in the input field
-    var formattedText = '';
-    if (selectedSubActivities.length > 0) {
-        // Group by activity
-        var groupedActivities = {};
+       // Format the selected activities for display in the input field
+var formattedText = '';
+if (selectedSubActivities.length > 0) {
+    // Group by activity
+    var groupedActivities = {};
+    
+    selectedSubActivities.forEach(function(item) {
+        if (!groupedActivities[item.activityTitle]) {
+            groupedActivities[item.activityTitle] = [];
+        }
+        groupedActivities[item.activityTitle].push(item.subActivityTitle);
+    });
+    
+    // Create the formatted string with each activity on a new line
+    var activityStrings = [];
+    for (var activity in groupedActivities) {
+        // Start with bold activity title
+        var activityString = "**" + activity + "** - \n";
         
-        selectedSubActivities.forEach(function(item) {
-            if (!groupedActivities[item.activityTitle]) {
-                groupedActivities[item.activityTitle] = [];
-            }
-            groupedActivities[item.activityTitle].push(item.subActivityTitle);
+        // Add sub-activities as bulleted list
+        groupedActivities[activity].forEach(function(subActivity) {
+            activityString += "**• **" + subActivity + ".\n";
         });
         
-        // Create the formatted string with each activity on a new line
-        var activityStrings = [];
-        for (var activity in groupedActivities) {
-            activityStrings.push(activity + " - " + groupedActivities[activity].join(', ') + ".");
-        }
-        
-        formattedText = activityStrings.join('\n');
+        activityStrings.push(activityString.trim());
     }
+    
+    formattedText = activityStrings.join('\n');
+}
     
     // Set the formatted text in the input field
     $('#math').val(formattedText);
@@ -1292,27 +1315,35 @@ $('#saveLanguageSelections').on('click', function() {
         });
     });
     
-    // Format the selected activities for display in the input field
-    var formattedText = '';
-    if (selectedSubActivities.length > 0) {
-        // Group by activity
-        var groupedActivities = {};
+     // Format the selected activities for display in the input field
+var formattedText = '';
+if (selectedSubActivities.length > 0) {
+    // Group by activity
+    var groupedActivities = {};
+    
+    selectedSubActivities.forEach(function(item) {
+        if (!groupedActivities[item.activityTitle]) {
+            groupedActivities[item.activityTitle] = [];
+        }
+        groupedActivities[item.activityTitle].push(item.subActivityTitle);
+    });
+    
+    // Create the formatted string with each activity on a new line
+    var activityStrings = [];
+    for (var activity in groupedActivities) {
+        // Start with bold activity title
+        var activityString = "**" + activity + "** - \n";
         
-        selectedSubActivities.forEach(function(item) {
-            if (!groupedActivities[item.activityTitle]) {
-                groupedActivities[item.activityTitle] = [];
-            }
-            groupedActivities[item.activityTitle].push(item.subActivityTitle);
+        // Add sub-activities as bulleted list
+        groupedActivities[activity].forEach(function(subActivity) {
+            activityString += "**• **" + subActivity + ".\n";
         });
         
-        // Create the formatted string with each activity on a new line
-        var activityStrings = [];
-        for (var activity in groupedActivities) {
-            activityStrings.push(activity + " - " + groupedActivities[activity].join(', ') + ".");
-        }
-        
-        formattedText = activityStrings.join('\n');
+        activityStrings.push(activityString.trim());
     }
+    
+    formattedText = activityStrings.join('\n');
+}
     
     // Set the formatted text in the input field
     $('#language').val(formattedText);
@@ -1358,27 +1389,35 @@ $('#saveCultureSelections').on('click', function() {
         });
     });
     
-    // Format the selected activities for display in the input field
-    var formattedText = '';
-    if (selectedSubActivities.length > 0) {
-        // Group by activity
-        var groupedActivities = {};
+   // Format the selected activities for display in the input field
+var formattedText = '';
+if (selectedSubActivities.length > 0) {
+    // Group by activity
+    var groupedActivities = {};
+    
+    selectedSubActivities.forEach(function(item) {
+        if (!groupedActivities[item.activityTitle]) {
+            groupedActivities[item.activityTitle] = [];
+        }
+        groupedActivities[item.activityTitle].push(item.subActivityTitle);
+    });
+    
+    // Create the formatted string with each activity on a new line
+    var activityStrings = [];
+    for (var activity in groupedActivities) {
+        // Start with bold activity title
+        var activityString = "**" + activity + "** - \n";
         
-        selectedSubActivities.forEach(function(item) {
-            if (!groupedActivities[item.activityTitle]) {
-                groupedActivities[item.activityTitle] = [];
-            }
-            groupedActivities[item.activityTitle].push(item.subActivityTitle);
+        // Add sub-activities as bulleted list
+        groupedActivities[activity].forEach(function(subActivity) {
+            activityString += "**• **" + subActivity + ".\n";
         });
         
-        // Create the formatted string with each activity on a new line
-        var activityStrings = [];
-        for (var activity in groupedActivities) {
-            activityStrings.push(activity + " - " + groupedActivities[activity].join(', ') + ".");
-        }
-        
-        formattedText = activityStrings.join('\n');
+        activityStrings.push(activityString.trim());
     }
+    
+    formattedText = activityStrings.join('\n');
+}
     
     // Set the formatted text in the input field
     $('#culture').val(formattedText);

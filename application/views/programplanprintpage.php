@@ -32,6 +32,16 @@
             border-radius: 10px;
         } */
 
+
+        .topdivs strong {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+.topdivs ul {
+    margin-top: 0;
+    padding-left: 20px;
+}
+
         .header {
     text-align: center;
     margin-top: 50px;
@@ -301,27 +311,226 @@
             </tr>
             <tr class="main-content-row">
                 <td>
-                    <div class="topdivs"> <?php echo isset($plan['practical_life']) ? nl2br(htmlspecialchars($plan['practical_life'], ENT_QUOTES, 'UTF-8')) : 'N/A'; ?></div>
+                   
+                <div class="topdivs">
+    <?php 
+    if (isset($plan['practical_life'])) { 
+        $formatted_text = htmlspecialchars($plan['practical_life'], ENT_QUOTES, 'UTF-8'); 
+        $lines = explode("\n", $formatted_text); 
+        
+        echo '<div>';
+        $in_list = false;
+        
+        foreach ($lines as $line) {
+            if (strpos($line, '**') === 0 && strpos($line, '** - ') !== false) {
+                // Close previous list if open
+                if ($in_list) {
+                    echo '</ul>';
+                    $in_list = false;
+                }
+                
+                // This is an activity title
+                echo '<strong>' . str_replace(['**', ' - '], '', $line) . '</strong>';
+                echo '<ul>';
+                $in_list = true;
+            } elseif (strpos($line, '**• **') === 0) {
+                // This is a sub-activity
+                echo '<li>' . str_replace('**• **', '', $line) . '</li>';
+            }
+        }
+        
+        // Close the last list if open
+        if ($in_list) {
+            echo '</ul>';
+        }
+        
+        echo '</div>'; 
+    } else { 
+        echo 'N/A'; 
+    } 
+    ?> 
+</div>
+
                     <!-- <div class="planned-experiences">Planned experiences:</div> -->
                     <div class="bottomdivs">  <?php echo isset($plan['practical_life_experiences']) ? htmlspecialchars($plan['practical_life_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?> </div>
                 </td>
                 <td>
-                    <div class="topdivs"> <?php echo isset($plan['sensorial']) ? nl2br(htmlspecialchars($plan['sensorial'], ENT_QUOTES, 'UTF-8')) : 'N/A'; ?></div>
+
+           <div class="topdivs">
+    <?php 
+    if (isset($plan['sensorial'])) { 
+        $formatted_text = htmlspecialchars($plan['sensorial'], ENT_QUOTES, 'UTF-8'); 
+        $lines = explode("\n", $formatted_text); 
+        
+        echo '<div>';
+        $in_list = false;
+        
+        foreach ($lines as $line) {
+            if (strpos($line, '**') === 0 && strpos($line, '** - ') !== false) {
+                // Close previous list if open
+                if ($in_list) {
+                    echo '</ul>';
+                    $in_list = false;
+                }
+                
+                // This is an activity title
+                echo '<strong>' . str_replace(['**', ' - '], '', $line) . '</strong>';
+                echo '<ul>';
+                $in_list = true;
+            } elseif (strpos($line, '**• **') === 0) {
+                // This is a sub-activity
+                echo '<li>' . str_replace('**• **', '', $line) . '</li>';
+            }
+        }
+        
+        // Close the last list if open
+        if ($in_list) {
+            echo '</ul>';
+        }
+        
+        echo '</div>'; 
+    } else { 
+        echo 'N/A'; 
+    } 
+    ?> 
+</div>
+
                     <!-- <div class="planned-experiences">Planned experiences:</div> -->
                     <div class="bottomdivs">  <?php echo isset($plan['sensorial_experiences']) ? htmlspecialchars($plan['sensorial_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?> </div>
                 </td>
                 <td>
-                    <div class="topdivs"> <?php echo isset($plan['math']) ? nl2br(htmlspecialchars($plan['math'], ENT_QUOTES, 'UTF-8')) : 'N/A'; ?></div>
+
+
+           <div class="topdivs">
+    <?php 
+    if (isset($plan['math'])) { 
+        $formatted_text = htmlspecialchars($plan['math'], ENT_QUOTES, 'UTF-8'); 
+        $lines = explode("\n", $formatted_text); 
+        
+        echo '<div>';
+        $in_list = false;
+        
+        foreach ($lines as $line) {
+            if (strpos($line, '**') === 0 && strpos($line, '** - ') !== false) {
+                // Close previous list if open
+                if ($in_list) {
+                    echo '</ul>';
+                    $in_list = false;
+                }
+                
+                // This is an activity title
+                echo '<strong>' . str_replace(['**', ' - '], '', $line) . '</strong>';
+                echo '<ul>';
+                $in_list = true;
+            } elseif (strpos($line, '**• **') === 0) {
+                // This is a sub-activity
+                echo '<li>' . str_replace('**• **', '', $line) . '</li>';
+            }
+        }
+        
+        // Close the last list if open
+        if ($in_list) {
+            echo '</ul>';
+        }
+        
+        echo '</div>'; 
+    } else { 
+        echo 'N/A'; 
+    } 
+    ?> 
+</div>
+
+
                     <!-- <div class="planned-experiences">Planned experiences:</div> -->
                     <div class="bottomdivs">  <?php echo isset($plan['math_experiences']) ? htmlspecialchars($plan['math_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?> </div>
                 </td>
                 <td>
-                    <div class="topdivs"> <?php echo isset($plan['language']) ? nl2br(htmlspecialchars($plan['language'], ENT_QUOTES, 'UTF-8')) : 'N/A'; ?></div>
+
+
+                <div class="topdivs">
+    <?php 
+    if (isset($plan['language'])) { 
+        $formatted_text = htmlspecialchars($plan['language'], ENT_QUOTES, 'UTF-8'); 
+        $lines = explode("\n", $formatted_text); 
+        
+        echo '<div>';
+        $in_list = false;
+        
+        foreach ($lines as $line) {
+            if (strpos($line, '**') === 0 && strpos($line, '** - ') !== false) {
+                // Close previous list if open
+                if ($in_list) {
+                    echo '</ul>';
+                    $in_list = false;
+                }
+                
+                // This is an activity title
+                echo '<strong>' . str_replace(['**', ' - '], '', $line) . '</strong>';
+                echo '<ul>';
+                $in_list = true;
+            } elseif (strpos($line, '**• **') === 0) {
+                // This is a sub-activity
+                echo '<li>' . str_replace('**• **', '', $line) . '</li>';
+            }
+        }
+        
+        // Close the last list if open
+        if ($in_list) {
+            echo '</ul>';
+        }
+        
+        echo '</div>'; 
+    } else { 
+        echo 'N/A'; 
+    } 
+    ?> 
+</div>
+
+
+
                     <!-- <div class="planned-experiences">Planned experiences:</div> -->
                     <div class="bottomdivs">  <?php echo isset($plan['language_experiences']) ? htmlspecialchars($plan['language_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?> </div>
                 </td>
                 <td>
-                    <div class="topdivs"> <?php echo isset($plan['culture']) ? nl2br(htmlspecialchars($plan['culture'], ENT_QUOTES, 'UTF-8')) : 'N/A'; ?></div>
+                
+                <div class="topdivs">
+    <?php 
+    if (isset($plan['culture'])) { 
+        $formatted_text = htmlspecialchars($plan['culture'], ENT_QUOTES, 'UTF-8'); 
+        $lines = explode("\n", $formatted_text); 
+        
+        echo '<div>';
+        $in_list = false;
+        
+        foreach ($lines as $line) {
+            if (strpos($line, '**') === 0 && strpos($line, '** - ') !== false) {
+                // Close previous list if open
+                if ($in_list) {
+                    echo '</ul>';
+                    $in_list = false;
+                }
+                
+                // This is an activity title
+                echo '<strong>' . str_replace(['**', ' - '], '', $line) . '</strong>';
+                echo '<ul>';
+                $in_list = true;
+            } elseif (strpos($line, '**• **') === 0) {
+                // This is a sub-activity
+                echo '<li>' . str_replace('**• **', '', $line) . '</li>';
+            }
+        }
+        
+        // Close the last list if open
+        if ($in_list) {
+            echo '</ul>';
+        }
+        
+        echo '</div>'; 
+    } else { 
+        echo 'N/A'; 
+    } 
+    ?> 
+</div>
                     <!-- <div class="planned-experiences">Planned experiences:</div> -->
                     <div class="bottomdivs">  <?php echo isset($plan['culture_experiences']) ? htmlspecialchars($plan['culture_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?> </div>
                 </td>
@@ -332,7 +541,7 @@
                 </td>
             
             </tr>
-        </table>
+        </table> 
 
         <div class="eylf-section">
             <div class="section-label" style="margin:10px;">EYLF:</div>
