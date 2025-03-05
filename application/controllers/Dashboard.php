@@ -405,10 +405,6 @@ class Dashboard extends CI_Controller {
 
             // Decode calendar events
             $calendarEventsJson = $this->calendarEvents();
-			echo "<pre>";
-			print_r($calendarEventsJson);
-			echo "</pre>";
-			exit;
             $getCalDetails = json_decode($calendarEventsJson);
   
 			// echo "<pre>";
