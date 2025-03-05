@@ -390,6 +390,7 @@ class Dashboard extends CI_Controller {
             if ($httpcode == 200 && $server_output) {
                 // Decode JSON response
                 $jsonOutput = json_decode($server_output);
+		
 
                 if (json_last_error() === JSON_ERROR_NONE) {
                     $data = $jsonOutput;
@@ -404,11 +405,15 @@ class Dashboard extends CI_Controller {
 
             // Decode calendar events
             $calendarEventsJson = $this->calendarEvents();
+			echo "<pre>";
+			print_r($calendarEventsJson);
+			echo "</pre>";
+			exit;
             $getCalDetails = json_decode($calendarEventsJson);
   
-			echo "<pre>";
-			print_r($getCalDetails);
-			exit;
+			// echo "<pre>";
+			// print_r($getCalDetails);
+			// exit;
 
             // Ensure $getCalDetails is not null and is an object
             if ($getCalDetails && is_object($getCalDetails)) {
