@@ -73,22 +73,22 @@ class DashboardModel extends CI_Model {
 	}
 	public function getAnnouncementsM($userid){
 		$query = "
-		SELECT * 
-		FROM announcement 
-		WHERE createdBy IN (
-			SELECT userid 
-			FROM usercenters 
-			WHERE centerid IN (
-				SELECT centerid 
-				FROM usercenters 
-				WHERE userid = ?
-			)
-		) 
-		AND eventDate IS NOT NULL 
-		AND eventDate != '0000-00-00'
-	";
-	
-	return $this->db->query($query, array($userid))->result();
+    SELECT * 
+    FROM announcement 
+    WHERE createdBy IN (
+        SELECT userid 
+        FROM usercenters 
+        WHERE centerid IN (
+            SELECT centerid 
+            FROM usercenters 
+            WHERE userid = ?
+        )
+    ) 
+    AND eventDate > '1000-01-01';
+";
+
+return $this->db->query($query, array($userid))->result();
+
 	}
 	public function getStaffBirthdaysM($userid){
 		 $query = $this->db->query("SELECT * from users where userType = 'Staff' and userid IN (SELECT staffid FROM room_staff where roomid IN (SELECT id FROM room where centerid IN (SELECT centerid from usercenters where userid = '$userid'))) ");
