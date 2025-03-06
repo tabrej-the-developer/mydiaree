@@ -569,7 +569,20 @@
 
         <div class="outdoor-section">
             <div class="section-label">Outdoor Experiences:</div>
-            <div style="margin:10px;">  <?php echo isset($plan['outdoor_experiences']) ? htmlspecialchars($plan['outdoor_experiences'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?>   </div>
+            <div style="margin:10px;">
+    <?php 
+    if (!empty($plan['outdoor_experiences'])) {
+        $experiences = explode(',', $plan['outdoor_experiences']);
+        echo '<ul style="margin: 0; padding-left: 20px;">';
+        foreach ($experiences as $experience) {
+            echo '<li>' . htmlspecialchars(trim($experience), ENT_QUOTES, 'UTF-8') . '</li>';
+        }
+        echo '</ul>';
+    } else {
+        echo 'N/A';
+    }
+    ?>
+</div>
         </div>
 
         <table>
@@ -582,10 +595,25 @@
                     <div class="section-label">Sustainability Topic:</div>
                     <div style="margin:10px;">  <?php echo isset($plan['sustainability_topic']) ? htmlspecialchars($plan['sustainability_topic'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?>   </div>
                 </td>
+               
                 <td style="width: 33%;height: 150px;">
-                    <div class="section-label">Special Events:</div>
-                    <div style="margin:10px;">  <?php echo isset($plan['special_events']) ? htmlspecialchars($plan['special_events'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?>   </div>
-                </td>
+    <div class="section-label">Special Events:</div>
+    <div style="margin:10px;">
+        <?php 
+        if (!empty($plan['special_events'])) {
+            $events = explode(',', $plan['special_events']);
+            echo '<ul style="margin: 0; padding-left: 20px;">';
+            foreach ($events as $event) {
+                echo '<li>' . htmlspecialchars(trim($event), ENT_QUOTES, 'UTF-8') . '</li>';
+            }
+            echo '</ul>';
+        } else {
+            echo 'N/A';
+        }
+        ?>
+    </div>
+              </td>
+              
             </tr>
         </table>
 

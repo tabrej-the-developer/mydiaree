@@ -103,6 +103,11 @@ class Accident extends CI_Controller {
             $data['username'] =$this->session->userdata('Name');
             $centerid = $data['centerid'];
             $roomid = $data['roomid'];
+
+			// echo "<pre>";
+			// print_r($data);
+			// exit;
+
 			$url = BASE_API_URL.'accident/saveAccident';	
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_URL,$url);

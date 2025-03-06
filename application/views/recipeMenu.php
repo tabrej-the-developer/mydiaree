@@ -436,7 +436,7 @@
                             <hr>
                             <div class="row mb-3">
                                 <div class="col-md-9">
-                                    <h3>Snacks</h3>
+                                    <h3>Late Snacks</h3>
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
@@ -711,7 +711,7 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-9">
-                                    <h3>Snacks</h3>
+                                    <h3>Late Snacks</h3>
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
@@ -987,7 +987,7 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-9">
-                                    <h3>Snacks</h3>
+                                    <h3>Late Snacks</h3>
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
@@ -1266,7 +1266,7 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-9">
-                                    <h3>Snacks</h3>
+                                    <h3>Late Snacks</h3>
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>
@@ -1544,7 +1544,7 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-9">
-                                    <h3>Snacks</h3>
+                                    <h3>Late Snacks</h3>
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <?php if ($add==1) { ?>

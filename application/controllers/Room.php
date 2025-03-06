@@ -2,6 +2,12 @@
 defined('BASEPATH') OR exit('No direct script access allowed');  
   
 class Room extends CI_Controller {  
+
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->database(); 
+	}
       
     public function index()  
     {
@@ -106,6 +112,8 @@ class Room extends CI_Controller {
 		{
 			$this->load->helper('form');
 		    $data = $this->input->post();
+			// print_r($data['redirect']);
+			// exit;
 			$data['userid'] = $this->session->userdata('LoginId');
 			$data['id'] = $_GET['id'];
 			$data['childId'] = $_GET['childId'];
@@ -132,7 +140,13 @@ class Room extends CI_Controller {
 			    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 				if($httpcode == 200){
 					$jsonOutput = json_decode($server_output);
-					redirect('room/getForm?id='.$_GET['id'].'&centerId='.$data['centerId']);
+
+					if($data['redirect'] == "customPage"){
+						redirect('room/childrenslistdata');
+					}else{
+						redirect('room/getForm?id='.$_GET['id'].'&centerId='.$data['centerId']);
+					}
+				
 				  curl_close($$ch);
 				}
 				else if($httpcode == 401){
@@ -145,6 +159,38 @@ class Room extends CI_Controller {
 	   }else{
 		redirect('welcome');
 	   }	
+	}
+
+
+	public function deletechilddata($id = null) {
+		// Check if user is logged in
+		if (!$this->session->has_userdata('LoginId')) {
+			// If AJAX request
+			if ($this->input->is_ajax_request()) {
+				echo json_encode(['success' => false, 'message' => 'Not authorized']);
+				return;
+			}
+			// If regular request
+			redirect('welcome');
+			return;
+		}
+		
+		// Validate ID
+		if (empty($id) || !is_numeric($id)) {
+			echo json_encode(['success' => false, 'message' => 'Invalid child ID']);
+			return;
+		}
+		
+		// Delete the child record
+		$deleted = $this->db->where('id', $id)
+							->delete('child');
+		
+		// Return response
+		if ($deleted) {
+			echo json_encode(['success' => true, 'message' => 'Child record deleted successfully']);
+		} else {
+			echo json_encode(['success' => false, 'message' => 'Failed to delete child record']);
+		}
 	}
 
 	public function changeStatus()
@@ -429,7 +475,105 @@ class Room extends CI_Controller {
 	   }	
 	}
 
+	public function childrenslistdata() {
+		if ($this->session->has_userdata('LoginId')) {
+			$data = [];
+			
+			if ($this->session->userdata("UserType") != "Superadmin") {
+				$data['superadmin'] = 0;
+				$userId = $this->session->userdata("LoginId");
+				$data['userid'] = $userId;
+				
+				// Get room IDs where staff is assigned or user is owner
+				$roomIdsFromStaff = $this->db->select('roomid')
+											->from('room_staff')
+											->where('staffid', $userId)
+											->get()
+											->result_array();
+				
+				$roomIdsFromOwner = $this->db->select('id')
+											->from('room')
+											->where('userId', $userId)
+											->get()
+											->result_array();
+				
+				// Combine room IDs and make distinct
+				$roomIds = [];
+				foreach ($roomIdsFromStaff as $room) {
+					$roomIds[] = $room['roomid'];
+				}
+				
+				foreach ($roomIdsFromOwner as $room) {
+					if (!in_array($room['id'], $roomIds)) {
+						$roomIds[] = $room['id'];
+					}
+				}
+				
+				// Get children data based on room IDs with room name
+				if (!empty($roomIds)) {
+					$this->db->select('child.*, room.name as room_name');
+					$this->db->from('child');
+					$this->db->join('room', 'child.room = room.id', 'left');
+					$this->db->where_in('child.room', $roomIds);
+					$data['children'] = $this->db->get()->result_array();
+				} else {
+					$data['children'] = [];
+				}
+				
+			} else {
+				$data['superadmin'] = 1;
+				$userId = $this->session->userdata("LoginId");
+				$data['userid'] = $userId;
+				
+				// Get center IDs for this user
+				$centerIds = $this->db->select('centerid')
+									->from('usercenters')
+									->where('userid', $userId)
+									->get()
+									->result_array();
+				
+				$centerIdsArray = [];
+				foreach ($centerIds as $center) {
+					$centerIdsArray[] = $center['centerid'];
+				}
+				
+				// Get room IDs based on center IDs
+				if (!empty($centerIdsArray)) {
+					$roomIds = $this->db->select('id')
+										->from('room')
+										->where_in('centerid', $centerIdsArray)
+										->get()
+										->result_array();
+					
+					$roomIdsArray = [];
+					foreach ($roomIds as $room) {
+						$roomIdsArray[] = $room['id'];
+					}
+					
+					// Get children data based on room IDs with room name
+					if (!empty($roomIdsArray)) {
+						$this->db->select('child.*, room.name as room_name');
+						$this->db->from('child');
+						$this->db->join('room', 'child.room = room.id', 'left');
+						$this->db->where_in('child.room', $roomIdsArray);
+						$data['children'] = $this->db->get()->result_array();
+					} else {
+						$data['children'] = [];
+					}
+				} else {
+					$data['children'] = [];
+				}
+			}
 
+			// echo "<pre>";
+			// print_r($data);
+			// exit;
+			
+			$this->load->view('childrenspage', $data);
+		} else {
+			redirect('welcome');
+		}
+	}
 	
 
 	public function manageEducators() {
@@ -576,6 +720,7 @@ class Room extends CI_Controller {
 	{
 	   if($this->session->has_userdata('LoginId')){
 		    $data = [];
+			$redirectPage = $this->input->get('redirectPage'); // New parameter
 			$id=isset($_GET['id'])?$_GET['id']:null;
 			$childId=isset($_GET['childId'])?$_GET['childId']:null;
 			$centerid=isset($_GET['centerid'])?$_GET['centerid']:null;
@@ -612,6 +757,10 @@ class Room extends CI_Controller {
 				$child_arr = json_decode($childData);
 				$data->child_arr = $child_arr->records;
 				$data->centerid = $jsonOutput->centerid;
+                if($redirectPage){
+					$data->redirectPage = $redirectPage;
+                   }
+				
 				// echo "<pre>";
 				// print_r($data);
 				// exit;

@@ -323,7 +323,7 @@
 
 		<div class="row mb-3">
         	<div class="col-md-10">
-        		<h4>MORNING TEA</h4>
+        		<h4>Morning Tea</h4>
         	</div>
         	<div class="col-md-2 text-right">
         		<?php if ($add==1) { ?>
@@ -445,7 +445,7 @@
 
 		<div class="row mb-3">
         	<div class="col-md-10">
-        		<h4>AFTERNOON TEA</h4>
+        		<h4>Afternoon Tea</h4>
         	</div>
         	<div class="col-md-2 text-right">
         		<?php if ($add==1) { ?>
@@ -505,7 +505,7 @@
 
         <div class="row mb-3">
         	<div class="col-md-10">
-        		<h4>Snacks</h4>
+        		<h4>Late Snacks</h4>
         	</div>
         	<div class="col-md-2 text-right">
         		<?php if ($add==1) { ?>

@@ -119,7 +119,7 @@
                                         </a>
                                     </div>
                                     <div class="col-md-4 mb-4">
-                                        <a href="<?= base_url("dailyDiary"); ?>" class="card">
+                                        <a href="<?= base_url("room/childrenslistdata"); ?>" class="card">
                                             <div class="card-body text-center">
                                                 <i class="iconsminds-students"></i>
                                                 <p class="card-text mb-0 title">Children</p>

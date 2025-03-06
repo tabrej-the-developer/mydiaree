@@ -94,6 +94,8 @@
                                                 <label for="firstname">First Name *</label>
                                                 <span class="text-danger error_firstname"></span>
                                                 <input type="text" name="firstname" id="firstname" value="<?php echo !empty($child->name)?$child->name:''; ?>" class="form-control">
+                                                <input type="hidden" name="redirect" id="redirect" value="<?php echo !empty($redirectPage)?$redirectPage:''; ?>" class="form-control">
+
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="lastname">Last Name *</label>

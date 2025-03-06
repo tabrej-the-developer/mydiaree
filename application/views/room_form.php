@@ -130,10 +130,10 @@
             <ul class="nav nav-tabs separator-tabs ml-0 mb-5" role="tablist">
             <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a class="nav-link active" id="first-tab" data-toggle="tab" href="#first" role="tab" aria-controls="first" aria-selected="true">CHILDS</a>
+        <a class="nav-link active" id="first-tab" data-toggle="tab" href="#first" role="tab" aria-controls="first" aria-selected="true">Child/ren</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="second-tab" data-toggle="tab" href="#second" role="tab" aria-controls="second" aria-selected="false">EDUCATORS</a>
+        <a class="nav-link" id="second-tab" data-toggle="tab" href="#second" role="tab" aria-controls="second" aria-selected="false">Educators</a>
     </li>
 </ul>
 <button id="manageEducatorsBtn" class="btn btn-outline-primary" style="margin-left:1111px;margin-bottom:15px; display: none;" onclick="loadEducators()" >Manage Educators</button>

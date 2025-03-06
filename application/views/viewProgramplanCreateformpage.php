@@ -243,8 +243,8 @@
 
 
                         <div class="form-group mb-3">
-                            <label for="outdoor_experiences">Outdoor Experiences</label>
-                            <textarea class="form-control" id="outdoor_experiences" name="outdoor_experiences" rows="3"><?= isset($plan_data) ? $plan_data->outdoor_experiences : '' ?></textarea>
+                            <label for="outdoor_experiences">Outdoor Experiences <span style="color:blueviolet;font-weight:bold;"> (Add Experiences seprated by Comma ",") </span></label>
+                            <textarea class="form-control" id="outdoor_experiences" name="outdoor_experiences" rows="3" placeholder="1st Experiences, 2nd Experiences, 3rd Experiences etc..."><?= isset($plan_data) ? $plan_data->outdoor_experiences : '' ?></textarea>
                         </div>
 
                         <div class="form-group mb-3">
@@ -258,8 +258,8 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="special_events">Special Events</label>
-                            <textarea class="form-control" id="special_events" name="special_events" rows="3"><?= isset($plan_data) ? $plan_data->special_events : '' ?></textarea>
+                            <label for="special_events">Special Events <span style="color:blueviolet;font-weight:bold;"> (Add multiple events seprated by Comma ",") </span> </label>
+                            <textarea class="form-control" id="special_events" name="special_events" rows="3" placeholder="14th March- Holi, 18th March- Global Recycling Day, 21st March- Harmony Day etc..."><?= isset($plan_data) ? $plan_data->special_events : '' ?></textarea>
                         </div>
 
                         <div class="form-group mb-3">
