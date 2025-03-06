@@ -407,8 +407,6 @@ class Dashboard extends CI_Controller {
                     $data = new stdClass(); // or handle as needed
                 }
             } else {
-				echo "<pre>";
-			print_r("1st Error");
                 $data = new stdClass(); // or handle as needed
             }
 

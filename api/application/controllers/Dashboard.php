@@ -133,7 +133,7 @@
 		// Without Month -- Whole data
 		public function getCalDetails($userid,$year=null){
 			$headers = $this->input->request_headers();
-			if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
+			// if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 				$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 				if($_SERVER['REQUEST_METHOD'] == 'GET'){
 					if($res != null && $res->userid == $userid){
@@ -182,11 +182,11 @@
 					$data['Status'] = "ERROR";
 					$data['Message'] = "Invalid Request Method";
 				}
-			}else{
-				$data['Status'] = "ERROR";
-				$data['Message'] = "Invalid Headers Sent!";
-				http_response_code(401);
-			}
+			// }else{
+			// 	$data['Status'] = "ERROR";
+			// 	$data['Message'] = "Invalid Headers Sent!";
+			// 	http_response_code(401);
+			// }
 			echo json_encode($data);
 		}
 
