@@ -140,10 +140,15 @@
 
 						$user = $this->DashboardModel->getUserType($userid);
 
+						echo "<pre>";
+				        print_r($user);
+
 						if ($user->userType=="Parent") {
 							$data['Announcements'] = $this->DashboardModel->getParentsAnnmnts($userid,$year);
 						} else {
 							$data['Announcements'] = $this->DashboardModel->getAnnouncementsM($userid);
+							echo "<pre>";
+				            print_r($data['Announcements']);
 						}
 
 						// Announcements
@@ -151,8 +156,8 @@
 						// Staff Birth Date
 						## Staff Birthday field
 						$data['StaffBirthdays'] = $this->DashboardModel->getStaffBirthdaysM($userid);
-				// echo "<pre>";
-				// print_r($data['StaffBirthdays']);
+				echo "<pre>";
+				print_r($data['StaffBirthdays']);
 				// exit;
 						// Public Holidays
 						$data['PublicHolidays'] = $this->DashboardModel->getPublicHolidaysM($userid);

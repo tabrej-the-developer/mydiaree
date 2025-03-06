@@ -124,11 +124,13 @@ class Dashboard extends CI_Controller {
 			curl_close($ch);
 	
 			if ($httpcode == 200) {
-				// echo "<pre>";
-				// print_r($server_output);
+				echo "<pre>";
+				print_r($server_output);
 				// exit;
 				return $server_output;
 			} else {
+				echo "<pre>";
+				print_r("error of calender events");
 				// Return an empty JSON object if the request fails
 				return json_encode(new stdClass());
 			}
@@ -393,7 +395,9 @@ class Dashboard extends CI_Controller {
             if ($httpcode == 200 && $server_output) {
                 // Decode JSON response
                 $jsonOutput = json_decode($server_output);
-		
+		    echo "<pre>";
+			print_r($jsonOutput);
+			
 
                 if (json_last_error() === JSON_ERROR_NONE) {
                     $data = $jsonOutput;
@@ -403,6 +407,8 @@ class Dashboard extends CI_Controller {
                     $data = new stdClass(); // or handle as needed
                 }
             } else {
+				echo "<pre>";
+			print_r("1st Error");
                 $data = new stdClass(); // or handle as needed
             }
 
