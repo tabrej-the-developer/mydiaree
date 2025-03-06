@@ -131,6 +131,7 @@ class Dashboard extends CI_Controller {
 			} else {
 				echo "<pre>";
 				print_r("error of calender events");
+				print_r($server_output);
 				// Return an empty JSON object if the request fails
 				return json_encode(new stdClass());
 			}
