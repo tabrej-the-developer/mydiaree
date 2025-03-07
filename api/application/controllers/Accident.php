@@ -158,8 +158,18 @@ class Accident extends CI_Controller {
 					$res = $this->acm->updateAccident($json);
 					$accidentid = $json->accidentid;
 				}else{
+					// echo "<pre>";
+					// print_r($json);
+					// exit;
 					$res = $this->acm->insertAccident($json);
 					$accidentid =  $res;
+
+					if (!$this->db->affected_rows()) {
+						echo "DB Error: " . $this->db->error()['message'];
+						exit;
+					}
+					// print_r($res);
+					// exit;
 				}
 
 				#update the signatures and accident mark image 
@@ -199,6 +209,9 @@ class Accident extends CI_Controller {
 					file_put_contents($target.$res_supervisor_sign, $nsv);
 					$this->acm->updateNomSupervisor($accidentid,$res_supervisor_sign);
 				}
+
+				// print_r($accidentid);
+				// exit;
 
 				#update all the illness
 				if ($accidentid == NULL) {

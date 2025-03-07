@@ -749,27 +749,41 @@
         
 	});
 
-	var canvas = new fabric.Canvas('c',{isDrawingMode:true});
+    var canvas = new fabric.Canvas('c', {
+    isDrawingMode: true,
+    // Set lower resolution for the canvas
+    width: 500,
+    height: 500
+});
 
-	fabric.Image.fromURL('<?php echo base_url("/assets/images/baby.jpg"); ?>', function(myImg) {
-	    
-	    var img1 = myImg.set({ 
-	        left: 0, 
-	        top: 0,
-	        scaleX: 500 / myImg.width,
-	        scaleY: 500 / myImg.height,
-	        selectable: false,
-	        hasControls: false
-	    });
+// Configure drawing brush to use less data
+canvas.freeDrawingBrush.width = 2; // Thinner lines
+canvas.freeDrawingBrush.color = '#000000'; // Simple color
 
-	    // setCorners(img1);
-	    canvas.add(img1);   
-	},{ crossOrigin: 'Anonymous' });
+fabric.Image.fromURL('<?php echo base_url("/assets/images/baby.jpg"); ?>', function(myImg) {
+    var img1 = myImg.set({ 
+        left: 0, 
+        top: 0,
+        scaleX: 500 / myImg.width,
+        scaleY: 500 / myImg.height,
+        selectable: false,
+        hasControls: false
+    });
 
-	function saveImage(){
-	    var pngURL = canvas.toDataURL();
-	    $("#injury-image").val(pngURL);
-	}
+    canvas.add(img1);
+}, { crossOrigin: 'Anonymous' });
+
+function saveImage() {
+    // Use JPEG format with compression instead of PNG
+    // The second parameter is the quality (0 to 1)
+    var jpegURL = canvas.toDataURL({
+        format: 'jpeg',
+        quality: 0.5,    // Lower value = smaller file, but lower quality
+        multiplier: 0.8  // Reduces the resolution of the output
+    });
+    
+    $("#injury-image").val(jpegURL);
+}
 
 	$("#form-submit").click(function(event) {
 		saveImage();

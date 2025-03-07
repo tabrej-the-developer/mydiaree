@@ -104,9 +104,7 @@ class Accident extends CI_Controller {
             $centerid = $data['centerid'];
             $roomid = $data['roomid'];
 
-			// echo "<pre>";
-			// print_r($data);
-			// exit;
+			
 
 			$url = BASE_API_URL.'accident/saveAccident';	
 			$ch = curl_init($url);
@@ -121,9 +119,15 @@ class Accident extends CI_Controller {
 			$server_output = curl_exec($ch);
 			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			if($httpcode == 200){
+			// echo "<pre>";
+			// print_r(json_encode($server_output));
+			// exit;
 				$r_url = base_url("Accident")."?status=success&centerid=".$centerid.'&roomid='.$roomid;
 				redirect($r_url);
 			}else{
+			// echo "<pre>";
+			// print_r(json_encode($server_output));
+			// exit;
 				$r_url = base_url("Accident")."?status=error";
 				redirect($r_url);
 			}
