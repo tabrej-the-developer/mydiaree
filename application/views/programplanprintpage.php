@@ -177,44 +177,50 @@
         }
 
         @media print {
-            .print-button {
-                display: none;
-            }
-            .back-button {
-                display: none;
-            }
+    .print-button {
+        display: none;
+    }
+    .back-button {
+        display: none;
+    }
 
-            
-            body {
-                margin: 0;
-                padding: 0;
-            }
+    body {  
+        margin: 0;
+        padding: 0;
+    }
 
-            .page {
-                margin: 0;
-                padding: 20px;
-            }
+    .page {
+        margin-left:180px;
+         /* Center the page horizontally */
+        padding: 10px;
+        width: 100%; /* Adjust width if needed */
+        box-sizing: border-box;
+        page-break-after: always; /* Force page break after each .page */
+    }
 
-            @page {
-    size: A3 landscape;
-    margin: 0;
+    .page:last-child {
+        page-break-after: auto; /* Prevent extra blank page at the end */
+    }
+
+    @page {
+        size: A3 landscape;
+        margin: 0;
+    }
+
+    .header {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    /* Force background images and colors to print */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
 }
 
-            .header {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-                color-adjust: exact !important;
-            }
-
-            /* Force background images and colors to print */
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-                color-adjust: exact !important;
-            }
-
-            
-        }
 
 
 
