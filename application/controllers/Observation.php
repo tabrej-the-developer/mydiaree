@@ -863,6 +863,9 @@ class Observation extends CI_Controller {
 			curl_close($ch);
 			if($httpcode == 200){
 				$data=json_decode($server_output);
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
 				$data->observation->title =  html_entity_decode($data->observation->title);
 				$data->centerid = $data->observation->centerid;
 				$data->observation->notes = html_entity_decode($data->observation->notes);
@@ -882,6 +885,69 @@ class Observation extends CI_Controller {
 				return FALSE;
 		   }
 	    }
+	}
+
+	public function print($observationId) {
+		// Check if user is logged in
+		if (!$this->session->has_userdata('LoginId')) {
+			redirect('login');
+		}
+		
+		$data['userid'] = $this->session->userdata('LoginId');
+			$data['observationId'] = $observationId;
+		    $url = BASE_API_URL.'observation/getObsView/';
+			$ch = curl_init($url);
+			curl_setopt($ch, CURLOPT_POST, 1);
+		    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+			curl_setopt($ch, CURLOPT_URL,$url);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'X-Device-Id: '.$this->session->userdata('X-Device-Id'),
+				'X-Token: '.$this->session->userdata('AuthToken')
+		    ));
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$server_output = curl_exec($ch);
+			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+			// print_r($server_output);
+			// echo $httpcode;
+			// exit;
+			curl_close($ch);
+			if($httpcode == 200){
+				$data=json_decode($server_output);
+				
+				$data->observation->title =  html_entity_decode($data->observation->title);
+				$data->centerid = $data->observation->centerid;
+				$data->observation->notes = html_entity_decode($data->observation->notes);
+				$data->observation->reflection = html_entity_decode($data->observation->reflection);
+				$data->id = isset($_GET['id'])?$_GET['id']:'';
+				$getStaffChild = $this->getAllUsers();
+				$getAllMontSubAct = $this->getAllMontSubAct();
+				foreach ($getStaffChild->UsersList as $key => $obj) {
+					$obj->id = $obj->type."_".$obj->id;
+				}
+				$myUserString = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($getStaffChild->UsersList));
+				$myTagsString = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($getAllMontSubAct->TagsList));
+				$data->getStaffChild = $myUserString;
+				$data->getTagsList = $myTagsString;
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
+				// $this->load->view('observationView_v3',$data);
+				// $data['observation_data'] = $data;
+				$this->load->view('print_observation_template', $data);
+			}else if($httpcode == 401){
+				return FALSE;
+		   }
+
+
+
+
+		// Get all observation data (same as your view method)
+		// $data['observation_data'] = $this->Observation_model->get_observation_data($observationId);
+		// print_r($data);
+		// exit;
+		
+		// Load the print template view
+		
 	}
 	
 	public function getObservations($id)
@@ -2162,7 +2228,7 @@ class Observation extends CI_Controller {
 		    	$url = BASE_API_URL . 'observation/getChildren?parentId='.$data['parentid'].'&userid='.$data['userid'];
 			}
            
-$centerid = 1;
+              $centerid = 1;
 
 
 			// print_r($centerid);

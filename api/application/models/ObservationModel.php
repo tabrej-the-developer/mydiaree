@@ -1608,12 +1608,17 @@ class ObservationModel extends CI_Model {
 		return $q->result();
 	}
 
-	public function getObsMilestoneSub($obsId='')
-	{
-		$sql = "SELECT * FROM devmilestonesub WHERE id IN (SELECT DISTINCT(devMilestoneId) FROM observationdevmilestonesub WHERE observationId = ".$obsId.")";
-		$q = $this->db->query($sql);
-		return $q->result();
-	}
+	public function getObsMilestoneSub($obsId = '')
+{
+    $sql = "SELECT dms.*, odms.assessment 
+            FROM devmilestonesub dms
+            JOIN observationdevmilestonesub odms 
+            ON dms.id = odms.devMilestoneId
+            WHERE odms.observationId = ?";
+    
+    $q = $this->db->query($sql, [$obsId]);
+    return $q->result();
+}
 
 	public function getObsMilestoneExtras($obsId='')
 	{

@@ -19,6 +19,7 @@
         }
 
         .page {
+            margin
             margin-bottom: 30px;
             page-break-after: always;
         }
@@ -44,12 +45,13 @@
 
         .header {
     text-align: center;
-    margin-top: 50px;
+    /* margin-top: 50px; */
     margin-bottom: 30px;
     position: relative;
     /* padding: 20px; */
     border-radius: 10px;
-    background-image: url("<?= base_url(); ?>api/assets/media/header_top.png"); /* Use url() for image */
+    /* background-image: url("<?= base_url(); ?>api/assets/media/header_top.png");  */
+    /* Use url() for image */
     background-size: contain; 
     background-repeat: no-repeat; 
                  }
@@ -194,9 +196,9 @@
             }
 
             @page {
-                size: A3;
-                margin: 0;
-            }
+    size: A3 landscape;
+    margin: 0;
+}
 
             .header {
                 -webkit-print-color-adjust: exact !important;
@@ -553,7 +555,7 @@
 
         <div class="footer">
         <div>1 Capricorn Road, Truganina, VIC 3029 </div>
-        <img src="<?= base_url(); ?>api/assets/media/footer_down.png" style="background-size: contain;background-repeat: no-repeat; position: relative;width:100%;">
+        <!-- <img src="<?= base_url(); ?>api/assets/media/footer_down.png" style="background-size: contain;background-repeat: no-repeat; position: relative;width:100%;"> -->
 
           
         </div>
@@ -649,7 +651,7 @@
 
         <div class="footer">
             1 Capricorn Road, Truganina, VIC 3029
-            <img src="<?= base_url(); ?>api/assets/media/footer_down.png" style="background-size: contain;background-repeat: no-repeat; position: relative;width:100%;">
+            <!-- <img src="<?= base_url(); ?>api/assets/media/footer_down.png" style="background-size: contain;background-repeat: no-repeat; position: relative;width:100%;"> -->
 
         </div>
     </div>

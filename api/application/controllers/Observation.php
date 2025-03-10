@@ -2271,48 +2271,49 @@ class Observation extends CI_Controller {
                 	// }
 
 					$setMonSubs = [];
-foreach ($obsMonSubArr as $monSubjects => $monsubject) {
-    $getMonSubs = $this->ObservationModel->getMonSubRow($monsubject);
-    $getAllMonActArr = $this->ObservationModel->getMonActvts($getMonSubs->idSubject);
-    
-    // Initialize the $sub object and its Activity property
-    $sub = new stdClass();
-    $sub->Activity = []; // Ensure Activity is an array
-
-    foreach ($getAllMonActArr as $activities => $act) {
-        if (in_array($act->idActivity, $obsMonActArr)) {
-            $sub->Activity[] = $act; // Safely add activity to $sub
-
-            // Get all subactivities for the current activity
-            $getAllMonSubActArr = $this->ObservationModel->getMonSubActvts($act->idActivity);
-            foreach ($getAllMonSubActArr as $gamsaarr => $gamsaa) {
-                if (in_array($gamsaa->idSubActivity, $obsMonSubActArr)) {
-                    $act->subActivity = []; // Initialize subActivity as an array if it doesn't exist
-                    $act->subActivity[] = $gamsaa; // Add subActivity
-
-                    // Extras for an observation
-                    $getMonObsExtras = [];
-                    $demoArr4 = $this->ObservationModel->getObsMonSubActvtsExtras($obsId);
-                    foreach ($demoArr4 as $demo4 => $obj4) {
-                        $getMonObsExtras[] = $obj4->idExtra;
-                    }
-
-                    // All extras for a particular subactivity
-                    $getAllExtras = $this->ObservationModel->getSubActivityExtras($gamsaa->idSubActivity);
-                    foreach ($getAllExtras as $getAllExtr => $getAllExtObj) {
-                        if (in_array($getAllExtObj->idExtra, $getMonObsExtras)) {
-                            $gamsaa->extras = []; // Initialize extras if not already set
-                            $gamsaa->extras[] = $getAllExtObj; // Add extra
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    $getMonSubs->Activity = $sub->Activity; // Assign the activities to $getMonSubs
-    $setMonSubs[] = $getMonSubs; // Collect all subjects
-}
+					foreach ($obsMonSubArr as $monSubjects => $monsubject) {
+						$getMonSubs = $this->ObservationModel->getMonSubRow($monsubject);
+						$getAllMonActArr = $this->ObservationModel->getMonActvts($getMonSubs->idSubject);
+					
+						// Check if this subject already exists in the result array
+						$subjectIndex = array_search($getMonSubs->idSubject, array_column($setMonSubs, 'idSubject'));
+					
+						if ($subjectIndex === false) {
+							$getMonSubs->Activity = []; // Initialize Activity array if not present
+							$setMonSubs[] = $getMonSubs; // Add the subject to the main array
+							$subjectIndex = array_key_last($setMonSubs); // Get the new index of added subject
+						}
+					
+						foreach ($getAllMonActArr as $act) {
+							if (in_array($act->idActivity, $obsMonActArr)) {
+								// Check if this activity already exists
+								$activityIds = array_column($setMonSubs[$subjectIndex]->Activity, 'idActivity');
+								if (!in_array($act->idActivity, $activityIds)) {
+									$act->subActivity = [];
+					
+									$getAllMonSubActArr = $this->ObservationModel->getMonSubActvts($act->idActivity);
+									foreach ($getAllMonSubActArr as $gamsaa) {
+										if (in_array($gamsaa->idSubActivity, $obsMonSubActArr)) {
+											$gamsaa->extras = [];
+					
+											$getMonObsExtras = array_column($this->ObservationModel->getObsMonSubActvtsExtras($obsId), 'idExtra');
+											$getAllExtras = $this->ObservationModel->getSubActivityExtras($gamsaa->idSubActivity);
+					
+											foreach ($getAllExtras as $getAllExtObj) {
+												if (in_array($getAllExtObj->idExtra, $getMonObsExtras)) {
+													$gamsaa->extras[] = $getAllExtObj;
+												}
+											}
+					
+											$act->subActivity[] = $gamsaa;
+										}
+									}
+					
+									$setMonSubs[$subjectIndex]->Activity[] = $act; // Add new activity
+								}
+							}
+						}
+					}
                 	
                 	#Developmental Milestone
                 	$devMilestone = [];
@@ -2348,6 +2349,7 @@ foreach ($obsMonSubArr as $monSubjects => $monsubject) {
                 					$getObsMileStoneSubs = $this->ObservationModel->getMileStoneSubs($mistmn->id);
                 					foreach ($getObsMileStoneSubs as $milestoneSubs => $mistsub) {
                 						if (in_array($mistsub->id, $devMilestoneSub)) {
+											$mistsub->assessment = $mistsub->assessment ?? '';
                 							$getObsMileStoneExtras = $this->ObservationModel->getMileStoneExtras($mistsub->id);
                 							foreach ($getObsMileStoneExtras as $milestoneExtras => $mistextra) {
                 								if(in_array($mistextra->id, $devMilestoneExtras)){

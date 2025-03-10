@@ -85,7 +85,14 @@
                     ?>
                         <div class="text-zero top-right-button-container">
                             <a href="<?= base_url('observation/addNew?type=observation&id='.$id); ?>" class="btn btn-primary btn-lg top-right-button">EDIT</a>
+
+                            <button id="printButton" style="margin-left:5px;" class="btn btn-primary btn-lg">
+    <i class="fa fa-print"></i> Print Observation
+                   </button>
                         </div>
+
+       
+
                     <?php } } ?>
 
                     <ul class="nav nav-tabs separator-tabs ml-0 mb-5" role="tablist">
@@ -589,7 +596,7 @@
                                                     ?>
                                                     <div class="border">
                                                         <div class="collapse-title">
-                                                            <button class="btn btn-link" data-toggle="collapse" data-target="#<?= $target; ?>" aria-expanded="<?= $true; ?>" aria-controls="<?= $target; ?>"> <?= $actvt->title; ?> </button>
+                                                            <button class="btn btn-link" data-toggle="collapse" data-target="#<?= $target; ?>" aria-expanded="<?= $true; ?>" aria-controls="<?= $target; ?>"> <?= $string; ?> </button>
                                                         </div>
                                                         
                                                         <div id="<?= $target; ?>" class="collapse <?= $show; ?>" data-parent="#accordionDM">
@@ -806,5 +813,20 @@ function commentobs() {
 }
 
 </script>
+
+<script>
+$(document).ready(function() {
+    $("#printButton").click(function() {
+        // Get the current observation ID from the URL
+        var urlParams = new URLSearchParams(window.location.search);
+        var observationId = urlParams.get('id');
+        
+        // Open the print page in a new window
+        window.open('<?= base_url("observation/print/") ?>' + observationId, '_blank');
+    });
+});
+</script>
+
+
 </body>
 </html>
