@@ -603,6 +603,10 @@ class LessonPlanList extends CI_Controller {
         $data['usertype'] = $this->session->userdata('UserType');
         $data['userid'] = $this->session->userdata('LoginId');
         
+
+        // print_r($data['usertype']);
+        // exit;
+
         if (isset($_GET['centerid'])) {
             $centerid = strip_tags(trim(stripslashes($_GET['centerid'])));
         } else {
@@ -614,8 +618,9 @@ class LessonPlanList extends CI_Controller {
             }
         }
         $data['centerid'] = $centerid;
-        
-        // Get program plan data using direct DB query
+
+        if($data['usertype'] == "Superadmin"){
+          // Get program plan data using direct DB query
         $this->db->select('ppd.*, u.name as creator_name, r.name as room_name');
         $this->db->from('programplantemplatedetailsadd as ppd');
         $this->db->join('users as u', 'u.userid = ppd.created_by', 'left');
@@ -625,6 +630,29 @@ class LessonPlanList extends CI_Controller {
         $query = $this->db->get();
         
         $data['program_plans'] = $query->result();
+
+        }else{
+ // Get program plan data for other users
+    $this->db->select('ppd.*, u.name as creator_name, r.name as room_name');
+    $this->db->from('programplantemplatedetailsadd as ppd');
+    $this->db->join('users as u', 'u.userid = ppd.created_by', 'left');
+    $this->db->join('room as r', 'r.id = ppd.room_id', 'left');
+    $this->db->where('ppd.centerid', $centerid);
+
+    // Filter by created_by or educators
+    $this->db->group_start();
+    $this->db->where('ppd.created_by', $data['userid']);
+    $this->db->or_like('ppd.educators', $data['userid']);
+    $this->db->group_end();
+
+    $this->db->order_by('ppd.created_at', 'DESC');
+    $query = $this->db->get();
+
+    $data['program_plans'] = $query->result();
+
+        }
+        
+        
         
         // Helper function for month conversion (directly in controller)
         $data['get_month_name'] = function($month_number) {
@@ -916,6 +944,7 @@ public function save_program_planinDB() {
   $program_data = array(
       'room_id' => $data['room'],
       'months' => $data['months'],
+      'years' => $data['years'],
       'centerid' => $data['centerid'] ?? NULL,
       'created_by' => $data['user_id'] ?? NULL,
       'educators' => $educators,

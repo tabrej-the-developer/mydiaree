@@ -278,7 +278,7 @@
             <img src="<?= base_url(); ?>api/assets/media/profile_1739442700.jpeg" alt="NextGen Montessori Logo">
         </div>
 
-        <div class="program-title">PROGRAM PLAN <span style="color:#22b1c4;"><?php echo $month_name?></span></div>
+        <div class="program-title">PROGRAM PLAN <span style="color:#22b1c4;"><?php echo $month_name; ?>&nbsp;<?php echo isset($plan['years']) ? $plan['years'] : ''; ?></span></div>
 
         <table>
             <tr class="room-name-row">

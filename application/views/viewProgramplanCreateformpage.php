@@ -91,6 +91,24 @@
     
     </div>
 
+    <div class="form-group mb-4">
+    <label for="years">Select Year</label>
+    <select class="form-control" id="years" name="years" required>
+        <option value="">Select Year</option>
+        <?php
+        $currentYear = date('Y');
+        $startYear = $currentYear - 10; // Adjust as needed, e.g., show last 10 years
+        $endYear = $currentYear + 10;   //adjust as needed to show future years.
+
+        for ($year = $startYear; $year <= $endYear; $year++) {
+            ?>
+            <option value="<?= $year ?>" <?= (isset($plan_data) && $plan_data->years == $year) ? 'selected' : '' ?>><?= $year ?></option>
+            <?php
+        }
+        ?>
+    </select>
+</div>
+
 
                 <!-- Room Selection -->
                <!-- Room Selection -->

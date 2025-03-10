@@ -2414,6 +2414,134 @@ class Observation extends CI_Controller {
 		}
 	}
 
+	public function getSubjects() {
+        // Query to fetch all subjects
+        $query = $this->db->get('montessorisubjects');
+        $subjects = $query->result();
+        
+        // Return data as JSON
+        header('Content-Type: application/json');
+        echo json_encode($subjects);
+    }
+
+
+	public function addActivity() {
+        // Get POST data
+        $idSubject = $this->input->post('idSubject');
+        $title = $this->input->post('title');
+        
+        // Validate input
+        if (empty($idSubject) || empty($title)) {
+            echo json_encode(['success' => false, 'message' => 'Subject and title are required']);
+            return;
+        }
+        
+        // Start transaction
+        $this->db->trans_start();
+        
+        // Insert into montessoriactivity table
+        $activityData = [
+            'idSubject' => $idSubject,
+            'title' => $title
+        ];
+        
+        $this->db->insert('montessoriactivity', $activityData);
+        
+        // Get the last insert ID (idActivity)
+        $idActivity = $this->db->insert_id();
+        
+        // Insert into montessoriactivityaccess table
+        $accessData = [
+            'idActivity' => $idActivity,
+            'centerid' => 1 // Always set to 1 as specified
+        ];
+        
+        $this->db->insert('montessoriactivityaccess', $accessData);
+        
+        // Complete transaction
+        $this->db->trans_complete();
+        
+        // Check if transaction was successful
+        if ($this->db->trans_status() === FALSE) {
+            // Transaction failed
+            echo json_encode(['success' => false, 'message' => 'Database error occurred']);
+        } else {
+            // Transaction succeeded
+            echo json_encode(['success' => true, 'message' => 'Activity added successfully']);
+        }
+    }
+
+
+
+	public function getActivitiesBySubject() {
+		// Get the subject ID from the GET request
+		$idSubject = $this->input->get('idSubject');
+		
+		// Validate input
+		if (empty($idSubject)) {
+			echo json_encode([]);
+			return;
+		}
+		
+		// Query to fetch activities filtered by subject ID
+		$this->db->where('idSubject', $idSubject);
+		$query = $this->db->get('montessoriactivity');
+		$activities = $query->result();
+		
+		// Return data as JSON
+		header('Content-Type: application/json');
+		echo json_encode($activities);
+	}
+	
+	/**
+	 * Add a new sub-activity and its access entry
+	 */
+	public function addSubActivity() {
+		// Get POST data
+		$idActivity = $this->input->post('idActivity');
+		$title = $this->input->post('title');
+		
+		// Validate input
+		if (empty($idActivity) || empty($title)) {
+			echo json_encode(['success' => false, 'message' => 'Activity and title are required']);
+			return;
+		}
+		
+		// Start transaction
+		$this->db->trans_start();
+		
+		// Insert into montessorisubactivity table
+		$subActivityData = [
+			'idActivity' => $idActivity,
+			'title' => $title
+		];
+		
+		$this->db->insert('montessorisubactivity', $subActivityData);
+		
+		// Get the last insert ID (idSubActivity)
+		$idSubActivity = $this->db->insert_id();
+		
+		// Insert into montessorisubactivityaccess table
+		$accessData = [
+			'idSubActivity' => $idSubActivity,
+			'centerid' => 1 // Always set to 1 as specified
+		];
+		
+		$this->db->insert('montessorisubactivityaccess', $accessData);
+		
+		// Complete transaction
+		$this->db->trans_complete();
+		
+		// Check if transaction was successful
+		if ($this->db->trans_status() === FALSE) {
+			// Transaction failed
+			echo json_encode(['success' => false, 'message' => 'Database error occurred']);
+		} else {
+			// Transaction succeeded
+			echo json_encode(['success' => true, 'message' => 'Sub-Activity added successfully']);
+		}
+	}
+
 
 	private function getRoomsWithChildren($centerid) {
 		// Load the database if not already loaded

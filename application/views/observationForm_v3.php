@@ -626,7 +626,13 @@
                                         <div class="tab-pane <?= ($sub_type=='Montessori')?'show active':'fade'; ?>" id="montes" role="tabpanel" aria-labelledby="montes-tab">
                                             <div class="card mb-4">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">Montessori</h5>
+                                                <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h5 class="card-title">Montessori</h5>
+    <div>
+    <button class="btn btn-outline-primary" id="addActivityBtn">Add Activity</button>&nbsp;
+        <button class="btn btn-outline-primary" id="addSubActivityBtn">Add Sub-Activity</button>
+    </div>
+</div>
                                                     <form action="" method="post" enctype="multipart/form-data" id="form-montessori" class="form-horizontal">
                                                         <div class="row">
                                                             <div class="col-md-3">
@@ -1895,6 +1901,88 @@
     </div>
     <!-- Preview Modal End -->
 
+
+    <!-- Modal Structure -->
+    <div class="modal fade" id="activityModal" tabindex="-1" aria-labelledby="activityModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="activityModalLabel">Add New Activity</h5>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="activityForm">
+          <div class="mb-3">
+            <label for="subjectSelect" class="form-label">Montessori Subject</label>
+            <select class="form-select" id="subjectSelect" name="idSubject" required>
+              <option value="" selected disabled>Select a subject</option>
+              <!-- Options will be loaded via AJAX -->
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="activityTitle" class="form-label">Activity Title</label>
+            <input type="text" class="form-control" id="activityTitle" name="title" required>
+            <!-- Success message will appear here -->
+            <div class="alert alert-success mt-2" id="successMessage" style="display: none;">
+              Activity added successfully!
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" id="saveActivityBtn">Save Activity</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Structure -->
+<div class="modal fade" id="subActivityModal" tabindex="-1" aria-labelledby="subActivityModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="subActivityModalLabel">Add New Sub-Activity</h5>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="subActivityForm">
+          <div class="mb-3">
+            <label for="subjectSelectForSub" class="form-label">Montessori Subject</label>
+            <select class="form-select" id="subjectSelectForSub" name="idSubject" required>
+              <option value="" selected disabled>Select a subject</option>
+              <!-- Options will be loaded via AJAX -->
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="activitySelect" class="form-label">Activity</label>
+            <select class="form-select" id="activitySelect" name="idActivity" required disabled>
+              <option value="" selected disabled>Select a subject first</option>
+              <!-- Options will be loaded via AJAX based on subject selection -->
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="subActivityTitle" class="form-label">Sub-Activity Title</label>
+            <input type="text" class="form-control" id="subActivityTitle" name="title" required>
+            <!-- Success message will appear here -->
+            <div class="alert alert-success mt-2" id="subActivitySuccessMessage" style="display: none;">
+              Sub-Activity added successfully!
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" id="saveSubActivityBtn">Save Sub-Activity</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
     <?php $this->load->view('footer_v3'); ?>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/jquery-3.3.1.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/bootstrap.bundle.min.js?v=1.0.0"></script>
@@ -2857,6 +2945,259 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     </script>
 
+<!-- JavaScript for Modal and AJAX -->
+<!-- JavaScript for Modal and AJAX -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const addActivityBtn = document.getElementById('addActivityBtn');
+  const activityForm = document.getElementById('activityForm');
+  const subjectSelect = document.getElementById('subjectSelect');
+  const activityModal = new bootstrap.Modal(document.getElementById('activityModal'));
+  const successMessage = document.getElementById('successMessage');
+  
+  // When the Add Activity button is clicked
+  addActivityBtn.addEventListener('click', function() {
+    // Fetch subjects via AJAX before opening the modal
+    fetchSubjects();
+  });
+  
+  // Function to fetch subjects from the database
+  function fetchSubjects() {
+    // Show loading state
+    subjectSelect.innerHTML = '<option value="" selected disabled>Loading subjects...</option>';
+    
+    // AJAX call to get subjects
+    $.ajax({
+      url: '<?= base_url('Observation/getSubjects') ?>',
+      type: 'GET',
+      dataType: 'json',
+      success: function(data) {
+        // Clear loading state
+        subjectSelect.innerHTML = '<option value="" selected disabled>Select a subject</option>';
+        
+        // Add the fetched subjects to the select element
+        data.forEach(function(subject) {
+          const option = document.createElement('option');
+          option.value = subject.idSubject;
+          option.textContent = subject.name;
+          subjectSelect.appendChild(option);
+        });
+        
+        // Open the modal after data is loaded
+        activityModal.show();
+      },
+      error: function(xhr, status, error) {
+        console.error('Error fetching subjects:', error);
+        alert('Failed to load subjects. Please try again.');
+      }
+    });
+  }
+  
+  // Form submission handler
+  activityForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const idSubject = subjectSelect.value;
+    const title = document.getElementById('activityTitle').value;
+    
+    // AJAX call to save the activity
+    $.ajax({
+      url: '<?= base_url('Observation/addActivity') ?>',
+      type: 'POST',
+      data: {
+        idSubject: idSubject,
+        title: title
+      },
+      dataType: 'json',
+      success: function(response) {
+        if (response.success) {
+          // Clear the title field
+          document.getElementById('activityTitle').value = '';
+          
+          // Show success message below the input
+          successMessage.style.display = 'block';
+          
+          // Hide success message after 3 seconds
+          setTimeout(function() {
+            successMessage.style.display = 'none';
+          }, 3000);
+        } else {
+          alert('Failed to add activity: ' + response.message);
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('Error adding activity:', error);
+        alert('Failed to add activity. Please try again.');
+      }
+    });
+  });
+  
+  // Ensure page refresh when modal is closed
+  document.getElementById('activityModal').addEventListener('hidden.bs.modal', function() {
+    location.reload();
+  });
+});
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const addSubActivityBtn = document.getElementById('addSubActivityBtn');
+  const subActivityForm = document.getElementById('subActivityForm');
+  const subjectSelectForSub = document.getElementById('subjectSelectForSub');
+  const activitySelect = document.getElementById('activitySelect');
+  const subActivityModal = new bootstrap.Modal(document.getElementById('subActivityModal'));
+  const subActivitySuccessMessage = document.getElementById('subActivitySuccessMessage');
+  
+  // When the Add Sub-Activity button is clicked
+  addSubActivityBtn.addEventListener('click', function() {
+    // Fetch subjects via AJAX before opening the modal
+    fetchSubjectsForSubActivity();
+  });
+  
+  // Function to fetch subjects from the database
+  function fetchSubjectsForSubActivity() {
+    // Show loading state
+    subjectSelectForSub.innerHTML = '<option value="" selected disabled>Loading subjects...</option>';
+    
+    // AJAX call to get subjects
+    $.ajax({
+      url: '<?= base_url('Observation/getSubjects') ?>',
+      type: 'GET',
+      dataType: 'json',
+      success: function(data) {
+        // Clear loading state
+        subjectSelectForSub.innerHTML = '<option value="" selected disabled>Select a subject</option>';
+        
+        // Add the fetched subjects to the select element
+        data.forEach(function(subject) {
+          const option = document.createElement('option');
+          option.value = subject.idSubject;
+          option.textContent = subject.name;
+          subjectSelectForSub.appendChild(option);
+        });
+        
+        // Open the modal after data is loaded
+        subActivityModal.show();
+      },
+      error: function(xhr, status, error) {
+        console.error('Error fetching subjects:', error);
+        alert('Failed to load subjects. Please try again.');
+      }
+    });
+  }
+  
+  // Function to fetch activities based on selected subject
+  function fetchActivitiesBySubject(subjectId) {
+    // Disable activity select and show loading
+    activitySelect.disabled = true;
+    activitySelect.innerHTML = '<option value="" selected disabled>Loading activities...</option>';
+    
+    // AJAX call to get activities for the selected subject
+    $.ajax({
+      url: '<?= base_url('Observation/getActivitiesBySubject') ?>',
+      type: 'GET',
+      data: { idSubject: subjectId },
+      dataType: 'json',
+      success: function(data) {
+        // Clear loading state
+        activitySelect.innerHTML = '<option value="" selected disabled>Select an activity</option>';
+        
+        if (data.length === 0) {
+          activitySelect.innerHTML = '<option value="" selected disabled>No activities found for this subject</option>';
+        } else {
+          // Add the fetched activities to the select element
+          data.forEach(function(activity) {
+            const option = document.createElement('option');
+            option.value = activity.idActivity;
+            option.textContent = activity.title;
+            activitySelect.appendChild(option);
+          });
+          
+          // Enable the activity select
+          activitySelect.disabled = false;
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('Error fetching activities:', error);
+        activitySelect.innerHTML = '<option value="" selected disabled>Error loading activities</option>';
+      }
+    });
+  }
+  
+  // When subject is selected, fetch related activities
+  subjectSelectForSub.addEventListener('change', function() {
+    const selectedSubjectId = this.value;
+    if (selectedSubjectId) {
+      fetchActivitiesBySubject(selectedSubjectId);
+    } else {
+      // Reset and disable activity select if no subject is selected
+      activitySelect.innerHTML = '<option value="" selected disabled>Select a subject first</option>';
+      activitySelect.disabled = true;
+    }
+  });
+  
+  // Form submission handler
+  subActivityForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const idActivity = activitySelect.value;
+    const title = document.getElementById('subActivityTitle').value;
+    
+    // AJAX call to save the sub-activity
+    $.ajax({
+      url: '<?= base_url('Observation/addSubActivity') ?>',
+      type: 'POST',
+      data: {
+        idActivity: idActivity,
+        title: title
+      },
+      dataType: 'json',
+      success: function(response) {
+        if (response.success) {
+          // Clear the title field
+          document.getElementById('subActivityTitle').value = '';
+          
+          // Show success message below the input
+          subActivitySuccessMessage.style.display = 'block';
+          
+          // Hide success message after 3 seconds
+          setTimeout(function() {
+            subActivitySuccessMessage.style.display = 'none';
+          }, 3000);
+        } else {
+          alert('Failed to add sub-activity: ' + response.message);
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('Error adding sub-activity:', error);
+        alert('Failed to add sub-activity. Please try again.');
+      }
+    });
+  });
+  
+  // Ensure page refresh when modal is closed
+  document.getElementById('subActivityModal').addEventListener('hidden.bs.modal', function() {
+    location.reload();
+  });
+});
+</script>
+<script>
+  $(document).ready(function() {
+    $('#activityModal').on('hidden.bs.modal', function () {
+      location.reload();
+    });
+  });
+</script>
+<script>
+  $(document).ready(function() {
+    $('#subActivityModal').on('hidden.bs.modal', function () {
+      location.reload();
+    });
+  });
+</script>
 
 </body>
 </html>

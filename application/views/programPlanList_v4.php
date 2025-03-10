@@ -320,7 +320,7 @@
                                         <tr>
                                             <td class="id-column"><?php echo $serial_no++; ?></td>
                                             <td>
-                                                <span class="month-label"><?php echo $get_month_name($plan->months); ?></span>
+                                                <span class="month-label"><?php echo $get_month_name($plan->months); ?>&nbsp;<?php echo $plan->years ?? 'N/A'; ?></span>
                                             </td>
                                             <td><?php echo $plan->room_name ?? 'N/A'; ?></td>
                                             <td><?php echo $plan->creator_name ?? 'N/A'; ?></td>
