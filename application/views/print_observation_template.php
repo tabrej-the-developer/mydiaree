@@ -206,24 +206,34 @@
                 <!-- <th>Child's Photos</th> -->
                 <td colspan="4" class="photo-cell">
                     <strong><p>Child's Photos</p></strong>
-                    <?php if (!empty($childrens)): ?>
+                    <!-- <?php if (!empty($childrens)): ?>
                         <?php foreach ($childrens as $child): ?>
                             <?php if (!empty($child->imageUrl)): ?>
                                 <img src="<?= base_url('api/assets/media/'.$child->imageUrl) ?>" class="child-image" alt="<?= $child->child_name ?>">
                             <?php endif; ?>
                         <?php endforeach; ?>
-                    <?php endif; ?>
-                </td>
-            </tr>
-            <tr>
-                <th>Observation</th>
-                <td colspan="3" class="observation-cell"><?= $observation->title ?>   <?php if (!empty($Media)): ?>
-                        <?php foreach ($Media as $media): ?>
+                    <?php endif; ?> -->
+
+
+                    <?php if (!empty($Media)): ?>
+                         <?php foreach ($Media as $media): ?>
                             <?php if ($media->mediaType == 'Image'): ?>
                                 <img src="<?= base_url('api/assets/media/'.$media->mediaUrl) ?>" class="child-image" alt="Observation Media">
                             <?php endif; ?>
                         <?php endforeach; ?>
-                    <?php endif; ?></td>
+                    <?php endif; ?> 
+
+                </td>
+            </tr>
+            <tr>
+                <th>Observation</th>
+                <td colspan="3" class="observation-cell">
+                    
+                <!-- <?= $observation->title ?>    -->
+                
+               
+                
+                </td>
                
             </tr>
             <tr>

@@ -913,7 +913,9 @@ class Observation extends CI_Controller {
 			curl_close($ch);
 			if($httpcode == 200){
 				$data=json_decode($server_output);
-				
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
 				$data->observation->title =  html_entity_decode($data->observation->title);
 				$data->centerid = $data->observation->centerid;
 				$data->observation->notes = html_entity_decode($data->observation->notes);
@@ -928,9 +930,7 @@ class Observation extends CI_Controller {
 				$myTagsString = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($getAllMontSubAct->TagsList));
 				$data->getStaffChild = $myUserString;
 				$data->getTagsList = $myTagsString;
-				// echo "<pre>";
-				// print_r($data);
-				// exit;
+				
 				// $this->load->view('observationView_v3',$data);
 				// $data['observation_data'] = $data;
 				$this->load->view('print_observation_template', $data);
@@ -1455,10 +1455,13 @@ class Observation extends CI_Controller {
 
 	public function getPermissions($user,$centerid)
 	{
+		
 		if($this->session->has_userdata('LoginId')){
 			$data['userid'] = $this->session->userdata('LoginId');
 			$data['user'] = $user;
 			$data['centerid'] = $centerid;
+		// 	print_r($data['user']);
+		// exit;
 			$url = BASE_API_URL."/Util/getPermissions/";
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_URL,$url);
@@ -2322,7 +2325,10 @@ class Observation extends CI_Controller {
 				}				
 				
 				$data['educators'] = $educators->Educators;
-				$permissions = $this->getPermissions($userid,$centerid);
+				$permissions = $this->getPermissions($userid,$data['centerid']);
+				// echo "<pre>";
+				// print_r($permissions);
+				// exit;
 				$data['permissions'] = $permissions->Permissions;
 
 				if($data['id'])
@@ -2403,6 +2409,8 @@ class Observation extends CI_Controller {
 				}
 				// $data['get_child']=str_replace('%20',' ', $get_child);
 				$data['get_child'] = is_null($get_child) ? '' : str_replace('%20', ' ', $get_child);
+
+				
 				
 			    $this->load->view('observationForm_v3',$data);
 			}else if($httpcode == 401){

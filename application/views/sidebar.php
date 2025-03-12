@@ -193,10 +193,17 @@
                     <?php if ($_SESSION['UserType'] != "Parent") { ?>
                     
                     <li>
+                        <a href="<?php echo base_url('Settings/managepublicholiday'); ?>">
+                            <span class="d-inline-block">Manage Public Holidays</span>
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="<?php echo base_url('Settings/moduleSettings'); ?>">
                             <span class="d-inline-block">Module Settings</span>
                         </a>
                     </li>
+
                     <li>
                         <a href="<?php echo base_url('Settings/userSettings'); ?>">
                             <span class="d-inline-block">User Settings</span>

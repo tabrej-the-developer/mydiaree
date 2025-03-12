@@ -22,8 +22,32 @@ class Login extends CI_Controller {
 
 	public function getUserValidation(){
 		
+		// header('Content-Type: application/json');
+
+		// Check all possible input sources
 		$json = json_decode(file_get_contents('php://input'));
-		
+	
+		// echo json_encode([
+		// 	'php_input' => $json,
+		// 	'post_data' => $_POST,
+		// 	'request_data' => $_REQUEST,
+		// ]);
+	
+
+		// If raw JSON is null, use $_POST
+		if (is_null($json)) {
+			$json = (object) $_POST;
+		}
+
+		// print_r($json);
+		// exit;
+	
+		// Output for debugging (You can remove this in production)
+		// echo json_encode([
+		// 	'received_data' => $json
+		// ]);
+		// exit;
+		 
 
 		if($json != null){
 			$email = $json->user_name;

@@ -1065,7 +1065,7 @@ class ObservationModel extends CI_Model {
 	}
 	public function getObservationChildrens($id)
 	{
-		$query = $this->db->query("SELECT c.name as child_name,c.dob as dob,c.id as child_id,c.imageUrl FROM observationchild oc INNER join child c on (c.id = oc.childId) where oc.observationId=".$id."");
+		$query = $this->db->query("SELECT CONCAT(c.name, ' ', c.lastname) as child_name, c.dob as dob, c.id as child_id, c.imageUrl FROM observationchild oc INNER JOIN child c ON (c.id = oc.childId) WHERE oc.observationId = ".$id."");
 		return $query->result();
 	}
 	public function getReflectionChildrens($id)

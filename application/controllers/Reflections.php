@@ -79,10 +79,11 @@ class Reflections extends CI_Controller {
 				$data = [];
 				$jsondata = json_decode($server_output);
 				// echo "<pre>";
-				// print_r($jsondata);
+				// print_r($jsondata->permission);
 				// die;
 				$data['reflection'] = $jsondata->Reflections;
-				$data['permission'] = $this->getUsersPermissions($defCenter);
+				// $data['permission'] = $this->getUsersPermissions($defCenter);
+				$data['permission'] = $jsondata->permission;
 				$this->load->view('Reflection_v4',$data);
 				// $this->load->view('Reflection_form-newui',$data);				
 			}

@@ -2376,7 +2376,7 @@ class Observation extends CI_Controller {
 
 					$comments =$this->ObservationModel->getobservationComments($obsId);
                     // echo "<pre>";
-					// print_r($comments);
+					// print_r($childrens);
 					// exit;
 
 	                $data['Status'] = "SUCCESS";

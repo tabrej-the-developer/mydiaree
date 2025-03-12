@@ -2,10 +2,10 @@
 
 class Settings extends CI_Controller {
 
-	public function __construct()
-	{
+	function __construct() {
 		parent::__construct();
-	}
+		$this->load->database(); 
+	  }
 
 	public function index()
 	{
@@ -31,6 +31,81 @@ class Settings extends CI_Controller {
 			redirect("Welcome");
 		}
 	}
+
+	public function managepublicholiday() {
+        $data['holidays'] = $this->db->get('publicholidays')->result();
+        $this->load->view('managepublicholidaypages', $data);
+    }
+
+
+	  // API endpoint to fetch all holidays
+	  public function getHolidays() {
+        $holidays = $this->db->get('publicholidays')->result();
+        echo json_encode(['data' => $holidays]);
+    }
+    
+    // API endpoint to add new holiday
+    public function addHoliday() {
+        $data = [
+            'state' => $this->input->post('state'),
+            'date' => $this->input->post('date'),
+            'month' => $this->input->post('month'),
+            'occasion' => $this->input->post('occasion')
+        ];
+        
+        $result = $this->db->insert('publicholidays', $data);
+        
+        if ($result) {
+            echo json_encode(['status' => 'success', 'message' => 'Holiday added successfully']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to add holiday']);
+        }
+    }
+    
+    // API endpoint to update holiday
+    public function updateHoliday() {
+        $id = $this->input->post('id');
+        $data = [
+            'state' => $this->input->post('state'),
+            'date' => $this->input->post('date'),
+            'month' => $this->input->post('month'),
+            'occasion' => $this->input->post('occasion')
+        ];
+        
+        $this->db->where('id', $id);
+        $result = $this->db->update('publicholidays', $data);
+        
+        if ($result) {
+            echo json_encode(['status' => 'success', 'message' => 'Holiday updated successfully']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to update holiday']);
+        }
+    }
+    
+    // API endpoint to get single holiday for editing
+    public function getHoliday() {
+    $id = $this->input->get('id');
+    $holiday = $this->db
+        ->where('id', $id)
+        ->order_by('id', 'DESC') // Add order_by clause
+        ->get('publicholidays')
+        ->row();
+
+    echo json_encode(['data' => $holiday]);
+}
+    
+    // API endpoint to delete holiday
+    public function deleteHoliday() {
+        $id = $this->input->post('id');
+        $this->db->where('id', $id);
+        $result = $this->db->delete('publicholidays');
+        
+        if ($result) {
+            echo json_encode(['status' => 'success', 'message' => 'Holiday deleted successfully']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to delete holiday']);
+        }
+    }
 
 	public function changePin()
 	{
