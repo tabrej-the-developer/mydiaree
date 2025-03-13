@@ -47,7 +47,7 @@ class Login extends CI_Controller {
 		// 	'received_data' => $json
 		// ]);
 		// exit;
-		 
+		  
 
 		if($json != null){
 			$email = $json->user_name;

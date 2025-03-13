@@ -231,6 +231,12 @@
                         </div>
                        
                         <div class="pl-5 pt-2 pr-2 pb-2">
+    <a href="<?= base_url('observation/print/') . $obsId ?>" target="_blank">
+        <i class="fa-solid fa-print fa-beat fa-lg" style="color: #74C0FC;"></i>
+    </a>
+</div>
+
+                        <div class="pl-5 pt-2 pr-2 pb-2">
                         <i class="fa-sharp fa-solid fa-trash fa-lg" style="color: #da0711;cursor:pointer;" onclick="deleteObservation(<?php echo $obsId; ?>)"></i>
                            </div>
 

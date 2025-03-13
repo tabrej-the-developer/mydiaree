@@ -213,6 +213,8 @@ class Observation extends CI_Controller {
 
 						$data['title'] = $this->dataready($data['title']);
 						$data['notes'] = $this->dataready($data['notes']);
+						$data['child_voice'] = $this->dataready($data['child_voice']);
+						$data['future_plan'] = $this->dataready($data['future_plan']);
 						$data['reflection'] = $this->dataready($data['reflection']);
 						$url = BASE_API_URL.'observation/editObservation';
 					}
@@ -330,6 +332,12 @@ class Observation extends CI_Controller {
 
 						if (isset($data['notes']) && !empty($data['notes'])) {
 							$data['notes'] = $this->dataready($data['notes']);
+						}
+						if (isset($data['child_voice']) && !empty($data['child_voice'])) {
+							$data['child_voice'] = $this->dataready($data['child_voice']);
+						}
+						if (isset($data['future_plan']) && !empty($data['future_plan'])) {
+							$data['future_plan'] = $this->dataready($data['future_plan']);
 						}
 						
 						if (isset($data['reflection']) && !empty($data['reflection'])) {
@@ -870,6 +878,8 @@ class Observation extends CI_Controller {
 				$data->centerid = $data->observation->centerid;
 				$data->observation->notes = html_entity_decode($data->observation->notes);
 				$data->observation->reflection = html_entity_decode($data->observation->reflection);
+				$data->observation->child_voice = html_entity_decode($data->observation->child_voice);
+				$data->observation->future_plan = html_entity_decode($data->observation->future_plan);
 				$data->id = isset($_GET['id'])?$_GET['id']:'';
 				$getStaffChild = $this->getAllUsers();
 				$getAllMontSubAct = $this->getAllMontSubAct();
@@ -1904,6 +1914,9 @@ class Observation extends CI_Controller {
 			    $this->load->view('observationList_v3',$data);
 			}
 			else if($httpcode == 401){
+				// $jsonOutput=json_decode($server_output);
+				// echo "JSON Output: <pre>" . print_r($jsonOutput, true) . "</pre>";
+				// exit;
 				redirect('welcome');
 			}
 		}else{
@@ -2035,6 +2048,8 @@ class Observation extends CI_Controller {
 						$data['title'] = $this->dataready($data['title']);
 						$data['notes'] = $this->dataready($data['notes']);
 						$data['reflection'] = $this->dataready($data['reflection']);
+						$data['child_voice'] = $this->dataready($data['child_voice']);
+						$data['future_plan'] = $this->dataready($data['future_plan']);
 						$url = BASE_API_URL.'observation/editObservation';
 					}
 				}else{
@@ -2157,6 +2172,12 @@ class Observation extends CI_Controller {
 						if (isset($data['reflection']) && !empty($data['reflection'])) {
 							$data['reflection'] = $this->dataready($data['reflection']);
 						}
+						if (isset($data['child_voice']) && !empty($data['child_voice'])) {
+							$data['child_voice'] = $this->dataready($data['child_voice']);
+						}
+						if (isset($data['future_plan']) && !empty($data['future_plan'])) {
+							$data['future_plan'] = $this->dataready($data['future_plan']);
+						}
 
 						if (isset($data['childrens'])) {
 							$data['childrens'] = json_encode($data['childrens']);
@@ -2173,7 +2194,7 @@ class Observation extends CI_Controller {
 				@curl_setopt($ch, CURLOPT_POSTFIELDS,$data);
 				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 					'X-Device-Id: '.$this->session->userdata('X-Device-Id'),
-					'X-Token: '.$this->session->userdata('AuthToken')
+					'X-Token: '.$this->session->userdata('AuthToken') 
 			    ));	
 				$server_output = curl_exec($ch);
 		

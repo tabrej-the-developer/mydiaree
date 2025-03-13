@@ -81,19 +81,21 @@
                     
                     <?php  
                     if ($this->session->userdata('UserType')!='Parent') {                        
-                        if ($observation->status != "Published" || $user == $observation->user_name) { 
+                        // if ($observation->status != "Published" || $user == $observation->user_name) { 
                     ?>
                         <div class="text-zero top-right-button-container">
-                            <a href="<?= base_url('observation/addNew?type=observation&id='.$id); ?>" class="btn btn-primary btn-lg top-right-button">EDIT</a>
+                            <a href="<?= base_url('observation/addNew?type=observation&id='.$id); ?>" class="btn btn-outline-primary btn-lg top-right-button">EDIT</a>
 
-                            <button id="printButton" style="margin-left:5px;" class="btn btn-primary btn-lg">
-    <i class="fa fa-print"></i> Print Observation
-                   </button>
+                            <button id="printButton" style="margin-left:5px;" class="btn btn-outline-primary btn-lg">
+                            <i class="fa fa-print"></i> Print Observation
+                            </button>
                         </div>
 
        
 
-                    <?php } } ?>
+                    <?php 
+                    // }
+                 } ?> 
 
                     <ul class="nav nav-tabs separator-tabs ml-0 mb-5" role="tablist">
                         <li class="nav-item">
@@ -143,6 +145,18 @@
                                                 <strong>Reflection:</strong>
                                                 <p><?php echo nl2br($observation->reflection); ?></p>
                                             <?php } ?>
+
+                                            <?php if($observation->child_voice) { ?>
+                                                <strong>Child Voice:</strong>
+                                                <p><?php echo nl2br($observation->child_voice); ?></p>
+                                            <?php } ?>
+
+                                            <?php if($observation->future_plan) { ?>
+                                                <strong>Future plan:</strong>
+                                                <p><?php echo nl2br($observation->future_plan); ?></p>
+                                            <?php } ?>
+
+
                                         </div>
                                         <div class="col-md-6">
                                             <div id="carousel-example-generic" class="carousel slide" data-bs-ride="carousel">

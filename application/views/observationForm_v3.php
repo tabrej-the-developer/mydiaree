@@ -469,7 +469,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-6">
                                                         <div id="select-children">
-                                                            <button type="button" class="btn btn-secondary mb-1" data-toggle="modal" data-backdrop="static" data-target="#selectChildrenModal"> + Add Children </button>
+                                                            <button type="button" class="btn btn-outline-primary mb-1" data-toggle="modal" data-backdrop="static" data-target="#selectChildrenModal"> + Add Children </button>
                                                             <div class="bootstrap-tagsinput">
                                                                 <?php 
                                                                     if(!empty($observationChildrens)) {
@@ -495,7 +495,7 @@
 
                                                         <div id="obs-notes">
                                                             <div class="form-group required">
-                                                                <label class="control-label">Analysis</label>
+                                                                <label class="control-label">Analysis/Evaluation</label>
                                                                 <textarea name="notes" style="height: 73px;" id="obs_notes"><?php echo isset($observation->notes)?$observation->notes:''; ?></textarea>
                                                             </div>
                                                         </div>
@@ -507,6 +507,23 @@
                                                                 </div>
                                                             <?php } ?>
                                                         </div>
+                                                        <div id="child-voice">
+                                                            <?php if ($_SESSION['UserType'] != 'Parent') { ?>
+                                                                <div class="form-group">
+                                                                    <label class=" control-label" >Child's Voice</label>
+                                                                    <textarea style="height: 73px;" id="child_voice" name="child_voice" class="form-control"><?php echo isset($observation->child_voice)?$observation->child_voice:''; ?></textarea>
+                                                                </div>
+                                                            <?php } ?>
+                                                        </div>
+                                                        <div id="Future Plan/Extension">
+                                                            <?php if ($_SESSION['UserType'] != 'Parent') { ?>
+                                                                <div class="form-group">
+                                                                    <label class=" control-label" >Future Plan/Extension</label>
+                                                                    <textarea style="height: 73px;" id="future_plan" name="future_plan" class="form-control"><?php echo isset($observation->future_plan)?$observation->future_plan:''; ?></textarea>
+                                                                </div>
+                                                            <?php } ?>
+                                                        </div>
+
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div id="img-droppable">
@@ -2152,6 +2169,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (document.getElementById('obs_reflection')) {
         CKEDITOR.replace('obs_reflection', commonConfig);
+    }
+    if (document.getElementById('child_voice')) {
+        CKEDITOR.replace('child_voice', commonConfig);
+    }
+    if (document.getElementById('future_plan')) {
+        CKEDITOR.replace('future_plan', commonConfig);
     }
 });
 

@@ -124,6 +124,84 @@ class Observation extends CI_Controller {
 						$data['notes'] = htmlspecialchars($data['notes']);
 					}
 
+
+
+
+
+
+					//Process future_plan for saving into db
+					if (!empty($data['future_plan'])) {
+						$data['future_plan'] = str_replace("a href=","a link='#link' href=",$data['future_plan']);
+						$childLink = [];
+						$data['future_plan'] = html_entity_decode($data['future_plan']);
+						preg_match_all('/<a[^>]+href=([\'"])(?<href>.+?)\1[^>]*>/i',html_entity_decode($data['future_plan']),$future_planMatch);
+						foreach ($future_planMatch['href'] as $key => $obj) {
+						    if (!in_array($obj, $childLink)) {
+						        array_push($childLink, $obj);
+						        array_push($tagsArr, $obj);
+						    }
+						}
+
+						$child_url = $this->base_url.'observation/viewChild'."?childid="; 
+						$data['future_plan'] = str_replace("user_Child_",$child_url,$data['future_plan']);
+						$data['future_plan'] = str_replace("&nbsp;"," ",$data['future_plan']);
+						$linkDom = new DOMDocument;
+						$linkDom->loadHTML($data['future_plan']);
+						$allLinks = $linkDom->getElementsByTagName('a');
+						$i = 0;
+						foreach ($allLinks as $rawLink) {
+						    $longLink = $rawLink->getAttribute('link');
+					        $shortURL = $childLink[$i];
+					        $rawLink->setAttribute('link', $shortURL);
+					        $i++;
+						}
+						$data['future_plan'] = str_replace('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">','',$linkDom->saveHTML());
+						$data['future_plan'] = str_replace('<html><body>','',$data['future_plan']);
+						$data['future_plan'] = str_replace('</body></html>','',$data['future_plan']);
+						$data['future_plan'] = htmlspecialchars($data['future_plan']);
+					}
+
+
+
+
+
+					//Process child_voice for saving into db
+					if (!empty($data['child_voice'])) {
+						$data['child_voice'] = str_replace("a href=","a link='#link' href=",$data['child_voice']);
+						$childLink = [];
+						$data['child_voice'] = html_entity_decode($data['child_voice']);
+						preg_match_all('/<a[^>]+href=([\'"])(?<href>.+?)\1[^>]*>/i',html_entity_decode($data['child_voice']),$child_voiceMatch);
+						foreach ($child_voiceMatch['href'] as $key => $obj) {
+						    if (!in_array($obj, $childLink)) {
+						        array_push($childLink, $obj);
+						        array_push($tagsArr, $obj);
+						    }
+						}
+
+						$child_url = $this->base_url.'observation/viewChild'."?childid="; 
+						$data['child_voice'] = str_replace("user_Child_",$child_url,$data['child_voice']);
+						$data['child_voice'] = str_replace("&nbsp;"," ",$data['child_voice']);
+						$linkDom = new DOMDocument;
+						$linkDom->loadHTML($data['child_voice']);
+						$allLinks = $linkDom->getElementsByTagName('a');
+						$i = 0;
+						foreach ($allLinks as $rawLink) {
+						    $longLink = $rawLink->getAttribute('link');
+					        $shortURL = $childLink[$i];
+					        $rawLink->setAttribute('link', $shortURL);
+					        $i++;
+						}
+						$data['child_voice'] = str_replace('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">','',$linkDom->saveHTML());
+						$data['child_voice'] = str_replace('<html><body>','',$data['child_voice']);
+						$data['child_voice'] = str_replace('</body></html>','',$data['child_voice']);
+						$data['child_voice'] = htmlspecialchars($data['child_voice']);
+					}
+
+
+
+
+
+
 					//Process Reflections for saving into db
 					if (!empty($data['reflection'])) {
 						$data['reflection'] = str_replace("a href=","a link='#link' href=",$data['reflection']);
@@ -352,6 +430,91 @@ class Observation extends CI_Controller {
 						$data['notes'] = str_replace('</body></html>','',$data['notes']);
 						$data['notes'] = htmlspecialchars($data['notes']);
 					}
+
+
+
+
+					//Process child_voice for saving into db
+					if (!empty($data['child_voice'])) {
+						$data['child_voice'] = str_replace("a href=","a link='#link' href=",$data['child_voice']);
+						$childLink = [];
+						$data['child_voice'] = html_entity_decode($data['child_voice']);
+						preg_match_all('/<a[^>]+href=([\'"])(?<href>.+?)\1[^>]*>/i',html_entity_decode($data['child_voice']),$notesMatch);
+						foreach ($notesMatch['href'] as $key => $obj) {
+						    if (!in_array($obj, $childLink)) {
+						        array_push($childLink, $obj);
+						        array_push($tagsArr, $obj);
+						    }
+						}
+
+						$child_url = 'href="http://localhost/Mykronicle/observation/viewChild?childid='; 
+						$data['child_voice'] = str_replace('href="user_Child_',$child_url,$data['child_voice']);
+						$data['child_voice'] = str_replace("&nbsp;"," ",$data['child_voice']);
+						$linkDom = new DOMDocument;
+						$linkDom->loadHTML($data['child_voice']);
+						$allLinks = $linkDom->getElementsByTagName('a');
+						$i = 0;
+						foreach ($allLinks as $rawLink) {
+						    $longLink = $rawLink->getAttribute('link');
+					        $shortURL = $childLink[$i];
+					        $rawLink->setAttribute('link', $shortURL);
+					        $i++;
+						}
+						$data['child_voice'] = str_replace('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">','',$linkDom->saveHTML());
+						$data['child_voice'] = str_replace('<html><body>','',$data['child_voice']);
+						$data['child_voice'] = str_replace('</body></html>','',$data['child_voice']);
+						$data['child_voice'] = htmlspecialchars($data['child_voice']);
+					}
+
+
+
+
+
+					//Process future_plan for saving into db
+					if (!empty($data['future_plan'])) {
+						$data['future_plan'] = str_replace("a href=","a link='#link' href=",$data['future_plan']);
+						$childLink = [];
+						$data['future_plan'] = html_entity_decode($data['future_plan']);
+						preg_match_all('/<a[^>]+href=([\'"])(?<href>.+?)\1[^>]*>/i',html_entity_decode($data['future_plan']),$future_planMatch);
+						foreach ($future_planMatch['href'] as $key => $obj) {
+						    if (!in_array($obj, $childLink)) {
+						        array_push($childLink, $obj);
+						        array_push($tagsArr, $obj);
+						    }
+						}
+
+						$child_url = 'href="http://localhost/Mykronicle/observation/viewChild?childid='; 
+						$data['future_plan'] = str_replace('href="user_Child_',$child_url,$data['future_plan']);
+						$data['future_plan'] = str_replace("&nbsp;"," ",$data['future_plan']);
+						$linkDom = new DOMDocument;
+						$linkDom->loadHTML($data['future_plan']);
+						$allLinks = $linkDom->getElementsByTagName('a');
+						$i = 0;
+						foreach ($allLinks as $rawLink) {
+						    $longLink = $rawLink->getAttribute('link');
+					        $shortURL = $childLink[$i];
+					        $rawLink->setAttribute('link', $shortURL);
+					        $i++;
+						}
+						$data['future_plan'] = str_replace('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">','',$linkDom->saveHTML());
+						$data['future_plan'] = str_replace('<html><body>','',$data['future_plan']);
+						$data['future_plan'] = str_replace('</body></html>','',$data['future_plan']);
+						$data['future_plan'] = htmlspecialchars($data['future_plan']);
+					}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 					//Process Reflections for saving into db
 					if (!empty($data['reflection'])) {
@@ -1256,17 +1419,41 @@ class Observation extends CI_Controller {
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			if($user_id!= null && $res != null && $res->userid == $user_id){
 				$permission = $this->UtilModel->getPermissions($user_id,$centerid);
+				$userArr = $this->LoginModel->getUserFromId($user_id);
+			// echo json_encode($userArr);
+			// exit;
+				$admin = 0;
+				if ($userArr->userType == "Superadmin"){
+                      $admin = 1;
+				}
+				// echo json_encode($admin);
+				// exit;
+
 				$filter_data=array(
 					'start' => ($page - 1) * 10,
                 	'limit' => 10,
                		'centerid' => $centerid
                	);
-               	$userArr = $this->LoginModel->getUserFromId($user_id);
+
+				   $filter_data2=array(
+					'start' => ($page - 1) * 10,
+                	'limit' => 10,
+               		'centerid' => $centerid,
+               		'userid' => $user_id
+               	);
+
+            
 				 //echo $userArr->userType; exit;
                 if ($userArr->userType == "Parent") {
 					$observations = $this->ObservationModel->getParentObsIds($user_id,$centerid);
                 }else{
-					$observations = $this->ObservationModel->getObservationsList($filter_data);
+
+					if($admin == 1){
+						$observations = $this->ObservationModel->getObservationsList($filter_data);
+					}else{
+						$observations = $this->ObservationModel->getObservationsList2($filter_data2);
+					}
+					
                 }
 
 				$observationTotal = $this->ObservationModel->getObservationsTotal($filter_data);

@@ -38,7 +38,8 @@ class Reflections extends CI_Controller {
 				}else if($usertype == "Staff"){
 					$permission = $this->UtilModel->getPermissions($json->userid,$json->centerid);
 					if ($permission) {
-						$view_others = $permission->viewAllReflection;
+						$view_others = 0;
+						// $view_others = $permission->viewAllReflection;
 					}else{
 						$view_others = 0;
 					}

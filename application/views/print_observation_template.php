@@ -75,12 +75,30 @@
         .plan-cell {
             height: 100px;
         }
-        .child-image {
-            border-radius:15px;
-            max-width: 130px;
-            max-height: 82px;
-            margin: 5px;
-        }
+     /* Photo Gallery Container */
+.photo-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Responsive grid */
+    gap: 10px; /* Space between images */
+    margin-top: 10px;
+}
+
+/* Each Photo Item */
+.photo-item {
+    border: 1px solid #ccc; /* Light border for clean look */
+    border-radius: 12px; /* Rounded corners */
+    padding: 5px; /* Space inside the box */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
+    text-align: center; /* Center image */
+}
+
+/* Image Styling */
+.child-image {
+    max-width: 100%;
+    max-height: 90px; /* Consistent image height */
+    border-radius: 8px; /* Rounded image corners */
+    object-fit: cover; /* Crop image to fill space while maintaining aspect ratio */
+}
         /* .no-print {
             display: none;
         } */
@@ -108,6 +126,9 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+
+        
         /* @media print {
             .no-print {
                 display: none;
@@ -123,26 +144,99 @@
         } */
 
         @media print {
-            .print-button {
-                display: none;
-            }
+    /* Hide print and back buttons */
+    .print-button, .back-button {
+        display: none;
+    }
 
-            
-            body {
-                margin: 0;
-                padding: 0;
-            }
+    /* Ensure body and page styling */
+    body {
+        margin: 0;
+        padding: 0;
+        font-size: 12px; /* Consistent font size for better print output */
+        line-height: 1.4;
+    }
 
-            .page {
-                margin: 0;
-                padding: 20px;
-            }
+    .container {
+        width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+    }
 
-            @page {
-                   size: A4;
-                   margin: 0;
-                  }
-        }
+    /* Ensure A4 size with consistent page margins */
+    @page {
+        size: A4; /* Standard print size */
+        margin: 20mm; /* Ensure 20mm margin on all sides */
+    }
+
+    /* Ensure margin at the bottom of each page */
+    .page::after {
+        content: "";
+        display: block;
+        height: 15mm; /* Add bottom space to avoid cutoff */
+    }
+
+ 
+
+    /* Avoid breaking inside these elements */
+    .no-break, .child-image, table, img {
+        page-break-inside: avoid; /* Avoid breaking inside tables and images */
+    }
+
+
+
+    /* Force page break after specific sections */
+    .page-break {
+        page-break-after: always; /* Use where necessary to break pages */
+    }
+
+    /* Prevent headings and important sections from breaking */
+    h1, h2, h3, th {
+        page-break-after: avoid; /* Keep headings intact */
+    }
+
+    /* Table styling for better print readability */
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    /* Ensure header and title stay together but do not push the table to a new page */
+.title-wrapper {
+    break-inside: avoid;       /* Avoid breaking inside */
+    page-break-inside: avoid;  /* Avoid breaking inside (for older browsers) */
+}
+
+/* Ensure the table follows without forcing a new page */
+table {
+    break-before: auto;        /* Let the table naturally flow */
+    page-break-before: auto;   /* Same for compatibility */
+    break-inside: auto;        /* Avoid breaking inside if possible */
+    page-break-inside: auto;   /* Compatibility */
+}
+
+    th, td {
+        border: 1px solid #000; /* Solid border for print */
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f8f8f8; /* Light background for headers */
+    }
+
+    /* Image Styling */
+    .photo-gallery {
+        grid-template-columns: repeat(3, 1fr); /* 3 images per row on print */
+        gap: 8px; /* Reduced gap for print */
+    }
+
+    .photo-item {
+        box-shadow: none; /* Remove shadow for print */
+        border: 0.5px solid #999; /* Thinner border for print */
+    }
+}
+
     </style>
 </head>
 <body>
@@ -153,26 +247,20 @@
 
     <div class="container">
   
-        <!-- Print Button (only visible on screen)
-        <div class="no-print">
-            <button onclick="window.print();" style="padding: 10px 20px; background: #4CAF50; color: white; border: none; cursor: pointer; margin-bottom: 20px;">
-                Print Observation
-            </button>
-        </div> -->
-        
+
         <!-- Header with Logo -->
-        <div class="header">
+        <div class="header" title-wrapper>
             <img src="<?= base_url('api/assets/media/profile_1739442700.jpeg') ?>" alt="NEXTGEN Montessori" class="logo">
         </div>
-        
+       
         <!-- Title -->
         <div class="title">Child's Observation:</div>
         
         <!-- Child Info Table -->
         <table>
             <tr>
-                <th colspan="1">Child's Name</th>
-                <td colspan="1">  
+                <th colspan="2">Child's Name</th>
+                <td colspan="2">  
                     <?php 
                     if (!empty($childrens)) {
                         $childNames = array_map(function($child) {
@@ -182,8 +270,11 @@
                     }
                     ?>
                 </td>
-                <th colspan="1">Date</th>
-                <td colspan="1"><?= date('d/m/Y', strtotime($observation->date_added)) ?></td>
+                </tr>
+                <tr>
+                <th colspan="2">Date</th>
+                <td colspan="2"><?= date('d/m/Y', strtotime($observation->date_added)) ?></td>
+                </tr>
             </tr>
             <tr>
                 <th>Educator's Name</th>
@@ -206,6 +297,7 @@
                 <!-- <th>Child's Photos</th> -->
                 <td colspan="4" class="photo-cell">
                     <strong><p>Child's Photos</p></strong>
+                   
                     <!-- <?php if (!empty($childrens)): ?>
                         <?php foreach ($childrens as $child): ?>
                             <?php if (!empty($child->imageUrl)): ?>
@@ -214,7 +306,7 @@
                         <?php endforeach; ?>
                     <?php endif; ?> -->
 
-
+                    <div class="photo-gallery">
                     <?php if (!empty($Media)): ?>
                          <?php foreach ($Media as $media): ?>
                             <?php if ($media->mediaType == 'Image'): ?>
@@ -222,6 +314,7 @@
                             <?php endif; ?>
                         <?php endforeach; ?>
                     <?php endif; ?> 
+                            </div>
 
                 </td>
             </tr>
@@ -229,7 +322,7 @@
                 <th>Observation</th>
                 <td colspan="3" class="observation-cell">
                     
-                <!-- <?= $observation->title ?>    -->
+                <?= $observation->title ?>   
                 
                
                 
@@ -274,8 +367,8 @@
                 <td colspan="3" class="voice-cell">
                     <?php 
                     // If you have child's voice data, display it here
-                    if (isset($observation->childVoice)) {
-                        echo $observation->childVoice;
+                    if (isset($observation->child_voice)) {
+                        echo strip_tags(html_entity_decode($observation->child_voice));
                     } else {
                         echo "Not recorded";
                     }
@@ -329,8 +422,8 @@
                 <td colspan="3" class="plan-cell">
                     <?php 
                     // If you have future plan data, display it here
-                    if (isset($observation->futurePlan)) {
-                        echo $observation->futurePlan;
+                    if (isset($observation->future_plan)) {
+                        echo strip_tags(html_entity_decode($observation->future_plan));
                     } else {
                         echo "";
                     }

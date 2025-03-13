@@ -104,7 +104,7 @@
         <div class="container-fluid observationListContainer">
             <div class="pageHead">
                 <div class="col-12">
-                    <h1>Reflections</h1>
+                    <h1>Daily Reflections</h1>
                     <div class="text-zero top-right-button-container">
                         <div class="btn-group mr-1">
                             <?php 

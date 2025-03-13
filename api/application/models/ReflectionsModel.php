@@ -63,6 +63,7 @@ class ReflectionsModel extends CI_Model {
 			"title"=>$data['title'],
 			"centerid"=>$data['centerid'],
 			"about"=>$data['about'],
+			"eylf"=>$data['eylf'],
 			"status"=>strtoupper($data['status']),
 			"createdBy"=>$data['userid'],
 			"createdAt"=>date('Y-m-d h:i:s')
@@ -139,6 +140,7 @@ class ReflectionsModel extends CI_Model {
 			"title"=>$data['title'],
 			"centerid"=>$data['centerid'],
 			"about"=>$data['about'],
+			"eylf"=>$data['eylf'],
 			"status"=>strtoupper($data['status']),
 			"createdBy"=>$data['userid'],
 			"createdAt"=>date('Y-m-d h:i:s')

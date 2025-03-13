@@ -12,7 +12,7 @@ class ObservationModel extends CI_Model {
 	public function createObservation($data){
 
 		$id=mt_rand();
-		$this->db->query("INSERT INTO observation (`id`, `userId`, `title`, `notes`, `reflection`, `status`, `approver`, `centerid`, `date_added`, `date_modified`) VALUES (NULL, '".$data->userid."', '".$this->db->escape($data->title)."', '".$this->db->escape($data->notes)."', '".$this->db->escape($data->reflection)."', '".$data->status."', '".$data->approver."', '".$data->centerid."', current_timestamp(), current_timestamp())");
+		$this->db->query("INSERT INTO observation (`id`, `userId`, `title`,`child_voice`,`future_plan`, `notes`, `reflection`, `status`, `approver`, `centerid`, `date_added`, `date_modified`) VALUES (NULL, '".$data->userid."', '".$this->db->escape($data->title)."', '".$this->db->escape($data->child_voice)."', '".$this->db->escape($data->future_plan)."', '".$this->db->escape($data->notes)."', '".$this->db->escape($data->reflection)."', '".$data->status."', '".$data->approver."', '".$data->centerid."', current_timestamp(), current_timestamp())");
 		if(!empty($data->childrens))
 		{
 			foreach($data->childrens as $key=>$child)
@@ -32,9 +32,16 @@ class ObservationModel extends CI_Model {
 
 	public function editObservation($data){
 		$id=$data->observationId;
-		$this->db->query("UPDATE observation SET title = " . addslashes($data->title) . ", userId = " . $data->userid. ",
-			     notes = " . $this->db->escape($data->notes) . ",reflection = " . $this->db->escape($data->reflection) . ",
-				 date_modified=NOW() where id=".$id."");
+		$this->db->query("UPDATE observation SET 
+		title = " . addslashes($data->title) . ", 
+		userId = " . $data->userid . ",
+		notes = " . $this->db->escape($data->notes) . ", 
+		reflection = " . $this->db->escape($data->reflection) . ",
+		child_voice = " . $this->db->escape($data->child_voice) . ",
+		future_plan = " . $this->db->escape($data->future_plan) . ",
+		date_modified = NOW() 
+		WHERE id = " . $id
+	);
 		if(!empty($data->childrens))
 		{
 			$this->db->query("DELETE FROM observationchild where observationId = " . $id . "");
@@ -857,6 +864,30 @@ class ObservationModel extends CI_Model {
 		return $query->result();
 	}
 
+	public function getObservationsList2($data = array())
+{
+	$sql="SELECT o.*, u.name AS user_name, a.name AS approverName
+	FROM observation o
+	LEFT JOIN users u ON u.userid = o.userId
+	LEFT JOIN users a ON a.userid = o.approver
+	WHERE o.centerid = ".$data['centerid']." AND o.userId = ".$data['userid'];;
+	/*	if (isset($data['start']) || isset($data['limit'])) {
+		if ($data['start'] < 0) {
+			$data['start'] = 0;
+		}
+
+		if ($data['limit'] < 1) {
+			$data['limit'] = 20;
+		}
+
+		$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+	}*/
+	$sql.=" ORDER BY o.date_added DESC";
+	$query = $this->db->query($sql);
+	return $query->result();
+    
+}
+
 	public function getObservationsTotal($data=array())
 	{
 		
@@ -1215,6 +1246,8 @@ class ObservationModel extends CI_Model {
 		$obsData = array(
 			"userId" => $data['userid'],
 			"title" => $data['title'],
+			"child_voice" => $data['child_voice'],
+			"future_plan" => $data['future_plan'],
 			"notes" => $data['notes'],
 			"reflection" => isset($data['reflection']) ? $data['reflection'] : "",
 			"status" => $data['status'],
@@ -1291,6 +1324,8 @@ class ObservationModel extends CI_Model {
 		$obsData = array(
 			"userId" => $data['userid'],
 			"title" => $data['title'],
+			"child_voice" => $data['child_voice'],
+			"future_plan" => $data['future_plan'],
 			"notes" => $data['notes'],
 			"reflection" => $data['reflection'],
 			// "status" => $data['status'],
@@ -1300,8 +1335,14 @@ class ObservationModel extends CI_Model {
 		);
 
 		// $this->db->insert('observation', $obsData);
-		$this->db->query("UPDATE observation SET title = '" . addslashes($data['title']) ."' , notes = '". addslashes($data['notes']) ."' , reflection = '". addslashes($data['reflection']) ."' WHERE id = ". $data['observationId'] ."");
-
+		$this->db->query("UPDATE observation SET 
+		title = '" . addslashes($data['title']) . "', 
+		notes = '" . addslashes($data['notes']) . "', 
+		reflection = '" . addslashes($data['reflection']) . "', 
+		child_voice = '" . addslashes($data['child_voice']) . "', 
+		future_plan = '" . addslashes($data['future_plan']) . "' 
+		WHERE id = " . $data['observationId']
+	);
 		// , status = '". $data['status'] ."'
 
 		// $id = $this->db->insert_id();

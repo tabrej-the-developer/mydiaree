@@ -3,6 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   
 class Reflections extends CI_Controller {
 
+	function __construct() {
+		parent::__construct();
+		$this->load->database(); 
+	  }
+
     public function index()  
     {
 		if($this->session->has_userdata('LoginId')){
@@ -73,7 +78,7 @@ class Reflections extends CI_Controller {
 				'X-Token: '.$this->session->userdata('AuthToken')
 			));
 			$server_output = curl_exec($ch);
-			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);			
+			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);			 
 			curl_close($ch);
 			if($httpcode == 200){
 				$data = [];
@@ -135,7 +140,30 @@ class Reflections extends CI_Controller {
 				$data['Childrens'] = $childArr->Childrens;
 				$data['Groups'] = $childArr->Groups;
 				$data['Rooms'] = $childArr->Rooms;
-				// $this->load->view('createReflection-newui',$data);				
+
+				      // Fetch EYLF Outcomes
+					  $eylf_outcomes = $this->db->select('id, title, name')
+					  ->order_by('title', 'ASC')
+					  ->get('eylfoutcome')
+					  ->result();
+
+				    // Fetch EYLF Activities for each outcome
+					$outcomes_with_activities = [];
+					foreach ($eylf_outcomes as $outcome) {
+					$activities = $this->db->select('id, outcomeId, title')
+				   ->where('outcomeId', $outcome->id)
+				   ->get('eylfactivity')
+				   ->result();
+		
+				  $outcome->activities = $activities;
+				  $outcomes_with_activities[] = $outcome;
+				   }
+				$data['eylf_outcomes'] = $outcomes_with_activities;
+
+				// $this->load->view('createReflection-newui',$data);	
+				// echo "<pre>";
+				// print_r($data);
+				// exit;			
 				$this->load->view('createReflection_v4',$data);				
 			}
 			else if($httpcode == 401){
@@ -151,6 +179,9 @@ class Reflections extends CI_Controller {
 		if ($this->session->has_userdata('LoginId')) {
 			$this->load->helper('form');
 			$data = $this->input->post();
+			// echo "<pre>";
+			// print_r($data['eylf']);
+			// exit;
 			$data['userid'] = $this->session->userdata('LoginId');
 			$data['createdAt'] = date('Y-m-d H:i:s');
 			$data['createdBy'] = $data['userid'];
@@ -250,7 +281,32 @@ class Reflections extends CI_Controller {
                 $childArr = $this->getChildRecords($defCenter,$_GET['reflectionid']);
 				$data->child = $childArr->Childrens;
 				$data->Groups = $childArr->Groups;
-				$data->Rooms = $childArr->Rooms;			
+				$data->Rooms = $childArr->Rooms;	
+
+			
+				
+				$eylf_outcomes = $this->db->select('id, title, name')
+				->order_by('title', 'ASC')
+				->get('eylfoutcome')
+				->result();
+
+			  // Fetch EYLF Activities for each outcome
+			  $outcomes_with_activities = [];
+			  foreach ($eylf_outcomes as $outcome) {
+			  $activities = $this->db->select('id, outcomeId, title')
+			 ->where('outcomeId', $outcome->id)
+			 ->get('eylfactivity')
+			 ->result();
+  
+			$outcome->activities = $activities;
+			$outcomes_with_activities[] = $outcome;
+			 }
+		  $data->eylf_outcomes = $outcomes_with_activities;
+
+		//   echo "<pre>";
+		//   print_r($data);
+		//   exit;
+
 				$this->load->view('reflectionUpdate_v4.php',$data);			
 			}
 			else if($httpcode == 401){
