@@ -95,6 +95,7 @@ class Login extends CI_Controller {
 					$this->LoginModel->insertLogin($user->userid,$deviceid,$authToken,$devicetype);
 					$data['Status'] = "SUCCESS";
 					$data['AuthToken'] = $authToken;
+					$data['deviceid'] = $deviceid;
 					$data['userid'] = $user->userid;
 					$data['email'] = $user->emailid;
 					$data['name'] = $user->name;
