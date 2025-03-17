@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/select2.min.css?id=1234" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/select2-bootstrap.min.css?id=1234" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/slick.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
     .pageHead {
         display: flex;
@@ -51,7 +52,7 @@
     .slick-arrow{
         display: none !important;
     }
- 
+  
     .slick-list.draggable, .slick-track{
         height: 100%;
     }
@@ -221,7 +222,15 @@
                                 </div>
                             </div>
                             <div class="btn-group" style="position:absolute; top: 25px; right: 15px;">
+
+          
+
                                 <?php if($_SESSION['UserType'] == "Superadmin"){ ?>
+
+                                    <a class="btn btn-outline-primary btn-xs" href="<?= base_url('Reflections/print/') . $ref->id ?>" target="_blank">
+        <i class="fa-solid fa-print fa-beat fa-lg" style="color: #74C0FC;"></i>
+    </a>
+
                                     <a class="btn btn-outline-primary btn-xs reflection-edit" data-id="<?= $ref->id; ?>" href="<?= base_url('Reflections/Reflection_update/?reflectionid='.$ref->id); ?>">
                                         <i class="simple-icon-pencil"></i>
                                     </a>

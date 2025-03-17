@@ -174,6 +174,84 @@ class Reflections extends CI_Controller {
 	   }
 	}
 
+	public function print($reflectionId) {
+		// Check if user is logged in
+		if (!$this->session->has_userdata('LoginId')) {
+			redirect('login');
+		}
+		
+		// Get reflection data
+		$data['reflection'] = $this->db->where('id', $reflectionId)
+								   ->get('reflection')
+								   ->row_array();
+		
+		// Get reflection child data
+		$data['reflectionChildren'] = $this->db->where('reflectionid', $reflectionId)
+										  ->get('reflectionchild')
+										  ->result_array();
+		
+		// Get all child data associated with this reflection
+		$childIds = array();
+		foreach ($data['reflectionChildren'] as $refChild) {
+			$childIds[] = $refChild['childid'];
+		}
+		
+		if (!empty($childIds)) {
+			$data['children'] = $this->db->where_in('id', $childIds)
+									->get('child')
+									->result_array();
+
+									  // Create comma-separated string of children names
+        $childrenNames = array();
+        foreach ($data['children'] as $child) {
+            $childrenNames[] = $child['name'] . ' ' . $child['lastname'];
+        }
+        $data['childrenNamesString'] = implode(', ', $childrenNames);
+		} else {
+			$data['children'] = array();
+		}
+
+		
+		
+		// Get reflection media data
+		$data['reflectionMedia'] = $this->db->where('reflectionid', $reflectionId)
+									   ->get('reflectionmedia')
+									   ->result_array();
+		
+		// Get reflection staff data
+		$data['reflectionStaff'] = $this->db->where('reflectionid', $reflectionId)
+									   ->get('reflectionstaff')
+									   ->result_array();
+		
+		// Get all staff user data
+		$staffIds = array();
+		foreach ($data['reflectionStaff'] as $refStaff) {
+			$staffIds[] = $refStaff['staffid'];
+		}
+		
+		if (!empty($staffIds)) {
+			$data['staffUsers'] = $this->db->where_in('userid', $staffIds)
+									  ->get('users')
+									  ->result_array();
+
+									   // Create comma-separated string of staff names
+        $staffNames = array();
+        foreach ($data['staffUsers'] as $staff) {
+            $staffNames[] = $staff['name'];
+        }
+        $data['staffNamesString'] = implode(', ', $staffNames);
+
+		} else {
+			$data['staffUsers'] = array();
+		}
+		
+		// Load the view with all the data
+		// echo "<pre>";
+		// print_r($data);
+		// exit;
+		$this->load->view('print_reflections_template', $data);
+	}
+
 	public function addreflection()
 	{
 		if ($this->session->has_userdata('LoginId')) {
