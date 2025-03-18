@@ -651,7 +651,7 @@ class Settings extends CI_Controller {
 	public function send_email() {
         $this->load->library('email');
 
-        $this->email->from('support@mydiaree.com', 'My Diaree Support');
+        $this->email->from('mydairee47@gmail.com', 'My Diaree Support');
         $this->email->to('tabrezk294@gmail.com');
         $this->email->subject('Test Email from CodeIgniter 3');
         $this->email->message('This is a test email from CodeIgniter 3 using GoDaddy SMTP.');
@@ -1012,8 +1012,12 @@ class Settings extends CI_Controller {
 			$data = $_POST;
 			$data['relation'] = $relation;
 			$data['userid'] = $this->session->userdata("LoginId");
-			// print_r($data);
+			// echo "<pre>";
+			// print_r($data['relation']);
 			// exit;
+			$email = $data['emailid'];
+			$password = $data['password'];
+			$childdata = $data['relation'];
 			$url = BASE_API_URL.'Settings/saveParentDetails';
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_URL,$url);
@@ -1030,6 +1034,9 @@ class Settings extends CI_Controller {
 			if($httpcode == 200){
 				$data = json_decode($server_output);
 				curl_close ($ch);
+				$this->_sendWelcomeEmail($email,$password,$childdata);
+				// print_r($data);
+				// exit;
 				redirect("Settings/parentSettings");
 			} else if($httpcode == 401){
 				return 'error';
@@ -1038,6 +1045,264 @@ class Settings extends CI_Controller {
 			redirect("Welcome");
 		}
 	}
+
+
+
+	private function _sendWelcomeEmail($email, $password, $childdata)
+	{
+		$this->load->library('email');
+		$this->load->database();
+		
+		// Get child details for each child ID
+		$childrenDetails = [];
+		foreach ($childdata as $child) {
+			$childId = $child['childid'];
+			$relation = $child['relation'];
+			
+			// Query to get child details
+			$query = $this->db->select('name, lastname, dob, imageUrl')
+							 ->from('child')
+							 ->where('id', $childId)
+							 ->get();
+			
+			if ($query->num_rows() > 0) {
+				$childInfo = $query->row_array();
+				$childInfo['relation'] = $relation;
+				$childrenDetails[] = $childInfo;
+			}
+		}
+		
+		// Generate HTML for each child
+		$childrenHTML = '';
+		foreach ($childrenDetails as $child) {
+			$childImageUrl = BASE_API_URL . 'assets/media/' . $child['imageUrl'];
+			$childFullName = $child['name'] . ' ' . $child['lastname'];
+			$dob = date('d M Y', strtotime($child['dob']));
+			
+			$childrenHTML .= '
+			<div class="child-card">
+				<div class="child-photo">
+					<img src="' . $childImageUrl . '" alt="' . $childFullName . '" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+				</div>
+				<div class="child-info">
+					<h3>' . $childFullName . '</h3>
+					<p><strong>Date of Birth:</strong> ' . $dob . '</p>
+					<p><strong>Your Relation:</strong> ' . $child['relation'] . '</p>
+				</div>
+			</div>';
+		}
+		
+		// Create the email message
+		$this->email->from('mydairee47@gmail.com', 'MyDiaree Support');
+		$this->email->to($email);
+		$this->email->subject('Welcome to MyDiaree (Beta) - A Smarter Way to stay in touch with your child\'s development and Learning!');
+		
+		// Create HTML email with professional design
+		$message = '
+		<!DOCTYPE html>
+		<html>
+		<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Welcome to MyDiaree</title>
+			<style>
+				body {
+					font-family: "Segoe UI", Arial, sans-serif;
+					line-height: 1.6;
+					color: #333333;
+					margin: 0;
+					padding: 0;
+					background-color: #f5f5f5;
+				}
+				.container {
+					max-width: 650px;
+					margin: 0 auto;
+					background-color: #ffffff;
+					box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+				}
+				.header {
+					background: linear-gradient(135deg, #5668e2 0%, #6a78f0 100%);
+					color: white;
+					padding: 25px 30px;
+					text-align: center;
+					border-radius: 5px 5px 0 0;
+				}
+				.content {
+					padding: 30px;
+					background-color: #ffffff;
+				}
+				h1 {
+					color: #ffffff;
+					margin: 0;
+					font-size: 28px;
+					font-weight: 600;
+					letter-spacing: 0.5px;
+				}
+				h2 {
+					color: #5668e2;
+					margin-top: 5px;
+					font-size: 22px;
+					border-bottom: 2px solid #f0f0f0;
+					padding-bottom: 10px;
+				}
+				.login-details {
+					background-color: #f8f9ff;
+					border-left: 4px solid #5668e2;
+					padding: 15px 20px;
+					margin: 20px 0;
+					border-radius: 0 5px 5px 0;
+				}
+				.login-details p {
+					margin: 5px 0;
+				}
+				.credentials {
+					font-family: monospace;
+					font-size: 16px;
+					background-color: #f0f0f0;
+					padding: 3px 6px;
+					border-radius: 3px;
+				}
+				.check-item {
+					margin-bottom: 12px;
+					position: relative;
+					padding-left: 30px;
+				}
+				.check-item:before {
+					content: "";
+					position: absolute;
+					left: 0;
+					top: 2px;
+					width: 20px;
+					height: 20px;
+					background-color: #5668e2;
+					border-radius: 50%;
+					background-image: url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23ffffff\' stroke-width=\'3\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpolyline points=\'20 6 9 17 4 12\'%3E%3C/polyline%3E%3C/svg%3E");
+					background-repeat: no-repeat;
+					background-position: center;
+				}
+				.footer {
+					text-align: center;
+					padding: 20px 30px;
+					font-size: 13px;
+					color: #777777;
+					background-color: #f9f9f9;
+					border-top: 1px solid #eeeeee;
+				}
+				.button {
+					display: inline-block;
+					background: linear-gradient(135deg, #5668e2 0%, #6a78f0 100%);
+					color: white;
+					padding: 14px 28px;
+					text-decoration: none;
+					border-radius: 4px;
+					margin: 20px 0;
+					font-weight: bold;
+					text-transform: uppercase;
+					letter-spacing: 0.5px;
+					font-size: 14px;
+					box-shadow: 0 3px 6px rgba(106, 120, 240, 0.3);
+					transition: all 0.3s ease;
+				}
+				.button:hover {
+					background: linear-gradient(135deg, #4a5bd0 0%, #5968db 100%);
+					box-shadow: 0 5px 10px rgba(106, 120, 240, 0.5);
+				}
+				.child-section {
+					margin: 30px 0;
+					border-top: 2px dashed #f0f0f0;
+					padding-top: 20px;
+				}
+				.child-card {
+					display: flex;
+					background-color: #f8f9ff;
+					border-radius: 10px;
+					padding: 15px;
+					margin-bottom: 20px;
+					box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+				}
+				.child-photo {
+					margin-right: 20px;
+					flex-shrink: 0;
+				}
+				.child-info {
+					flex-grow: 1;
+				}
+				.child-info h3 {
+					margin-top: 0;
+					color: #5668e2;
+				}
+				.highlight {
+					color: #5668e2;
+					font-weight: bold;
+				}
+				.divider {
+					height: 1px;
+					background-color: #eeeeee;
+					margin: 25px 0;
+				}
+			</style>
+		</head>
+		<body>
+			<div class="container">
+				<div class="header">
+					<h1>Welcome to MyDiaree (Beta)</h1>
+				</div>
+				<div class="content">
+					<h2>Dear Parent,</h2>
+					<p>We are excited to welcome you to <span class="highlight">MyDiaree (Beta)</span>, our innovative platform designed to keep you connected with your child\'s development and learning journey!</p>
+					
+					<div class="login-details">
+						<h3>Your Login Information</h3>
+						<p><strong>Email:</strong> <span class="credentials">' . $email . '</span></p>
+						<p><strong>Password:</strong> <span class="credentials">' . $password . '</span></p>
+						<p><em>Please store this information safely for future access.</em></p>
+					</div>
+					
+					<p>With MyDiaree, you\'ll enjoy these features:</p>
+					<p class="check-item">Track daily routine and progress of your child</p>
+					<p class="check-item">Stay updated with important school announcements</p>
+					<p class="check-item">Communicate effortlessly with teachers</p>
+					<p class="check-item">Access learning resources to support your child at home</p>
+					
+					<div style="text-align: center;">
+						<a href="https://www.mydiaree.com/login" class="button" style="color:white;">Log In To Your Account</a>
+					</div>
+					
+					<div class="child-section">
+						<h2>Your Connected Children</h2>
+						<p>You have been linked to the following children in MyDiaree:</p>
+						
+						' . $childrenHTML . '
+					</div>
+					
+					<div class="divider"></div>
+					
+					<p>We believe MyDiaree will transform how you stay connected with your child\'s educational journey, making parent-school collaboration smoother and more effective than ever before.</p>
+					
+					<p>If you have any questions or need assistance, our support team is always here to help at <a href="mailto:support@mydiaree.com" style="color: #5668e2;">support@mydiaree.com</a></p>
+					
+					<p>Welcome aboard, and thank you for being a part of this exciting journey!</p>
+					
+					<p>Warm regards,<br>
+					<strong>Nextgen Montessori Team</strong></p>
+				</div>
+				<div class="footer">
+					<p>&copy; ' . date('Y') . ' MyDiaree. All rights reserved.</p>
+					<p>This is an automated email. Please do not reply directly to this message.</p>
+				
+				</div>
+			</div>
+		</body>
+		</html>
+		';
+		
+		$this->email->set_mailtype('html');
+		$this->email->message($message);
+		
+		return $this->email->send();
+	}
+
+
 
 	public function childGroups()
 	{
