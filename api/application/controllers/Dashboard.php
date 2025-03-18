@@ -22,7 +22,20 @@
 		}
 
 		public function getDashboardDetails($userid){
-			$headers = $this->input->request_headers();
+				$headers = $this->input->request_headers();
+
+			foreach ($headers as $key => $value) {
+				$lower_key = strtolower($key);
+			
+				// Check for specific headers and rename them
+				if ($lower_key === 'x-device-id') {
+					$headers['X-Device-Id'] = $value;
+					unset($headers[$key]); // Remove old key
+				} elseif ($lower_key === 'x-token') {
+					$headers['X-Token'] = $value;
+					unset($headers[$key]); // Remove old key
+				}
+			}
 			if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 				$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 				if($_SERVER['REQUEST_METHOD'] == 'GET'){
@@ -84,7 +97,20 @@
 
 		// Data for a particular Month 
 		public function getCalendarDetails($userid,$month=null,$year=null){
-			$headers = $this->input->request_headers();
+				$headers = $this->input->request_headers();
+
+			foreach ($headers as $key => $value) {
+				$lower_key = strtolower($key);
+			
+				// Check for specific headers and rename them
+				if ($lower_key === 'x-device-id') {
+					$headers['X-Device-Id'] = $value;
+					unset($headers[$key]); // Remove old key
+				} elseif ($lower_key === 'x-token') {
+					$headers['X-Token'] = $value;
+					unset($headers[$key]); // Remove old key
+				}
+			}
 			if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 				$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 				if($_SERVER['REQUEST_METHOD'] == 'GET'){
@@ -132,7 +158,20 @@
 
 		// Without Month -- Whole data
 		public function getCalDetails($userid,$year=null){
-			$headers = $this->input->request_headers();
+				$headers = $this->input->request_headers();
+
+			foreach ($headers as $key => $value) {
+				$lower_key = strtolower($key);
+			
+				// Check for specific headers and rename them
+				if ($lower_key === 'x-device-id') {
+					$headers['X-Device-Id'] = $value;
+					unset($headers[$key]); // Remove old key
+				} elseif ($lower_key === 'x-token') {
+					$headers['X-Token'] = $value;
+					unset($headers[$key]); // Remove old key
+				}
+			}
 			if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 				$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 				if($_SERVER['REQUEST_METHOD'] == 'GET'){
@@ -189,7 +228,7 @@
 			
 			// $userid = $this->session->has_userdata('LoginId');
 			$headers = $this->input->request_headers();
-			
+
 			foreach ($headers as $key => $value) {
 				$lower_key = strtolower($key);
 			
@@ -204,8 +243,8 @@
 			}
 			
  
-			echo "<pre>";
-			print_r($headers);
+			// echo "<pre>";
+			// print_r($headers);
 			// exit;
 			if($headers != null){
 				$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
@@ -276,7 +315,20 @@
 
 		public function getParentDashboard()
 		{
-			$headers = $this->input->request_headers();
+				$headers = $this->input->request_headers();
+
+			foreach ($headers as $key => $value) {
+				$lower_key = strtolower($key);
+			
+				// Check for specific headers and rename them
+				if ($lower_key === 'x-device-id') {
+					$headers['X-Device-Id'] = $value;
+					unset($headers[$key]); // Remove old key
+				} elseif ($lower_key === 'x-token') {
+					$headers['X-Token'] = $value;
+					unset($headers[$key]); // Remove old key
+				}
+			}
 			if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 				$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 				$json = json_decode(file_get_contents('php://input'));

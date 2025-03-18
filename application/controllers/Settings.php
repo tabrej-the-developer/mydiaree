@@ -1269,7 +1269,7 @@ class Settings extends CI_Controller {
 					</div>
 					
 					<div class="child-section">
-						<h2>Your Connected Children</h2>
+						<h2>Your Connected Child/ren</h2>
 						<p>You have been linked to the following children in MyDiaree:</p>
 						
 						' . $childrenHTML . '
@@ -1279,7 +1279,7 @@ class Settings extends CI_Controller {
 					
 					<p>We believe MyDiaree will transform how you stay connected with your child\'s educational journey, making parent-school collaboration smoother and more effective than ever before.</p>
 					
-					<p>If you have any questions or need assistance, our support team is always here to help at <a href="mailto:support@mydiaree.com" style="color: #5668e2;">support@mydiaree.com</a></p>
+					<p>If you have any questions or need assistance, our support team is always here to help at <a href="mailto:mydairee47@gmail.com" style="color: #5668e2;">mydairee47@gmail.com</a></p>
 					
 					<p>Welcome aboard, and thank you for being a part of this exciting journey!</p>
 					
