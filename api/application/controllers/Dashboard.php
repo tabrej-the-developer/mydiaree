@@ -189,6 +189,9 @@
 			
 			// $userid = $this->session->has_userdata('LoginId');
 			$headers = $this->input->request_headers();
+			echo "<pre>";
+			print_r($headers);
+			exit;
 			if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 				$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 				if($_SERVER['REQUEST_METHOD'] == 'GET'){
