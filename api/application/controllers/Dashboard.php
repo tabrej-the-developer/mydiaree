@@ -192,7 +192,7 @@
 			// echo "<pre>";
 			// print_r($headers);
 			// exit;
-			if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
+			if($headers != null){
 				$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 				if($_SERVER['REQUEST_METHOD'] == 'GET'){
 					if( $res != null && $res->userid == $userid){
