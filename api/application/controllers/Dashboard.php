@@ -189,22 +189,21 @@
 			
 			// $userid = $this->session->has_userdata('LoginId');
 			$headers = $this->input->request_headers();
-			$updated_headers = [];
-
-foreach ($headers as $key => $value) {
-    // Convert key to lowercase for case-insensitive comparison
-    $lower_key = strtolower($key);
-
-    // Check for specific headers and rename them
-    if ($lower_key === 'x-device-id') {
-        $updated_headers['X-Device-Id'] = $value;
-    } elseif ($lower_key === 'x-token') {
-        $updated_headers['X-Token'] = $value;
-    } else {
-        // Keep other headers unchanged
-        $updated_headers[$key] = $value;
-    }
-}
+			
+			foreach ($headers as $key => $value) {
+				$lower_key = strtolower($key);
+			
+				// Check for specific headers and rename them
+				if ($lower_key === 'x-device-id') {
+					$headers['X-Device-Id'] = $value;
+					unset($headers[$key]); // Remove old key
+				} elseif ($lower_key === 'x-token') {
+					$headers['X-Token'] = $value;
+					unset($headers[$key]); // Remove old key
+				}
+			}
+			
+ 
 			echo "<pre>";
 			print_r($headers);
 			// exit;
