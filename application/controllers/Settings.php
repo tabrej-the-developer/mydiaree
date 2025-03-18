@@ -1265,7 +1265,7 @@ class Settings extends CI_Controller {
 					<p class="check-item">Access learning resources to support your child at home</p>
 					
 					<div style="text-align: center;">
-						<a href="https://www.mydiaree.com/login" class="button" style="color:white;">Log In To Your Account</a>
+						<a href="https://mydiaree.com/login?type=Parent" class="button" style="color:white;">Log In To Your Account</a>
 					</div>
 					
 					<div class="child-section">
