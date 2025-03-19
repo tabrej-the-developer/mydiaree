@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/select2-bootstrap.min.css" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/component-custom-switch.min.css" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/custom-styles.css?v=1.0.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         .modal-footer {
         display: inline-block;
@@ -56,29 +57,104 @@
         .select2-container{
             width:100% !important;
         }
+
+
+        .print-button {
+            position: absolute;
+            top: 9px;
+            right: 60px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10; /* Add this */
+        }
+
+        .email-button {
+    position: absolute;
+    top: 9px;
+    right: 190px; /* Adjust to position it beside the print button */
+    padding: 10px 20px;
+    background-color: #007BFF; /* Blue to distinguish from print */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 10; /* Ensure it’s clickable */
+}
+
+.email-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+
+          /* Print Styles */
+                @media print {
+            body {
+                margin: 20mm;
+            }
+           .no-print2 {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        overflow: hidden !important;
+    }
+        
+            .print-container {
+                font-size: 16px;
+                line-height: 1.6;
+            }
+            .print-container h2 {
+                text-align: center;
+                border-bottom: 2px solid #333;
+                padding-bottom: 5px;
+            }
+            .print-container .row {
+                display: flex;
+                justify-content: space-between;
+                border-bottom: 1px dashed #ccc;
+                padding: 8px 0;
+            }
+            .print-container .label {
+                font-weight: bold;
+            }
+        }
+
+
+
     </style>
 </head>
 <body id="app-container" class="menu-default">
     <?php $this->load->view('sidebar'); ?>
+
+                            <!-- <button onclick="printMainContent()" style="margin-top:100px;margin-left: 200px;" class="btn btn-outline-primary no-print">Print</button> -->
+     <button onclick="printMainContent()" class="print-button no-print">Print Pages&nbsp;<i class="fa-solid fa-print fa-beat-fade"></i></button>
+     <button onclick="sendReportToParent()" class="email-button no-print">Send to Parent <i class="fa-solid fa-envelope fa-beat-fade"></i></button>
+
+
     <main>
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <h1>Add Accidents</h1>
-                    <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
-                        <ol class="breadcrumb pt-0">
-                            <li class="breadcrumb-item">
-                                <a href="<?= base_url('Dashboard'); ?>">Dashboard</a>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <a href="<?= base_url('accident?centerid=').$_GET['centerid'].'&roomid='.$_GET['roomid']; ?>">Accident</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">View Accidents</li>
-                        </ol>
-                    </nav>
-                    <div class="separator mb-5"></div>
-                </div>
-            </div>  
+           <div class="row no-print2">
+    <div class="col-12">
+        <h1>Add Accidents</h1>
+        <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
+            <ol class="breadcrumb pt-0">
+                <li class="breadcrumb-item">
+                    <a href="<?= base_url('Dashboard'); ?>">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="<?= base_url('accident?centerid=').$_GET['centerid'].'&roomid='.$_GET['roomid']; ?>">Accident</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">View Accidents</li>
+            </ol>
+        </nav>
+        <div class="separator mb-5"></div>
+    </div>
+</div>
+       <div id="printArea">
             <div class="row">
                 <div class="col-12 mb-5 card pt-4">
                     <h3 class="service-title text-primary">INCIDENT, INJURY, TRAUMA, & ILLNESS RECORD</h3>
@@ -118,6 +194,8 @@
                                 <input type="hidden" class="form-control" id="person_sign_dt" disabled>
                                 <div id="#person_sign">
                                     <!-- <input type="hidden" name="person_sign" id="person_sign_txt"  value="<?#= $AccidentInfo->person_sign; ?>"> -->
+                                    <input type="hidden" name="student_id" id="student_id"  value="<?= $AccidentInfo->childid; ?>">
+
                                     <img src="<?= base_url('/api/assets/media/').$AccidentInfo->person_sign; ?>" height="120px" width="300px" id="person_sign_img">
                                 </div>
                             </div>
@@ -130,28 +208,26 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="childid" class="col-sm-12 pl-0">Select Child</label>
+                                <label for="childid" class="col-sm-12 pl-0">Child</label>
                                 <select name="childid" id="childid" class="form-control js-example-basic-single">
-                                    <option value="<?php $AccidentInfo->child_name ?>"><?php echo $AccidentInfo->child_name ?></option>
+                                    <option value="<?php $AccidentInfo->child_name ?>"> <span class="no-print3"><?php echo $AccidentInfo->child_name ?></span> </option>
                                 </select>
-                                <input type="hidden" class="form-control" id="childfullname" name="child_name" value="">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="birthdate">Date of Birth</label>
-                                <input type="text" class="form-control" id="birthdate" name="child_dob" value="<?php $AccidentInfo->child_dob ?>" placeholder="<?php echo $AccidentInfo->child_dob ?>">
+                                <input type="text" class="form-control" id="birthdate" name="child_dob" value="<?php echo $AccidentInfo->child_dob ?>" placeholder="<?php echo $AccidentInfo->child_dob ?>">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="age">Age</label>
-                                <input type="text" class="form-control" id="age" name="child_age" value="" placeholder="<?= $AccidentInfo->child_age; ?>">     
+                                <input type="text" class="form-control" id="age" name="child_age" value="<?= $AccidentInfo->child_age; ?>" placeholder="<?= $AccidentInfo->child_age; ?>">     
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="<?= $AccidentInfo->child_gender; ?>">Gender </label>
+                                <label for="gender">Gender </label>
                                 <div class="radioFlex">
-                                    <label for="<?= $AccidentInfo->child_gender; ?>"><input class="m-1" type="radio" id="<?= $AccidentInfo->child_gender; ?>" name="gender" value="<?= $AccidentInfo->child_gender; ?>" <?php if($AccidentInfo->child_gender) { echo "checked"; } ?> ><?= $AccidentInfo->child_gender; ?></label>
-                                    <!-- <label for="Female"><input class="m-1" type="radio" id="Female" name="gender" value="Female">Female</label>
-                                    <label for="Others"><input class="m-1" type="radio" id="Others" name="gender" value="Others">Others</label> -->
+                                    <label for="gender"><input class="m-1" type="radio" id="<?= $AccidentInfo->child_gender; ?>" name="gender" value="<?= $AccidentInfo->child_gender; ?>" <?php if($AccidentInfo->child_gender) { echo "checked"; } ?> ><span class="no-print2"><?= $AccidentInfo->child_gender; ?></span></label>
+                                   
                                 </div>
                             </div>
                         </div>
@@ -164,27 +240,27 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="incidentdate">Incident Date</label>
-                                <input type="text" class="form-control" id="incidentdate" name="incident_date" placeholder="<?= $AccidentInfo->incident_date; ?>">     
+                                <input type="text" class="form-control" id="incidentdate" name="incident_date" value="<?= $AccidentInfo->incident_date; ?>" placeholder="<?= $AccidentInfo->incident_date; ?>">     
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="incidenttime">Time</label>
-                                <input type="text" class="form-control" id="incidenttime" name="incident_time" placeholder="<?= $AccidentInfo->incident_time; ?>">
+                                <input type="text" class="form-control" id="incidenttime" name="incident_time" value="<?= $AccidentInfo->incident_time; ?>" placeholder="<?= $AccidentInfo->incident_time; ?>">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="location">Location</label>
-                                <input type="text" class="form-control" id="location" name="incident_location" placeholder="<?= $AccidentInfo->incident_location; ?>">
+                                <input type="text" class="form-control" id="location" name="incident_location" value="<?= $AccidentInfo->incident_location; ?>" placeholder="<?= $AccidentInfo->incident_location; ?>">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="witnessname">Name of Witness</label>
-                                <input type="text" class="form-control" id="witnessname" name="witness_name" placeholder="<?= $AccidentInfo->witness_name; ?>">
+                                <input type="text" class="form-control" id="witnessname" name="witness_name" value="<?= $AccidentInfo->witness_name; ?>" placeholder="<?= $AccidentInfo->witness_name; ?>">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="witness-date">Date</label>
-                                <input type="text" class="form-control" id="witness-date" name="witness_date" placeholder="<?= $AccidentInfo->witness_date; ?>">     
+                                <input type="text" class="form-control" id="witness-date" name="witness_date" value="<?= $AccidentInfo->witness_date; ?>" placeholder="<?= $AccidentInfo->witness_date; ?>">     
                             </div>
                             <div class="form-group col-md-6">
                                 <label>
@@ -434,9 +510,9 @@
                             <div class="form-group col-md-12">
                                 <label for="provideDetails">List the steps that have been taken to prevent or minimise this type of incident in the future:</label>
                                 <ol>
-                                    <li><input type="text" class="form-control" id="one" name="prevention_step_1" placeholder="<?= $AccidentInfo->prevention_step_1;?>"></li>
-                                    <li><input type="text" class="form-control" id="two" name="prevention_step_2" placeholder="<?= $AccidentInfo->prevention_step_2;?>"></li>
-                                    <li><input type="text" class="form-control" id="three" name="prevention_step_3" placeholder="<?= $AccidentInfo->prevention_step_3;?>"></li>
+                                    <li><input type="text" class="form-control" id="one" name="prevention_step_1" value="<?= $AccidentInfo->prevention_step_1;?>" placeholder="<?= $AccidentInfo->prevention_step_1;?>"></li>
+                                    <li><input type="text" class="form-control" id="two" name="prevention_step_2" value="<?= $AccidentInfo->prevention_step_2;?>" placeholder="<?= $AccidentInfo->prevention_step_2;?>"></li>
+                                    <li><input type="text" class="form-control" id="three" name="prevention_step_3" value="<?= $AccidentInfo->prevention_step_3;?>" placeholder="<?= $AccidentInfo->prevention_step_3;?>"></li>
                                 </ol>
                             </div>
                         </div>
@@ -449,61 +525,61 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="parentname">Parent/ Guardian name:</label>
-                                <input type="text" class="form-control" id="parentname" name="parent1_name" placeholder="<?= $AccidentInfo->parent1_name;?>">    
+                                <input type="text" class="form-control" id="parentname" name="parent1_name" value="<?= $AccidentInfo->parent1_name;?>" placeholder="<?= $AccidentInfo->parent1_name;?>">    
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="method">Method of Contact:</label>
-                                <input type="text" class="form-control" id="method" name="contact1_method" placeholder="<?= $AccidentInfo->contact1_method;?>">
+                                <input type="text" class="form-control" id="method" name="contact1_method" value="<?= $AccidentInfo->contact1_method;?>" placeholder="<?= $AccidentInfo->contact1_method;?>">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="contactDate">Date</label>
-                                <input type="text" class="form-control" id="contactDate" name="contact1_date" placeholder="<?= $AccidentInfo->contact1_date;?>">
+                                <input type="text" class="form-control" id="contactDate" name="contact1_date" value="<?= $AccidentInfo->contact1_date;?>" placeholder="<?= $AccidentInfo->contact1_date;?>">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="contactTime">Time</label>
-                                <input type="text" class="form-control" id="contactTime" name="contact1_time" placeholder="<?= $AccidentInfo->contact1_time;?>">
+                                <input type="text" class="form-control" id="contactTime" name="contact1_time" value="<?= $AccidentInfo->contact1_time;?>" placeholder="<?= $AccidentInfo->contact1_time;?>">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="contactmade">Contact Made: </label>
-                                <input type="text" class="form-control check-control" id="contactmade" name="contact1_made" value="1" placeholder="<?= $AccidentInfo->contact1_made;?>">   
+                                <input type="text" class="form-control" id="contactmade" name="contact1_made" value="<?= $AccidentInfo->contact1_made;?>" placeholder="<?= $AccidentInfo->contact1_made;?>">   
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="messageleft">Message Left:</label>
-                                <input type="text" class="form-control check-control" id="messageleft" name="contact1_msg" value="1" placeholder="<?= $AccidentInfo->contact1_msg;?>">
+                                <input type="text" class="form-control" id="messageleft" name="contact1_msg" value="<?= $AccidentInfo->contact1_msg;?>" placeholder="<?= $AccidentInfo->contact1_msg;?>">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="parentname2">Parent/ Guardian name:</label>
-                                <input type="text" class="form-control" id="parentname2" name="parent2_name" value="" placeholder="<?= $AccidentInfo->parent2_name;?>">
+                                <input type="text" class="form-control" id="parentname2" name="parent2_name" value="<?= $AccidentInfo->parent2_name;?>" placeholder="<?= $AccidentInfo->parent2_name;?>">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="method2">Method of Contact:</label>
-                                <input type="text" class="form-control" id="method2" name="contact2_method" value="" placeholder="<?= $AccidentInfo->contact2_method;?>">
+                                <input type="text" class="form-control" id="method2" name="contact2_method" value="<?= $AccidentInfo->contact2_method;?>" placeholder="<?= $AccidentInfo->contact2_method;?>">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="contactDate2">Date</label>
-                                <input type="text" class="form-control" id="contactDate2" name="contact2_date" value="" placeholder="<?= $AccidentInfo->contact2_date;?>"> 
+                                <input type="text" class="form-control" id="contactDate2" name="contact2_date" value="<?= $AccidentInfo->contact2_date;?>" placeholder="<?= $AccidentInfo->contact2_date;?>"> 
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="contactTime2">Time</label>
-                                <input type="text" class="form-control" id="contactTime2" name="contact2_time" value="" placeholder="<?= $AccidentInfo->contact2_time;?>">
+                                <input type="text" class="form-control" id="contactTime2" name="contact2_time" value="<?= $AccidentInfo->contact2_time;?>" placeholder="<?= $AccidentInfo->contact2_time;?>">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="contactmade2">Contact Made: </label>
-                                <input type="text" class="form-control check-control" id="contactmade2" name="contact2_made" value="1" placeholder="<?= $AccidentInfo->contact2_made;?>">
+                                <input type="text" class="form-control" id="contactmade2" name="contact2_made" value="<?= $AccidentInfo->contact2_made;?>" placeholder="<?= $AccidentInfo->contact2_made;?>">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="messageleft2">Message Left:</label>
-                                <input type="text" class="form-control check-control" id="messageleft2" name="contact2_msg" value="1" placeholder="<?= $AccidentInfo->contact2_msg;?>">
+                                <input type="text" class="form-control" id="messageleft2" name="contact2_msg" value="<?= $AccidentInfo->contact2_msg;?>" placeholder="<?= $AccidentInfo->contact2_msg;?>">
                             </div>
                         </div>
 
@@ -515,7 +591,7 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="res_pinc">Responsible Person in Charge Name:</label>
-                                <input type="text" class="form-control" id="res_pinc" name="responsible_person_name" value="" placeholder="<?= $AccidentInfo->responsible_person_name;?>"> 
+                                <input type="text" class="form-control" id="res_pinc" name="responsible_person_name" value="<?= $AccidentInfo->responsible_person_name;?>" placeholder="<?= $AccidentInfo->responsible_person_name;?>"> 
                             </div>
                             <div class="form-group col-md-6">
                                 <label>
@@ -577,17 +653,17 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="otheragency">Other agency:</label>
-                                <input type="text" class="form-control" id="otheragency" name="otheragency" value="" placeholder="<?= $AccidentInfo->ext_notif_other_agency;?>">
+                                <input type="text" class="form-control" id="otheragency" name="otheragency" value="<?= $AccidentInfo->ext_notif_other_agency;?>" placeholder="<?= $AccidentInfo->ext_notif_other_agency;?>">
                             </div>
                             <div class="form-group col-md-6">
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="agencyDate">Date</label>
-                                        <input type="text" class="form-control" id="agencyDate" name="enor_date" value="" placeholder="<?= $AccidentInfo->enor_date;?>">
+                                        <input type="text" class="form-control" id="agencyDate" name="enor_date" value="<?= $AccidentInfo->enor_date;?>" placeholder="<?= $AccidentInfo->enor_date;?>">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="agencyTime">Time</label>
-                                        <input type="text" class="form-control" id="agencyTime" name="enor_time" value="" placeholder="<?= $AccidentInfo->enor_time;?>">
+                                        <input type="text" class="form-control" id="agencyTime" name="enor_time" value="<?= $AccidentInfo->enor_time;?>" placeholder="<?= $AccidentInfo->enor_time;?>">
                                     </div>
                                 </div>
                             </div>
@@ -595,17 +671,17 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="Regulatoryauthority">Regulatory authority:</label>
-                                <input type="text" class="form-control" id="Regulatoryauthority" name="Regulatoryauthority" value="" placeholder="<?= $AccidentInfo->ext_notif_regulatory_auth;?>">
+                                <input type="text" class="form-control" id="Regulatoryauthority" name="Regulatoryauthority" value="<?= $AccidentInfo->ext_notif_regulatory_auth;?>" placeholder="<?= $AccidentInfo->ext_notif_regulatory_auth;?>">
                             </div>
                             <div class="form-group col-md-6">
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="enra_date">Date</label>
-                                        <input type="text" class="form-control" id="enra_date" name="enra_date" value="" placeholder="<?= $AccidentInfo->enra_date;?>">
+                                        <input type="text" class="form-control" id="enra_date" name="enra_date" value="<?= $AccidentInfo->enra_date;?>" placeholder="<?= $AccidentInfo->enra_date;?>">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="enra_time">Time</label>
-                                        <input type="text" class="form-control" id="enra_time" name="enra_time" value="" placeholder="<?= $AccidentInfo->enra_time;?>">
+                                        <input type="text" class="form-control" id="enra_time" name="enra_time" value="<?= $AccidentInfo->enra_time;?>" placeholder="<?= $AccidentInfo->enra_time;?>">
                                     </div>
                                 </div>
                             </div>
@@ -614,20 +690,21 @@
                         <?php if (isset($_GET['id'])) { ?>	
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <h3 class="service-title">Parental acknowledgement</h3>
-                                    <div class="inlineInput">
-                                        I <input type="text" name="ack_parent_name" placeholder="<?= $AccidentInfo->ack_parent_name;?>"> (name of parent / guardian) have been notified of my child’s incident / injury / trauma / illness.
+                                    <!-- <h3 class="service-title">Parental acknowledgement</h3> -->
+                                    <div class="form-group col-md-6">
+                                    <label for="ack_parent_name">Parental acknowledgement</label>
+                                         <input type="text" name="ack_parent_name" value="<?= $AccidentInfo->ack_parent_name;?>" placeholder="<?= $AccidentInfo->ack_parent_name;?>"> (name of parent / guardian) have been notified of my child's incident / injury / trauma / illness.
                                     </div>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="RegulatoryauthorityDate">Date</label>
-                                    <input type="text" class="form-control" id="RegulatoryauthorityDate" name="ack_date" value="" placeholder="<?= $AccidentInfo->ack_date;?>">
+                                    <input type="text" class="form-control" id="RegulatoryauthorityDate" name="ack_date" value="<?= $AccidentInfo->ack_date;?>" placeholder="<?= $AccidentInfo->ack_date;?>">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="RegulatoryauthorityTime">Time</label>
-                                    <input type="text" class="form-control" id="RegulatoryauthorityTime" name="ack_time" value="" placeholder="<?= $AccidentInfo->ack_time;?>">
+                                    <input type="text" class="form-control" id="RegulatoryauthorityTime" name="ack_time" value="<?= $AccidentInfo->ack_time;?>" placeholder="<?= $AccidentInfo->ack_time;?>">
                                 </div>
                             </div>
                         <?php } ?>
@@ -650,9 +727,11 @@
                                 </div>
                             </div>
                         </div> -->
+
                     </form>
                 </div>
-            </div> 
+            </div>
+                        </div> 
         </div>
     </main>
 
@@ -673,6 +752,8 @@
     <script src="<?= base_url('assets'); ?>/js/jquery.ui.touch-punch.min.js"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/select2.full.js"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/survey.js?v=1.0.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 </body>
     <script>
@@ -790,4 +871,214 @@
             }
         });
     </script>
+
+<script>
+    function printMainContent() {
+        var content = document.getElementById("printArea").cloneNode(true);
+
+        // Convert input fields, textareas, and selects to plain text with label formatting
+        content.querySelectorAll("input, textarea, select").forEach(field => {
+            var parent = field.parentNode;
+            var label = parent.querySelector("label"); // Get label
+
+            if (field.type === "hidden") {
+                // Remove hidden inputs (they won't be printed)
+                field.remove();
+                return;
+            }
+
+            if (label) {
+                var labelText = label.textContent.trim();
+                label.remove(); // Remove original label
+            } else {
+                var labelText = ''; // If no label exists, keep it empty
+            }
+
+            var valueText = ""; // Store the field value
+            if (field.tagName === "SELECT") {
+                valueText = field.options[field.selectedIndex]?.text || "";
+            } else if (field.type === "checkbox") {
+                valueText = field.checked ? "✅" : "❌"; // Show checkmark for selected, cross for unselected
+            } else {
+                valueText = field.value;
+            }
+
+            // Create formatted output: Label - Value
+            var formattedRow = document.createElement("div");
+            formattedRow.classList.add("formatted-row");
+            formattedRow.innerHTML = `<strong class="label">${labelText}</strong> - <span class="value">${valueText}</span>`;
+
+            parent.replaceChild(formattedRow, field);
+        });
+
+        // Create print window
+        var printWindow = window.open("", "", "width=1000,height=800");
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>Print</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 20mm; }
+                    .print-container { font-size: 16px; line-height: 1.6; }
+                    .print-container h2 { text-align: center; border-bottom: 2px solid #333; padding-bottom: 5px; }
+                    .formatted-row { padding: 8px 0; border-bottom: 1px dashed #ccc; }
+                    .label { font-weight: bold; margin-right: 5px; }
+                    .value { font-weight: normal; }
+                    .no-print2 {  display: none !important; }
+                    .no-print3 {  display: none !important; }
+                </style>
+            </head>
+            <body>
+                <div class="print-container">${content.innerHTML}</div>
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.print();
+    }
+
+
+    function sendReportToParent() {
+    // Show loading indicator
+    showLoading("Preparing PDF and sending email...");
+    
+    // Get the content just like in printMainContent()
+    var content = document.getElementById("printArea").cloneNode(true);
+
+    // Apply the same formatting as in printMainContent()
+    content.querySelectorAll("input, textarea, select").forEach(field => {
+        var parent = field.parentNode;
+        var label = parent.querySelector("label");
+
+        if (field.type === "hidden") {
+            field.remove();
+            return;
+        }
+
+        if (label) {
+            var labelText = label.textContent.trim();
+            label.remove();
+        } else {
+            var labelText = '';
+        }
+
+        var valueText = "";
+        if (field.tagName === "SELECT") {
+            valueText = field.options[field.selectedIndex]?.text || "";
+        } else if (field.type === "checkbox") {
+            valueText = field.checked ? "&#10004; Yes" : "&#10008; No";  // Using HTML entities
+        } else {
+            valueText = field.value;
+        }
+
+        var formattedRow = document.createElement("div");
+        formattedRow.classList.add("formatted-row");
+        formattedRow.innerHTML = `<strong class="label">${labelText}</strong> - <span class="value">${valueText}</span>`;
+
+        parent.replaceChild(formattedRow, field);
+    });
+
+    // Create HTML content for PDF
+    var htmlContent = `
+        <html>
+        <head>
+            <title>Report</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20mm; }
+                .print-container { font-size: 16px; line-height: 1.6; }
+                .print-container h2 { text-align: center; border-bottom: 2px solid #333; padding-bottom: 5px; }
+                .formatted-row { padding: 8px 0; border-bottom: 1px dashed #ccc; }
+                .label { font-weight: bold; margin-right: 5px; }
+                .value { font-weight: normal; }
+                .no-print2 { display: none !important; }
+                .no-print3 { display: none !important; }
+            </style>
+        </head>
+        <body>
+            <div class="print-container">${content.innerHTML}</div>
+        </body>
+        </html>
+    `;
+
+    // Send the HTML content to the server for PDF generation and email sending
+    fetch('<?= base_url("Accident/send_email") ?>', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({
+            html_content: htmlContent,
+            student_id: document.getElementById('student_id').value // Assuming you have a student ID field
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        hideLoading();
+        if (data.success) {
+            showAlert('success', 'Report sent successfully to parent!');
+        } else {
+            showAlert('error', 'Failed to send report: ' + data.message);
+        }
+    })
+    .catch(error => {
+        hideLoading();
+        showAlert('error', 'An error occurred while sending the report.');
+        console.error('Error:', error);
+    });
+}
+
+function showLoading(message) {
+    // Create or show a loading indicator
+    if (!document.getElementById('loading-overlay')) {
+        const overlay = document.createElement('div');
+        overlay.id = 'loading-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;';
+        
+        const spinner = document.createElement('div');
+        spinner.style.cssText = 'background:white;padding:20px;border-radius:5px;text-align:center;';
+        spinner.innerHTML = `<div class="spinner"></div><p>${message}</p>`;
+        
+        overlay.appendChild(spinner);
+        document.body.appendChild(overlay);
+    } else {
+        document.getElementById('loading-overlay').style.display = 'flex';
+    }
+}
+
+function hideLoading() {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) overlay.style.display = 'none';
+}
+
+function showAlert(type, message) {
+    // Create or show an alert message
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type}`;
+    alertDiv.innerHTML = message;
+    alertDiv.style.cssText = 'position:fixed;top:20px;right:20px;padding:15px;border-radius:5px;z-index:9999;';
+    
+    if (type === 'success') {
+        alertDiv.style.background = '#d4edda';
+        alertDiv.style.color = '#155724';
+    } else {
+        alertDiv.style.background = '#f8d7da';
+        alertDiv.style.color = '#721c24';
+    }
+    
+    document.body.appendChild(alertDiv);
+    
+    // Remove the alert after 3 seconds
+    setTimeout(() => {
+        alertDiv.remove();
+    }, 3000);
+}
+
+</script>
+
+
+
+
+
+
 </html>

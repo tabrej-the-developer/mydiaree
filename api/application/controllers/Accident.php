@@ -24,7 +24,9 @@ class Accident extends CI_Controller {
 
 	public function getPageData()
 	{
-		$headers = $this->input->request_headers();
+			$headers = $this->input->request_headers();
+
+	
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -53,7 +55,9 @@ class Accident extends CI_Controller {
 
 	public function getAccidents()
 	{
-		$headers = $this->input->request_headers();
+			$headers = $this->input->request_headers();
+
+
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -147,7 +151,9 @@ class Accident extends CI_Controller {
 
 	public function saveAccident()
 	{
-		$headers = $this->input->request_headers();
+			$headers = $this->input->request_headers();
+
+	
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -246,7 +252,9 @@ class Accident extends CI_Controller {
 
 	public function getChildDetails()
 	{
-		$headers = $this->input->request_headers();
+			$headers = $this->input->request_headers();
+
+		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -285,7 +293,9 @@ class Accident extends CI_Controller {
 
 	public function getCenterRooms()
 	{
-		$headers = $this->input->request_headers();
+			$headers = $this->input->request_headers();
+
+		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -320,7 +330,9 @@ class Accident extends CI_Controller {
 
 	public function getAccidentDetails()
 	{
-		$headers = $this->input->request_headers();
+			$headers = $this->input->request_headers();
+
+		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
