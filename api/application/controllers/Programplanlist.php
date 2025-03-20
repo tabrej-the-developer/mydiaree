@@ -25,7 +25,24 @@ class Programplanlist extends CI_Controller{
 
 	public function fetchProgPlanDetails()
 	{
-		$headers = $this->input->request_headers();		
+		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers))
 		{
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
@@ -78,7 +95,24 @@ class Programplanlist extends CI_Controller{
 
 	public function saveLinks()
 	{
-		$headers = $this->input->request_headers();		
+		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);		
 			$json = json_decode(file_get_contents('php://input'));			
@@ -109,6 +143,23 @@ class Programplanlist extends CI_Controller{
     public function getprogramplandetails(){
 
         $headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			
@@ -154,6 +205,23 @@ class Programplanlist extends CI_Controller{
 
 	public function saveprogramplandetails(){
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			
@@ -199,6 +267,23 @@ class Programplanlist extends CI_Controller{
 	public function saveprogramplandetails_old(){
 
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			
@@ -244,6 +329,23 @@ class Programplanlist extends CI_Controller{
 
 	public function show_details(){
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -306,6 +408,23 @@ class Programplanlist extends CI_Controller{
 
 	public function get_details_list(){
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -337,6 +456,23 @@ class Programplanlist extends CI_Controller{
 	public function edit_programlistdetails(){
 
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			
@@ -377,6 +513,23 @@ class Programplanlist extends CI_Controller{
 
 	// public function delete(){
 	// 	$headers = $this->input->request_headers();
+// $updated_headers = []; // Temporary array to store modified headers
+
+// foreach ($headers as $key => $value) {
+//     $lower_key = strtolower($key);
+
+//     // Normalize key names
+//     if ($lower_key === 'x-device-id') {
+//         $updated_headers['X-Device-Id'] = $value;
+//     } elseif ($lower_key === 'x-token') {
+//         $updated_headers['X-Token'] = $value;
+//     } else {
+//         $updated_headers[$key] = $value; // Keep other headers as is
+//     }
+// }
+
+// // Assign back to $headers
+// $headers = $updated_headers;
 
 	// 	if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			
@@ -415,6 +568,23 @@ class Programplanlist extends CI_Controller{
 
 	public function delete(){
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 	
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			
@@ -464,7 +634,24 @@ class Programplanlist extends CI_Controller{
 	
 
 	public function  getAllPublishedObservations($user_id,$center_id,$program_id){
-		$headers = $this->input->request_headers();		
+		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){			
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);					
 			if($user_id!= null && $res != null && $res->userid == $user_id){
@@ -509,6 +696,23 @@ class Programplanlist extends CI_Controller{
 
 	public function getPublishedReflections($userid,$centerid,$programid){
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			if($res != null && $res->userid == $userid){
@@ -584,7 +788,24 @@ class Programplanlist extends CI_Controller{
 	public function comments(){
 
 
-		$headers = $this->input->request_headers();		
+		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){			
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);		
 			$json = json_decode(file_get_contents('php://input'));		
@@ -622,6 +843,23 @@ class Programplanlist extends CI_Controller{
 	public function get_details(){
 
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			
@@ -668,7 +906,24 @@ class Programplanlist extends CI_Controller{
 	
 	public function getProgPlanComments()
 	{
-		$headers = $this->input->request_headers();		
+		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){			
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);		
 			$json = json_decode(file_get_contents('php://input'));			
@@ -706,7 +961,24 @@ class Programplanlist extends CI_Controller{
 
 	public function getProgramPlanData()
 	{
-		$headers = $this->input->request_headers();		
+		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){			
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);		
 			$json = json_decode(file_get_contents('php://input'));			
@@ -739,7 +1011,24 @@ class Programplanlist extends CI_Controller{
 
 	public function save()
 	{
-		$headers = $this->input->request_headers();		
+		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){			
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);		
 			$json = json_decode(file_get_contents('php://input'));			
@@ -807,7 +1096,24 @@ class Programplanlist extends CI_Controller{
 
 
 	public function templatesave(){
-		$headers = $this->input->request_headers();		
+		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){			
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);		
 			$json = json_decode(file_get_contents('php://input'));			
@@ -906,6 +1212,23 @@ class Programplanlist extends CI_Controller{
 
 	public function deletetemplates() {
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 	
 		// Validate headers
 		if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {

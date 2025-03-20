@@ -23,6 +23,24 @@
 
 		public function getDashboardDetails($userid){
 				$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
+
 
 			
 			if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
@@ -87,6 +105,24 @@
 		// Data for a particular Month 
 		public function getCalendarDetails($userid,$month=null,$year=null){
 				$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
+
 
 		
 			if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
@@ -137,6 +173,23 @@
 		// Without Month -- Whole data
 		public function getCalDetails($userid,$year=null){
 				$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 
 		
 			if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
@@ -195,6 +248,23 @@
 			
 			// $userid = $this->session->has_userdata('LoginId');
 			$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 
 		
 			
@@ -272,6 +342,23 @@
 		public function getParentDashboard()
 		{
 				$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 
 		
 			if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){

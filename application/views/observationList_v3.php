@@ -247,7 +247,7 @@
                                 <div class="text-primary text-small font-weight-medium d-none d-sm-block">
                                     <?= date("d.m.Y",strtotime($observation->date_added)); ?>
                                 </div>
-                            </a>
+                            </a> 
                         </div>
                        
                         <?php if($role!="Parent"){ ?>
@@ -263,6 +263,14 @@
                         <i class="fa-sharp fa-solid fa-trash fa-lg" style="color: #da0711;cursor:pointer;" onclick="deleteObservation(<?php echo $obsId; ?>)"></i>
                            </div>
         <?php }   ?>
+
+        <?php if($role=="Parent"){ ?>
+                        <div class="pl-5 pt-2 pr-2 pb-2">
+                        <i class="fa-solid fa-comment fa-bounce" style="color: #74C0FC;cursor:pointer;" onclick="openAddCommentModal(<?php echo $obsId; ?>)"> Add Comments</i>
+                           </div>
+        <?php }   ?>
+
+
                     </div>
                 </div>
                 <?php } }else{ ?>
@@ -558,6 +566,45 @@
     </div>
 </div>
 
+
+
+<!-- Modal for comments -->
+<div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="commentModalLabel">Observation Comments</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Comment form -->
+        <form id="commentForm">
+          <input type="hidden" id="observationId" name="observationId">
+          <div class="form-group">
+            <label for="commentText">Add a comment:</label>
+            <textarea class="form-control" id="commentText" name="commentText" rows="3" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit Comment</button>
+        </form>
+        
+        <hr>
+        
+        <!-- Comment list -->
+        <h6>All Comments</h6>
+        <div id="commentsList" class="mt-3">
+          <!-- Comments will be loaded here -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/jquery-3.3.1.min.js?v=1.1.1"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/bootstrap.bundle.min.js?v=1.1.1"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/moment.min.js?v=1.1.1"></script>
@@ -573,6 +620,9 @@
 
 <!-- SweetAlert2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+
+
+
     
     <script>
         $(function() {
@@ -916,7 +966,112 @@ $(document).ready(function() {
         }
     });
 }
+
+
+
+
     </script>
+
+
+
+
+<script>
+    
+function openAddCommentModal(obsId) {
+  $('#observationId').val(obsId);
+  $('#commentModal').modal('show');
+  loadComments(obsId);
+}
+
+function loadComments(obsId) {
+  $.ajax({
+    url: '<?php echo base_url("observation/getComments"); ?>',
+    type: 'POST',
+    data: {observationId: obsId},
+    dataType: 'json',
+    success: function(response) {
+      var html = '';
+      if(response.comments.length > 0) {
+        $.each(response.comments, function(index, comment) {
+          html += '<div class="card mb-2">';
+          html += '<div class="card-body p-3">';
+          html += '<p class="mb-1">' + comment.comments + '</p>';
+          html += '<div class="d-flex justify-content-between">';
+          html += '<small class="text-muted">By ' + comment.userName + ' on ' + comment.date_added + '</small>';
+          if(comment.userId == <?php echo $this->session->userdata('LoginId'); ?>) {
+            html += '<button class="btn btn-sm btn-danger" onclick="deleteComment(' + comment.id + ')"><i class="fa fa-trash"></i> Delete</button>';
+          }
+          html += '</div></div></div>';
+        });
+      } else {
+        html = '<p class="text-muted">No comments yet.</p>';
+      }
+      $('#commentsList').html(html);
+    },
+    error: function() {
+      alert('Error loading comments. Please try again.');
+    }
+  });
+}
+
+function deleteComment(commentId) {
+  if(confirm('Are you sure you want to delete this comment?')) {
+    $.ajax({
+      url: '<?php echo base_url("observation/deleteComment"); ?>',
+      type: 'POST',
+      data: {commentId: commentId},
+      dataType: 'json',
+      success: function(response) {
+        if(response.status === 'success') {
+          loadComments($('#observationId').val()); // Reload comments
+          toastr.success('Comment deleted successfully');
+        } else {
+          toastr.error('Error deleting comment');
+        }
+      },
+      error: function() {
+        toastr.error('Error deleting comment. Please try again.');
+      }
+    });
+  }
+}
+
+$(document).ready(function() {
+  $('#commentForm').submit(function(e) {
+    e.preventDefault();
+    
+    var observationId = $('#observationId').val();
+    var commentText = $('#commentText').val();
+    
+    if(commentText.trim() === '') {
+      toastr.error('Please enter a comment');
+      return false;
+    }
+    
+    $.ajax({
+      url: '<?php echo base_url("observation/addComment"); ?>',
+      type: 'POST',
+      data: {
+        observationId: observationId,
+        commentText: commentText
+      },
+      dataType: 'json',
+      success: function(response) {
+        if(response.status === 'success') {
+          $('#commentText').val(''); // Clear the form
+          loadComments(observationId); // Reload comments
+          toastr.success('Comment added successfully');
+        } else {
+          toastr.error('Error adding comment');
+        }
+      },
+      error: function() {
+        toastr.error('Error adding comment. Please try again.');
+      }
+    });
+  });
+});
+</script>
 
 
 </body>

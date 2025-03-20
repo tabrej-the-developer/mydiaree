@@ -22,6 +22,23 @@ class Settings extends CI_Controller {
 	
 	public function changePin(){
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -96,6 +113,23 @@ class Settings extends CI_Controller {
 
 	public function changePassword(){
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -134,6 +168,23 @@ class Settings extends CI_Controller {
 
 	public function changeEmail(){
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -180,6 +231,23 @@ class Settings extends CI_Controller {
 
 	public function getModuleSettings(){
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -218,6 +286,23 @@ class Settings extends CI_Controller {
 
 	public function addModuleSettings(){
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -241,6 +326,23 @@ class Settings extends CI_Controller {
 	public function getUsersSettings()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -267,6 +369,23 @@ class Settings extends CI_Controller {
 	public function saveUsersDetails()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			// $json = json_decode(file_get_contents('php://input'));
@@ -366,6 +485,23 @@ class Settings extends CI_Controller {
 	public function getUsersDetails()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -410,6 +546,23 @@ class Settings extends CI_Controller {
 	public function fetchEmpCodeAvl()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -449,6 +602,23 @@ class Settings extends CI_Controller {
 	public function getCentersSettings()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -472,6 +642,23 @@ class Settings extends CI_Controller {
 	public function getCenterDetails()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -502,6 +689,23 @@ class Settings extends CI_Controller {
 	public function saveCenterDetails()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -533,6 +737,23 @@ class Settings extends CI_Controller {
 	public function getParentSettings()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -558,6 +779,23 @@ class Settings extends CI_Controller {
 	public function getParentDetails()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -597,6 +835,23 @@ class Settings extends CI_Controller {
 	public function saveParentDetails()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -636,6 +891,23 @@ class Settings extends CI_Controller {
 	public function getChildGroupDetails()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -670,6 +942,23 @@ class Settings extends CI_Controller {
 	public function saveChildGroup()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -703,6 +992,23 @@ class Settings extends CI_Controller {
 	public function getChildGroups()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -731,6 +1037,23 @@ class Settings extends CI_Controller {
 	public function getPermissions()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -760,6 +1083,23 @@ class Settings extends CI_Controller {
 	public function getUsersPermissions()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -855,6 +1195,23 @@ class Settings extends CI_Controller {
 	public function getCenterUsers()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -895,6 +1252,23 @@ class Settings extends CI_Controller {
 	public function savePermissions()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -928,6 +1302,23 @@ class Settings extends CI_Controller {
 	public function dailyJournalTabs()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -958,6 +1349,23 @@ class Settings extends CI_Controller {
 	public function saveApplicationSettings()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -994,6 +1402,23 @@ class Settings extends CI_Controller {
 	public function noticePeriodSettings()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1024,6 +1449,23 @@ class Settings extends CI_Controller {
 	public function saveNoticeSettings()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1060,6 +1502,23 @@ class Settings extends CI_Controller {
 	public function export_excel()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1083,6 +1542,23 @@ class Settings extends CI_Controller {
 	public function themeSettings()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1111,6 +1587,23 @@ class Settings extends CI_Controller {
 	public function saveThemeSettings()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1137,6 +1630,23 @@ class Settings extends CI_Controller {
 	public function getAssessmentSettings()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1175,6 +1685,23 @@ class Settings extends CI_Controller {
 	public function saveAsmntSettings()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1225,6 +1752,23 @@ class Settings extends CI_Controller {
 	public function getMontessoriSettings()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1304,6 +1848,23 @@ class Settings extends CI_Controller {
 	public function saveActivity()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1341,6 +1902,23 @@ class Settings extends CI_Controller {
 	public function saveSubActivity()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1378,6 +1956,23 @@ class Settings extends CI_Controller {
 	public function getSubActivity()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1413,6 +2008,23 @@ class Settings extends CI_Controller {
 	public function saveExtras()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1450,6 +2062,23 @@ class Settings extends CI_Controller {
 	public function deleteMonActivity()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1488,6 +2117,23 @@ class Settings extends CI_Controller {
 	public function deleteMonSubActivity()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1526,6 +2172,23 @@ class Settings extends CI_Controller {
 	public function deleteMonSubActivityExtras()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1564,6 +2227,23 @@ class Settings extends CI_Controller {
 	public function saveMontessoriList()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1618,6 +2298,23 @@ class Settings extends CI_Controller {
 	public function getEylfSettings()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1692,6 +2389,23 @@ class Settings extends CI_Controller {
 	public function saveEylfActivity()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1729,6 +2443,23 @@ class Settings extends CI_Controller {
 	public function saveEylfSubActivity()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1766,6 +2497,23 @@ class Settings extends CI_Controller {
 	public function getEylfSubActivity()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1802,6 +2550,23 @@ class Settings extends CI_Controller {
 	public function deleteEylfActivity()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1840,6 +2605,23 @@ class Settings extends CI_Controller {
 	public function deleteEylfSubActivity()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1878,6 +2660,23 @@ class Settings extends CI_Controller {
 	public function saveEylfList()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1922,6 +2721,23 @@ class Settings extends CI_Controller {
 	public function getDevMileSettings()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -1998,6 +2814,23 @@ class Settings extends CI_Controller {
 	public function saveDevMileActivity()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -2035,6 +2868,23 @@ class Settings extends CI_Controller {
 	public function saveDevMileSubActivity()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -2072,6 +2922,23 @@ class Settings extends CI_Controller {
 	public function getDevMileSubActivity()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -2107,6 +2974,23 @@ class Settings extends CI_Controller {
 	public function saveDevMileExtras()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -2144,6 +3028,23 @@ class Settings extends CI_Controller {
 	public function deleteMileMain()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -2182,6 +3083,23 @@ class Settings extends CI_Controller {
 	public function deleteMileSubActivity()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -2220,6 +3138,23 @@ class Settings extends CI_Controller {
 	public function deleteMileSubActExtras()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -2258,6 +3193,23 @@ class Settings extends CI_Controller {
 	public function saveDevMileList()
 	{
 		$headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));

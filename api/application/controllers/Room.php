@@ -26,6 +26,23 @@ class Room extends CI_Controller
 
     public function getRooms($user_id,$centerid, $filter_name = null){
         $headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
         // print_r($user_id); exit;
         if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
             $res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
@@ -103,6 +120,23 @@ class Room extends CI_Controller
     // Get Rooms Without Current Room
     public function getRoomsExcept($user_id,$roomId){
         $headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
         if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
             $this->load->model('LoginModel');
             $res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
@@ -127,6 +161,23 @@ class Room extends CI_Controller
     public function createRoom()
     {
         $headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
         if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
             $res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
             $json = json_decode(file_get_contents('php://input'));
@@ -222,6 +273,23 @@ class Room extends CI_Controller
     public function editRoom()
     {
         $headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
         if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers) ) {
             $res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
             $json = json_decode(file_get_contents('php://input'));
@@ -264,6 +332,23 @@ class Room extends CI_Controller
     public function createChild()
     {
         $headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
         if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
             $res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
             $json = json_decode(file_get_contents('php://input'));
@@ -292,6 +377,23 @@ class Room extends CI_Controller
     public function editChild()
     {
         $headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
         if (
             $headers != null &&
             array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
@@ -318,6 +420,23 @@ class Room extends CI_Controller
     public function changeStatus()
     {
         $headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
         if ( $headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers) ) {
             $this->load->model('LoginModel');
             $res = $this->LoginModel->getAuthUserId( $headers['X-Device-Id'], $headers['X-Token'] );
@@ -344,6 +463,23 @@ class Room extends CI_Controller
     public function deleteRoom()
     {
         $headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
         if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
             $res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
             $json = json_decode(file_get_contents('php://input'));
@@ -408,6 +544,23 @@ class Room extends CI_Controller
     public function deleteChildren()
     {
         $headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
         if (
             $headers != null &&
             array_key_exists('X-Device-Id', $headers) &&
@@ -438,6 +591,23 @@ class Room extends CI_Controller
     public function deleteChilds()
     {
         $headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
         if ( $headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers) ) {
             $this->load->model('LoginModel');
             $res = $this->LoginModel->getAuthUserId( $headers['X-Device-Id'], $headers['X-Token'] );
@@ -464,6 +634,23 @@ class Room extends CI_Controller
     public function getRoomDetails($user_id, $roomId = null, $order = 'ASC')
     {
         $headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
         if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
             $res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
             $json = json_decode(file_get_contents('php://input'));
@@ -532,6 +719,23 @@ class Room extends CI_Controller
     public function getChildForm($user_id, $roomId = null, $childId = null)
     {
         $headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
         if (
             $headers != null &&
             array_key_exists('X-Device-Id', $headers) &&
@@ -566,6 +770,23 @@ class Room extends CI_Controller
     public function deleteSingleRoom()
     {
         $headers = $this->input->request_headers();
+$updated_headers = []; // Temporary array to store modified headers
+
+foreach ($headers as $key => $value) {
+    $lower_key = strtolower($key);
+
+    // Normalize key names
+    if ($lower_key === 'x-device-id') {
+        $updated_headers['X-Device-Id'] = $value;
+    } elseif ($lower_key === 'x-token') {
+        $updated_headers['X-Token'] = $value;
+    } else {
+        $updated_headers[$key] = $value; // Keep other headers as is
+    }
+}
+
+// Assign back to $headers
+$headers = $updated_headers;
         if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
             $res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
             $json = json_decode(file_get_contents('php://input'));

@@ -2742,8 +2742,106 @@ class Observation extends CI_Controller {
 		}
 	}
 
-
-
+	public function getComments() {
+		$observationId = $this->input->post('observationId');
+		
+		if(!$observationId) {
+			echo json_encode(['status' => 'error', 'message' => 'Invalid observation ID']);
+			return;
+		}
+		
+		// Direct DB query to get comments
+		$this->db->select('*');
+		$this->db->from('observationcomments');
+		$this->db->where('observationId', $observationId);
+		$this->db->order_by('date_added', 'DESC');
+		$query = $this->db->get();
+		$comments = $query->result_array();
+		
+		// Format the comments for display
+		foreach($comments as &$comment) {
+			// Get user name directly with DB query
+			$this->db->select('username');
+			$this->db->from('users'); // Adjust table name as needed
+			$this->db->where('userid', $comment['userId']);
+			$user_query = $this->db->get();
+			$user = $user_query->row_array();
+			
+			$comment['userName'] = $user ? $user['username'] : 'Unknown User';
+			
+			// Format date for Australia/Sydney timezone
+			$date = new DateTime($comment['date_added']);
+			$date->setTimezone(new DateTimeZone('Australia/Sydney'));
+			$comment['date_added'] = $date->format('d M Y, h:i A');
+		}
+		
+		echo json_encode(['status' => 'success', 'comments' => $comments]);
+	}
+	
+	public function addComment() {
+		$observationId = $this->input->post('observationId');
+		$commentText = $this->input->post('commentText');
+		$userId = $this->session->userdata('LoginId');
+		
+		if(!$observationId || !$commentText) {
+			echo json_encode(['status' => 'error', 'message' => 'Invalid data provided']);
+			return;
+		}
+		
+		// Set Sydney timezone for date
+		$date = new DateTime('now', new DateTimeZone('Australia/Sydney'));
+		$sydneyDateTime = $date->format('Y-m-d H:i:s');
+		
+		$data = [
+			'observationId' => $observationId,
+			'comments' => $commentText,
+			'userId' => $userId,
+			'date_added' => $sydneyDateTime
+		];
+		
+		// Direct DB insert query
+		$this->db->insert('observationcomments', $data);
+		$result = $this->db->insert_id();
+		
+		if($result) {
+			echo json_encode(['status' => 'success']);
+		} else {
+			echo json_encode(['status' => 'error', 'message' => 'Failed to add comment']);
+		}
+	}
+	
+	public function deleteComment() {
+		$commentId = $this->input->post('commentId');
+		$userId = $this->session->userdata('LoginId');
+		
+		if(!$commentId) {
+			echo json_encode(['status' => 'error', 'message' => 'Invalid comment ID']);
+			return;
+		}
+		
+		// Check if user is the owner of the comment using direct DB query
+		$this->db->select('*');
+		$this->db->from('observationcomments');
+		$this->db->where('id', $commentId);
+		$query = $this->db->get();
+		$comment = $query->row_array();
+		
+		if(!$comment || $comment['userId'] != $userId) {
+			echo json_encode(['status' => 'error', 'message' => 'You are not authorized to delete this comment']);
+			return;
+		}
+		
+		// Direct DB delete query
+		$this->db->where('id', $commentId);
+		$this->db->delete('observationcomments');
+		$affected_rows = $this->db->affected_rows();
+		
+		if($affected_rows > 0) {
+			echo json_encode(['status' => 'success']);
+		} else {
+			echo json_encode(['status' => 'error', 'message' => 'Failed to delete comment']);
+		}
+	}
 
 
 }  
