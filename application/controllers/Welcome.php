@@ -29,11 +29,11 @@ class Welcome extends CI_Controller {
 		
 	}
 
-	public function account2()
+	public function account()
 	{
 		$this->load->view('welcome_message');
 	}
-	public function account()
+	public function account2()
 	{
 		$this->load->view('indexpage');
 	}
