@@ -72,12 +72,16 @@
             <div class="d-flex " >
                 <div class="col-12 ">
                     <h1>Observation List</h1>
-
-                   
+                    <?php 
+                            $role = $this->session->userdata('UserType');
+                         ?>
+                    
                     <div class="text-zero top-right-button-container ">
+                    <?php if($role!="Parent"){ ?>
                         <button class="btn btn-outline-primary btn-lg mr-1 filterbutton" data-toggle="modal" data-backdrop="static" data-target="#filtersModal">
                             FILTERS
                         </button>
+                        <?php }   ?>
 
                         <div class="btn-group mr-1 filterbutton">
                             <?php 
@@ -157,10 +161,16 @@
                                     $newObsUrl = base_url('observation/addNew');
                                 }
                         ?>
+
+                         <?php if($role!="Parent"){ ?>
                         <a type="button" class="btn btn-primary btn-lg top-right-button" href="<?= $newObsUrl; ?>">ADD NEW</a>
-                        
                         <?php } ?>
+
+                        <?php } ?>
+
+                        <?php if($role!="Parent"){ ?>
                         <button id="checkDraftObservationsBtn" class="btn btn-outline-danger" style="margin-left:5px;">Draft Observations</button>
+                        <?php } ?>
                     </div>
                     
                     <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
@@ -187,7 +197,12 @@
                 <h1><?php //echo $obsId; ?></h1>
                 <div class="col-lg-6 col-md-3">
                     <div class="d-flex flex-row mb-3 bg-white br-10">
+                    <?php if($role!="Parent"){ ?>
                         <a class="d-block position-relative" href="<?= base_url('observation/view?id='.$obsId); ?>">
+                        <?php }else{ ?>
+                            <a class="d-block position-relative" href="<?= base_url('observation/print/') . $obsId ?>" target="_blank">
+                            <?php } ?>
+
                             <?php if(empty($observation->observationsMedia)) { ?>
                             <img src="https://skala.or.id/wp-content/uploads/2024/01/dummy-post-square-1-1.jpg" alt="No Media" class="list-thumbnail border-0">
                             <?php 
@@ -215,7 +230,12 @@
                             <?php } ?>
                         </a>
                         <div class="pl-5 pt-2 pr-2 pb-2">
+                        <?php if($role!="Parent"){ ?>
                             <a href="<?= base_url('observation/view?id='.$obsId); ?>" class="obs-link">
+                        <?php }else{ ?>
+                            <a href="<?= base_url('observation/print/'.$obsId); ?>" class="obs-link" target="_blank">
+                            <?php } ?>
+
                                 <p class="list-item-heading">
                                     <?= substr_replace(strip_tags(html_entity_decode($observation->title)),'...',40); ?>
                                 </p>
@@ -230,16 +250,19 @@
                             </a>
                         </div>
                        
+                        <?php if($role!="Parent"){ ?>
                         <div class="pl-5 pt-2 pr-2 pb-2">
     <a href="<?= base_url('observation/print/') . $obsId ?>" target="_blank">
         <i class="fa-solid fa-print fa-beat fa-lg" style="color: #74C0FC;"></i>
     </a>
-</div>
+       </div>
+       <?php }   ?>
 
+                     <?php if($role!="Parent"){ ?>
                         <div class="pl-5 pt-2 pr-2 pb-2">
                         <i class="fa-sharp fa-solid fa-trash fa-lg" style="color: #da0711;cursor:pointer;" onclick="deleteObservation(<?php echo $obsId; ?>)"></i>
                            </div>
-
+        <?php }   ?>
                     </div>
                 </div>
                 <?php } }else{ ?>

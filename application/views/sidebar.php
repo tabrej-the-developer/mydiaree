@@ -110,12 +110,16 @@
                             <i class="iconsminds-receipt-4"></i>Service Details
                         </a>
                     </li>
-                    <?php } ?>
+
                     <li  class="<?= (strpos($_SERVER['REQUEST_URI'], 'Media') === TRUE ? 'active' : ''); ?>">
                         <a href="<?php echo base_url('Media'); ?>">
                             <i class="iconsminds-photo-album-2"></i>Media
                         </a>
                     </li>
+
+                    
+                    <?php } ?>
+                
                     <li>
                         <a href="#announcements">
                             <i class="iconsminds-speaker-1"></i>Announcements
@@ -138,13 +142,13 @@
                             <i class="iconsminds-wallet"></i>Daily Journal
                         </a>
                     </li>
-                    <?php if($this->session->userdata("UserType")!="Parent"){ ?>
+                 
                     <li  class="<?= (strpos($_SERVER['REQUEST_URI'], 'dashboard') === TRUE ? 'active' : ''); ?>">
                         <a href="<?php echo base_url('Reflections'); ?>">
-                            <i class="iconsminds-reset"></i>Reflections
+                            <i class="iconsminds-reset"></i>Daily Reflections
                         </a>
                     </li>
-                    <?php } ?>
+              
                     <li>
                         <a href="#Lesson">
                             <i class="iconsminds-line-chart-1"></i>L&P Plan
@@ -283,12 +287,16 @@
                         <i class="simple-icon-picture"></i> <span class="d-inline-block">Menu</span>
                     </a>
                 </li>
+
+                <?php if($this->session->userdata("UserType")!="Parent"){ ?>
                 
                 <li>
                     <a href="<?php echo base_url('recipe'); ?>">
                         <i class="simple-icon-picture"></i> <span class="d-inline-block">Recipe</span>
                     </a>
                 </li>
+
+                <?php } ?>
               
             </ul>
 
