@@ -29,10 +29,17 @@ class Welcome extends CI_Controller {
 		
 	}
 
-	public function account()
+	public function account2()
 	{
 		$this->load->view('welcome_message');
 	}
+	public function account()
+	{
+		$this->load->view('indexpage');
+	}
+
+
+
 	//function to get ip address
 	function getIpAddress(){
 		if (!empty($_SERVER['HTTP_CLIENT_IP'])){
