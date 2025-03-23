@@ -212,15 +212,19 @@
                                         $date2 = new DateTime("today");
                                         if ($date1 > $date2) { 
                                     ?>
-                                    <?php if($this->session->userdata("UserType") != "Parent"){ ?>
+                                    <?php if($this->session->userdata("UserType") != "Parent"){ ?> 
+                                        <?php if ($this->session->userdata("UserType") === "Staff" && $this->session->userdata("Name") === $records_obj->createdBy || $this->session->userdata("UserType") === "Superadmin") { ?> 
                                     <a class="btn btn-outline-primary btn-xs" href="<?= base_url('announcements/edit/').$records_obj->id; ?>">
                                         <i class="simple-icon-pencil"></i>
                                     </a> 
+                                             <?php }  ?>
                                     <?php } } ?>
-                                    <?php if($this->session->userdata("UserType")!="Parent"){ ?>                                              
+                                    <?php if($this->session->userdata("UserType")!="Parent"){ ?>     
+                                        <?php if ($this->session->userdata("UserType") === "Staff" && $this->session->userdata("Name") === $records_obj->createdBy || $this->session->userdata("UserType") === "Superadmin") { ?>                                          
                                     <a class="btn btn-outline-danger btn-xs delete" onclick="return confirm('Do you really want to remove this item?');" href="<?= base_url('announcements/delete/').$records_obj->id; ?>">
                                         <i class="simple-icon-trash"></i>
                                     </a>  
+                                    <?php }  ?>
                                     <?php } ?>                                            
                                 </div>
                             </div>
@@ -232,7 +236,6 @@
             </div>  
         </div>
     </main>
-
     <?php $this->load->view('footer_v3'); ?>
 
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/jquery-3.3.1.min.js?v=1.0.0"></script>

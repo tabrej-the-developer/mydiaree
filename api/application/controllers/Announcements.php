@@ -137,7 +137,7 @@ $headers = $updated_headers;
 
 				if ($type == "Staff") {
 
-					$annmnts = $this->AnnouncementsModel->getAnnouncements($user_id,$centerid);
+					$annmnts = $this->AnnouncementsModel->getAnnouncements(NULL,$centerid);
 					$permission = $this->UtilModel->getPermissions($user_id,$centerid);
 
 				} elseif ($type == "Superadmin") {
