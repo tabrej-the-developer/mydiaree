@@ -65,10 +65,12 @@ class DailyDiary extends CI_Controller {
                 $data['roomid'] = $_GET['roomid'];
             }
 
-			if($this->session->userdata("UserType") != "Superadmin" ){
-				$data['superadmin'] = 0;
+			if($this->session->userdata("UserType") == "Superadmin" ){
+				$data['superadmin'] = 1;
+			}else if ($this->session->userdata("UserType") == "Parent"){
+				$data['superadmin'] = 2;
 			}else{
-                $data['superadmin'] = 1;
+                $data['superadmin'] = 0;
 			}
 
 
@@ -94,9 +96,9 @@ class DailyDiary extends CI_Controller {
 			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			curl_close($ch);
 
-			// echo "<pre>";
-			// 	print_r(json_decode($server_output)); 
-			// 	exit;
+			    // echo "<pre>"; 
+				// print_r(json_decode($server_output)); 
+				// exit;
 			if($httpcode == 200){
 				$data = json_decode($server_output);
 							// echo "<pre>";

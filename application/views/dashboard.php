@@ -185,6 +185,29 @@
     </div>
 </main>
 
+
+<!-- Event Details Modal -->
+<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Event:</strong> <span id="event-title"></span></p>
+        <p><strong>Date:</strong> <span id="event-date"></span></p>
+        <!-- Add more fields as needed -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <?php $this->load->view('footer_v3'); ?>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/jquery-3.3.1.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/bootstrap.bundle.min.js?v=1.0.0"></script>
@@ -196,32 +219,46 @@
     <script src="<?= base_url('assets/v3'); ?>/js/dore.script.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/scripts.js?v=1.0.0"></script>
     <script>
-        $(document).ready(function(){
-            /* 03.10. Calendar */
-            if ($().fullCalendar) {
-            var testEvent = new Date(new Date().setHours(new Date().getHours()));
-            var day = testEvent.getDate();
-            var month = testEvent.getMonth() + 1;
-            $("#cal").fullCalendar({
-                    themeSystem: "bootstrap4",
-                    height: "auto",
-                    buttonText: {
-                    today: "Today",
-                    month: "Month",
-                    week: "Week",
-                    day: "Day",
-                    list: "List"
-                },
-                bootstrapFontAwesome: {
-                    prev: " simple-icon-arrow-left",
-                    next: " simple-icon-arrow-right",
-                    prevYear: " simple-icon-control-start",
-                    nextYear: " simple-icon-control-end"
-                },
-                events: <?= isset($calendar)?json_encode($calendar):"";?>
-            });
+      $(document).ready(function(){
+    /* 03.10. Calendar */
+    if ($().fullCalendar) {
+        var testEvent = new Date(new Date().setHours(new Date().getHours()));
+        var day = testEvent.getDate();
+        var month = testEvent.getMonth() + 1;
+        $("#cal").fullCalendar({
+            themeSystem: "bootstrap4",
+            height: "auto",
+            buttonText: {
+                today: "Today",
+                month: "Month",
+                week: "Week",
+                day: "Day",
+                list: "List"
+            },
+            bootstrapFontAwesome: {
+                prev: " simple-icon-arrow-left",
+                next: " simple-icon-arrow-right",
+                prevYear: " simple-icon-control-start",
+                nextYear: " simple-icon-control-end"
+            },
+            events: <?= isset($calendar)?json_encode($calendar):"";?>,
+            eventClick: function(calEvent, jsEvent, view) {
+                // Show modal with event details
+                $("#event-title").text(calEvent.title);
+                $("#event-date").text(moment(calEvent.start).format('MMMM D, YYYY'));
+                
+                // Add more details if you have them in your event object
+                // For example, if your event object has a 'description' field:
+                // $("#event-description").text(calEvent.description);
+                
+                $("#eventModal").modal('show');
+                
+                // Prevent the browser from navigating to the href
+                return false;
             }
         });
+    }
+});
     </script>
 
     <!-- <script>

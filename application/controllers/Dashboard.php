@@ -533,6 +533,23 @@ class Dashboard extends CI_Controller {
 					$jsonOutput->calendar = $jsonOutput->events; // Create new property 'calendar' with the same value as 'events'
 					unset($jsonOutput->events); // Remove the old 'events' property
 				}
+
+				$calendarEventsJson = $this->calendarEvents();
+				$getCalDetails = json_decode($calendarEventsJson);
+
+				$getCalDetails->PublicHolidays = array_map(function($holiday) {
+					return [
+						'id' => $holiday->id,  // Change "date" to "start"
+						'start' => $holiday->date,  // Change "date" to "start"
+						'title' => $holiday->occasion // Change "occasion" to "title"
+					];
+				}, $getCalDetails->PublicHolidays);
+				
+
+				$jsonOutput->calendar = array_merge($jsonOutput->calendar, $getCalDetails->PublicHolidays);
+
+
+				// echo "<pre>";
 				// print_r($jsonOutput);
 				// exit;
 				$this->load->view('dashboard', $jsonOutput);

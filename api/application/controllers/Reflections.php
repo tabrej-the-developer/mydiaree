@@ -49,7 +49,7 @@ $headers = $updated_headers;
 				$usertype = $this->LoginModel->getUserType($json->userid);
 				$error_num = 0;
 				if ($usertype == "Superadmin") {
-					$error_num = 0;
+					$error_num = 0; 
 					$permission = NULL;
 					$view_others = 1;
 				}else if($usertype == "Staff"){
@@ -60,6 +60,10 @@ $headers = $updated_headers;
 					}else{
 						$view_others = 0;
 					}
+				}else if($usertype == "Parent"){
+					$error_num = 0;
+					$view_others = 2;
+					$permission = NULL;
 				}else{
 					$error_num = 2;
 				}
@@ -68,9 +72,15 @@ $headers = $updated_headers;
 
 					if ($view_others == 1) {
 						$resultArr = $this->refmodel->getCenterReflections($json->centerid);
-					} else {
+					} else if($view_others == 0) {
 						$resultArr = $this->refmodel->getUserReflections($json->userid);
+					}else{
+						$resultArr = $this->refmodel->getParentsReflections($json->userid);
 					}
+
+					// http_response_code(200);
+					// print_r($resultArr);
+					// exit;
 
 					foreach ($resultArr as $resKey => $resObj) {
 						//Fetch Reflection Media and Media Tags
@@ -82,6 +92,8 @@ $headers = $updated_headers;
 						//Fetch Reflection Staffs
 						$resObj->staffs = $this->refmodel->getReflectionStaffs($resObj->id);
 					}
+				
+				
 
 					http_response_code(200);
 					$data['Status'] = "SUCCESS";

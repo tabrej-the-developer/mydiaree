@@ -290,19 +290,11 @@ table {
 
 
             <tr>
+
                 <td colspan="4"><span style="font-weight:bold;">Daily Reflection:</span>
                 <!-- <td colspan="3" class="observation-cell"> -->
-                    
-                <div class="photo-gallery">
-                    <?php if (!empty($reflectionMedia)): ?>
-                         <?php foreach ($reflectionMedia as $reflectionMedia2): ?>
-                            <?php if ($reflectionMedia2['mediaType'] == 'Image'): ?>
-                                <img src="<?= base_url('api/assets/media/'.$reflectionMedia2['mediaUrl']) ?>" class="child-image" alt="Observation Media">
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    <?php endif; ?> 
-                            </div>
-                
+                  <?= $reflection['about'] ?>  
+           
                
                 
                 </td>
@@ -316,14 +308,25 @@ table {
                 <!-- <th>Child's Photos</th> -->
                 <td colspan="4" class="photo-cell">
                     <strong><p>Child's Photos</p></strong>
+
+                    <div class="photo-gallery">
+                    <?php if (!empty($reflectionMedia)): ?>
+                         <?php foreach ($reflectionMedia as $reflectionMedia2): ?>
+                            <?php if ($reflectionMedia2['mediaType'] == 'Image'): ?>
+                                <img src="<?= base_url('api/assets/media/'.$reflectionMedia2['mediaUrl']) ?>" class="child-image" alt="Observation Media">
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?> 
+                            </div>
+                
                    
-                    <?php if (!empty($children)): ?>
+                    <!-- <?php if (!empty($children)): ?>
                         <?php foreach ($children as $child): ?>
                             <?php if (!empty($child['imageUrl'])): ?>
                                 <img src="<?= base_url('api/assets/media/'.$child['imageUrl']) ?>" class="child-image" alt="<?= $child['name'] ?>">
                             <?php endif; ?>
                         <?php endforeach; ?>
-                    <?php endif; ?>
+                    <?php endif; ?> -->
 
                 
 

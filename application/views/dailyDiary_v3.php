@@ -323,7 +323,11 @@
                                             <?php 
                                                 if (empty($cobj->breakfast->startTime)) {
                                             ?>
+                                                 <?php if ($this->session->userdata("UserType")!="Parent") { ?>
                                             <button class="btn btn-outline-primary btn-sm btn-add" data-toggle="modal" data-target="#foodModal" data-bgcolor="#FFECB3" data-title="Add Breakfast" data-type="BREAKFAST" data-childid="<?php echo $cobj->id; ?>"> Add </button>
+                                            <?php }else{ ?>
+                                                <p>Not Update</p>
+                                                <?php } ?>
                                             <?php
                                                 } else {
                                                     echo $cobj->breakfast->startTime;
@@ -336,7 +340,11 @@
                                             <?php 
                                                 if (empty($cobj->morningtea->startTime)) {
                                             ?>
+                                            <?php if ($this->session->userdata("UserType")!="Parent") { ?>
                                             <button class="btn btn-outline-primary btn-sm btn-add" data-toggle="modal" data-target="#foodModal" data-bgcolor="#C0CCD9" data-title="Add Morning Tea" data-type="morningtea" data-childid="<?php echo $cobj->id; ?>"> Add </button>
+                                            <?php }else{ ?>
+                                                <p>Not Update</p>
+                                                <?php } ?>
                                             <?php
                                                 } else {
                                                     echo $cobj->morningtea->startTime;
@@ -349,8 +357,12 @@
                                             <?php 
                                                 if (empty($cobj->lunch->startTime)) {
                                             ?>
+                                            <?php if ($this->session->userdata("UserType")!="Parent") { ?>
                                             <button class="btn btn-outline-primary btn-sm btn-add" data-toggle="modal" data-target="#foodModal" data-bgcolor="#D0E2FD" data-title="Add Lunch" data-type="lunch" data-childid="<?php echo $cobj->id; ?>"> Add </button>
-                                            <?php
+                                            <?php }else{ ?>
+                                                <p>Not Update</p>
+                                                <?php } ?>
+                                           <?php
                                                 } else {
                                                     echo $cobj->lunch->startTime;
                                                 }
@@ -362,8 +374,12 @@
                                             <?php 
                                                 if (empty($cobj->sleep[0]->startTime)) {
                                             ?>
+                                            <?php if ($this->session->userdata("UserType")!="Parent") { ?>
                                             <button class="btn btn-outline-primary btn-sm btn-add btn-sleep" data-toggle="modal" data-target="#sleepModal" data-bgcolor="#F5E18F" data-title="Add Sleep" data-type="sleep" data-childid="<?php echo $cobj->id; ?>"> Add </button>
-                                            <?php
+                                            <?php }else{ ?>
+                                                <p>Not Update</p>
+                                                <?php } ?>
+                                           <?php
                                                 } else {
                                                     echo $cobj->sleep[0]->startTime ." to ".$cobj->sleep[0]->endTime;
                                                 }
@@ -375,8 +391,12 @@
                                             <?php 
                                                 if (empty($cobj->afternoontea->startTime)) {
                                             ?>
+                                            <?php if ($this->session->userdata("UserType")!="Parent") { ?>
                                             <button class="btn btn-outline-primary btn-sm btn-add" data-toggle="modal" data-target="#foodModal" data-bgcolor="#F0CDFF" data-title="Add Afternoon Tea" data-type="afternoontea" data-childid="<?php echo $cobj->id; ?>"> Add </button>
-                                            <?php
+                                            <?php }else{ ?>
+                                                <p>Not Update</p>
+                                                <?php } ?>
+                                           <?php
                                                 } else {
                                                     echo $cobj->afternoontea->startTime;
                                                 }
@@ -388,7 +408,11 @@
                                             <?php 
                                                 if (empty($cobj->snacks->startTime)) {
                                             ?>
+                                            <?php if ($this->session->userdata("UserType")!="Parent") { ?>
                                             <button class="btn btn-outline-primary btn-sm btn-add" data-toggle="modal" data-target="#foodModal" data-bgcolor="#FEC093" data-title="Add Snacks" data-type="snacks" data-childid="<?php echo $cobj->id; ?>"> Add </button>
+                                            <?php }else{ ?>
+                                                <p>Not Update</p>
+                                                <?php } ?>
                                             <?php
                                                 } else {
                                                     echo $cobj->snacks->startTime;
@@ -401,7 +425,11 @@
                                             <?php 
                                                 if (empty($cobj->sunscreen[0]->startTime)) {
                                             ?>
+                                            <?php if ($this->session->userdata("UserType")!="Parent") { ?>
                                             <button class="btn btn-outline-primary btn-sm btnSunscreen" data-toggle="modal" data-target="#sunscreenModal" data-bgcolor="#E07F7F" data-title="Add Sunscreen" data-type="sunscreen" data-childid="<?= $cobj->id; ?>"> Add </button>
+                                            <?php }else{ ?>
+                                                <p>Not Update</p>
+                                                <?php } ?>
                                             <?php
                                                 } else {
                                                     $totalMinutes2 = 0;
@@ -438,7 +466,11 @@
                                             <?php 
                                                 if (empty($cobj->toileting[0]->startTime)) {
                                             ?>
+                                            <?php if ($this->session->userdata("UserType")!="Parent") { ?>
                                             <button class="btn btn-outline-primary btn-sm btnToileting" data-toggle="modal" data-target="#toiletingModal" data-bgcolor="#D1FFCD" data-title="Add Toileting Info" data-type="toileting" data-childid="<?php echo $cobj->id; ?>"> Add </button>
+                                            <?php }else{ ?>
+                                                <p>Not Update</p>
+                                                <?php } ?>
                                             <?php
                                                 } else {
                                                     $totalMinutes = 0;

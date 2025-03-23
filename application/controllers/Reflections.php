@@ -55,6 +55,7 @@ class Reflections extends CI_Controller {
     public function getUserReflections()
 	{	
 		if($this->session->has_userdata('LoginId')){
+					
 
 			if(empty($_GET['centerid'])){
 				$centers = $this->session->userdata("centerIds");
@@ -80,12 +81,15 @@ class Reflections extends CI_Controller {
 			$server_output = curl_exec($ch);
 			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);			 
 			curl_close($ch);
+
+			// echo "<pre>";
+			// print_r($server_output);
+			// exit;
 			if($httpcode == 200){
 				$data = [];
 				$jsondata = json_decode($server_output);
-				// echo "<pre>";
-				// print_r($jsondata->permission);
-				// die;
+			
+				
 				$data['reflection'] = $jsondata->Reflections;
 				// $data['permission'] = $this->getUsersPermissions($defCenter);
 				$data['permission'] = $jsondata->permission;

@@ -234,13 +234,28 @@
                                     <a class="btn btn-outline-primary btn-xs reflection-edit" data-id="<?= $ref->id; ?>" href="<?= base_url('Reflections/Reflection_update/?reflectionid='.$ref->id); ?>">
                                         <i class="simple-icon-pencil"></i>
                                     </a>
+
+
+                       
+
+
                                     <?php } elseif(isset($permission) && is_object($permission) && $permission->updatereflection == 1) { ?>
-    <a class="btn btn-outline-primary btn-xs reflection-edit" 
+            <a class="btn btn-outline-primary btn-xs reflection-edit" 
        data-id="<?= $ref->id; ?>" 
        href="<?= base_url('Reflections/Reflection_update/?reflectionid='.$ref->id); ?>">
         <i class="simple-icon-pencil"></i>
-    </a>
-                                <?php }else{} ?>   
+           </a>
+                                <?php }elseif($_SESSION['UserType'] == "Parent"){ ?>   
+
+
+                                    <a class="btn btn-outline-primary btn-xs" href="<?= base_url('Reflections/print/') . $ref->id ?>" target="_blank">
+                    <i class="fa-solid fa-print fa-beat fa-lg" style="color: #74C0FC;"></i>
+                     </a>
+
+                     <?php }else{}  ?>
+
+
+
                                 <?php if($_SESSION['UserType'] == "Superadmin"){ ?>                                           
                                     <a class="btn btn-outline-danger btn-xs reflection-delete" data-userid="<?= $ref->createdBy; ?>" id="reflection-delete" data-id="<?= $ref->id; ?>">
                                         <i class="simple-icon-trash"></i>
@@ -252,7 +267,22 @@
        data-id="<?= $ref->id; ?>">
         <i class="simple-icon-trash"></i>
     </a>
-<?php } else {} ?>                                      
+
+<?php } else {} ?>       
+
+
+
+
+<?php if($_SESSION['UserType'] == "Superadmin"){ ?>                                           
+                              
+                                    <?php } elseif(isset($permission) && is_object($permission) && $permission->viewAllReflection == 1) { ?>
+ 
+                                        <a class="btn btn-outline-primary btn-xs" href="<?= base_url('Reflections/print/') . $ref->id ?>" target="_blank">
+                    <i class="fa-solid fa-print fa-beat fa-lg" style="color: #74C0FC;"></i>
+                     </a>
+<?php } else {} ?>       
+
+
                             </div>
                             <?php if($ref->about) { ?>
                                 <p class="text-truncate">

@@ -25,20 +25,20 @@ class DailyDiary extends CI_Controller {
 	{
 
 		$headers = $this->input->request_headers();
-$updated_headers = []; // Temporary array to store modified headers
+        $updated_headers = []; // Temporary array to store modified headers
 
-foreach ($headers as $key => $value) {
-    $lower_key = strtolower($key);
+             foreach ($headers as $key => $value) {
+                   $lower_key = strtolower($key);
 
-    // Normalize key names
-    if ($lower_key === 'x-device-id') {
-        $updated_headers['X-Device-Id'] = $value;
-    } elseif ($lower_key === 'x-token') {
-        $updated_headers['X-Token'] = $value;
-    } else {
-        $updated_headers[$key] = $value; // Keep other headers as is
-    }
-}
+                    // Normalize key names
+               if ($lower_key === 'x-device-id') {
+                  $updated_headers['X-Device-Id'] = $value;
+              } elseif ($lower_key === 'x-token') {
+                 $updated_headers['X-Token'] = $value;
+               } else {
+                 $updated_headers[$key] = $value; // Keep other headers as is
+               }
+      }
 
 // Assign back to $headers
 $headers = $updated_headers;
@@ -65,6 +65,13 @@ $headers = $updated_headers;
 					$roomid = empty($getCenterRoomsArr[0]->id)?NULL:$getCenterRoomsArr[0]->id;
 					$roomname = empty($getCenterRoomsArr[0]->name)?NULL:$getCenterRoomsArr[0]->name;
 					$roomcolor = empty($getCenterRoomsArr[0]->color)?NULL:$getCenterRoomsArr[0]->color;
+					}else if($json->superadmin == 2){
+
+						$getCenterRoomsArr = $this->ddm->getRoomsofParents($json->userid);
+						$roomid = empty($getCenterRoomsArr[0]->id)?NULL:$getCenterRoomsArr[0]->id;
+						$roomname = empty($getCenterRoomsArr[0]->name)?NULL:$getCenterRoomsArr[0]->name;
+						$roomcolor = empty($getCenterRoomsArr[0]->color)?NULL:$getCenterRoomsArr[0]->color;
+
 					}else{
 					$getCenterRoomsArr = $this->ddm->getRooms2($json->userid);
 					$roomid = empty($getCenterRoomsArr[0]->id)?NULL:$getCenterRoomsArr[0]->id;
@@ -80,12 +87,17 @@ $headers = $updated_headers;
 					$roomcolor = $getRoom[0]->color;
 					if($json->superadmin == 1){
 					$getCenterRoomsArr = $this->ddm->getRooms($centerid);
+					}else if($json->superadmin == 2){
+					$getCenterRoomsArr = $this->ddm->getRoomsofParents($json->userid);
 					}else{
 						$getCenterRoomsArr = $this->ddm->getRooms2($json->userid);
 					}
 					// print_r($getCenterRoomsArr);
 					//  exit;
 				}
+				
+				// print_r($getCenterRoomsArr);
+				// exit;
 
 				if (empty($json->date)) {
 					$date = date("Y-m-d");
@@ -102,10 +114,18 @@ $headers = $updated_headers;
 				$data['roomcolor'] = $roomcolor;
 				$data['rooms'] = $getCenterRoomsArr;
 				if ($userArr->userType == "Parent") {
+					// $childsArr = $this->ddm->getChildsFromRoom($roomid);
 					$childsArr = $this->ddm->getChildsFromRoomOfParent($roomid,$userid);
+					foreach ($childsArr as $child) {
+						$child->id = $child->childid; // Assign childid to id
+					}
+
 				} else {
 					$childsArr = $this->ddm->getChildsFromRoom($roomid);
-				}				
+				}		
+
+				// print_r(json_encode($childsArr));
+				// exit;		
 				
 				// get column details from db daily diary settings
 
@@ -122,6 +142,10 @@ $headers = $updated_headers;
 					$getSettings->sunscreen = "1";
 					$getSettings->toileting = "1";
 				}
+
+				// print_r(json_encode($getSettings));
+				// exit;
+			
 				$data['childs'] = $childsArr;
 				foreach ($childsArr as $child => $cobj) {
 					$childId = $cobj->id;
@@ -160,6 +184,9 @@ $headers = $updated_headers;
 						$cobj->toileting = $ttObj;
 					}
 				}
+
+				// print_r(json_encode($data['childs']));
+				// exit;
 
 				$data['columns'] = $getSettings;
 				
@@ -502,7 +529,7 @@ $headers = $updated_headers;
 						$json->childid = $childid;
 						$last_rec_id = $this->ddm->addSunscreenRecord2($json);
 						array_push($data['last_rec_ids'], $last_rec_id);
-					}
+					} 
 					$data['Status'] = "SUCCESS";
 					$data['Message'] = "Sunscreen Record Added Successfully";
 				} else {

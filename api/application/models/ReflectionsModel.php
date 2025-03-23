@@ -98,6 +98,45 @@ class ReflectionsModel extends CI_Model {
 		return $query->result();
 	}
 
+	public function getParentsReflections($userid = '') {
+		if (empty($userid)) {
+			return [];
+		}
+	
+		// Step 1: Get all child IDs where parentid = $userid
+		$this->db->select('childid');
+		$this->db->from('childparent');
+		$this->db->where('parentid', $userid);
+		$query = $this->db->get();
+		$child_ids = array_column($query->result(), 'childid'); // Fetch as object
+	
+		if (empty($child_ids)) {
+			return [];
+		}
+	
+		// Step 2: Get all reflection IDs where childid is in the above child_ids
+		$this->db->select('reflectionid');
+		$this->db->from('reflectionchild');
+		$this->db->where_in('childid', $child_ids);
+		$query = $this->db->get();
+		$reflection_ids = array_column($query->result(), 'reflectionid'); // Fetch as object
+	
+		if (empty($reflection_ids)) {
+			return [];
+		}
+	
+		// Step 3: Get all reflection data where id is in the above reflection_ids
+		$this->db->select('*');
+		$this->db->from('reflection');
+		$this->db->where_in('id', $reflection_ids);
+		$query = $this->db->get();
+		
+		return $query->result(); // Return as object
+	}
+	
+	
+
+
 	public function insertReflectionChild($refid='',$childid='')
 	{
 		$insarr = [

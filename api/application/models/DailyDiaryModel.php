@@ -4,7 +4,7 @@ class DailyDiaryModel extends CI_Model {
 
 	public function __construct()
 	{
-		parent::__construct();
+		parent::__construct(); 
 		$this->load->database();
 	}
 
@@ -50,6 +50,46 @@ class DailyDiaryModel extends CI_Model {
 
         return $query->result(); // Return room data
     }
+
+
+
+	public function getRoomsofParents($userid) {
+		if (empty($userid)) {
+			return [];
+		}
+	
+		// Step 1: Get all child IDs where parentid = $userid
+		$this->db->select('childid');
+		$this->db->from('childparent');
+		$this->db->where('parentid', $userid);
+		$query = $this->db->get();
+		$child_ids = array_column($query->result(), 'childid');
+	
+		if (empty($child_ids)) {
+			return [];
+		}
+	
+		// Step 2: Get all room IDs where child ID is in the child_ids
+		$this->db->select('room');
+		$this->db->from('child');
+		$this->db->where_in('id', $child_ids);
+		$this->db->where('room IS NOT NULL'); // Skip if no room is assigned
+		$query = $this->db->get();
+		$room_ids = array_column($query->result(), 'room');
+	
+		if (empty($room_ids)) {
+			return [];
+		}
+	
+		// Step 3: Get all room data where id is in the room_ids
+		$this->db->select('*');
+		$this->db->from('room');
+		$this->db->where_in('id', $room_ids);
+		$query = $this->db->get();
+	
+		return $query->result(); // Return as object
+	}
+	
 
 	public function getChildsFromRoom($roomid)
 	{
