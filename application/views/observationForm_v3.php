@@ -33,8 +33,9 @@
             background: #ffffff;
             border: 1px dashed #d8d8d8;
             padding: 15px;
-            min-height: 400px;
+            min-height: 285px;
             width: 100%;
+            margin-bottom:15px;
         }
         label.file-upload-field{
             background: rgb(248,248,248);
@@ -469,7 +470,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-6">
                                                         <div id="select-children">
-                                                            <button type="button" class="btn btn-outline-primary mb-1" data-toggle="modal" data-backdrop="static" data-target="#selectChildrenModal"> + Add Children </button>
+                                                            <button type="button" class="btn btn-outline-primary mb-1" data-toggle="modal" data-backdrop="static" data-target="#selectChildrenModal"> + Add Children </button> &nbsp;<span style="color:red;">* Required</span>
                                                             <div class="bootstrap-tagsinput">
                                                                 <?php 
                                                                     if(!empty($observationChildrens)) {
@@ -484,9 +485,10 @@
                                                                 <?php } } ?>
                                                             </div>
                                                         </div>
+                                                        <hr>
                                                         <div id="obs-title">
                                                             <div class="form-group required">
-                                                                <label class=" control-label" ><?php //echo 'Title'; ?></label>
+                                                                <label class=" control-label" ><strong>Observation Title</strong></label>
                                                                 <textarea name="title" id="obs_title" class="form-control" data-sample-short><?php echo isset($observation->title)?$observation->title:''; ?></textarea>
                                                             </div>
                                                         </div>
@@ -495,34 +497,20 @@
 
                                                         <div id="obs-notes">
                                                             <div class="form-group required">
-                                                                <label class="control-label">Analysis/Evaluation</label>
+                                                                <label class="control-label"><strong>Analysis/Evaluation</strong></label>
                                                                 <textarea name="notes" style="height: 73px;" id="obs_notes"><?php echo isset($observation->notes)?$observation->notes:''; ?></textarea>
                                                             </div>
                                                         </div>
+
                                                         <div id="obs-reflection">
                                                             <?php if ($_SESSION['UserType'] != 'Parent') { ?>
                                                                 <div class="form-group required">
-                                                                    <label class=" control-label" >Reflection</label>
+                                                                    <label class=" control-label" ><strong>Reflection</strong></label>
                                                                     <textarea style="height: 73px;" id="obs_reflection" name="reflection" class="form-control"><?php echo isset($observation->reflection)?$observation->reflection:''; ?></textarea>
                                                                 </div>
                                                             <?php } ?>
                                                         </div>
-                                                        <div id="child-voice">
-                                                            <?php if ($_SESSION['UserType'] != 'Parent') { ?>
-                                                                <div class="form-group">
-                                                                    <label class=" control-label" >Child's Voice</label>
-                                                                    <textarea style="height: 73px;" id="child_voice" name="child_voice" class="form-control"><?php echo isset($observation->child_voice)?$observation->child_voice:''; ?></textarea>
-                                                                </div>
-                                                            <?php } ?>
-                                                        </div>
-                                                        <div id="Future Plan/Extension">
-                                                            <?php if ($_SESSION['UserType'] != 'Parent') { ?>
-                                                                <div class="form-group">
-                                                                    <label class=" control-label" >Future Plan/Extension</label>
-                                                                    <textarea style="height: 73px;" id="future_plan" name="future_plan" class="form-control"><?php echo isset($observation->future_plan)?$observation->future_plan:''; ?></textarea>
-                                                                </div>
-                                                            <?php } ?>
-                                                        </div>
+                                                        
 
                                                     </div>
                                                     <div class="col-lg-6">
@@ -543,12 +531,32 @@
                                                                     }
                                                                 ?>
                                                                 </div>
-                                                                <label class="file-upload-field" data-toggle="modal" data-target="#uploadMediaModal">
+                                                                <label class="file-upload-field" data-toggle="modal" data-target="#uploadMediaModal" style="border:2px solid cornflowerblue;">
                                                                     <span>+</span><span>Upload</span>
                                                                 </label>
-                                                                <input type="file" name="obsMedia[]" id="fileUpload" multiple style="display: none;">
+                                                                <input type="file" name="obsMedia[]" id="fileUpload" multiple accept="image/*" style="display: none;">
                                                             </div>
                                                         </div>
+
+                                                   
+                                                        <div id="child-voice">
+                                                            <?php if ($_SESSION['UserType'] != 'Parent') { ?>
+                                                                <div class="form-group">
+                                                                    <label class=" control-label" ><strong>Child's Voice</strong></label>
+                                                                    <textarea style="height: 73px;" id="child_voice" name="child_voice" class="form-control"><?php echo isset($observation->child_voice)?$observation->child_voice:''; ?></textarea>
+                                                                </div>
+                                                            <?php } ?>
+                                                        </div>
+                                                        <div id="Future Plan/Extension">
+                                                            <?php if ($_SESSION['UserType'] != 'Parent') { ?>
+                                                                <div class="form-group">
+                                                                    <label class=" control-label" ><strong>Future Plan/Extension</strong></label>
+                                                                    <textarea style="height: 73px;" id="future_plan" name="future_plan" class="form-control"><?php echo isset($observation->future_plan)?$observation->future_plan:''; ?></textarea>
+                                                                </div>
+                                                            <?php } ?>
+                                                        </div>
+
+
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -1741,14 +1749,14 @@
                     <li class="nav-item">
                         <a class="nav-link" id="upload-new-tab" data-toggle="tab" href="#uploadNew" role="tab" aria-controls="uploadNew" aria-selected="true">UPLOAD NEW</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" id="media-library-tab" data-toggle="tab" href="#uploadedImages" role="tab" aria-controls="uploadedImages" aria-selected="true">MEDIA LIBRARY</a>
-                    </li>
+                    </li> -->
                 </ul>
 
                <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="uploadNew">
-                        <label class="file-upload-field" for="fileUpload">
+                        <label class="file-upload-field" for="fileUpload" style="border:2px solid cornflowerblue;">
                             <span>+</span>
                             <span>Upload</span>
                         </label>
@@ -2664,6 +2672,7 @@ document.addEventListener('DOMContentLoaded', function() {
              $("#form-observation").append('<input type="hidden" name="upl-media-tags-caption'+mediaId+'" value="'+imgCaption+'">');
           });
 
+
           $("#fileUpload").on('change', function() {
              let imgPrevs = $(".img-preview").length;
              if(imgPrevs==0){
@@ -2682,7 +2691,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const imgPath = file.name;
                 const extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
                 const image_holder_name = "img-preview-" + i;
-                if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg" || extn == "mp4") {
+                if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg" || extn == "mp4" || extn == "heic" || extn == "heif") {
                    if (typeof(Blob) != "undefined") {
                      const image_holder = $("#img-preview-" + i);
                      if (extn == "mp4") {
@@ -2709,7 +2718,7 @@ document.addEventListener('DOMContentLoaded', function() {
                    }
                 } else {
                    allGood = false;
-                   alert("This browser does not support File API.");
+                   alert("use image extension - gif,png,jpg,jpeg,mp4,heic,heif.");
                    break;
                 }
                 imgPrevs = imgPrevs + 1;
@@ -2722,6 +2731,8 @@ document.addEventListener('DOMContentLoaded', function() {
              // $("#fileUpload").val("");
              $("#uploadMediaModal").modal("hide");
           });
+
+
 
           $(document).on('click','.img-remove',function(){
              if (confirm("Are you sure?")) {
