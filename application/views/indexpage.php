@@ -49,7 +49,8 @@
 <body>
 
     <!-- Login Button -->
-    <a href="<?php echo base_url('welcome/account'); ?>" class="login-btn">Log In</a>
+    <a href="<?php echo base_url('welcome/account
+    '); ?>" class="login-btn">Log In</a>
 
 </body>
 </html>

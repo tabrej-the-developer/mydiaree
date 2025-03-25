@@ -1430,6 +1430,9 @@ class Settings extends CI_Controller {
 			curl_close($ch);
 			if($httpcode == 200){
 				$jsondata = json_decode($server_output);
+				// echo "<pre>";
+				// print_r($jsondata);
+				// exit;
 				$this->load->view('managePermissions_v3', $jsondata);
 			} else if($httpcode == 401){
 				return 'error';
@@ -2704,6 +2707,42 @@ public function uploadProfileImage()
 
 
 
+
+public function get_centers() {
+	$login_id = $this->session->userdata("LoginId");
+	
+	$this->db->select('c.id, c.centerName');
+	$this->db->from('usercenters uc');
+	$this->db->join('centers c', 'c.id = uc.centerid');
+	$this->db->where('uc.userid', $login_id);
+	$query = $this->db->get();
+	
+	echo json_encode($query->result());
+}
+
+public function get_staff_by_center() {
+	$center_id = $this->input->post('center_id');
+	
+	$this->db->select('u.userid, u.username');
+	$this->db->from('usercenters uc');
+	$this->db->join('users u', 'u.userid = uc.userid');
+	$this->db->where('uc.centerid', $center_id);
+	$this->db->where('u.userType', 'Staff');
+	$query = $this->db->get();
+	
+	echo json_encode($query->result());
+}
+
+public function get_permissions() {
+	$user_id = $this->input->post('user_id');
+	
+	$this->db->select('*');
+	$this->db->from('permissions');
+	$this->db->where('userid', $user_id);
+	$query = $this->db->get();
+	
+	echo json_encode($query->row());
+}
 
 
 

@@ -22,6 +22,31 @@
 	<link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/select2.min.css?v=1.1.0" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/select2-bootstrap.min.css?v=1.1.0" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/permission-styles.css?v=1.1.0" />
+
+	<style>
+.permission-group {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    background: #f9f9f9;
+}
+
+.checkbox-group {
+    column-count: 2;
+    column-gap: 20px;
+}
+
+.progress {
+    height: 10px;
+}
+
+.progress-percentage {
+    float: right;
+    font-size: 12px;
+    color: #666;
+}
+</style>
 </head>
 
 <body id="app-container" class="menu-default show-spinner">
@@ -48,7 +73,9 @@
                         <li class="breadcrumb-item active" aria-current="page">Manage Permissions Settings</li>
                     </ol>
                 </nav>
-                <div class="separator mb-5"></div>
+				<button class="btn btn-outline-info" style="float:right;" data-toggle="modal" data-target="#permissionModal">Check Permission</button>        
+				<div class="separator mb-5">		
+				</div>
             </div>
         </div>
         <form action="<?= base_url('settings/savePermission'); ?>" method="post" id="permission-form">
@@ -600,6 +627,533 @@
 	</div>
 </main>
 
+
+<!-- Modal -->
+<div class="modal fade" id="permissionModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document" style="margin-top:0px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Check Permissions</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" style="overflow-y:auto;max-height:550px;">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Select Center</label>
+                            <select class="form-control" id="centerSelect">
+                                <option value="">Select Center</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Select Staff</label>
+                            <select class="form-control" id="staffSelect" disabled>
+                                <option value="">Select Staff</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Permission Groups -->
+                <div id="permissionContainer" style="display: none;">
+                  
+				    <div class="permission-group">
+                        <h6>Observation <span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="addObservation" name="addObservation">
+                                <label class="form-check-label" for="addObservation">Create Observation</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="approveObservation" name="approveObservation">
+                                <label class="form-check-label" for="approveObservation">Approve Observation</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="deleteObservation" name="deleteObservation">
+                                <label class="form-check-label" for="deleteObservation">Delete Observation</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="updateObservation" name="updateObservation">
+                                <label class="form-check-label" for="updateObservation">Update Observation</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="viewAllObservation" name="viewAllObservation">
+                                <label class="form-check-label" for="viewAllObservation">View All Observation</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+
+
+
+					<div class="permission-group">
+                        <h6>QIP <span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="addQIP" name="addQIP">
+                                <label class="form-check-label" for="addQIP">Create QIP</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="editQIP" name="editQIP">
+                                <label class="form-check-label" for="editQIP">Edit QIP</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="viewQip" name="viewQip">
+                                <label class="form-check-label" for="viewQip">View QIP</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="deleteQIP" name="deleteQIP">
+                                <label class="form-check-label" for="deleteQIP">Delete QIP</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="downloadQIP" name="downloadQIP">
+                                <label class="form-check-label" for="downloadQIP">Download QIP Report</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="printQIP" name="printQIP">
+                                <label class="form-check-label" for="printQIP">Print QIP Report</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="mailQIP" name="mailQIP">
+                                <label class="form-check-label" for="mailQIP">Mail QIP Report</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+
+
+					<div class="permission-group">
+                        <h6>Reflections <span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="addReflection" name="addReflection">
+                                <label class="form-check-label" for="addReflection">Add Reflection</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="approveReflection" name="approveReflection">
+                                <label class="form-check-label" for="approveReflection">Approve Reflection</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="updatereflection" name="updatereflection">
+                                <label class="form-check-label" for="updatereflection">Update Reflection</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="deletereflection" name="deletereflection">
+                                <label class="form-check-label" for="deletereflection">Delete Reflection</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="viewAllReflection" name="viewAllReflection">
+                                <label class="form-check-label" for="viewAllReflection">View All Reflection</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+
+
+					<div class="permission-group">
+                        <h6>Self Assessments <span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="addSelfAssessment" name="addSelfAssessment">
+                                <label class="form-check-label" for="addSelfAssessment">Add Self Assessments</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="editSelfAssessment" name="editSelfAssessment">
+                                <label class="form-check-label" for="editSelfAssessment">Edit Self Assessments</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="deleteSelfAssessment" name="deleteSelfAssessment">
+                                <label class="form-check-label" for="deleteSelfAssessment">Delete Self Assessments</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="viewSelfAssessment" name="viewSelfAssessment">
+                                <label class="form-check-label" for="viewSelfAssessment">View All Self Assessments</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+
+					<div class="permission-group">
+                        <h6>Rooms<span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="addRoom" name="addRoom">
+                                <label class="form-check-label" for="addRoom">Create Room</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="editRoom" name="editRoom">
+                                <label class="form-check-label" for="editRoom">Edit Room</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="deleteRoom" name="deleteRoom">
+                                <label class="form-check-label" for="deleteRoom">Delete Room</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="viewRoom" name="viewRoom">
+                                <label class="form-check-label" for="viewRoom">View Room</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+
+					<div class="permission-group">
+                        <h6>Program Plan<span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="addProgramPlan" name="addProgramPlan">
+                                <label class="form-check-label" for="addProgramPlan">Create Program Plan</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="editProgramPlan" name="editProgramPlan">
+                                <label class="form-check-label" for="editProgramPlan">Edit Program Plan</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="viewProgramPlan" name="viewProgramPlan">
+                                <label class="form-check-label" for="viewProgramPlan">View Program Plan</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="deleteProgramPlan" name="deleteProgramPlan">
+                                <label class="form-check-label" for="deleteProgramPlan">Delete Program Plan</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+
+					<div class="permission-group">
+                        <h6>Announcements<span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="addAnnouncement" name="addAnnouncement">
+                                <label class="form-check-label" for="addAnnouncement">Create Announcements</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="approveAnnouncement" name="approveAnnouncement">
+                                <label class="form-check-label" for="approveAnnouncement">Approve Announcements</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="deleteAnnouncement" name="deleteAnnouncement">
+                                <label class="form-check-label" for="deleteAnnouncement">Delete Announcements</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="updateAnnouncement" name="updateAnnouncement">
+                                <label class="form-check-label" for="updateAnnouncement">Update Announcements</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="viewAllAnnouncement" name="viewAllAnnouncement">
+                                <label class="form-check-label" for="viewAllAnnouncement">View All Announcements</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+
+					<div class="permission-group">
+                        <h6>Surveys<span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="addSurvey" name="addSurvey">
+                                <label class="form-check-label" for="addSurvey">Create Survey</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="approveSurvey" name="approveSurvey">
+                                <label class="form-check-label" for="approveSurvey">Approve Survey</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="deleteSurvey" name="deleteSurvey">
+                                <label class="form-check-label" for="deleteSurvey">Delete Survey</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="updateSurvey" name="updateSurvey">
+                                <label class="form-check-label" for="updateSurvey">Update Survey</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="viewAllSurvey" name="viewAllSurvey">
+                                <label class="form-check-label" for="viewAllSurvey">View All Survey</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+
+					<div class="permission-group">
+                        <h6>Recipes<span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="addRecipe" name="addRecipe">
+                                <label class="form-check-label" for="addRecipe">Create Recipe</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="approveRecipe" name="approveRecipe">
+                                <label class="form-check-label" for="approveRecipe">Approve Recipe</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="deleteRecipe" name="deleteRecipe">
+                                <label class="form-check-label" for="deleteRecipe">Delete Recipe</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="updateRecipe" name="updateRecipe">
+                                <label class="form-check-label" for="updateRecipe">Update Recipe</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+					<div class="permission-group">
+                        <h6>Menu<span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="addMenu" name="addMenu">
+                                <label class="form-check-label" for="addMenu">Create Menu</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="approveMenu" name="approveMenu">
+                                <label class="form-check-label" for="approveMenu">Approve Menu</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="deleteMenu" name="deleteMenu">
+                                <label class="form-check-label" for="deleteMenu">Delete Menu</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="updateMenu" name="updateMenu">
+                                <label class="form-check-label" for="updateMenu">Update Menu</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+
+					<div class="permission-group">
+                        <h6>Progress Plan<span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="addprogress" name="addprogress">
+                                <label class="form-check-label" for="addprogress">Create Progress Plan</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="editprogress" name="editprogress">
+                                <label class="form-check-label" for="editprogress">Edit Progress Plan</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="viewprogress" name="viewprogress">
+                                <label class="form-check-label" for="viewprogress">View Progress Plan</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+					<div class="permission-group">
+                        <h6>Lesson Plan<span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="printpdflesson" name="printpdflesson">
+                                <label class="form-check-label" for="printpdflesson">Print PDF Lesson</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="editlesson" name="editlesson">
+                                <label class="form-check-label" for="editlesson">Edit Lesson Plan</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="viewlesson" name="viewlesson">
+                                <label class="form-check-label" for="viewlesson">View Lesson Plan</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+					<div class="permission-group">
+                        <h6>Daily Journal<span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="updateDailyDiary" name="updateDailyDiary">
+                                <label class="form-check-label" for="updateDailyDiary">Update Daily Diary</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="viewDailyDiary" name="viewDailyDiary">
+                                <label class="form-check-label" for="viewDailyDiary">View Daily Diary</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="updateHeadChecks" name="updateHeadChecks">
+                                <label class="form-check-label" for="updateHeadChecks">Update Head Checks</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="updateAccidents" name="updateAccidents">
+                                <label class="form-check-label" for="updateAccidents">Update Accidents</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+					<div class="permission-group">
+                        <h6>User Settings<span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="addUsers" name="addUsers">
+                                <label class="form-check-label" for="addUsers">Create Users</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="viewUsers" name="viewUsers">
+                                <label class="form-check-label" for="viewUsers">View Users</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="updateUsers" name="updateUsers">
+                                <label class="form-check-label" for="updateUsers">Update Users</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+					<div class="permission-group">
+                        <h6>Center Settings<span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="addCenters" name="addCenters">
+                                <label class="form-check-label" for="addCenters">Create Centers</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="viewCenters" name="viewCenters">
+                                <label class="form-check-label" for="viewCenters">View Centers</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="updateCenters" name="updateCenters">
+                                <label class="form-check-label" for="updateCenters">Update Centers</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+					<div class="permission-group">
+                        <h6>Parent Settings<span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="addParent" name="addParent">
+                                <label class="form-check-label" for="addParent">Create Parents</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="viewParent" name="viewParent">
+                                <label class="form-check-label" for="viewParent">View Parents</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="updateParent" name="updateParent">
+                                <label class="form-check-label" for="updateParent">Update Parents</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+					<div class="permission-group">
+                        <h6>Child Groups<span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="addChildGroup" name="addChildGroup">
+                                <label class="form-check-label" for="addChildGroup">Create Child Group</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="viewChildGroup" name="viewChildGroup">
+                                <label class="form-check-label" for="viewChildGroup">View Child Group</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="updateChildGroup" name="updateChildGroup">
+                                <label class="form-check-label" for="updateChildGroup">Update Child Group</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+					<div class="permission-group">
+                        <h6>Misc Settings<span class="progress-percentage"></span></h6>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="updatePermission" name="updatePermission">
+                                <label class="form-check-label" for="updatePermission">Update Permission Setting</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="assessment" name="assessment">
+                                <label class="form-check-label" for="assessment">Update Assessments Setting</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="updateModules" name="updateModules">
+                                <label class="form-check-label" for="updateModules">Update Module Setting</label>
+                            </div>
+                            <!-- Add other Observation permissions similarly -->
+                        </div>
+                    </div>
+
+
+
+
+                    <!-- Add other permission groups similarly -->
+                </div>
+            </div>
+            <div class="modal-footer" style="padding:12px;">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php $this->load->view('footer_v3'); ?>
 	<script src="<?= base_url('assets/v3'); ?>/js/vendor/jquery-3.3.1.min.js?v=1.1.0"></script>
 	<script src="<?= base_url('assets/v3'); ?>/js/vendor/select2.full.js?v=1.1.0"></script>
@@ -663,6 +1217,181 @@
 
 		
 	</script>	
+
+
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Load centers on modal open
+    $('#permissionModal').on('shown.bs.modal', function() {
+        $.ajax({
+            url: '<?= base_url('settings/get_centers') ?>',
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                let options = '<option value="">Select Center</option>';
+                $.each(response, function(i, center) {
+                    options += `<option value="${center.id}">${center.centerName}</option>`;
+                });
+                $('#centerSelect').html(options);
+            }
+        });
+    });
+
+    // Load staff when center is selected
+    $('#centerSelect').change(function() {
+        let centerId = $(this).val();
+        if(centerId) {
+            $('#staffSelect').prop('disabled', true);
+            $.ajax({
+                url: '<?= base_url('settings/get_staff_by_center') ?>',
+                method: 'POST',
+                data: {center_id: centerId},
+                dataType: 'json',
+                success: function(response) {
+                    let options = '<option value="">Select Staff</option>';
+                    $.each(response, function(i, staff) {
+                        options += `<option value="${staff.userid}">${staff.username}</option>`;
+                    });
+                    $('#staffSelect').html(options).prop('disabled', false);
+                }
+            });
+        }
+    });
+
+    // Load permissions when staff is selected
+    $('#staffSelect').change(function() {
+        let userId = $(this).val();
+        if(userId) {
+            $.ajax({
+                url: '<?= base_url('settings/get_permissions') ?>',
+                method: 'POST',
+                data: {user_id: userId},
+                dataType: 'json',
+                success: function(response) {
+                    // Update checkbox states
+                    $('#addObservation').prop('checked', response.addObservation == 1);
+                    $('#approveObservation').prop('checked', response.approveObservation == 1);
+                    $('#deleteObservation').prop('checked', response.deleteObservation == 1);
+                    $('#updateObservation').prop('checked', response.updateObservation == 1);
+                    $('#viewAllObservation').prop('checked', response.viewAllObservation == 1);
+                   
+					$('#addQIP').prop('checked', response.addQIP == 1);
+                    $('#editQIP').prop('checked', response.editQIP == 1);
+                    $('#viewQip').prop('checked', response.viewQip == 1);
+                    $('#deleteQIP').prop('checked', response.deleteQIP == 1);
+                    $('#downloadQIP').prop('checked', response.downloadQIP == 1);
+                    $('#printQIP').prop('checked', response.printQIP == 1);
+                    $('#mailQIP').prop('checked', response.mailQIP == 1);
+                    
+					$('#addReflection').prop('checked', response.addReflection == 1);
+                    $('#approveReflection').prop('checked', response.approveReflection == 1);
+                    $('#updatereflection').prop('checked', response.updatereflection == 1);
+                    $('#deletereflection').prop('checked', response.deletereflection == 1);
+                    $('#viewAllReflection').prop('checked', response.viewAllReflection == 1);
+                    
+					$('#addSelfAssessment').prop('checked', response.addSelfAssessment == 1);
+                    $('#editSelfAssessment').prop('checked', response.editSelfAssessment == 1);
+                    $('#deleteSelfAssessment').prop('checked', response.deleteSelfAssessment == 1);
+                    $('#viewSelfAssessment').prop('checked', response.viewSelfAssessment == 1);
+                    
+					$('#viewRoom').prop('checked', response.viewRoom == 1);
+                    $('#deleteRoom').prop('checked', response.deleteRoom == 1);
+                    $('#editRoom').prop('checked', response.editRoom == 1);
+                    $('#addRoom').prop('checked', response.addRoom == 1);
+                  
+					$('#addProgramPlan').prop('checked', response.addProgramPlan == 1);
+                    $('#editProgramPlan').prop('checked', response.editProgramPlan == 1);
+                    $('#viewProgramPlan').prop('checked', response.viewProgramPlan == 1);
+                    $('#deleteProgramPlan').prop('checked', response.deleteProgramPlan == 1);
+                   
+					$('#addAnnouncement').prop('checked', response.addAnnouncement == 1);
+                    $('#approveAnnouncement').prop('checked', response.approveAnnouncement == 1);
+                    $('#deleteAnnouncement').prop('checked', response.deleteAnnouncement == 1);
+                    $('#updateAnnouncement').prop('checked', response.updateAnnouncement == 1);
+                    $('#viewAllAnnouncement').prop('checked', response.viewAllAnnouncement == 1);
+                   
+					$('#addSurvey').prop('checked', response.addSurvey == 1);
+                    $('#approveSurvey').prop('checked', response.approveSurvey == 1);
+                    $('#deleteSurvey').prop('checked', response.deleteSurvey == 1);
+                    $('#updateSurvey').prop('checked', response.updateSurvey == 1);
+                    $('#viewAllSurvey').prop('checked', response.viewAllSurvey == 1);
+                   
+					$('#addRecipe').prop('checked', response.addRecipe == 1);
+                    $('#approveRecipe').prop('checked', response.approveRecipe == 1);
+                    $('#deleteRecipe').prop('checked', response.deleteRecipe == 1);
+                    $('#updateRecipe').prop('checked', response.updateRecipe == 1);
+                  
+					$('#addMenu').prop('checked', response.addMenu == 1);
+                    $('#approveMenu').prop('checked', response.approveMenu == 1);
+                    $('#deleteMenu').prop('checked', response.deleteMenu == 1);
+                    $('#updateMenu').prop('checked', response.updateMenu == 1);
+                   
+					$('#addprogress').prop('checked', response.addprogress == 1);
+                    $('#editprogress').prop('checked', response.editprogress == 1);
+                    $('#viewprogress').prop('checked', response.viewprogress == 1);
+                   
+					$('#printpdflesson').prop('checked', response.printpdflesson == 1);
+                    $('#viewlesson').prop('checked', response.viewlesson == 1);
+                    $('#editlesson').prop('checked', response.editlesson == 1);
+                   
+					$('#updateDailyDiary').prop('checked', response.updateDailyDiary == 1);
+                    $('#viewDailyDiary').prop('checked', response.viewDailyDiary == 1);
+                    $('#updateHeadChecks').prop('checked', response.updateHeadChecks == 1);
+                    $('#updateAccidents').prop('checked', response.updateAccidents == 1);
+                   
+					$('#addUsers').prop('checked', response.addUsers == 1);
+                    $('#viewUsers').prop('checked', response.viewUsers == 1);
+                    $('#updateUsers').prop('checked', response.updateUsers == 1);
+
+                    $('#addCenters').prop('checked', response.addCenters == 1);
+                    $('#viewCenters').prop('checked', response.viewCenters == 1);
+                    $('#updateCenters').prop('checked', response.updateCenters == 1);
+
+                    $('#addParent').prop('checked', response.addParent == 1);
+                    $('#viewParent').prop('checked', response.viewParent == 1);
+                    $('#updateParent').prop('checked', response.updateParent == 1);
+
+                    $('#addChildGroup').prop('checked', response.addChildGroup == 1);
+                    $('#viewChildGroup').prop('checked', response.viewChildGroup == 1);
+                    $('#updateChildGroup').prop('checked', response.updateChildGroup == 1);
+
+                    $('#updatePermission').prop('checked', response.updatePermission == 1);
+                    $('#assessment').prop('checked', response.assessment == 1);
+                    $('#updateModules').prop('checked', response.updateModules == 1);
+
+
+
+                    
+
+
+                    
+					// Add similar lines for all permissions
+                    
+                    // Calculate and update progress bars
+                    updateProgressBars();
+                    $('#permissionContainer').show();
+                }
+            });
+        }
+    });
+
+    // Update progress bars when checkboxes change
+    $('input[type="checkbox"]').change(updateProgressBars);
+
+    function updateProgressBars() {
+        $('.permission-group').each(function() {
+            let total = $(this).find('input[type="checkbox"]').length;
+            let checked = $(this).find('input[type="checkbox"]:checked').length;
+            let percentage = (checked / total) * 100;
+            
+            $(this).find('.progress-bar').css('width', percentage + '%');
+            $(this).find('.progress-percentage').text(Math.round(percentage) + '%');
+        });
+    }
+});
+</script>
 </body>
 </html>
 

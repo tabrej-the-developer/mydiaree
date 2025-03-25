@@ -1586,7 +1586,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="overflow-y:auto;max-height:500px;">
                     <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search by Name, Date of Birth(day or year first) or UPN" class="form-control">
                     <br>
                     <ul class="nav nav-tabs separator-tabs ml-0 mb-5" role="tablist">
