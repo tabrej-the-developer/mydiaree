@@ -111,6 +111,24 @@
                                     <input type="hidden" name="centerid" value="<?= $centerid; ?>">
                                 <div class="row">
                                     <div class="col-md-6">
+
+                                    <div class="form-group">
+                                            <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-backdrop="static" data-target="#selectChildrenModal"> + Add Children </button>  &nbsp;<span style="color:red">*Required</span>
+                                        </div>
+
+                                        <div class="children-tags">                                            
+                                            <?php 
+                                                if (isset($reflection) && !empty($reflection->children)) {
+                                                    foreach ($reflection->children as $key => $obj) {
+                                            ?>
+                                            <a href="#!" class="rem" data-role="remove" data-child="<?= $obj->childid;?>">
+                                                <input type="hidden" name="childId[]" value="<?= $obj->childid;?>">
+                                                <span class="badge badge-pill badge-outline-primary mb-1"><?= $obj->name; ?> X </span>
+                                            </a>
+                                            <?php } } ?>
+                                        </div>
+<hr>
+
                                         <div class="form-group">
                                             <label for="title">Title</label>
                                             <div class="input-group">
@@ -150,20 +168,8 @@
 
 
                                         
-                                        <div class="form-group">
-                                            <button type="button" class="btn btn-secondary mb-1" data-toggle="modal" data-backdrop="static" data-target="#selectChildrenModal"> + Add Children </button>
-                                        </div>
-                                        <div class="children-tags">                                            
-                                            <?php 
-                                                if (isset($reflection) && !empty($reflection->children)) {
-                                                    foreach ($reflection->children as $key => $obj) {
-                                            ?>
-                                            <a href="#!" class="rem" data-role="remove" data-child="<?= $obj->childid;?>">
-                                                <input type="hidden" name="childId[]" value="<?= $obj->childid;?>">
-                                                <span class="badge badge-pill badge-outline-primary mb-1"><?= $obj->name; ?> X </span>
-                                            </a>
-                                            <?php } } ?>
-                                        </div>
+                                      
+                                    
                                     </div>
                                     <div class="col-md-6">
                                         <div class="card-body border border-dotted mt-4">
@@ -663,16 +669,34 @@
 
     </script>
 
-    <script>
-        document.getElementById('fileUpload').addEventListener('change', function() {
+<script>
+document.getElementById('fileUpload').addEventListener('change', function() {
     const maxFiles = 8;
-    if (this.files.length > maxFiles) {
+    const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+    const files = Array.from(this.files); // Convert FileList to Array
+    let validFiles = [];
+
+    if (files.length > maxFiles) {
         alert(`You can upload a maximum of ${maxFiles} images.`);
         this.value = ''; // Clear the file input
+        return;
     }
-});
 
-        </script>
+    files.forEach(file => {
+        if (file.size > maxSize) {
+            alert(`The file "${file.name}" exceeds 2MB and will not be uploaded.`);
+        } else {
+            validFiles.push(file);
+        }
+    });
+
+    // Creating a new FileList object (workaround)
+    const dataTransfer = new DataTransfer();
+    validFiles.forEach(file => dataTransfer.items.add(file));
+
+    this.files = dataTransfer.files; // Set the filtered files back to input
+});
+</script>
 
 
 </body>
