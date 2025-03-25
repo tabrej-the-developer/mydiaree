@@ -1,12 +1,14 @@
 
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');  
+use Intervention\Image\ImageManager;
   
 class Observation extends CI_Controller {  
 
 	function __construct() {
 		parent::__construct();
 		$this->load->database(); 
+		$this->load->library('image_intervention');
 	  }
       
     public function index()  
@@ -101,46 +103,6 @@ class Observation extends CI_Controller {
 		}
 	}
 
-	function compressImage($source, $destination, $quality) {
-		if (!file_exists($source)) {
-			error_log("ERROR: Source file does not exist - $source");
-			return false;
-		}
-	
-		$info = getimagesize($source);
-		if (!$info) {
-			error_log("ERROR: Failed to get image info - $source");
-			return false;
-		}
-	
-		if ($info['mime'] == 'image/jpeg' || $info['mime'] == 'image/jpg') {
-			$image = imagecreatefromjpeg($source);
-			if (!$image) {
-				error_log("ERROR: Failed to create image from JPEG - $source");
-				return false;
-			}
-			imagejpeg($image, $destination, $quality);
-		} elseif ($info['mime'] == 'image/png') {
-			$image = imagecreatefrompng($source);
-			if (!$image) {
-				error_log("ERROR: Failed to create image from PNG - $source");
-				return false;
-			}
-			imagepng($image, $destination, round($quality / 10));
-		} elseif ($info['mime'] == 'image/webp') {
-			$image = imagecreatefromwebp($source);
-			if (!$image) {
-				error_log("ERROR: Failed to create image from WEBP - $source");
-				return false;
-			}
-			imagewebp($image, $destination, $quality);
-		} else {
-			error_log("ERROR: Unsupported image format - " . $info['mime']);
-			return false;
-		}
-	
-		return $destination;
-	}
 	
 
 	
@@ -204,25 +166,8 @@ class Observation extends CI_Controller {
 
 						if (isset($_FILES['obsMedia']['name']) && !empty($_FILES['obsMedia']['name'][0])) {
 							$countFiles = count($_FILES['obsMedia']['name']);
-							for ($i = 0; $i < $countFiles; $i++) {
-								$fileSize = $_FILES['obsMedia']['size'][$i]; // Get file size
-								$tempPath = $_FILES['obsMedia']['tmp_name'][$i]; // Get temporary path
-						
-								// Check if file is larger than 2MB (2 * 1024 * 1024 bytes)
-								if ($fileSize > 2 * 1024 * 1024) { 
-									$compressedFile = sys_get_temp_dir() . '/compressed_' . time() . '_' . $_FILES['obsMedia']['name'][$i];
-									$compressedPath = $this->compressImage($tempPath, $compressedFile, 70); // Compress at 70% quality
-						
-									if ($compressedPath) {
-										$data['obsMedia' . $i] = new CurlFile($compressedPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
-									} else {
-										// If compression fails, use original file
-										$data['obsMedia' . $i] = new CurlFile($tempPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
-									}
-								} else {
-									// If file is already under 2MB, upload as is
-									$data['obsMedia' . $i] = new CurlFile($tempPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
-								}
+							for ($i=0; $i <$countFiles ; $i++) { 
+								$data['obsMedia'.$i] = new CurlFile($_FILES['obsMedia']['tmp_name'][$i],$_FILES['obsMedia']['type'][$i],$_FILES['obsMedia']['name'][$i]);
 							}
 						}
 
@@ -317,25 +262,8 @@ class Observation extends CI_Controller {
 
 						if (isset($_FILES['obsMedia']['name']) && !empty($_FILES['obsMedia']['name'][0])) {
 							$countFiles = count($_FILES['obsMedia']['name']);
-							for ($i = 0; $i < $countFiles; $i++) {
-								$fileSize = $_FILES['obsMedia']['size'][$i]; // Get file size
-								$tempPath = $_FILES['obsMedia']['tmp_name'][$i]; // Get temporary path
-						
-								// Check if file is larger than 2MB (2 * 1024 * 1024 bytes)
-								if ($fileSize > 2 * 1024 * 1024) { 
-									$compressedFile = sys_get_temp_dir() . '/compressed_' . time() . '_' . $_FILES['obsMedia']['name'][$i];
-									$compressedPath = $this->compressImage($tempPath, $compressedFile, 70); // Compress at 70% quality
-						
-									if ($compressedPath) {
-										$data['obsMedia' . $i] = new CurlFile($compressedPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
-									} else {
-										// If compression fails, use original file
-										$data['obsMedia' . $i] = new CurlFile($tempPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
-									}
-								} else {
-									// If file is already under 2MB, upload as is
-									$data['obsMedia' . $i] = new CurlFile($tempPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
-								}
+							for ($i=0; $i < $countFiles ; $i++) { 
+								$data['obsMedia'.$i] = new CurlFile($_FILES['obsMedia']['tmp_name'][$i],$_FILES['obsMedia']['type'][$i],$_FILES['obsMedia']['name'][$i]);
 							}
 						}
 
@@ -376,28 +304,11 @@ class Observation extends CI_Controller {
 									$data[$obsEdu] = json_encode($data[$obsEdu]);
 								}
 								$mediaCount = count($_FILES['obsMedia']['name']);
-     for ($i = 0; $i < $mediaCount; $i++) {
-    if (isset($_FILES['obsMedia']['tmp_name'][$i]) && !empty($_FILES['obsMedia']['tmp_name'][$i])) {
-        $fileSize = $_FILES['obsMedia']['size'][$i]; // Get file size
-        $tempPath = $_FILES['obsMedia']['tmp_name'][$i]; // Get temporary path
-
-        // Check if file is larger than 2MB
-        if ($fileSize > 2 * 1024 * 1024) {
-            $compressedFile = sys_get_temp_dir() . '/compressed_' . time() . '_' . $_FILES['obsMedia']['name'][$i];
-            $compressedPath = $this->compressImage($tempPath, $compressedFile, 70); // 70% quality
-
-            if ($compressedPath) {
-                $data['obsMedia' . $i] = new CurlFile($compressedPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
-            } else {
-                // If compression fails, use original file
-                $data['obsMedia' . $i] = new CurlFile($tempPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
-            }
-        } else {
-            // If file is already under 2MB, upload as is
-            $data['obsMedia' . $i] = new CurlFile($tempPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
-        }
-    }
-    }
+								for ($i=0; $i < $mediaCount; $i++) { 
+									if(isset($_FILES['obsMedia']['tmp_name'][$i]) && !empty($_FILES['obsMedia']['tmp_name'][$i])){
+										$data['obsMedia'.$i] = new CurlFile($_FILES['obsMedia']['tmp_name'][$i],$_FILES['obsMedia']['type'][$i],$_FILES['obsMedia']['name'][$i]);
+									}
+								}
 						
 								$keys = array_keys($_POST);
 								$matches = preg_grep("/^obsImage_/",$keys);
@@ -2089,23 +2000,58 @@ class Observation extends CI_Controller {
 						if (isset($_FILES['obsMedia']['name']) && !empty($_FILES['obsMedia']['name'][0])) {
 							$countFiles = count($_FILES['obsMedia']['name']);
 							for ($i = 0; $i < $countFiles; $i++) {
-								$fileSize = $_FILES['obsMedia']['size'][$i]; // Get file size
-								$tempPath = $_FILES['obsMedia']['tmp_name'][$i]; // Get temporary path
-						
-								// Check if file is larger than 2MB (2 * 1024 * 1024 bytes)
+								$fileSize = $_FILES['obsMedia']['size'][$i];
+								$tempPath = $_FILES['obsMedia']['tmp_name'][$i];
+								
+								// Check if file is larger than 2MB
 								if ($fileSize > 2 * 1024 * 1024) { 
-									$compressedFile = sys_get_temp_dir() . '/compressed_' . time() . '_' . $_FILES['obsMedia']['name'][$i];
-									$compressedPath = $this->compressImage($tempPath, $compressedFile, 70); // Compress at 70% quality
-						
-									if ($compressedPath) {
-										$data['obsMedia' . $i] = new CurlFile($compressedPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
-									} else {
-										// If compression fails, use original file
-										$data['obsMedia' . $i] = new CurlFile($tempPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
+									// Generate a unique temporary filename
+									$compressedFile = tempnam(sys_get_temp_dir(), 'compressed_');
+									
+									// Add the correct file extension
+									$compressedFile .= '.' . pathinfo($_FILES['obsMedia']['name'][$i], PATHINFO_EXTENSION);
+									
+									// Compress the image
+									try {
+										// Use Image_intervention library
+										$compressedPath = $this->image_intervention->compress(
+											$tempPath, 
+											$compressedFile, 
+											1024,   // Max width
+											70      // Quality
+										);
+										
+										if ($compressedPath) {
+											// Use compressed file for upload
+											$data['obsMedia' . $i] = new CurlFile(
+												$compressedPath, 
+												$_FILES['obsMedia']['type'][$i], 
+												$_FILES['obsMedia']['name'][$i]
+											);
+										} else {
+											// If compression fails, use original file
+											$data['obsMedia' . $i] = new CurlFile(
+												$tempPath, 
+												$_FILES['obsMedia']['type'][$i], 
+												$_FILES['obsMedia']['name'][$i]
+											);
+										}
+									} catch (Exception $e) {
+										// Catch any unexpected errors
+										log_message('error', 'Image Compression Error: ' . $e->getMessage());
+										$data['obsMedia' . $i] = new CurlFile(
+											$tempPath, 
+											$_FILES['obsMedia']['type'][$i], 
+											$_FILES['obsMedia']['name'][$i]
+										);
 									}
 								} else {
 									// If file is already under 2MB, upload as is
-									$data['obsMedia' . $i] = new CurlFile($tempPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
+									$data['obsMedia' . $i] = new CurlFile(
+										$tempPath, 
+										$_FILES['obsMedia']['type'][$i], 
+										$_FILES['obsMedia']['name'][$i]
+									);
 								}
 							}
 						}
@@ -2204,23 +2150,58 @@ class Observation extends CI_Controller {
 						if (isset($_FILES['obsMedia']['name']) && !empty($_FILES['obsMedia']['name'][0])) {
 							$countFiles = count($_FILES['obsMedia']['name']);
 							for ($i = 0; $i < $countFiles; $i++) {
-								$fileSize = $_FILES['obsMedia']['size'][$i]; // Get file size
-								$tempPath = $_FILES['obsMedia']['tmp_name'][$i]; // Get temporary path
-						
-								// Check if file is larger than 2MB (2 * 1024 * 1024 bytes)
+								$fileSize = $_FILES['obsMedia']['size'][$i];
+								$tempPath = $_FILES['obsMedia']['tmp_name'][$i];
+								
+								// Check if file is larger than 2MB
 								if ($fileSize > 2 * 1024 * 1024) { 
-									$compressedFile = sys_get_temp_dir() . '/compressed_' . time() . '_' . $_FILES['obsMedia']['name'][$i];
-									$compressedPath = $this->compressImage($tempPath, $compressedFile, 70); // Compress at 70% quality
-						
-									if ($compressedPath) {
-										$data['obsMedia' . $i] = new CurlFile($compressedPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
-									} else {
-										// If compression fails, use original file
-										$data['obsMedia' . $i] = new CurlFile($tempPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
+									// Generate a unique temporary filename
+									$compressedFile = tempnam(sys_get_temp_dir(), 'compressed_');
+									
+									// Add the correct file extension
+									$compressedFile .= '.' . pathinfo($_FILES['obsMedia']['name'][$i], PATHINFO_EXTENSION);
+									
+									// Compress the image
+									try {
+										// Use Image_intervention library
+										$compressedPath = $this->image_intervention->compress(
+											$tempPath, 
+											$compressedFile, 
+											1024,   // Max width
+											70      // Quality
+										);
+										
+										if ($compressedPath) {
+											// Use compressed file for upload
+											$data['obsMedia' . $i] = new CurlFile(
+												$compressedPath, 
+												$_FILES['obsMedia']['type'][$i], 
+												$_FILES['obsMedia']['name'][$i]
+											);
+										} else {
+											// If compression fails, use original file
+											$data['obsMedia' . $i] = new CurlFile(
+												$tempPath, 
+												$_FILES['obsMedia']['type'][$i], 
+												$_FILES['obsMedia']['name'][$i]
+											);
+										}
+									} catch (Exception $e) {
+										// Catch any unexpected errors
+										log_message('error', 'Image Compression Error: ' . $e->getMessage());
+										$data['obsMedia' . $i] = new CurlFile(
+											$tempPath, 
+											$_FILES['obsMedia']['type'][$i], 
+											$_FILES['obsMedia']['name'][$i]
+										);
 									}
 								} else {
 									// If file is already under 2MB, upload as is
-									$data['obsMedia' . $i] = new CurlFile($tempPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
+									$data['obsMedia' . $i] = new CurlFile(
+										$tempPath, 
+										$_FILES['obsMedia']['type'][$i], 
+										$_FILES['obsMedia']['name'][$i]
+									);
 								}
 							}
 						}
@@ -2261,29 +2242,55 @@ class Observation extends CI_Controller {
 								if(isset($data[$obsEdu])){
 									$data[$obsEdu] = json_encode($data[$obsEdu]);
 								}
+
+
 								$mediaCount = count($_FILES['obsMedia']['name']);
-for ($i = 0; $i < $mediaCount; $i++) {
-    if (isset($_FILES['obsMedia']['tmp_name'][$i]) && !empty($_FILES['obsMedia']['tmp_name'][$i])) {
-        $fileSize = $_FILES['obsMedia']['size'][$i]; // Get file size
-        $tempPath = $_FILES['obsMedia']['tmp_name'][$i]; // Get temporary path
-
-        // Check if file is larger than 2MB
-        if ($fileSize > 2 * 1024 * 1024) {
-            $compressedFile = sys_get_temp_dir() . '/compressed_' . time() . '_' . $_FILES['obsMedia']['name'][$i];
-            $compressedPath = $this->compressImage($tempPath, $compressedFile, 70); // 70% quality
-
-            if ($compressedPath) {
-                $data['obsMedia' . $i] = new CurlFile($compressedPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
-            } else {
-                // If compression fails, use original file
-                $data['obsMedia' . $i] = new CurlFile($tempPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
-            }
-        } else {
-            // If file is already under 2MB, upload as is
-            $data['obsMedia' . $i] = new CurlFile($tempPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
-        }
-    }
-}
+								for ($i = 0; $i < $mediaCount; $i++) { 
+									if(isset($_FILES['obsMedia']['tmp_name'][$i]) && !empty($_FILES['obsMedia']['tmp_name'][$i])){
+										$fileSize = $_FILES['obsMedia']['size'][$i];
+										$tempPath = $_FILES['obsMedia']['tmp_name'][$i];
+										
+										// Check if file is larger than 2MB
+										if ($fileSize > 2 * 1024 * 1024) { 
+											// Generate a unique temporary filename
+											$compressedFile = tempnam(sys_get_temp_dir(), 'compressed_');
+											
+											// Add the correct file extension
+											$compressedFile .= '.' . pathinfo($_FILES['obsMedia']['name'][$i], PATHINFO_EXTENSION);
+											
+											// Compress the image
+											$compressedPath = $this->image_intervention->compress(
+												$tempPath, 
+												$compressedFile, 
+												1024, 
+												70
+											);
+						
+											if ($compressedPath) {
+												// Use compressed file for upload
+												$data['obsMedia' . $i] = new CurlFile(
+													$compressedPath, 
+													$_FILES['obsMedia']['type'][$i], 
+													$_FILES['obsMedia']['name'][$i]
+												);
+											} else {
+												// If compression fails, use original file
+												$data['obsMedia' . $i] = new CurlFile(
+													$tempPath, 
+													$_FILES['obsMedia']['type'][$i], 
+													$_FILES['obsMedia']['name'][$i]
+												);
+											}
+										} else {
+											// If file is already under 2MB, upload as is
+											$data['obsMedia' . $i] = new CurlFile(
+												$tempPath, 
+												$_FILES['obsMedia']['type'][$i], 
+												$_FILES['obsMedia']['name'][$i]
+											);
+										}
+									}
+								}
 						
 								$keys = array_keys($_POST);
 								$matches = preg_grep("/^obsImage_/",$keys);
