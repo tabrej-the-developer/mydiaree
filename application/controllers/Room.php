@@ -461,7 +461,23 @@ class Room extends CI_Controller {
 				if($type)
 				{
 					$url.='&type=filter';
-				}
+				} 
+
+				$maleCount = 0;
+                $femaleCount = 0;
+
+          foreach ($jsonOutput->roomChilds as $child) {
+    if (strtolower($child->gender) === 'male') {
+        $maleCount++;
+    } elseif (strtolower($child->gender) === 'female') {
+        $femaleCount++;
+    }
+             }
+
+
+
+              $data->maleCount=$maleCount;
+              $data->femaleCount=$femaleCount;
 				
 				$data->sort_name=base_url('room/getForm?id='.$id.$url);
 			    $this->load->view('room_form',$data);

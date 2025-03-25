@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/perfect-scrollbar.css?v=1.1.0" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/main.css?v=1.1.0" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <style>
         .d-flex-custom{
@@ -119,11 +120,18 @@
                 </div>
                 <div class="col-md-3">
                     <div class="card">
-                        <div class="card-body text-center">
-                            <i class="iconsminds-building"></i>
-                            <h3>Room Vacancy</h3>
-                            <div class="card-text"><?= $room->capacity - $count; ?></div>
-                        </div>
+                    <div class="card-body d-flex align-items-center justify-content-around">
+    <div class="text-center" style="margin-top:6px;">
+        <i class="fa-solid fa-person" style="font-size: 2em; color: #007bff;"></i>
+        <h3>Male</h3>
+        <div class="card-text" style="font-size: 1.2em; font-weight: bold; color: #007bff;"><?= $maleCount; ?></div>
+    </div>
+    <div style="border-left: 1px solid #ccc; height: 3em;"></div> <div class="text-center">
+        <i class="fa-solid fa-person-dress" style="font-size: 2em; color: #dc3545;"></i>
+        <h3>Female</h3>
+        <div class="card-text" style="font-size: 1.2em; font-weight: bold; color: #dc3545;"><?= $femaleCount; ?></div>
+    </div>
+</div>
                     </div>
                 </div> 
             </div>
@@ -185,6 +193,14 @@
                                             <a href="<?= base_url('room/editChild?id='.$id.'&childId='.$child->id); ?>">
                                                 <p class="list-item-heading mb-1 truncate"><?= $child->name; ?></p>
                                             </a>
+                                            <p class="mb-2 text-muted text-small">
+    <?php
+    $originalDate = $child->dob;
+    $timestamp = strtotime($originalDate);
+    $formattedDate = date("d-M-Y", $timestamp);
+    echo $formattedDate;
+    ?>
+</p>
                                             <p class="mb-2 text-muted text-small"><?= $diff->y,' years'; ?></p>
                                             <a href="<?= $obsUrl; ?>" class="btn btn-xs btn-outline-primary ">Last observation</a>
                                         </div>
