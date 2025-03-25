@@ -2681,33 +2681,19 @@ document.addEventListener('DOMContentLoaded', function() {
     let allGood = true;
     const mainHolder = $("#img-holder");
 
-    function compressImage(file, callback) {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function(event) {
-            const img = new Image();
-            img.src = event.target.result;
-            img.onload = function() {
-                const canvas = document.createElement("canvas");
-                const ctx = canvas.getContext("2d");
-                const maxWidth = 1024; // Set max width for compression
-                const scaleSize = maxWidth / img.width;
-                canvas.width = maxWidth;
-                canvas.height = img.height * scaleSize;
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                canvas.toBlob(blob => {
-                    callback(blob);
-                }, "image/jpeg", 0.7); // Adjust quality as needed
-            };
-        };
-    }
-
     for (let i = 0; i < countFiles; i++) {
-        let file = this.files[i];
+        const file = this.files[i];
         const url = URL.createObjectURL(file);
         const imgPath = file.name;
         const extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-        const fileSizeMB = file.size / (1024 * 1024);
+        const image_holder_name = "img-preview-" + i;
+        const fileSizeMB = file.size / (1024 * 1024); // Convert bytes to MB
+
+        if (fileSizeMB > 2) {
+            alert("File size exceeds 2MB: " + imgPath);
+            allGood = false;
+            continue; // Skip this file
+        }
 
         if (["gif", "png", "jpg", "jpeg", "mp4", "heic", "heif"].includes(extn)) {
             if (typeof Blob !== "undefined") {
@@ -2720,22 +2706,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         <a class="img-edit" href="#!" data-mediaorigin="NEW" data-imgcount="${i}" data-image="${url}" data-toggle="modal" data-target="#myModal" data-priority="${imgPrevs}" data-edit="3">#</a>
                     </div>`);
                 } else {
-                    if (fileSizeMB > 2) {
-                        compressImage(file, function(compressedBlob) {
-                            const compressedUrl = URL.createObjectURL(compressedBlob);
-                            mainHolder.append(`<div class="img-preview nonsticky-preview" data-origin="NEW" data-fileno="${i}" data-key="${i}">
-                                <img class="thumb-image" src="${compressedUrl}">
-                                <span class="img-remove">X</span>
-                                <a class="img-edit" href="#!" data-mediaorigin="NEW" data-imgcount="${i}" data-image="${compressedUrl}" data-toggle="modal" data-target="#myModal" data-priority="${imgPrevs}" data-edit="3">#</a>
-                            </div>`);
-                        });
-                    } else {
-                        mainHolder.append(`<div class="img-preview nonsticky-preview" data-origin="NEW" data-fileno="${i}" data-key="${i}">
-                            <img class="thumb-image" src="${url}">
-                            <span class="img-remove">X</span>
-                            <a class="img-edit" href="#!" data-mediaorigin="NEW" data-imgcount="${i}" data-image="${url}" data-toggle="modal" data-target="#myModal" data-priority="${imgPrevs}" data-edit="3">#</a>
-                        </div>`);
-                    }
+                    mainHolder.append(`<div class="img-preview nonsticky-preview" data-origin="NEW" data-fileno="${i}" data-key="${i}">
+                        <img class="thumb-image" src="${url}">
+                        <span class="img-remove">X</span>
+                        <a class="img-edit" href="#!" data-mediaorigin="NEW" data-imgcount="${i}" data-image="${url}" data-toggle="modal" data-target="#myModal" data-priority="${imgPrevs}" data-edit="3">#</a>
+                    </div>`);
                 }
             }
         } else {
@@ -2747,12 +2722,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (!allGood) {
-        alert("Please select only images and videos.");
+        alert("Please select only images and videos under 2MB.");
     }
 
     $("#uploadMediaModal").modal("hide");
 });
-
 
 
 
