@@ -102,23 +102,46 @@ class Observation extends CI_Controller {
 	}
 
 	function compressImage($source, $destination, $quality) {
+		if (!file_exists($source)) {
+			error_log("ERROR: Source file does not exist - $source");
+			return false;
+		}
+	
 		$info = getimagesize($source);
+		if (!$info) {
+			error_log("ERROR: Failed to get image info - $source");
+			return false;
+		}
 	
 		if ($info['mime'] == 'image/jpeg' || $info['mime'] == 'image/jpg') {
 			$image = imagecreatefromjpeg($source);
+			if (!$image) {
+				error_log("ERROR: Failed to create image from JPEG - $source");
+				return false;
+			}
 			imagejpeg($image, $destination, $quality);
 		} elseif ($info['mime'] == 'image/png') {
 			$image = imagecreatefrompng($source);
-			imagepng($image, $destination, round($quality / 10)); // PNG uses 0-9 scale
+			if (!$image) {
+				error_log("ERROR: Failed to create image from PNG - $source");
+				return false;
+			}
+			imagepng($image, $destination, round($quality / 10));
 		} elseif ($info['mime'] == 'image/webp') {
 			$image = imagecreatefromwebp($source);
+			if (!$image) {
+				error_log("ERROR: Failed to create image from WEBP - $source");
+				return false;
+			}
 			imagewebp($image, $destination, $quality);
 		} else {
-			return false; // Unsupported format
+			error_log("ERROR: Unsupported image format - " . $info['mime']);
+			return false;
 		}
 	
 		return $destination;
 	}
+	
 
 	
 	public function add($get_child=NULL)
