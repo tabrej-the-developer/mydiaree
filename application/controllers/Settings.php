@@ -1443,6 +1443,125 @@ class Settings extends CI_Controller {
 		}
 	}
 
+	public function update_permissions() {
+        $user_id = $this->input->post('user_id');
+		$data = array(
+			'addObservation' => $this->input->post('addObservation') ? 1 : 0,
+			'approveObservation' => $this->input->post('approveObservation') ? 1 : 0,
+			'deleteObservation' => $this->input->post('deleteObservation') ? 1 : 0,
+			'updateObservation' => $this->input->post('updateObservation') ? 1 : 0,
+			'viewAllObservation' => $this->input->post('viewAllObservation') ? 1 : 0,
+			
+			'addQIP' => $this->input->post('addQIP') ? 1 : 0,
+			'editQIP' => $this->input->post('editQIP') ? 1 : 0,
+			'viewQip' => $this->input->post('viewQip') ? 1 : 0,
+			'deleteQIP' => $this->input->post('deleteQIP') ? 1 : 0,
+			'downloadQIP' => $this->input->post('downloadQIP') ? 1 : 0,
+			'printQIP' => $this->input->post('printQIP') ? 1 : 0,
+			'mailQIP' => $this->input->post('mailQIP') ? 1 : 0,
+			
+			'addReflection' => $this->input->post('addReflection') ? 1 : 0,
+			'approveReflection' => $this->input->post('approveReflection') ? 1 : 0,
+			'updatereflection' => $this->input->post('updatereflection') ? 1 : 0,
+			'deletereflection' => $this->input->post('deletereflection') ? 1 : 0,
+			'viewAllReflection' => $this->input->post('viewAllReflection') ? 1 : 0,
+			
+			'addSelfAssessment' => $this->input->post('addSelfAssessment') ? 1 : 0,
+			'editSelfAssessment' => $this->input->post('editSelfAssessment') ? 1 : 0,
+			'deleteSelfAssessment' => $this->input->post('deleteSelfAssessment') ? 1 : 0,
+			'viewSelfAssessment' => $this->input->post('viewSelfAssessment') ? 1 : 0,
+			
+			'viewRoom' => $this->input->post('viewRoom') ? 1 : 0,
+			'deleteRoom' => $this->input->post('deleteRoom') ? 1 : 0,
+			'editRoom' => $this->input->post('editRoom') ? 1 : 0,
+			'addRoom' => $this->input->post('addRoom') ? 1 : 0,
+			
+			'addProgramPlan' => $this->input->post('addProgramPlan') ? 1 : 0,
+			'editProgramPlan' => $this->input->post('editProgramPlan') ? 1 : 0,
+			'viewProgramPlan' => $this->input->post('viewProgramPlan') ? 1 : 0,
+			'deleteProgramPlan' => $this->input->post('deleteProgramPlan') ? 1 : 0,
+			
+			'addAnnouncement' => $this->input->post('addAnnouncement') ? 1 : 0,
+			'approveAnnouncement' => $this->input->post('approveAnnouncement') ? 1 : 0,
+			'deleteAnnouncement' => $this->input->post('deleteAnnouncement') ? 1 : 0,
+			'updateAnnouncement' => $this->input->post('updateAnnouncement') ? 1 : 0,
+			'viewAllAnnouncement' => $this->input->post('viewAllAnnouncement') ? 1 : 0,
+			
+			'addSurvey' => $this->input->post('addSurvey') ? 1 : 0,
+			'approveSurvey' => $this->input->post('approveSurvey') ? 1 : 0,
+			'deleteSurvey' => $this->input->post('deleteSurvey') ? 1 : 0,
+			'updateSurvey' => $this->input->post('updateSurvey') ? 1 : 0,
+			'viewAllSurvey' => $this->input->post('viewAllSurvey') ? 1 : 0,
+			
+			'addRecipe' => $this->input->post('addRecipe') ? 1 : 0,
+			'approveRecipe' => $this->input->post('approveRecipe') ? 1 : 0,
+			'deleteRecipe' => $this->input->post('deleteRecipe') ? 1 : 0,
+			'updateRecipe' => $this->input->post('updateRecipe') ? 1 : 0,
+			
+			'addMenu' => $this->input->post('addMenu') ? 1 : 0,
+			'approveMenu' => $this->input->post('approveMenu') ? 1 : 0,
+			'deleteMenu' => $this->input->post('deleteMenu') ? 1 : 0,
+			'updateMenu' => $this->input->post('updateMenu') ? 1 : 0,
+			
+			'addprogress' => $this->input->post('addprogress') ? 1 : 0,
+			'editprogress' => $this->input->post('editprogress') ? 1 : 0,
+			'viewprogress' => $this->input->post('viewprogress') ? 1 : 0,
+			
+			'printpdflesson' => $this->input->post('printpdflesson') ? 1 : 0,
+			'viewlesson' => $this->input->post('viewlesson') ? 1 : 0,
+			'editlesson' => $this->input->post('editlesson') ? 1 : 0,
+			
+			'updateDailyDiary' => $this->input->post('updateDailyDiary') ? 1 : 0,
+			'viewDailyDiary' => $this->input->post('viewDailyDiary') ? 1 : 0,
+			'updateHeadChecks' => $this->input->post('updateHeadChecks') ? 1 : 0,
+			'updateAccidents' => $this->input->post('updateAccidents') ? 1 : 0,
+			
+			'addUsers' => $this->input->post('addUsers') ? 1 : 0,
+			'viewUsers' => $this->input->post('viewUsers') ? 1 : 0,
+			'updateUsers' => $this->input->post('updateUsers') ? 1 : 0,
+			
+			'addCenters' => $this->input->post('addCenters') ? 1 : 0,
+			'viewCenters' => $this->input->post('viewCenters') ? 1 : 0,
+			'updateCenters' => $this->input->post('updateCenters') ? 1 : 0,
+			
+			'addParent' => $this->input->post('addParent') ? 1 : 0,
+			'viewParent' => $this->input->post('viewParent') ? 1 : 0,
+			'updateParent' => $this->input->post('updateParent') ? 1 : 0,
+			
+			'addChildGroup' => $this->input->post('addChildGroup') ? 1 : 0,
+			'viewChildGroup' => $this->input->post('viewChildGroup') ? 1 : 0,
+			'updateChildGroup' => $this->input->post('updateChildGroup') ? 1 : 0,
+			
+			'updatePermission' => $this->input->post('updatePermission') ? 1 : 0,
+			'assessment' => $this->input->post('assessment') ? 1 : 0,
+			'updateModules' => $this->input->post('updateModules') ? 1 : 0
+		);
+
+		// echo "<pre>";
+		// print_r($data);
+		// exit;
+
+        // Check if record exists
+        $this->db->where('userid', $user_id);
+        $exists = $this->db->get('permissions')->num_rows();
+
+        if ($exists) {
+            // Update existing record
+            $this->db->where('userid', $user_id);
+            $result = $this->db->update('permissions', $data);
+        } else {
+            // Insert new record
+            $data['userid'] = $user_id;
+            $result = $this->db->insert('permissions', $data);
+        }
+
+        if ($result) {
+            echo json_encode(['status' => 'success', 'message' => 'Permissions updated successfully']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to update permissions']);
+        }
+    }
+ 
 	public function getUsersPermissions()
 	{
 		if ($this->session->has_userdata("LoginId")) {

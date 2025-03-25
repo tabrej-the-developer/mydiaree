@@ -632,6 +632,7 @@
 <div class="modal fade" id="permissionModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document" style="margin-top:0px;">
         <div class="modal-content">
+        <form id="permissionForm">
             <div class="modal-header">
                 <h5 class="modal-title">Check Permissions</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -649,7 +650,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Select Staff</label>
-                            <select class="form-control" id="staffSelect" disabled>
+                            <select class="form-control" id="staffSelect" name="user_id" disabled>
                                 <option value="">Select Staff</option>
                             </select>
                         </div>
@@ -1145,11 +1146,13 @@
 
                     <!-- Add other permission groups similarly -->
                 </div>
+             
             </div>
             <div class="modal-footer" style="padding:12px;">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save Changes</button>
+                <button type="submit" class="btn btn-primary">Update Permission</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
@@ -1217,7 +1220,7 @@
 
 		
 	</script>	
-
+ 
 
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -1390,6 +1393,36 @@ $(document).ready(function() {
             $(this).find('.progress-percentage').text(Math.round(percentage) + '%');
         });
     }
+
+
+    // Handle form submission
+    $('#permissionForm').submit(function(e) {
+        e.preventDefault();
+        
+        let formData = $(this).serialize();
+        
+        $.ajax({
+            url: '<?= base_url('settings/update_permissions') ?>',
+            method: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function(response) {
+                if(response.status === 'success') {
+                    alert(response.message);
+                    $('#permissionModal').modal('hide');
+                    setTimeout(function() {
+                        window.location.reload();
+    }, 500); // Wait for 500 milliseconds (adjust as needed)
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function() {
+                alert('Error updating permissions');
+            }
+        });
+    });
+
 });
 </script>
 </body>
