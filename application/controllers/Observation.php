@@ -188,7 +188,7 @@ class Observation extends CI_Controller {
 								// Check if file is larger than 2MB (2 * 1024 * 1024 bytes)
 								if ($fileSize > 2 * 1024 * 1024) { 
 									$compressedFile = sys_get_temp_dir() . '/compressed_' . time() . '_' . $_FILES['obsMedia']['name'][$i];
-									$compressedPath = compressImage($tempPath, $compressedFile, 70); // Compress at 70% quality
+									$compressedPath = $this->compressImage($tempPath, $compressedFile, 70); // Compress at 70% quality
 						
 									if ($compressedPath) {
 										$data['obsMedia' . $i] = new CurlFile($compressedPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
@@ -301,7 +301,7 @@ class Observation extends CI_Controller {
 								// Check if file is larger than 2MB (2 * 1024 * 1024 bytes)
 								if ($fileSize > 2 * 1024 * 1024) { 
 									$compressedFile = sys_get_temp_dir() . '/compressed_' . time() . '_' . $_FILES['obsMedia']['name'][$i];
-									$compressedPath = compressImage($tempPath, $compressedFile, 70); // Compress at 70% quality
+									$compressedPath = $this->compressImage($tempPath, $compressedFile, 70); // Compress at 70% quality
 						
 									if ($compressedPath) {
 										$data['obsMedia' . $i] = new CurlFile($compressedPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
@@ -361,7 +361,7 @@ class Observation extends CI_Controller {
         // Check if file is larger than 2MB
         if ($fileSize > 2 * 1024 * 1024) {
             $compressedFile = sys_get_temp_dir() . '/compressed_' . time() . '_' . $_FILES['obsMedia']['name'][$i];
-            $compressedPath = compressImage($tempPath, $compressedFile, 70); // 70% quality
+            $compressedPath = $this->compressImage($tempPath, $compressedFile, 70); // 70% quality
 
             if ($compressedPath) {
                 $data['obsMedia' . $i] = new CurlFile($compressedPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
@@ -2072,7 +2072,7 @@ class Observation extends CI_Controller {
 								// Check if file is larger than 2MB (2 * 1024 * 1024 bytes)
 								if ($fileSize > 2 * 1024 * 1024) { 
 									$compressedFile = sys_get_temp_dir() . '/compressed_' . time() . '_' . $_FILES['obsMedia']['name'][$i];
-									$compressedPath = compressImage($tempPath, $compressedFile, 70); // Compress at 70% quality
+									$compressedPath = $this->compressImage($tempPath, $compressedFile, 70); // Compress at 70% quality
 						
 									if ($compressedPath) {
 										$data['obsMedia' . $i] = new CurlFile($compressedPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
@@ -2187,7 +2187,7 @@ class Observation extends CI_Controller {
 								// Check if file is larger than 2MB (2 * 1024 * 1024 bytes)
 								if ($fileSize > 2 * 1024 * 1024) { 
 									$compressedFile = sys_get_temp_dir() . '/compressed_' . time() . '_' . $_FILES['obsMedia']['name'][$i];
-									$compressedPath = compressImage($tempPath, $compressedFile, 70); // Compress at 70% quality
+									$compressedPath = $this->compressImage($tempPath, $compressedFile, 70); // Compress at 70% quality
 						
 									if ($compressedPath) {
 										$data['obsMedia' . $i] = new CurlFile($compressedPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
@@ -2247,7 +2247,7 @@ for ($i = 0; $i < $mediaCount; $i++) {
         // Check if file is larger than 2MB
         if ($fileSize > 2 * 1024 * 1024) {
             $compressedFile = sys_get_temp_dir() . '/compressed_' . time() . '_' . $_FILES['obsMedia']['name'][$i];
-            $compressedPath = compressImage($tempPath, $compressedFile, 70); // 70% quality
+            $compressedPath = $this->compressImage($tempPath, $compressedFile, 70); // 70% quality
 
             if ($compressedPath) {
                 $data['obsMedia' . $i] = new CurlFile($compressedPath, $_FILES['obsMedia']['type'][$i], $_FILES['obsMedia']['name'][$i]);
