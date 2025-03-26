@@ -2341,9 +2341,9 @@ class Observation extends CI_Controller {
 						$url = BASE_API_URL.'observation/createObservation';
 					}
 				}
-                echo "<pre>";
-				print_r($data);
-				exit;
+                // echo "<pre>";
+				// print_r($data);
+				// exit;
 				
 				$ch = curl_init($url);
 				curl_setopt($ch, CURLOPT_URL,$url);
