@@ -79,7 +79,7 @@
                     <div class="card">
                         <div class="card-body text-center">
                             <i class="iconsminds-building"></i>
-                            <h3>Room Occupancy</h3>
+                            <h3>Daily Occupancy</h3>
                             <div class="room-occupancy d-flex d-flex-custom">
                                 <div class="days">
                                     <div class="days-name">M</div>
@@ -109,7 +109,7 @@
                     <div class="card">
                         <div class="card-body text-center">
                             <i class="iconsminds-building"></i>
-                            <h3>Active Childs</h3>
+                            <h3>Active Child/ren</h3>
                             <?php 
                                 $count=0; 
                                 foreach($roomChilds as $child) { if($child->status=='Active') { $count++; } }
