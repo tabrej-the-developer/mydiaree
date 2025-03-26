@@ -112,6 +112,24 @@
                                     <input type="hidden" name="centerid" value="<?= $Reflections->centerid; ?>">
                                 <div class="row">
                                     <div class="col-md-6">
+
+                                    <div class="form-group">
+                                            <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-backdrop="static" data-target="#selectChildrenModal"> + Add Children </button>&nbsp;&nbsp;<span style="color:red;">* Required</span>
+                                        </div>
+                                        <div class="children-tags">                                            
+                                            <?php 
+                                                if (isset($Reflections) && !empty($Reflections->childs)) {
+                                                    foreach ($Reflections->childs as $key => $obj) {
+                                            ?>
+                                            <a href="#!" class="rem" data-role="remove" data-child="<?= $obj->childid;?>">
+                                                <input type="hidden" name="childId[]" value="<?= $obj->childid;?>">
+                                                <span class="badge badge-pill badge-outline-primary mb-1"><?= $obj->name; ?> X </span>
+                                            </a>
+                                            <?php } } ?>
+                                        </div>
+
+                                        <hr>
+
                                         <div class="form-group">
                                             <label for="title">Title</label>
                                             <div class="input-group">
@@ -150,20 +168,7 @@
 
 
                                         
-                                        <div class="form-group">
-                                            <button type="button" class="btn btn-secondary mb-1" data-toggle="modal" data-backdrop="static" data-target="#selectChildrenModal"> + Add Children </button>
-                                        </div>
-                                        <div class="children-tags">                                            
-                                            <?php 
-                                                if (isset($Reflections) && !empty($Reflections->childs)) {
-                                                    foreach ($Reflections->childs as $key => $obj) {
-                                            ?>
-                                            <a href="#!" class="rem" data-role="remove" data-child="<?= $obj->childid;?>">
-                                                <input type="hidden" name="childId[]" value="<?= $obj->childid;?>">
-                                                <span class="badge badge-pill badge-outline-primary mb-1"><?= $obj->name; ?> X </span>
-                                            </a>
-                                            <?php } } ?>
-                                        </div>
+                                     
                                     </div>
                                     <div class="col-md-6">
                                         <div class="card-body border border-dotted mt-4">
@@ -173,7 +178,7 @@
                                                     <input type="file" visbility="hidden" name="media[]" id="fileUpload" class="form-control-hidden" multiple accept="image/*" value="">
                                                 </div>
 
-                                                <div class="col-md-9">
+                                                <div class="col-md-9" style="margin-top: 15px;margin-left: 4px;">
                                                     <?php foreach($Reflections->refMedia as $media => $objmedia) {?>
                                                     <?php
                                                             echo '<img class="card-img" src="'.BASE_API_URL."assets/media/".$objmedia->mediaUrl.'" alt="No media here" style="width:100px;height:100px;">';
