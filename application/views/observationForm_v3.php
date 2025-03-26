@@ -2672,61 +2672,123 @@ document.addEventListener('DOMContentLoaded', function() {
              $("#form-observation").append('<input type="hidden" name="upl-media-tags-caption'+mediaId+'" value="'+imgCaption+'">');
           });
 
+
           $("#fileUpload").on('change', function() {
-    let imgPrevs = $(".img-preview").length;
-    imgPrevs = imgPrevs === 0 ? 1 : imgPrevs + 1;
-    $(".nonsticky-preview").remove();
-
-    const countFiles = $(this)[0].files.length;
-    let allGood = true;
-    const mainHolder = $("#img-holder");
-
-    for (let i = 0; i < countFiles; i++) {
-        const file = this.files[i];
-        const url = URL.createObjectURL(file);
-        const imgPath = file.name;
-        const extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-        const image_holder_name = "img-preview-" + i;
-        const fileSizeMB = file.size / (1024 * 1024); // Convert bytes to MB
-
-        if (fileSizeMB > 2) {
-            alert("File size exceeds 2MB: " + imgPath);
-            allGood = false;
-            continue; // Skip this file
-        }
-
-        if (["gif", "png", "jpg", "jpeg", "mp4", "heic", "heif"].includes(extn)) {
-            if (typeof Blob !== "undefined") {
-                if (extn === "mp4") {
-                    mainHolder.append(`<div class="img-preview nonsticky-preview" data-origin="NEW" data-fileno="${i}" data-key="${i}">
-                        <video class="thumb-image" controls>
-                            <source src="${url}" type="video/mp4">
-                        </video>
-                        <span class="img-remove">X</span>
-                        <a class="img-edit" href="#!" data-mediaorigin="NEW" data-imgcount="${i}" data-image="${url}" data-toggle="modal" data-target="#myModal" data-priority="${imgPrevs}" data-edit="3">#</a>
-                    </div>`);
+             let imgPrevs = $(".img-preview").length;
+             if(imgPrevs==0){
+                imgPrevs = 1;
+             }else{
+                imgPrevs = imgPrevs + 1;
+             }
+             $(".nonsticky-preview").remove();
+             //Get count of selected files
+             const countFiles = $(this)[0].files.length;
+             let allGood = true;
+             const mainHolder = $("#img-holder");
+             for (let i = 0; i < countFiles; i++) {
+                const file = this.files[i];
+                const url = URL.createObjectURL(file);
+                const imgPath = file.name;
+                const extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+                const image_holder_name = "img-preview-" + i;
+                if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg" || extn == "mp4" || extn == "heic" || extn == "heif") {
+                   if (typeof(Blob) != "undefined") {
+                     const image_holder = $("#img-preview-" + i);
+                     if (extn == "mp4") {
+                        mainHolder.append(`<div class="img-preview nonsticky-preview" data-origin="NEW" data-fileno="${i}" data-key="${i}">
+                                              <video class="thumb-image" controls>
+                                                 <source src="${url}" type="video/mp4">
+                                              </video>
+                                              <span class="img-remove">
+                                                X
+                                              </span>
+                                              <a class="img-edit" href="#!" data-mediaorigin="NEW" data-imgcount="${i}" data-image="${url}" data-toggle="modal" data-target="#myModal" data-priority="${imgPrevs}" data-edit="3">
+                                                #
+                                              </a>
+                                           </div>`);
+                     } else {
+                        mainHolder.append(`<div class="img-preview nonsticky-preview" data-origin="NEW" data-fileno="${i}" data-key="${i}">
+                                              <img class="thumb-image" src="${url}">
+                                              <span class="img-remove">X</span>
+                                              <a class="img-edit" href="#!" data-mediaorigin="NEW" data-imgcount="${i}" data-image="${url}" data-toggle="modal" data-target="#myModal" data-priority="${imgPrevs}" data-edit="3">
+                                                #
+                                              </a>
+                                           </div>`);
+                     }
+                   }
                 } else {
-                    mainHolder.append(`<div class="img-preview nonsticky-preview" data-origin="NEW" data-fileno="${i}" data-key="${i}">
-                        <img class="thumb-image" src="${url}">
-                        <span class="img-remove">X</span>
-                        <a class="img-edit" href="#!" data-mediaorigin="NEW" data-imgcount="${i}" data-image="${url}" data-toggle="modal" data-target="#myModal" data-priority="${imgPrevs}" data-edit="3">#</a>
-                    </div>`);
+                   allGood = false;
+                   alert("use image extension - gif,png,jpg,jpeg,mp4,heic,heif.");
+                   break;
                 }
-            }
-        } else {
-            alert("Use image/video extensions - gif, png, jpg, jpeg, mp4, heic, heif.");
-            allGood = false;
-            break;
-        }
-        imgPrevs++;
-    }
+                imgPrevs = imgPrevs + 1;
+             }
 
-    if (!allGood) {
-        alert("Please select only images and videos under 2MB.");
-    }
+             if (!allGood) {
+                alert("Pls select only images and videos");
+             }
 
-    $("#uploadMediaModal").modal("hide");
-});
+             // $("#fileUpload").val("");
+             $("#uploadMediaModal").modal("hide");
+          });
+
+
+
+//         $("#fileUpload").on('change', function() {
+//     let imgPrevs = $(".img-preview").length;
+//     imgPrevs = imgPrevs === 0 ? 1 : imgPrevs + 1;
+//     $(".nonsticky-preview").remove();
+
+//     const countFiles = $(this)[0].files.length;
+//     let allGood = true;
+//     const mainHolder = $("#img-holder");
+
+//     for (let i = 0; i < countFiles; i++) {
+//         const file = this.files[i];
+//         const url = URL.createObjectURL(file);
+//         const imgPath = file.name;
+//         const extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+//         const image_holder_name = "img-preview-" + i;
+//         const fileSizeMB = file.size / (1024 * 1024); // Convert bytes to MB
+
+//         if (fileSizeMB > 2) {
+//             alert("File size exceeds 2MB: " + imgPath);
+//             allGood = false;
+//             continue; // Skip this file
+//         }
+
+//         if (["gif", "png", "jpg", "jpeg", "mp4", "heic", "heif"].includes(extn)) {
+//             if (typeof Blob !== "undefined") {
+//                 if (extn === "mp4") {
+//                     mainHolder.append(`<div class="img-preview nonsticky-preview" data-origin="NEW" data-fileno="${i}" data-key="${i}">
+//                         <video class="thumb-image" controls>
+//                             <source src="${url}" type="video/mp4">
+//                         </video>
+//                         <span class="img-remove">X</span>
+//                         <a class="img-edit" href="#!" data-mediaorigin="NEW" data-imgcount="${i}" data-image="${url}" data-toggle="modal" data-target="#myModal" data-priority="${imgPrevs}" data-edit="3">#</a>
+//                     </div>`);
+//                 } else {
+//                     mainHolder.append(`<div class="img-preview nonsticky-preview" data-origin="NEW" data-fileno="${i}" data-key="${i}">
+//                         <img class="thumb-image" src="${url}">
+//                         <span class="img-remove">X</span>
+//                         <a class="img-edit" href="#!" data-mediaorigin="NEW" data-imgcount="${i}" data-image="${url}" data-toggle="modal" data-target="#myModal" data-priority="${imgPrevs}" data-edit="3">#</a>
+//                     </div>`);
+//                 }
+//             }
+//         } else {
+//             alert("Use image/video extensions - gif, png, jpg, jpeg, mp4, heic, heif.");
+//             allGood = false;
+//             break;
+//         }
+//         imgPrevs++;
+//     }
+
+//     if (!allGood) {
+//         alert("Please select only images and videos under 2MB.");
+//     }
+
+//     $("#uploadMediaModal").modal("hide");
+// });
 
 
 

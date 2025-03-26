@@ -1959,6 +1959,9 @@ class Observation extends CI_Controller {
 				$this->load->helper('form');
 				$data=[];
 		        $data = $this->input->post();
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
 		        $data['centerid'] = $centerid;
 				$data['userid'] = $this->session->userdata('LoginId');
 
@@ -2338,9 +2341,9 @@ class Observation extends CI_Controller {
 						$url = BASE_API_URL.'observation/createObservation';
 					}
 				}
-                // echo "<pre>";
-				// print_r($data);
-				// exit;
+                echo "<pre>";
+				print_r($data);
+				exit;
 				
 				$ch = curl_init($url);
 				curl_setopt($ch, CURLOPT_URL,$url);
