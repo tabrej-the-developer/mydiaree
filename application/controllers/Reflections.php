@@ -1,11 +1,15 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');  
+use Intervention\Image\ImageManager;
+
   
 class Reflections extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
 		$this->load->database(); 
+		$this->load->library('image_intervention');
+
 	  }
 
     public function index()  
@@ -80,7 +84,7 @@ class Reflections extends CI_Controller {
 			));
 			$server_output = curl_exec($ch);
 			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);			 
-			curl_close($ch);
+			curl_close($ch); 
 
 			// echo "<pre>";
 			// print_r($server_output);
@@ -271,12 +275,45 @@ class Reflections extends CI_Controller {
             unset($data['childId']);
 			$data['educators'] = json_encode($data['Educator']);
 			unset($data['Educator']);
-			if(!empty($_FILES['media'])){
+			
+			if (!empty($_FILES['media'])) {
 				$filesCount = count($_FILES['media']['name']);
-				for ($i=0; $i < $filesCount; $i++) {
-					$data['media'.$i]= new CurlFile($_FILES['media']['tmp_name'][$i],$_FILES['media']['type'][$i],$_FILES['media']['name'][$i]);
+				
+				for ($i = 0; $i < $filesCount; $i++) {
+					$fileSize = $_FILES['media']['size'][$i];
+					$tempPath = $_FILES['media']['tmp_name'][$i];
+					$originalName = $_FILES['media']['name'][$i];
+					$fileType = $_FILES['media']['type'][$i];
+			
+					// Check if file is larger than 2MB
+					if ($fileSize > 2 * 1024 * 1024) {
+						// Generate a temporary file with correct extension
+						$compressedFile = tempnam(sys_get_temp_dir(), 'compressed_');
+						$compressedFile .= '.' . pathinfo($originalName, PATHINFO_EXTENSION);
+						
+						try {
+							// Use Image_intervention library to compress the image
+							$compressedPath = $this->image_intervention->compress(
+								$tempPath, 
+								$compressedFile, 
+								1024,  // Max width
+								70     // Quality
+							);
+							
+							if ($compressedPath) {
+								// Use compressed file for upload
+								$tempPath = $compressedPath;
+							}
+						} catch (Exception $e) {
+							log_message('error', 'Image Compression Error: ' . $e->getMessage());
+						}
+					}
+			
+					// Assign file (compressed or original) for upload
+					$data['media' . $i] = new CurlFile($tempPath, $fileType, $originalName);
 				}
 			}
+
 			// $data['description'] = trim(stripslashes(htmlspecialchars($data['description'])));
 			$url = BASE_API_URL."Reflections/createReflection/";
 			$ch = curl_init($url);

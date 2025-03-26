@@ -104,7 +104,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="mb-5">
+                            <div class="mb-5"> 
                                 <h5 class="card-title">Enter Details</h5>
                             </div>
                             <form action="<?= base_url('Reflections/addreflection'); ?>" method="post" autocomplete="off" enctype="multipart/form-data">
@@ -154,16 +154,16 @@
 
 
                                         <div class="form-group" style="width:720px;">
-    <label for="eylf">EYLF</label>
-    <div class="input-group">
-    <textarea class="form-control" id="eylf" name="eylf" rows="3" readonly></textarea>
-        <div class="input-group-append">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#eylfModal">
-                <i class="fa fa-search"></i> Select EYLF
-            </button>
-        </div>
-    </div>
-</div>
+                                        <label for="eylf">EYLF</label>
+                                          <div class="input-group">
+                                           <textarea class="form-control" id="eylf" name="eylf" rows="3" readonly></textarea>
+                                            <div class="input-group-append">
+                                          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#eylfModal">
+                                             <i class="fa fa-search"></i> Select EYLF
+                                            </button>
+                                                 </div>
+                                                </div>
+                                            </div>
 
 
 
@@ -180,13 +180,13 @@
                                         <div class="mt-2">
                                             <div class="form-check-inline">
                                                 <label class="form-check-label custom-control custom-checkbox mb-1 align-self-center pr-4">
-                                                    <input type="radio" class="form-check-input custom-control-input" name="status" value="PUBLISHED" checked>
+                                                    <input type="radio" class="form-check-input custom-control-input" name="status" value="PUBLISHED">
                                                     <span class="custom-control-label">PUBLISHED</span>
                                                 </label>
                                             </div>
                                             <div class="form-check-inline">
                                                 <label class="form-check-label custom-control custom-checkbox mb-1 align-self-center pr-4 pl-0">
-                                                    <input type="radio" class="form-check-input custom-control-input" name="status" value="DRAFT">
+                                                    <input type="radio" class="form-check-input custom-control-input" name="status" value="DRAFT" checked>
                                                     <span class="custom-control-label">DRAFT</span>
                                                 </label>
                                             </div>
@@ -670,34 +670,110 @@
     </script>
 
 <script>
-document.getElementById('fileUpload').addEventListener('change', function() {
+        document.getElementById('fileUpload').addEventListener('change', function() {
     const maxFiles = 8;
-    const maxSize = 2 * 1024 * 1024; // 2MB in bytes
-    const files = Array.from(this.files); // Convert FileList to Array
-    let validFiles = [];
-
-    if (files.length > maxFiles) {
-        alert(`You can upload a maximum of ${maxFiles} images.`);
+    if (this.files.length > maxFiles) {
+        alert(You can upload a maximum of ${maxFiles} images.);
         this.value = ''; // Clear the file input
-        return;
+    }
+});
+ 
+</script>
+
+<script>
+ document.addEventListener('DOMContentLoaded', function() {
+    // Select form and necessary elements
+    const form = document.querySelector('form');
+    const addChildrenButton = document.querySelector('button[data-target="#selectChildrenModal"]');
+    const childrenTagsContainer = document.querySelector('.children-tags');
+    const submitButton = document.getElementById('submit-btn');
+
+    // Create error modal if it doesn't exist
+    function createErrorModal() {
+        // Check if modal already exists
+        if (document.getElementById('childrenErrorModal')) return;
+
+        const modalHtml = `
+        <div class="modal fade" id="childrenErrorModal" tabindex="-1" role="dialog" aria-labelledby="childrenErrorModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="childrenErrorModalLabel">Validation Error</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-danger">Please select at least one child before submitting the reflection.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+
+        // Create a temporary div to insert the modal
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = modalHtml.trim();
+        document.body.appendChild(tempDiv.firstChild);
     }
 
-    files.forEach(file => {
-        if (file.size > maxSize) {
-            alert(`The file "${file.name}" exceeds 2MB and will not be uploaded.`);
-        } else {
-            validFiles.push(file);
+    // Function to validate children selection
+    function validateChildrenSelection() {
+        const selectedChildren = childrenTagsContainer.querySelectorAll('input[name="childId[]"]');
+        
+        if (selectedChildren.length === 0) {
+            // Create modal if not exists
+            createErrorModal();
+            
+            // Show the modal using jQuery (assuming Bootstrap is used)
+            if (window.jQuery && window.jQuery.fn.modal) {
+                $('#childrenErrorModal').modal('show');
+            } else {
+                // Fallback alert if jQuery/Bootstrap is not available
+                alert('Please select at least one child before submitting the reflection.');
+            }
+            
+            return false;
+        }
+        return true;
+    }
+
+    // Add form submission event listener
+    form.addEventListener('submit', function(event) {
+        // Prevent form submission if no children are selected
+        if (!validateChildrenSelection()) {
+            event.preventDefault();
         }
     });
 
-    // Creating a new FileList object (workaround)
-    const dataTransfer = new DataTransfer();
-    validFiles.forEach(file => dataTransfer.items.add(file));
+    // Optional: Validate on submit button click as well
+    submitButton.addEventListener('click', function(event) {
+        if (!validateChildrenSelection()) {
+            event.preventDefault();
+        }
+    });
 
-    this.files = dataTransfer.files; // Set the filtered files back to input
+    // Optional: Remove error message when children are added
+    const mutationObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+                // Close the modal if children are added
+                if (window.jQuery && window.jQuery.fn.modal) {
+                    $('#childrenErrorModal').modal('hide');
+                }
+            }
+        });
+    });
+
+    // Start observing the children tags container
+    mutationObserver.observe(childrenTagsContainer, { 
+        childList: true 
+    });
 });
-</script>
-
+    </script>
 
 </body>
 
