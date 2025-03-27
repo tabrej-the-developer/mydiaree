@@ -131,6 +131,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$usr = $this->loginModel->getUserFromId($json->userid);
 				if ($usr->userType == "Superadmin") {
@@ -286,6 +292,12 @@ $headers = $updated_headers;
 			$this->load->model('loginModel');
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$usr = $this->loginModel->getUserFromId($json->userid);
 				if ($usr->userType == "Superadmin") {
@@ -343,6 +355,12 @@ $headers = $updated_headers;
 			$this->load->model('loginModel');
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$results = $this->programPlanModel->getProgramPlans($json->centerid);
 				$data['Status'] = "SUCCESS";
