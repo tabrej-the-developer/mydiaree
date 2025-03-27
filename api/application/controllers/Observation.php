@@ -4188,9 +4188,9 @@ $headers = $updated_headers;
 					$data['Message'] = "Status updated successfully";
 					http_response_code(200);
 				}else{
-					$data['Status'] = "ERROR";
-					$data['Message'] = "Something went wrong!";
-					http_response_code(401);
+					$data['Status'] = "SUCCESS";
+					$data['Message'] = "Status updated successfully";
+					http_response_code(200);
 				}				
 			}else{
 				$data['Status'] = "ERROR";
