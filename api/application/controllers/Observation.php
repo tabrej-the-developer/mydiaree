@@ -4143,9 +4143,9 @@ $headers = $updated_headers;
 	public function changeObsStatus()
 	{
 		$headers = $this->input->request_headers();
-$updated_headers = []; // Temporary array to store modified headers
+        $updated_headers = []; // Temporary array to store modified headers
 
-foreach ($headers as $key => $value) {
+      foreach ($headers as $key => $value) {
     $lower_key = strtolower($key);
 
     // Normalize key names
@@ -4156,13 +4156,31 @@ foreach ($headers as $key => $value) {
     } else {
         $updated_headers[$key] = $value; // Keep other headers as is
     }
-}
+             }
 
-// Assign back to $headers
-$headers = $updated_headers;	
+         // Assign back to $headers
+         $headers = $updated_headers;	
+
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
+
+			//   $json = $_POST;
+			//   $json = (object)$_POST;
+			  
+			//   // Debug to see what's coming through
+			//   echo "<pre>";
+			//   print_r($json);
+			//   exit;
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+            $json = $json;
+			}else{
+				$json = $_POST;
+				$json = (object)$_POST;
+			}
+			// echo "<pre>";
+			// print_r($json);
+			// exit;
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$result = $this->ObservationModel->changeObsStatus($json);
 				if ($result) {
