@@ -129,6 +129,7 @@ class ReflectionsModel extends CI_Model {
 		$this->db->select('*');
 		$this->db->from('reflection');
 		$this->db->where_in('id', $reflection_ids);
+		$this->db->where('status', 'PUBLISHED');
 		$query = $this->db->get();
 		
 		return $query->result(); // Return as object

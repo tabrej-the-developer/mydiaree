@@ -180,7 +180,7 @@
             <div class="col-12 col-lg-6 mb-5">
                 <div class="card flex-row listing-card-container" style="height: 200px; overflow: hidden;">
                     <div class="w-40 position-relative">
-                        <a href="#">
+                        <a href="<?= base_url('Reflections/print/') . $ref->id ?>" target="_blank">
                             <!-- <img class="card-img-left" src="img/details/small-5.jpg" alt="Card image cap"> -->
                             <?php if(empty($ref->media)){ ?>
                                 <img src="<?= base_url('assets/images/no-image-available.jpg') ?>" class="card-img-left" alt="no-image" style="width:200px;height:200px;">
@@ -205,21 +205,30 @@
                     <div class="w-60 d-flex align-items-center">
                         <div class="card-body" style="position:relative;">
                             <div class="parent-main">
+                            <a href="<?= base_url('Reflections/print/') . $ref->id ?>" target="_blank">
                                 <h3 class="font-weight-bold"><?php echo $ref->title ?></h3>
+                                </a>
+
                                 <h5 class="text-primary" style="font-size:14px;">
                                     <?php echo date('d M Y',strtotime($ref->createdAt)) ?>
                                 </h5>
                             
                                 <div class="reflection-child-data row" style="height: 60px;">
-                                    <?php foreach($ref->childs as $refChild => $childdata) { ?>
-                                    <div class="mb-3" style="display: flex;">
-                                        <div class="col pr-0 d-flex align-items-center">
-                                            <img src="<?= BASE_API_URL."assets/media/".$childdata->imageUrl;?>" alt="" style=" border-radius:50%;width:30px;height:30px;">
-                                            <?= "&nbsp;".$childdata->name; ?>
-                                        </div>
-                                    </div>
-                                    <?php } ?>
-                                </div>
+    <?php foreach ($ref->childs as $refChild => $childdata) { ?>
+        <div class="mb-3" style="display: flex;">
+            <div class="col pr-0 d-flex align-items-center">
+                <?php 
+                $imageUrl = !empty($childdata->imageUrl) ? BASE_API_URL . "assets/media/" . $childdata->imageUrl 
+                                                         : "https://banner2.cleanpng.com/lnd/20240627/rqr/a7wt7wcvw.webp";
+                ?>
+                <img src="<?= $imageUrl; ?>" alt="" style="border-radius:50%; width:30px; height:30px;">
+                <?= "&nbsp;" . $childdata->name; ?>
+            </div>
+        </div>
+    <?php } ?>
+</div>
+
+
                             </div>
                             <div class="btn-group" style="position:absolute; top: 25px; right: 15px;">
 
