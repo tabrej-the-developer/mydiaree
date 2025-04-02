@@ -213,7 +213,7 @@
                                     <?php echo date('d M Y',strtotime($ref->createdAt)) ?>
                                 </h5>
                             
-                                <div class="reflection-child-data row" style="overflow-x: auto;overflow-y: auto;max-height: 90px;max-width: 370px;">
+                                <div class="reflection-child-data row" style="overflow-x: auto;overflow-y: auto;max-height: 90px;max-width: 370px;height:70px;">
     <?php foreach ($ref->childs as $refChild => $childdata) { ?>
         <div class="mb-3" style="display: flex;">
             <div class="col pr-0 d-flex align-items-center">
@@ -236,9 +236,9 @@
 
                                 <?php if($_SESSION['UserType'] == "Superadmin"){ ?>
 
-                                    <a class="btn btn-outline-primary btn-xs" href="<?= base_url('Reflections/print/') . $ref->id ?>" target="_blank">
+                                    <!-- <a class="btn btn-outline-primary btn-xs" href="<?= base_url('Reflections/print/') . $ref->id ?>" target="_blank">
         <i class="fa-solid fa-print fa-beat fa-lg" style="color: #74C0FC;"></i>
-    </a>
+    </a> -->
 
                                     <a class="btn btn-outline-primary btn-xs reflection-edit" data-id="<?= $ref->id; ?>" href="<?= base_url('Reflections/Reflection_update/?reflectionid='.$ref->id); ?>">
                                         <i class="simple-icon-pencil"></i>
@@ -257,9 +257,9 @@
                                 <?php }elseif($_SESSION['UserType'] == "Parent"){ ?>   
 
 
-                                    <a class="btn btn-outline-primary btn-xs" href="<?= base_url('Reflections/print/') . $ref->id ?>" target="_blank">
+                                    <!-- <a class="btn btn-outline-primary btn-xs" href="<?= base_url('Reflections/print/') . $ref->id ?>" target="_blank">
                     <i class="fa-solid fa-print fa-beat fa-lg" style="color: #74C0FC;"></i>
-                     </a>
+                     </a> -->
 
                      <?php }else{}  ?>
 
