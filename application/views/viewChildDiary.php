@@ -141,7 +141,7 @@
     <?php $this->load->view('sidebar'); ?>
     <main>
         <?php 
-            foreach ($child as $child => $cobj) {
+            foreach ($child as $key => $cobj) {
         ?>
 
         <div class="container-fluid">
@@ -168,9 +168,12 @@
                             <li class="breadcrumb-item active" aria-current="page"><?php echo $cobj->roomName; ?></li>
                         </ol>
                     </nav>
+                    <button class="btn btn-outline-primary" style="float:right;" id="resetButton">Reset</button>
                     <div class="separator mb-5"></div>
                 </div>
             </div>
+          
+
             <form
                 action="<?php echo base_url("dailyDiary/updateChildDailyDiary?centerid=").$_GET['centerid'].'&roomid='.$roomid; ?>"
                 method="post" id="ucdd" enctype="multipart/form-data" autocomplete="off">
@@ -1120,6 +1123,35 @@ $mins = date('i'); // Current minute
         <?php }	?>
     </main>
 
+
+    <!-- Reset Modal -->
+<div class="modal fade" id="resetModal" tabindex="-1" aria-labelledby="resetModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resetModalLabel">Reset Data</h5>
+        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-label="Close">X</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="selectAll">
+          <label class="form-check-label" for="selectAll">
+            <strong>Select All</strong>
+          </label>
+        </div>
+        <hr>
+        <div id="resetOptions">
+          <!-- Checkboxes will be dynamically added here -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="confirmReset">Reset Selected</button>
+      </div>
+    </div>
+  </div>
+</div>
+
     <?php $this->load->view('footer_v3'); ?>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/jquery-3.3.1.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/bootstrap.bundle.min.js?v=1.0.0"></script>
@@ -1392,8 +1424,143 @@ setupTimeGroup('lsTime', 'lshour', 'lsmins'); // Lunch Snack
 </script>
 
 <script>
-< script >
+document.addEventListener('DOMContentLoaded', function() {
+  // Get the button and add event listener
+  const resetButton = document.getElementById('resetButton');
+  resetButton.addEventListener('click', openResetModal);
+  
+  // Select All checkbox event
+  const selectAllCheckbox = document.getElementById('selectAll');
+  selectAllCheckbox.addEventListener('change', function() {
+    const checkboxes = document.querySelectorAll('#resetOptions input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+      checkbox.checked = selectAllCheckbox.checked;
+    });
+  });
+  
+  // Function to open the reset modal
+  function openResetModal() {
+    // Get the data from PHP (assuming it's already passed to JavaScript)
+    const childData = <?php echo isset($child) ? json_encode($child[0]) : 'null'; ?>;
 
+console.log("Child Data:", childData);
 
-    <
-    /html>
+if (!childData || childData === "null") {
+    alert('Error: Child data is not available');
+    return;
+}
+
+    
+    // List of all possible options
+    const allOptions = ['breakfast', 'morningtea', 'lunch', 'sleep', 'afternoontea', 'snack', 'sunscreen', 'toileting'];
+    
+    // Clear previous options
+    const resetOptions = document.getElementById('resetOptions');
+    resetOptions.innerHTML = '';
+    
+    // Reset select all checkbox
+    selectAllCheckbox.checked = false;
+    
+    // Filter options that are not null and create checkboxes
+    let availableOptions = [];
+    
+    allOptions.forEach(option => {
+      if (childData[option] !== null && childData[option] !== '') {
+        availableOptions.push(option);
+        
+        // Create checkbox for this option
+        const div = document.createElement('div');
+        div.className = 'form-check';
+        
+        const input = document.createElement('input');
+        input.className = 'form-check-input';
+        input.type = 'checkbox';
+        input.id = `reset_${option}`;
+        input.name = 'reset_options[]';
+        input.value = option;
+        
+        const label = document.createElement('label');
+        label.className = 'form-check-label';
+        label.htmlFor = `reset_${option}`;
+        
+        // Format the label to be more readable (capitalize first letter)
+        const formattedOption = option.charAt(0).toUpperCase() + option.slice(1);
+        if (option === 'morningtea') {
+          label.textContent = 'Morning Tea';
+        } else if (option === 'afternoontea') {
+          label.textContent = 'Afternoon Tea';
+        } else {
+          label.textContent = formattedOption;
+        }
+        
+        div.appendChild(input);
+        div.appendChild(label);
+        resetOptions.appendChild(div);
+      }
+    });
+    
+    // Show the modal
+    const resetModal = new bootstrap.Modal(document.getElementById('resetModal'));
+    resetModal.show();
+    
+    // Add event listener for the confirm button
+    document.getElementById('confirmReset').addEventListener('click', function() {
+      const selectedOptions = [];
+      document.querySelectorAll('#resetOptions input[type="checkbox"]:checked').forEach(checkbox => {
+        selectedOptions.push(checkbox.value);
+      });
+      
+      if (selectedOptions.length > 0) {
+        // Send the selected options to the server for processing
+        resetSelectedData(selectedOptions, childData.id);
+      } else {
+        alert('Please select at least one item to reset.');
+      }
+    });
+  }
+  
+  // Function to reset the selected data
+  function resetSelectedData(options, childId) {
+    // AJAX call to your CodeIgniter controller
+    $.ajax({
+      url: '<?php echo base_url("dailyDiary/reset_data"); ?>',
+      type: 'POST',
+      data: {
+        options: options,
+        child_id: childId,
+        date: '<?php echo date("Y-m-d"); ?>'
+      },
+      success: function(response) {
+        try {
+      response = JSON.parse(response); // Ensure response is properly parsed
+    } catch (e) {
+      console.error("JSON Parsing Error:", e, response);
+      alert("An error occurred while processing the response.");
+      return;
+    }
+        console.log("response",response);
+        console.log("response-success",response.status);
+    if (response.status === 'success') {
+        // Close the modal
+        // bootstrap.Modal.getInstance(document.getElementById('resetModal')).hide();
+        
+        // Show success message
+        alert('Data reset successfully: ' + response.message);
+        
+        // Reload the page to reflect changes
+        location.reload();
+    } else {
+        alert('Error: ' + response.message);
+    }
+},
+      error: function() {
+        alert('An error occurred while processing your request.');
+      }
+    });
+  }
+
+  
+});
+</script>
+
+    </html>

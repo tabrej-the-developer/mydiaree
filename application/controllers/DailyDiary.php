@@ -5,6 +5,7 @@ class DailyDiary extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->database(); 
 	}
 
 	public function index()
@@ -331,7 +332,7 @@ class DailyDiary extends CI_Controller {
 				curl_close ($ch);
 				$data = json_decode($server_output);
 				// echo "<pre>";
-				// print_r($data);
+				// print_r($data); 
 				// exit;  
 				$data->centerid = $centerid;
 				$this->load->view('viewChildDiary', $data);
@@ -342,6 +343,76 @@ class DailyDiary extends CI_Controller {
 		}else{
 			redirect("welcome");
 		}
+	}
+
+
+	public function reset_data() {
+		// Get POST data
+		$data = $this->input->post();
+		
+		// Initialize response array
+		$response = array(
+			'status' => 'error',
+			'message' => 'No data was reset'
+		);
+		
+		// Check if required data exists
+		if (!isset($data['options']) || !isset($data['child_id']) || !isset($data['date'])) {
+			$response['message'] = 'Missing required parameters';
+			echo json_encode($response);
+			return;
+		}
+		
+		// Map option names to their corresponding table names
+		$table_map = [
+			'breakfast' => 'dailydiarybreakfast',
+			'morningtea' => 'dailydiarymorningtea',
+			'lunch' => 'dailydiarylunch',
+			'sleep' => 'dailydiarysleep',
+			'afternoontea' => 'dailydiaryafternoontea',
+			'snack' => 'dailydiarysnacks',
+			'sunscreen' => 'dailydiarysunscreen',
+			'toileting' => 'dailydiarytoileting'
+		];
+		
+		// Keep track of successful deletes
+		$successful_deletes = [];
+		$failed_deletes = [];
+		
+		// Loop through each selected option
+		foreach ($data['options'] as $option) {
+			// Check if this option exists in our map
+			if (isset($table_map[$option])) {
+				$table_name = $table_map[$option];
+				
+				// Delete records from the corresponding table
+				$this->db->where('childid', $data['child_id']);
+				$this->db->where('diarydate', $data['date']);
+				$this->db->delete($table_name);
+				
+				// Check if delete was successful
+				if ($this->db->affected_rows() > 0) {
+					$successful_deletes[] = $option;
+				} else {
+					// There might not be any records to delete
+					$failed_deletes[] = $option;
+				}
+			}
+		}
+		
+		// Prepare response
+		if (count($successful_deletes) > 0) {
+			$response['status'] = 'success';
+			$response['message'] = 'Successfully reset: ' . implode(', ', $successful_deletes);
+			$response['successful'] = $successful_deletes;
+			$response['failed'] = $failed_deletes;
+		} else {
+			$response['message'] = 'No data found to reset for the selected options';
+		}
+		
+		// Return JSON response
+		echo json_encode($response);
+		exit;
 	}
 
 	public function updateChildDailyDiary()
