@@ -213,7 +213,7 @@
                                     <?php echo date('d M Y',strtotime($ref->createdAt)) ?>
                                 </h5>
                             
-                                <div class="reflection-child-data row" style="height: 60px;">
+                                <div class="reflection-child-data row" style="overflow-x: auto;overflow-y: auto;max-height: 90px;max-width: 370px;">
     <?php foreach ($ref->childs as $refChild => $childdata) { ?>
         <div class="mb-3" style="display: flex;">
             <div class="col pr-0 d-flex align-items-center">
@@ -230,7 +230,7 @@
 
 
                             </div>
-                            <div class="btn-group" style="position:absolute; top: 25px; right: 15px;">
+                            <div class="btn-group" style="position:absolute; top: 35px; right: 2px;">
 
           
 
@@ -294,7 +294,8 @@
 
                             </div>
                             <?php if($ref->about) { ?>
-                                <p class="text-truncate">
+                                <!-- <p class="text-truncate"> -->
+                                <p class="">
                                     <?= substr($ref->about,0,70).'...'; ?>
                                 </p>
                             <?php } ?>
