@@ -94,6 +94,7 @@
 
 /* Image Styling */
 .child-image {
+    width: 100%;
     max-width: 100%;
     max-height: 90px; /* Consistent image height */
     border-radius: 8px; /* Rounded image corners */
@@ -318,15 +319,7 @@ table {
                         <?php endforeach; ?>
                     <?php endif; ?> 
                             </div>
-                
-                   
-                    <!-- <?php if (!empty($children)): ?>
-                        <?php foreach ($children as $child): ?>
-                            <?php if (!empty($child['imageUrl'])): ?>
-                                <img src="<?= base_url('api/assets/media/'.$child['imageUrl']) ?>" class="child-image" alt="<?= $child['name'] ?>">
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    <?php endif; ?> -->
+            
 
                 
 

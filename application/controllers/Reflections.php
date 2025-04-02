@@ -265,9 +265,11 @@ class Reflections extends CI_Controller {
 		if ($this->session->has_userdata('LoginId')) {
 			$this->load->helper('form');
 			$data = $this->input->post();
-			// echo "<pre>";
-			// print_r($data['eylf']);
-			// exit;
+			
+// 			echo "<pre>";
+// 			print_r($_POST); // Check if image_rotation_* values are being received
+// print_r($_FILES); // Check if images are properly uploaded
+// exit;
 			$data['userid'] = $this->session->userdata('LoginId');
 			$data['createdAt'] = date('Y-m-d H:i:s');
 			$data['createdBy'] = $data['userid'];
@@ -278,30 +280,43 @@ class Reflections extends CI_Controller {
 			
 			if (!empty($_FILES['media'])) {
 				$filesCount = count($_FILES['media']['name']);
-				
+			
 				for ($i = 0; $i < $filesCount; $i++) {
 					$fileSize = $_FILES['media']['size'][$i];
 					$tempPath = $_FILES['media']['tmp_name'][$i];
 					$originalName = $_FILES['media']['name'][$i];
 					$fileType = $_FILES['media']['type'][$i];
 			
-					// Check if file is larger than 2MB
+					// Get rotation angle from POST data
+					$rotationKey = 'image_rotation_' . $i;
+					$rotationAngle = isset($_POST[$rotationKey]) ? (int)$_POST[$rotationKey] : 0;
+			
+					// Normalize rotation to always be within 0-360
+					$rotationAngle = $rotationAngle % 360; 
+			
+					// Convert clockwise CSS rotation to counterclockwise Intervention Image rotation
+					$rotationAngle = -$rotationAngle;  
+			
+					// Load image using Intervention Image
+					$image = \Intervention\Image\ImageManagerStatic::make($tempPath);
+			
+					// Apply rotation only if needed
+					if ($rotationAngle !== 0) {
+						$image->rotate($rotationAngle);  // Correct rotation direction
+						$rotatedFile = sys_get_temp_dir() . '/' . uniqid('rotated_', true) . '.' . pathinfo($originalName, PATHINFO_EXTENSION);
+						$image->save($rotatedFile);
+						$tempPath = $rotatedFile;
+					}
+			
+					// Check if file is larger than 2MB for compression
 					if ($fileSize > 2 * 1024 * 1024) {
-						// Generate a temporary file with correct extension
-						$compressedFile = tempnam(sys_get_temp_dir(), 'compressed_');
-						$compressedFile .= '.' . pathinfo($originalName, PATHINFO_EXTENSION);
-						
+						$compressedFile = sys_get_temp_dir() . '/' . uniqid('compressed_', true) . '.' . pathinfo($originalName, PATHINFO_EXTENSION);
+			
 						try {
-							// Use Image_intervention library to compress the image
-							$compressedPath = $this->image_intervention->compress(
-								$tempPath, 
-								$compressedFile, 
-								1024,  // Max width
-								70     // Quality
-							);
-							
+							// Compress and save the image
+							$compressedPath = $this->image_intervention->compress($tempPath, $compressedFile, 1024, 70);
+			
 							if ($compressedPath) {
-								// Use compressed file for upload
 								$tempPath = $compressedPath;
 							}
 						} catch (Exception $e) {
@@ -309,10 +324,14 @@ class Reflections extends CI_Controller {
 						}
 					}
 			
-					// Assign file (compressed or original) for upload
+					// Assign processed file for upload
 					$data['media' . $i] = new CurlFile($tempPath, $fileType, $originalName);
 				}
 			}
+			
+			
+			
+			
 
 			// $data['description'] = trim(stripslashes(htmlspecialchars($data['description'])));
 			$url = BASE_API_URL."Reflections/createReflection/";

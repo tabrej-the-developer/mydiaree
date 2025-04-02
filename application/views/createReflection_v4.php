@@ -77,6 +77,63 @@
     }
 </style>
 
+<style>
+.preview-item {
+    position: relative;
+    margin: 10px;
+    border: 1px solid #ddd;
+    padding: 5px;
+    width: 150px;
+}
+
+.preview-img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.preview-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
+.rotate-btn {
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 3px 8px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.remove-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(255, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    line-height: 18px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.img-counter {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 10px;
+}
+</style>
+
 </head>
 
 <body id="app-container" class="menu-default show-spinner">
@@ -136,7 +193,7 @@
                                             </div>
                                         </div>
                                         <div class=" form-group">
-                                            <label>Educators</label>
+                                            <label>Educators &nbsp;<span style="color:red">*Required</span></label>
                                             <select id="room_educators" name="Educator[]"
                                                     class="popinput js-example-basic-multiple multiple_selection form-control select2-multiple"
                                                     multiple="multiple">
@@ -172,9 +229,11 @@
                                     
                                     </div>
                                     <div class="col-md-6">
+                                      
                                         <div class="card-body border border-dotted mt-4">
                                             <h5 class="mb-4">Upload Single/Multiple Images &nbsp;&nbsp;<span style="color:blueviolet;">(upload upto 8 pics only)</span></h5>
                                             <input type="file" name="media[]" id="fileUpload" class="form-control-hidden" multiple accept="image/*" required>
+                                            <div id="imagePreviewContainer" class="d-flex flex-wrap mt-3"></div>
                                         </div>
                                        
                                         <div class="mt-2">
@@ -774,6 +833,188 @@
     });
 });
     </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileUpload = document.getElementById('fileUpload');
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    const form = document.querySelector('form');
+    const MAX_FILES = 8;
+    let rotationAngles = {};
+    let uploadedFiles = [];
+    
+    fileUpload.addEventListener('change', function(e) {
+        const files = Array.from(e.target.files);
+        
+        // Check if total files exceed the limit
+        if (uploadedFiles.length + files.length > MAX_FILES) {
+            alert(`You can only upload up to ${MAX_FILES} images. Please select fewer images.`);
+            return;
+        }
+        
+        // Process each selected file
+        files.forEach(file => {
+            if (!file.type.match('image.*')) {
+                return;
+            }
+            
+            // Create unique ID for each image
+            const imageId = 'img_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            rotationAngles[imageId] = 0;
+            uploadedFiles.push({
+                id: imageId,
+                file: file
+            });
+            
+            // Create preview elements
+            const previewItem = document.createElement('div');
+            previewItem.className = 'preview-item';
+            previewItem.id = 'container_' + imageId;
+            
+            const counter = document.createElement('div');
+            counter.className = 'img-counter';
+            counter.textContent = uploadedFiles.length;
+            
+            const img = document.createElement('img');
+            img.className = 'preview-img';
+            img.id = imageId;
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-btn';
+            removeBtn.innerHTML = 'X';
+            removeBtn.onclick = function(e) {
+                e.preventDefault(); // Prevent form submission
+                removeImage(imageId);
+            };
+            
+            const controls = document.createElement('div');
+            controls.className = 'preview-controls';
+            
+            const rotateLeftBtn = document.createElement('button');
+            rotateLeftBtn.className = 'rotate-btn';
+            rotateLeftBtn.innerHTML = '↺ Left';
+            rotateLeftBtn.type = 'button'; // Explicitly set button type
+            rotateLeftBtn.onclick = function(e) {
+                e.preventDefault(); // Prevent form submission
+                rotateImage(imageId, -90);
+            };
+            
+            const rotateRightBtn = document.createElement('button');
+            rotateRightBtn.className = 'rotate-btn';
+            rotateRightBtn.innerHTML = '↻ Right';
+            rotateRightBtn.type = 'button'; // Explicitly set button type
+            rotateRightBtn.onclick = function(e) {
+                e.preventDefault(); // Prevent form submission
+                rotateImage(imageId, 90);
+            };
+            
+            controls.appendChild(rotateLeftBtn);
+            controls.appendChild(rotateRightBtn);
+            
+            previewItem.appendChild(img);
+            previewItem.appendChild(counter);
+            previewItem.appendChild(removeBtn);
+            previewItem.appendChild(controls);
+            
+            imagePreviewContainer.appendChild(previewItem);
+            
+            // Read and display the image
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+        
+        // Store the files in the file input
+        updateFileInput();
+    });
+    
+    function rotateImage(imageId, degrees) {
+    console.log(`Rotating Image ID: ${imageId} by ${degrees} degrees`);
+
+    const img = document.getElementById(imageId);
+    rotationAngles[imageId] = (rotationAngles[imageId] + degrees + 360) % 360;
+    img.style.transform = `rotate(${rotationAngles[imageId]}deg)`;
+
+    // Find the index of this image in our uploadedFiles array
+    const fileIndex = uploadedFiles.findIndex(item => item.id === imageId);
+    console.log(`Rotation Angle for ${imageId}: ${rotationAngles[imageId]}`);
+
+    // Ensure hidden input exists
+    let hiddenField = $('#rotation_' + imageId);
+    if (!hiddenField.length) {
+        console.log(`Creating new hidden input for ${imageId}`);
+        hiddenField = $('<input>').attr({
+            type: 'hidden',
+            id: 'rotation_' + imageId,
+            name: 'image_rotation_' + fileIndex
+        }).appendTo('form');
+    }
+    
+    // Set the correct value
+    hiddenField.val(rotationAngles[imageId]);
+
+    console.log(`Final Hidden Input Value:`, hiddenField.val());
+}
+
+
+    
+    function removeImage(imageId) {
+        // Remove from uploadedFiles array
+        uploadedFiles = uploadedFiles.filter(item => item.id !== imageId);
+        
+        // Remove rotation data
+        delete rotationAngles[imageId];
+        
+        // Remove hidden field if exists
+        const hiddenField = document.getElementById('rotation_' + imageId);
+        if (hiddenField) hiddenField.remove();
+        
+        // Remove preview element
+        document.getElementById('container_' + imageId).remove();
+        
+        // Update counters
+        updateCounters();
+        
+        // Update the file input
+        updateFileInput();
+    }
+    
+    function updateCounters() {
+        const counters = document.querySelectorAll('.img-counter');
+        counters.forEach((counter, index) => {
+            counter.textContent = index + 1;
+        });
+    }
+    
+    function updateFileInput() {
+        if (typeof DataTransfer !== 'undefined') {
+            const dataTransfer = new DataTransfer();
+            uploadedFiles.forEach(item => {
+                dataTransfer.items.add(item.file);
+            });
+            fileUpload.files = dataTransfer.files;
+        }
+    }
+    
+    // Handle form submission to include rotated images
+    $('form').on('submit', function(e) {
+    console.log('Form submission triggered, setting final values');
+
+    // Loop through rotationAngles and update hidden input fields
+    Object.keys(rotationAngles).forEach(imageId => {
+        $('#rotation_' + imageId).val(rotationAngles[imageId]);
+        console.log(`Setting rotation_${imageId} to ${rotationAngles[imageId]}`);
+    });
+
+    console.log('Serialized Form Data:', $(this).serialize());
+});
+
+});
+
+
+</script>
 
 </body>
 

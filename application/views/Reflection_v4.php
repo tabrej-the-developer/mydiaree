@@ -296,7 +296,7 @@
                             <?php if($ref->about) { ?>
                                 <!-- <p class="text-truncate"> -->
                                 <p class="">
-                                    <?= substr($ref->about,0,70).'...'; ?>
+                                    <?= substr($ref->about,0,40).'...'; ?>
                                 </p>
                             <?php } ?>
                         </div>
