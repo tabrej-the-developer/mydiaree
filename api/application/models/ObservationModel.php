@@ -2037,14 +2037,29 @@ class ObservationModel extends CI_Model {
 		return $q->row();
 	}
 
-	public function getParentObsIds($user_id,$centerid)
-	{
-		$sql = "SELECT o.*,u.name as user_name,a.name as approverName FROM observation o left join users u on (u.userid=o.userId) left join users a on (a.userid=o.approver) WHERE o.centerid = ".$centerid." AND o.status = 'Published' and o.id IN (SELECT DISTINCT(observationId) FROM observationchild WHERE childId IN (SELECT DISTINCT(childid) FROM `childparent` WHERE parentid = ".$user_id."))";
-		$sql.=" ORDER BY o.date_added DESC";
-		$query = $this->db->query($sql);
-		return $query->result();
-	}
+	public function getParentObsIds($user_id, $centerid)
+{
+    $sql = "SELECT o.*, u.name as user_name, a.name as approverName 
+            FROM observation o 
+            LEFT JOIN users u ON (u.userid = o.userId) 
+            LEFT JOIN users a ON (a.userid = o.approver) 
+            WHERE o.centerid = " . $centerid . " 
+            AND o.status = 'Published' 
+            AND o.id IN (
+                SELECT DISTINCT(observationId) 
+                FROM observationchild 
+                WHERE childId IN (
+                    SELECT DISTINCT(childid) 
+                    FROM childparent 
+                    WHERE parentid = " . $user_id . "
+                )
+            )
+            AND o.status = 'Published' 
+            ORDER BY o.date_added DESC";
 
+    $query = $this->db->query($sql);
+    return $query->result();
+}
 
 	public function getAssessmentSettings($centerid='')
 	{
