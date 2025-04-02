@@ -717,11 +717,11 @@ $mins = date('i'); // Current minute
                        </div>   
 
                     <div class="form-group">
-                        <label for="signature">Signature</label>
+                        <label for="signature">Signature <span style="color:red;">* Required</span></label>
                         <input type="text" class="form-control modal-form-control" name="signature" id="signature">
                     </div>
                     <div class="form-group">
-                        <label for="comments">Comments</label>
+                        <label for="comments">Comments <span style="color:red;">* Required</span></label>
                         <textarea name="comments" class="form-control modal-form-control tt-comments" rows="4"></textarea>
                     </div>
                 </div>
