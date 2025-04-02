@@ -257,9 +257,9 @@
                                 <?php }elseif($_SESSION['UserType'] == "Parent"){ ?>   
 
 
-                                    <!-- <a class="btn btn-outline-primary btn-xs" href="<?= base_url('Reflections/print/') . $ref->id ?>" target="_blank">
+                                    <a class="btn btn-outline-primary btn-xs" href="<?= base_url('Reflections/print/') . $ref->id ?>" target="_blank">
                     <i class="fa-solid fa-print fa-beat fa-lg" style="color: #74C0FC;"></i>
-                     </a> -->
+                     </a>
 
                      <?php }else{}  ?>
 
