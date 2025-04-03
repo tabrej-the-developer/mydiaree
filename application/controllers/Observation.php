@@ -216,9 +216,11 @@ class Observation extends CI_Controller {
 							$data['childrens'] = json_encode($data['childrens']);
 						}
 
+						$data['room'] = implode(",", $data['room']);
 						$data['title'] = $this->dataready($data['title']);
 						$data['notes'] = $this->dataready($data['notes']);
 						$data['child_voice'] = $this->dataready($data['child_voice']);
+						$data['room'] = $this->dataready($data['room']);
 						$data['future_plan'] = $this->dataready($data['future_plan']);
 						$data['reflection'] = $this->dataready($data['reflection']);
 						$url = BASE_API_URL.'observation/editObservation';
@@ -331,6 +333,8 @@ class Observation extends CI_Controller {
 							}
 						}
 
+						$data['room'] = implode(",", $data['room']);
+
 						if (isset($data['title']) && !empty($data['title'])) {
 							$data['title'] = $this->dataready($data['title']);
 						}
@@ -340,6 +344,9 @@ class Observation extends CI_Controller {
 						}
 						if (isset($data['child_voice']) && !empty($data['child_voice'])) {
 							$data['child_voice'] = $this->dataready($data['child_voice']);
+						}
+						if (isset($data['room']) && !empty($data['room'])) {
+							$data['room'] = $this->dataready($data['room']);
 						}
 						if (isset($data['future_plan']) && !empty($data['future_plan'])) {
 							$data['future_plan'] = $this->dataready($data['future_plan']);
@@ -884,6 +891,7 @@ class Observation extends CI_Controller {
 				$data->observation->notes = html_entity_decode($data->observation->notes);
 				$data->observation->reflection = html_entity_decode($data->observation->reflection);
 				$data->observation->child_voice = html_entity_decode($data->observation->child_voice);
+				$data->observation->room = $data->observation->room;
 				$data->observation->future_plan = html_entity_decode($data->observation->future_plan);
 				$data->id = isset($_GET['id'])?$_GET['id']:'';
 				$getStaffChild = $this->getAllUsers();
@@ -928,9 +936,27 @@ class Observation extends CI_Controller {
 			curl_close($ch);
 			if($httpcode == 200){
 				$data=json_decode($server_output);
-				// echo "<pre>";
-				// print_r($data);
-				// exit;
+				
+
+				// Check if 'roomids' exists
+              if (!empty($data->observation->room)) {
+    // Convert room IDs string to an array
+    $roomIds = explode(',', $data->observation->room);
+
+    // Fetch room names where id matches the given IDs
+    $rooms = $this->db->where_in('id', $roomIds)
+                      ->select('name')
+                      ->get('room')
+                      ->result_array();
+
+    // Extract names from the result array
+    $roomNames = array_column($rooms, 'name');
+
+    // Convert array to a comma-separated string
+    $data->observation->roomName = implode(', ', $roomNames);
+                                                     }
+
+
 				$data->observation->title =  html_entity_decode($data->observation->title);
 				$data->centerid = $data->observation->centerid;
 				$data->observation->notes = html_entity_decode($data->observation->notes);
@@ -948,6 +974,9 @@ class Observation extends CI_Controller {
 				
 				// $this->load->view('observationView_v3',$data);
 				// $data['observation_data'] = $data;
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
 				$this->load->view('print_observation_template', $data);
 			}else if($httpcode == 401){
 				return FALSE;
@@ -2105,10 +2134,12 @@ class Observation extends CI_Controller {
 							$data['childrens'] = json_encode($data['childrens']);
 						}
 
+						$data['room'] = implode(",", $data['room']);
 						$data['title'] = $this->dataready($data['title']);
 						$data['notes'] = $this->dataready($data['notes']);
 						$data['reflection'] = $this->dataready($data['reflection']);
 						$data['child_voice'] = $this->dataready($data['child_voice']);
+						$data['room'] = $this->dataready($data['room']);
 						$data['future_plan'] = $this->dataready($data['future_plan']);
 						$url = BASE_API_URL.'observation/editObservation';
 					}
@@ -2316,6 +2347,7 @@ class Observation extends CI_Controller {
 							}
 						}
 
+						$data['room'] = implode(",", $data['room']);
 						if (isset($data['title']) && !empty($data['title'])) {
 							$data['title'] = $this->dataready($data['title']);
 						}
@@ -2329,6 +2361,9 @@ class Observation extends CI_Controller {
 						}
 						if (isset($data['child_voice']) && !empty($data['child_voice'])) {
 							$data['child_voice'] = $this->dataready($data['child_voice']);
+						}
+						if (isset($data['room']) && !empty($data['room'])) {
+							$data['room'] = $this->dataready($data['room']);
 						}
 						if (isset($data['future_plan']) && !empty($data['future_plan'])) {
 							$data['future_plan'] = $this->dataready($data['future_plan']);
@@ -2441,6 +2476,27 @@ class Observation extends CI_Controller {
 				// echo "<pre>";
 				// print_r($data['groups']);
 				// exit;
+
+				if ($this->session->userdata('UserType') == "Superadmin") {
+					// Get all room data where centerid matches
+					$query = $this->db->query("SELECT * FROM room WHERE centerid = ?", array($data['centerid']));
+					$data['roomss'] = $query->result_array();
+				} else {
+					// Get all room IDs from room_staff table where staffid matches
+					$query = $this->db->query("SELECT roomid FROM room_staff WHERE staffid = ?", array($data['userid']));
+					$room_ids = array_column($query->result_array(), 'roomid');
+				
+					if (!empty($room_ids)) {
+						// Get all room data where id is in the fetched room IDs
+						$this->db->where_in('id', $room_ids);
+						$room_query = $this->db->get('room');
+						$data['roomss'] = $room_query->result_array();
+					} else {
+						$data['roomss'] = [];
+					}
+				}
+				
+
 				$data['mon_activites']=$this->getMontessoriActivites($centerid);
 				$data['mon_sub_activites']=$this->getMontessoriSubActivites($centerid);
 				$data['mon_extras']=$this->getMontessoriExtras($centerid);
@@ -2589,7 +2645,9 @@ class Observation extends CI_Controller {
 				// $data['get_child']=str_replace('%20',' ', $get_child);
 				$data['get_child'] = is_null($get_child) ? '' : str_replace('%20', ' ', $get_child);
 
-				
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
 				
 			    $this->load->view('observationForm_v3',$data);
 			}else if($httpcode == 401){

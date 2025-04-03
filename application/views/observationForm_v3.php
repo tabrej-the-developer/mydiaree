@@ -484,8 +484,26 @@
                                                                 </span>
                                                                 <?php } } ?>
                                                             </div>
-                                                        </div>
+                                                        </div> 
                                                         <hr>
+
+                                                        <div id="room">
+                                                        <div class=" form-group">
+                                            <label>Classroom &nbsp;<span style="color:red">*Required</span></label>
+                                            <select id="room" name="room[]"
+                                                    class="popinput js-example-basic-multiple multiple_selection form-control select2-multiple"
+                                                    multiple="multiple">
+                                                    <?php foreach($roomss as $Roomsses => $objRooms) { ?>
+                                                    <option name="<?php echo $objRooms['name']; ?>"
+                                                        value="<?php echo $objRooms['id']; ?>"><?php echo $objRooms['name']; ?>
+                                                    </option>
+                                                    <?php }?>
+                                            </select>
+                                        </div>
+                                                    </div>
+                                             <hr>
+
+
                                                         <div id="obs-title">
                                                             <div class="form-group required">
                                                                 <label class=" control-label" ><strong>Observation Title</strong></label>

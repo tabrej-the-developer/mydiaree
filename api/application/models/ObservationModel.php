@@ -12,7 +12,7 @@ class ObservationModel extends CI_Model {
 	public function createObservation($data){
 
 		$id=mt_rand();
-		$this->db->query("INSERT INTO observation (`id`, `userId`, `title`,`child_voice`,`future_plan`, `notes`, `reflection`, `status`, `approver`, `centerid`, `date_added`, `date_modified`) VALUES (NULL, '".$data->userid."', '".$this->db->escape($data->title)."', '".$this->db->escape($data->child_voice)."', '".$this->db->escape($data->future_plan)."', '".$this->db->escape($data->notes)."', '".$this->db->escape($data->reflection)."', '".$data->status."', '".$data->approver."', '".$data->centerid."', current_timestamp(), current_timestamp())");
+		$this->db->query("INSERT INTO observation (`id`, `userId`, `title`,`child_voice`,`room`,`future_plan`, `notes`, `reflection`, `status`, `approver`, `centerid`, `date_added`, `date_modified`) VALUES (NULL, '".$data->userid."', '".$this->db->escape($data->title)."', '".$this->db->escape($data->child_voice)."','".$data->room."', '".$this->db->escape($data->future_plan)."', '".$this->db->escape($data->notes)."', '".$this->db->escape($data->reflection)."', '".$data->status."', '".$data->approver."', '".$data->centerid."', current_timestamp(), current_timestamp())");
 		if(!empty($data->childrens))
 		{
 			foreach($data->childrens as $key=>$child)
@@ -38,6 +38,7 @@ class ObservationModel extends CI_Model {
 		notes = " . $this->db->escape($data->notes) . ", 
 		reflection = " . $this->db->escape($data->reflection) . ",
 		child_voice = " . $this->db->escape($data->child_voice) . ",
+		room = " . $data->room . ",
 		future_plan = " . $this->db->escape($data->future_plan) . ",
 		date_modified = NOW() 
 		WHERE id = " . $id
@@ -1247,6 +1248,7 @@ class ObservationModel extends CI_Model {
 			"userId" => $data['userid'],
 			"title" => $data['title'],
 			"child_voice" => $data['child_voice'],
+			"room" => $data['room'],
 			"future_plan" => $data['future_plan'],
 			"notes" => $data['notes'],
 			"reflection" => isset($data['reflection']) ? $data['reflection'] : "",
@@ -1325,6 +1327,7 @@ class ObservationModel extends CI_Model {
 			"userId" => $data['userid'],
 			"title" => $data['title'],
 			"child_voice" => $data['child_voice'],
+			"room" => $data['room'],
 			"future_plan" => $data['future_plan'],
 			"notes" => $data['notes'],
 			"reflection" => $data['reflection'],
@@ -1340,6 +1343,7 @@ class ObservationModel extends CI_Model {
 		notes = '" . addslashes($data['notes']) . "', 
 		reflection = '" . addslashes($data['reflection']) . "', 
 		child_voice = '" . addslashes($data['child_voice']) . "', 
+		room = '" . $data['room'] . "', 
 		future_plan = '" . addslashes($data['future_plan']) . "' 
 		WHERE id = " . $data['observationId']
 	);

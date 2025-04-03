@@ -95,6 +95,7 @@
 /* Image Styling */
 .child-image {
     max-width: 100%;
+    width: 100%;
     max-height: 90px; /* Consistent image height */
     border-radius: 8px; /* Rounded image corners */
     object-fit: cover; /* Crop image to fill space while maintaining aspect ratio */
@@ -285,8 +286,8 @@ table {
                 <td colspan="3">
                     <?php 
                     // If you have center/classroom information, display it here
-                    if (isset($observation->centerName)) {
-                        echo $observation->centerName;
+                    if (isset($observation->roomName)) {
+                        echo $observation->roomName;
                     } else {
                         echo "";
                     }
