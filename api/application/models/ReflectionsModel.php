@@ -64,6 +64,7 @@ class ReflectionsModel extends CI_Model {
 			"centerid"=>$data['centerid'],
 			"about"=>$data['about'],
 			"eylf"=>$data['eylf'],
+			"roomids" => $data['room'], // Convert array to comma-separated string
 			"status"=>strtoupper($data['status']),
 			"createdBy"=>$data['userid'],
 			"createdAt"=>date('Y-m-d h:i:s')
@@ -181,6 +182,7 @@ class ReflectionsModel extends CI_Model {
 			"centerid"=>$data['centerid'],
 			"about"=>$data['about'],
 			"eylf"=>$data['eylf'],
+			"roomids" => $data['room'],
 			"status"=>strtoupper($data['status']),
 			"createdBy"=>$data['userid'],
 			"createdAt"=>date('Y-m-d h:i:s')

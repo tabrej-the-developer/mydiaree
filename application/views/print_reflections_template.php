@@ -279,8 +279,8 @@ table {
                 <td colspan="3">
                     <?php 
                     // If you have center/classroom information, display it here
-                    if (isset($observation->centerName)) {
-                        echo $observation->centerName;
+                    if (isset($reflection['room_names'])) {
+                        echo $reflection['room_names'];
                     } else {
                         echo "";
                     }
@@ -291,8 +291,8 @@ table {
 
 
             <tr>
-
-                <td colspan="4"><span style="font-weight:bold;">Daily Reflection:</span>
+                    <th>Daily Reflection:</th>
+                <td colspan="3">
                 <!-- <td colspan="3" class="observation-cell"> -->
                   <?= $reflection['about'] ?>  
            

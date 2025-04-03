@@ -171,7 +171,7 @@ class Reflections extends CI_Controller {
 				// $this->load->view('createReflection-newui',$data);	
 				// echo "<pre>";
 				// print_r($data);
-				// exit;			
+				// exit;			 
 				$this->load->view('createReflection_v4',$data);				
 			}
 			else if($httpcode == 401){
@@ -192,6 +192,23 @@ class Reflections extends CI_Controller {
 		$data['reflection'] = $this->db->where('id', $reflectionId)
 								   ->get('reflection')
 								   ->row_array();
+
+								   if (!empty($data['reflection']['roomids'])) {
+									// Convert room IDs string to an array
+									$roomIds = explode(',', $data['reflection']['roomids']);
+								
+									// Fetch room names where id matches the given IDs
+									$rooms = $this->db->where_in('id', $roomIds)
+													  ->select('name')
+													  ->get('room')
+													  ->result_array();
+								
+									// Extract names from the result array
+									$roomNames = array_column($rooms, 'name');
+								
+									// Convert array to a comma-separated string
+									$data['reflection']['room_names'] = implode(', ', $roomNames);
+								}						   
 		
 		// Get reflection child data
 		$data['reflectionChildren'] = $this->db->where('reflectionid', $reflectionId)
@@ -265,11 +282,15 @@ class Reflections extends CI_Controller {
 		if ($this->session->has_userdata('LoginId')) {
 			$this->load->helper('form');
 			$data = $this->input->post();
+			$data['room'] = implode(",", $data['room']);
+
 			
-// 			echo "<pre>";
-// 			print_r($_POST); // Check if image_rotation_* values are being received
-// print_r($_FILES); // Check if images are properly uploaded
-// exit;
+			// echo "<pre>";
+			// print_r($data); 
+            // // print_r($_FILES); 
+            // exit;
+
+
 			$data['userid'] = $this->session->userdata('LoginId');
 			$data['createdAt'] = date('Y-m-d H:i:s');
 			$data['createdBy'] = $data['userid'];
@@ -350,6 +371,9 @@ class Reflections extends CI_Controller {
 			if($httpcode == 200){
 				curl_close ($ch);
 				$data = json_decode($server_output);
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
 				redirect("Reflections");
 			}
 			if($httpcode == 401){
@@ -462,6 +486,9 @@ class Reflections extends CI_Controller {
 			$data = $this->input->post();
 			$data['userid'] = $this->session->userdata('LoginId');
 			$data['reflectionid'] = $_GET['reflectionId'];
+
+			$data['room'] = implode(",", $data['room']);
+
             
 			$data['childs'] = json_encode($data['childId']);
             unset($data['childId']);

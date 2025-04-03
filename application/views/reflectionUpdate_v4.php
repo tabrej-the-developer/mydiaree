@@ -137,7 +137,7 @@
                                             </div>
                                         </div>
                                         <div class=" form-group">
-                                            <label>Educators</label>
+                                            <label>Educators &nbsp;<span style="color:red">*Required</span></label>
                                             <select id="room_educators" name="Educator[]" class="js-example-basic-multiple  multiple_selection form-control select2-multiple" multiple="multiple">
                                                 <?php foreach($Reflections->staffs as $staff => $objstaff) { ?>
                                                         <option  value="<?php echo $objstaff->userid; ?>"></option>
@@ -147,6 +147,22 @@
                                                 <?php }?>
                                             </select>
                                         </div>
+
+                                        <div class=" form-group">
+                                            <label>Classroom &nbsp;<span style="color:red">*Required</span></label>
+                                            <select id="room" name="room[]"
+                                                    class="popinput js-example-basic-multiple multiple_selection form-control select2-multiple"
+                                                    multiple="multiple">
+                                                    <?php foreach($Rooms as $Roomss => $objRooms) { ?>
+                                                    <option name="<?php echo $objRooms->name; ?>"
+                                                        value="<?php echo $objRooms->roomid; ?>"><?php echo $objRooms->name; ?>
+                                                    </option>
+                                                    <?php }?>
+                                            </select>
+                                        </div>
+
+
+
                                         <div class="form-group">
                                             <label for="about">Reflection</label>
                                             <textarea name="about" class="form-control about rounded-1" id="about" rows="10" value="<?= $Reflections->about ?>" placeholder="<?= $Reflections->about ?>"><?= $Reflections->about ?></textarea>
