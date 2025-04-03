@@ -488,20 +488,29 @@
                                                         <hr>
 
                                                         <div id="room">
-                                                        <div class=" form-group">
-                                            <label>Classroom &nbsp;<span style="color:red">*Required</span></label>
-                                            <select id="room" name="room[]"
-                                                    class="popinput js-example-basic-multiple multiple_selection form-control select2-multiple"
-                                                    multiple="multiple">
-                                                    <?php foreach($roomss as $Roomsses => $objRooms) { ?>
-                                                    <option name="<?php echo $objRooms['name']; ?>"
-                                                        value="<?php echo $objRooms['id']; ?>"><?php echo $objRooms['name']; ?>
-                                                    </option>
-                                                    <?php }?>
-                                            </select>
-                                        </div>
-                                                    </div>
-                                             <hr>
+    <div class="form-group">
+        <label>Classroom &nbsp;<span style="color:red">*Required</span></label>
+        <select id="room" name="room[]"
+                class="popinput js-example-basic-multiple multiple_selection form-control select2-multiple"
+                multiple="multiple">
+            <?php
+            // Convert the comma-separated room IDs into an array
+            $selectedRooms = isset($observation->room) ? explode(',', $observation->room) : [];
+
+            // Loop through available rooms and set selected attribute if present in $selectedRooms
+            foreach ($roomss as $objRooms) {
+                $isSelected = in_array($objRooms['id'], $selectedRooms) ? 'selected' : '';
+            ?>
+                <option name="<?php echo $objRooms['name']; ?>"
+                        value="<?php echo $objRooms['id']; ?>" <?php echo $isSelected; ?>>
+                    <?php echo $objRooms['name']; ?>
+                </option>
+            <?php } ?>
+        </select>
+    </div>
+</div>
+
+                                             <hr> 
 
 
                                                         <div id="obs-title">

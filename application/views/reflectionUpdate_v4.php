@@ -136,30 +136,52 @@
                                                 <input type="text" name="title" class="form-control title" id="title" value="<?= $Reflections->title ?>">
                                             </div>
                                         </div>
-                                        <div class=" form-group">
-                                            <label>Educators &nbsp;<span style="color:red">*Required</span></label>
-                                            <select id="room_educators" name="Educator[]" class="js-example-basic-multiple  multiple_selection form-control select2-multiple" multiple="multiple">
-                                                <?php foreach($Reflections->staffs as $staff => $objstaff) { ?>
-                                                        <option  value="<?php echo $objstaff->userid; ?>"></option>
-                                                <?php }?>
-                                                <?php foreach($Educators as $educator => $objEducator) { ?>
-                                                        <option name="<?php echo $objEducator->name; ?>" value="<?php echo $objEducator->userid; ?>"><?php echo $objEducator->name; ?></option>
-                                                <?php }?>
-                                            </select>
-                                        </div>
+                                       
+                                        <div class="form-group">
+    <label>Educators &nbsp;<span style="color:red">*Required</span></label>
+    <select id="room_educators" name="Educator[]" 
+            class="js-example-basic-multiple multiple_selection form-control select2-multiple" 
+            multiple="multiple">
+        <?php
+        // Convert the comma-separated staff IDs into an array
+        $selectedStaffIds = isset($Reflections->staffsID) ? explode(',', $Reflections->staffsID) : [];
 
-                                        <div class=" form-group">
-                                            <label>Classroom &nbsp;<span style="color:red">*Required</span></label>
-                                            <select id="room" name="room[]"
-                                                    class="popinput js-example-basic-multiple multiple_selection form-control select2-multiple"
-                                                    multiple="multiple">
-                                                    <?php foreach($Rooms as $Roomss => $objRooms) { ?>
-                                                    <option name="<?php echo $objRooms->name; ?>"
-                                                        value="<?php echo $objRooms->roomid; ?>"><?php echo $objRooms->name; ?>
-                                                    </option>
-                                                    <?php }?>
-                                            </select>
-                                        </div>
+        // Loop through available educators and set selected attribute if present in $selectedStaffIds
+        foreach ($Educators as $objEducator) {
+            $isSelected = in_array($objEducator->userid, $selectedStaffIds) ? 'selected' : '';
+        ?>
+            <option name="<?php echo $objEducator->name; ?>" 
+                    value="<?php echo $objEducator->userid; ?>" <?php echo $isSelected; ?>>
+                <?php echo $objEducator->name; ?>
+            </option>
+        <?php } ?>
+    </select>
+</div>
+
+
+
+
+                                        <div class="form-group">
+    <label>Classroom &nbsp;<span style="color:red">*Required</span></label>
+    <select id="room" name="room[]"
+            class="popinput js-example-basic-multiple multiple_selection form-control select2-multiple"
+            multiple="multiple">
+        <?php
+        // Convert the comma-separated room IDs into an array
+        $selectedRoomIds = isset($Reflections->roomids) ? explode(',', $Reflections->roomids) : [];
+
+        // Loop through available rooms and set selected attribute if present in $selectedRoomIds
+        foreach ($Rooms as $objRooms) {
+            $isSelected = in_array($objRooms->roomid, $selectedRoomIds) ? 'selected' : '';
+        ?>
+            <option name="<?php echo $objRooms->name; ?>"
+                    value="<?php echo $objRooms->roomid; ?>" <?php echo $isSelected; ?>>
+                <?php echo $objRooms->name; ?>
+            </option>
+        <?php } ?>
+    </select>
+</div>
+
 
 
 

@@ -465,6 +465,18 @@ class Reflections extends CI_Controller {
 			 }
 		  $data->eylf_outcomes = $outcomes_with_activities;
 
+		  if (isset($data->Reflections->staffs) && is_array($data->Reflections->staffs)) {
+			$staffIDs = array();
+			foreach ($data->Reflections->staffs as $staff) {
+				if (isset($staff->userid)) {
+					$staffIDs[] = $staff->userid;
+				}
+			}
+			$data->Reflections->staffsID = implode(',', $staffIDs);
+		} else {
+			$data->Reflections->staffsID = ''; // Or null, or handle the case as needed
+		}
+
 		//   echo "<pre>";
 		//   print_r($data);
 		//   exit;
