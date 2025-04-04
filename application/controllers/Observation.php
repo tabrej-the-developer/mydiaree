@@ -2679,7 +2679,7 @@ class Observation extends CI_Controller {
     }
 
     private function call_openrouter($text) {
-        $apiKey = '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';  // Replace with your OpenRouter API Key
+        $apiKey = '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';  // Replace with your OpenRouter API Key
 
         $postData = [
             "model" => "mistralai/mistral-7b-instruct:free",  // Use free AI model
@@ -2703,7 +2703,7 @@ class Observation extends CI_Controller {
         curl_close($ch);
 
         $response = json_decode($result, true);
-        return $response['choices'][0]['message']['content'] ?? 'Error refining text';
+        return $response['choices'][0]['message']['content'] ??  $text;
     }
 
 
