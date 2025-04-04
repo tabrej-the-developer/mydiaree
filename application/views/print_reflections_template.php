@@ -95,8 +95,9 @@
 /* Image Styling */
 .child-image {
     width: 100%;
+    height: 100%;
     max-width: 100%;
-    max-height: 90px; /* Consistent image height */
+    max-height: 100%; /* Consistent image height */
     border-radius: 8px; /* Rounded image corners */
     object-fit: cover; /* Crop image to fill space while maintaining aspect ratio */
 }
