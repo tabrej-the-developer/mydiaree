@@ -186,7 +186,7 @@
 
 
                                         <div class="form-group">
-                                            <label for="about">Reflection</label>
+                                            <label for="about">Reflection</label>  &nbsp;&nbsp;&nbsp; <button type="button" style="font-size:10px;font-weight:bold;margin-bottom:3px;" class="btn btn-sm btn-outline-primary mt-2 refine-about-btn">Refine Text</button>
                                             <textarea name="about" class="form-control about rounded-1" id="about" rows="10" value="<?= $Reflections->about ?>" placeholder="<?= $Reflections->about ?>"><?= $Reflections->about ?></textarea>
                                         </div>
 
@@ -724,6 +724,47 @@
 });
 
         </script>
+
+      
+            <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const refineAboutBtn = document.querySelector(".refine-about-btn");
+
+    if (refineAboutBtn) {
+        refineAboutBtn.addEventListener("click", function () {
+            const aboutTextarea = document.getElementById("about");
+            const originalText = this.innerText;
+
+            // Show "Refining..." while processing
+            this.innerText = "Refining...";
+            this.disabled = true;
+
+            fetch("<?= base_url('observation/refine_text') ?>", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: aboutTextarea.value })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "success") {
+                    aboutTextarea.value = data.refined_text;
+                } else {
+                    alert("Error refining text: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Something went wrong!");
+            })
+            .finally(() => {
+                this.innerText = originalText;
+                this.disabled = false;
+            });
+        });
+    }
+});
+
+            </script>
 
 
 </body>

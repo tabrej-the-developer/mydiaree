@@ -2659,6 +2659,55 @@ class Observation extends CI_Controller {
 		}
 	}
 
+
+
+	public function refine_text() {
+        $json = json_decode(file_get_contents('php://input'), true);
+        $text = $json['text'] ?? '';
+
+        if (!$text) {
+            echo json_encode(['status' => 'error', 'message' => 'No text provided']);
+            return;
+        }
+
+        $response = $this->call_openrouter($text);
+
+        echo json_encode([
+            'status' => 'success',
+            'refined_text' => $response
+        ]);
+    }
+
+    private function call_openrouter($text) {
+        $apiKey = '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';  // Replace with your OpenRouter API Key
+
+        $postData = [
+            "model" => "mistralai/mistral-7b-instruct:free",  // Use free AI model
+            "messages" => [
+                ["role" => "system", "content" => "Improve and refine the given text in a clear, professional way."],
+                ["role" => "user", "content" => $text]
+            ]
+        ];
+
+        $ch = curl_init("https://openrouter.ai/api/v1/chat/completions");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer $apiKey",
+            "Content-Type: application/json",
+            "HTTP-Referer: your-website.com",  // Your domain
+            "X-Title: CKEditor AI Refiner"
+        ]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
+
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        $response = json_decode($result, true);
+        return $response['choices'][0]['message']['content'] ?? 'Error refining text';
+    }
+
+
+
 	public function getSubjects() {
         // Query to fetch all subjects
         $query = $this->db->get('montessorisubjects');

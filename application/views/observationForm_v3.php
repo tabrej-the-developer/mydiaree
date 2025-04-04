@@ -515,26 +515,29 @@
 
                                                         <div id="obs-title">
                                                             <div class="form-group required">
-                                                                <label class=" control-label" ><strong>Observation Title</strong></label>
+                                                                <label class=" control-label" ><strong>Observation Title</strong></label> &nbsp;&nbsp;&nbsp; <button type="button" style="font-size:10px;font-weight:bold;margin-bottom:3px;" class="btn btn-outline-primary refine-btn btn-sm" data-editor="obs_title">Refine Text</button>
                                                                 <textarea name="title" id="obs_title" class="form-control" data-sample-short><?php echo isset($observation->title)?$observation->title:''; ?></textarea>
                                                             </div>
+                                                           
                                                         </div>
 
                                                        
 
                                                         <div id="obs-notes">
                                                             <div class="form-group required">
-                                                                <label class="control-label"><strong>Analysis/Evaluation</strong></label>
+                                                                <label class="control-label"><strong>Analysis/Evaluation</strong></label>  &nbsp;&nbsp;&nbsp;  <button type="button" style="font-size:10px;font-weight:bold;margin-bottom:3px;" class="btn btn-outline-primary refine-btn btn-sm" data-editor="obs_notes">Refine Text</button>
                                                                 <textarea name="notes" style="height: 73px;" id="obs_notes"><?php echo isset($observation->notes)?$observation->notes:''; ?></textarea>
                                                             </div>
+                                                            
                                                         </div>
 
                                                         <div id="obs-reflection">
                                                             <?php if ($_SESSION['UserType'] != 'Parent') { ?>
                                                                 <div class="form-group required">
-                                                                    <label class=" control-label" ><strong>Reflection</strong></label>
+                                                                    <label class=" control-label" ><strong>Reflection</strong></label>  &nbsp;&nbsp;&nbsp;  <button type="button" style="font-size:10px;font-weight:bold;margin-bottom:3px;" class="btn btn-outline-primary refine-btn btn-sm" data-editor="obs_reflection">Refine Text</button>
                                                                     <textarea style="height: 73px;" id="obs_reflection" name="reflection" class="form-control"><?php echo isset($observation->reflection)?$observation->reflection:''; ?></textarea>
                                                                 </div>
+                                                                
                                                             <?php } ?>
                                                         </div>
                                                         
@@ -569,17 +572,19 @@
                                                         <div id="child-voice">
                                                             <?php if ($_SESSION['UserType'] != 'Parent') { ?>
                                                                 <div class="form-group">
-                                                                    <label class=" control-label" ><strong>Child's Voice</strong></label>
+                                                                    <label class=" control-label" ><strong>Child's Voice</strong></label>  &nbsp;&nbsp;&nbsp;  <button type="button" style="font-size:10px;font-weight:bold;margin-bottom:3px;" class="btn btn-outline-primary refine-btn btn-sm" data-editor="child_voice">Refine Text</button>
                                                                     <textarea style="height: 73px;" id="child_voice" name="child_voice" class="form-control"><?php echo isset($observation->child_voice)?$observation->child_voice:''; ?></textarea>
                                                                 </div>
+                                                               
                                                             <?php } ?>
                                                         </div>
                                                         <div id="Future Plan/Extension">
                                                             <?php if ($_SESSION['UserType'] != 'Parent') { ?>
                                                                 <div class="form-group">
-                                                                    <label class=" control-label" ><strong>Future Plan/Extension</strong></label>
+                                                                    <label class=" control-label" ><strong>Future Plan/Extension</strong></label>  &nbsp;&nbsp;&nbsp;  <button type="button" style="font-size:10px;font-weight:bold;margin-bottom:3px;" class="btn btn-outline-primary refine-btn btn-sm" data-editor="future_plan">Refine Text</button>
                                                                     <textarea style="height: 73px;" id="future_plan" name="future_plan" class="form-control"><?php echo isset($observation->future_plan)?$observation->future_plan:''; ?></textarea>
                                                                 </div>
+                                                               
                                                             <?php } ?>
                                                         </div>
 
@@ -2211,6 +2216,44 @@ document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('future_plan')) {
         CKEDITOR.replace('future_plan', commonConfig);
     }
+
+
+    document.querySelectorAll(".refine-btn").forEach(button => {
+    button.addEventListener("click", function() {
+        let editorId = this.getAttribute("data-editor");
+        let content = CKEDITOR.instances[editorId].getData();
+
+        // Save original text and disable the button
+        let originalText = this.innerText;
+        this.innerText = "Refining...";
+        this.disabled = true;
+
+        fetch("<?= base_url('observation/refine_text') ?>", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: content })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                CKEDITOR.instances[editorId].setData(data.refined_text);
+            } else {
+                alert("Error refining text: " + data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Something went wrong!");
+        })
+        .finally(() => {
+            // Revert button text and re-enable it
+            this.innerText = originalText;
+            this.disabled = false;
+        });
+    });
+});
+
+
 });
 
 
