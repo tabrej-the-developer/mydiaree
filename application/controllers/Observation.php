@@ -2679,12 +2679,12 @@ class Observation extends CI_Controller {
     }
 
     private function call_openrouter($text) {
-        $apiKey = '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';  // Replace with your OpenRouter API Key
+        $apiKey = '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';  // Replace with your OpenRouter API Key
 
         $postData = [
-            "model" => "mistralai/mistral-7b-instruct:free",  // Use free AI model
+            "model" => "meta-llama/llama-3-70b-instruct:free",  // Use free AI model
             "messages" => [
-                ["role" => "system", "content" => "Improve and refine the given text in a clear, professional way."],
+                ["role" => "system", "content" => "You are an assistant that improves and refines text for grammar, clarity, and flow in professional way. and don't need your explaination just response the changed text."],
                 ["role" => "user", "content" => $text]
             ]
         ];
