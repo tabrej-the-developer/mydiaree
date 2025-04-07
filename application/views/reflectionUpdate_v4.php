@@ -78,6 +78,31 @@
     }
 </style>
 
+<style>
+    .image-box {
+        display: inline-block;
+        margin: 5px;
+        position: relative;
+    }
+
+    .image-box img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
+
+    .image-box button {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 12px;
+    }
+</style>
+
 </head>
 
 <body id="app-container" class="menu-default show-spinner">
@@ -108,6 +133,7 @@
                             <div class="mb-5">
                                 <h5 class="card-title">Enter Details</h5>
                             </div>
+                        
                             <form action="<?php echo base_url('Reflections/updateReflection?reflectionId='.$reflectionid); ?>" method="post" autocomplete="off" enctype="multipart/form-data">
                                     <input type="hidden" name="centerid" value="<?= $Reflections->centerid; ?>">
                                 <div class="row">
@@ -208,23 +234,44 @@
                                         
                                      
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="card-body border border-dotted mt-4">
-                                            <h5 class="mb-4">Upload Single/Multiple Images &nbsp;&nbsp;<span style="color:blueviolet;">(upload upto 8 pics only)</span></h5>
-                                            <div class="d-flex row">
-                                                <div class="col-md-3">
-                                                    <input type="file" visbility="hidden" name="media[]" id="fileUpload" class="form-control-hidden" multiple accept="image/*" value="">
-                                                </div>
+                                    
 
-                                                <div class="col-md-9" style="margin-top: 15px;margin-left: 4px;">
-                                                    <?php foreach($Reflections->refMedia as $media => $objmedia) {?>
-                                                    <?php
-                                                            echo '<img class="card-img" src="'.BASE_API_URL."assets/media/".$objmedia->mediaUrl.'" alt="No media here" style="width:100px;height:100px;">';
-                                                        }
-                                                    ?>
-                                                </div>
+
+
+                                    
+                                    <div class="col-md-6">
+          <div class="card-body border border-dotted mt-4">
+        <h5 class="mb-4">Upload Single/Multiple Images &nbsp;&nbsp;
+            <span style="color:blueviolet;">(upload up to 8 pics only)</span>
+        </h5>
+
+        <div class="d-flex row">
+            <div class="col-md-3">
+                <input type="file" name="media[]" id="fileUpload" class="form-control-hidden" multiple accept="image/*">
+            </div>
+
+            <!-- Image preview area (Uploaded + New) -->
+            <div class="col-md-9 d-flex flex-wrap" id="imageContainer" style="margin-top: 15px; margin-left: 4px;">
+                <!-- Already uploaded images -->
+                <?php foreach($Reflections->refMedia as $media => $objmedia) { ?>
+                    <div class="image-box uploaded" style="position:relative;">
+                        <img class="card-img" src="<?= BASE_API_URL."assets/media/".$objmedia->mediaUrl ?>" 
+                             alt="No media here">
+                        
+                        <button class="btn btn-sm btn-danger delete-image" 
+                                data-reflectionid="<?= $reflectionid ?>" 
+                                data-mediaurl="<?= $objmedia->mediaUrl ?>">X</button>
+                    </div>
+                <?php } ?>
+            </div>
+   
+    
+
+                                                
                                             </div>
                                         </div>
+
+
                                         <div class="mt-2">
                                             <div class="form-check-inline">
                                                 <label class="form-check-label custom-control custom-checkbox mb-1 align-self-center pr-4">
@@ -714,17 +761,6 @@
     </script>
 
 
-<script>
-        document.getElementById('fileUpload').addEventListener('change', function() {
-    const maxFiles = 8;
-    if (this.files.length > maxFiles) {
-        alert(`You can upload a maximum of ${maxFiles} images.`);
-        this.value = ''; // Clear the file input
-    }
-});
-
-        </script>
-
       
             <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -758,13 +794,111 @@
             })
             .finally(() => {
                 this.innerText = originalText;
-                this.disabled = false;
+                this.disabled = false; 
             });
         });
     }
 });
 
             </script>
+
+<script>
+    let selectedFiles = [];
+
+    // On file input change - add files to selectedFiles
+    $('#fileUpload').on('change', function() {
+        const files = Array.from(this.files);
+        const maxAllowed = 8;
+        const existingCount = $('#imageContainer .image-box').length;
+        const totalCount = existingCount + selectedFiles.length + files.length;
+
+        if (totalCount > maxAllowed) {
+            alert("You can upload a maximum of 8 images.");
+            this.value = ""; // reset input
+            return;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (!file.type.startsWith("image/")) continue;
+
+            const id = 'preview-' + Date.now() + Math.random().toString(36).substr(2, 5);
+
+            selectedFiles.push({ id: id, file: file });
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageHtml = `
+                    <div class="image-box preview" id="${id}" style="position:relative;">
+                        <img src="${e.target.result}" alt="Preview">
+                        <button class="btn btn-sm btn-danger remove-preview" data-id="${id}">X</button>
+                    </div>`;
+                $('#imageContainer').append(imageHtml);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        this.value = ""; // allow re-selecting same file
+    });
+
+    // Remove preview image
+    $(document).on('click', '.remove-preview', function(e) {
+        e.preventDefault();
+        const id = $(this).data('id');
+        selectedFiles = selectedFiles.filter(f => f.id !== id);
+        $('#' + id).remove();
+    });
+
+    // Before form submit, create new input with only selected files
+    $('form').on('submit', function(e) {
+        const form = this;
+
+        // Remove old file input
+        $('#fileUpload').remove();
+
+        // Create new input
+        const newInput = document.createElement('input');
+        newInput.type = 'file';
+        newInput.name = 'media[]';
+        newInput.multiple = true;
+        newInput.style.display = 'none';
+
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(f => dataTransfer.items.add(f.file));
+        newInput.files = dataTransfer.files;
+
+        form.appendChild(newInput);
+    });
+
+    // AJAX delete for uploaded images (already working fine)
+    $(document).on('click', '.delete-image', function(event) {
+        event.preventDefault();
+
+        var reflectionid = $(this).data('reflectionid');
+        var mediaurl = $(this).data('mediaurl');
+        var button = $(this);
+
+        if(confirm("Are you sure you want to delete this image?")) {
+            $.ajax({
+                url: "<?= base_url('Reflections/deleteMedia') ?>",
+                method: "POST",
+                data: { reflectionid: reflectionid, mediaurl: mediaurl },
+                success: function(response) {
+                    var res = JSON.parse(response);
+                    if(res.status === 'success') {
+                        button.parent().remove();
+                        alert("Image deleted successfully");
+                    } else {
+                        alert("Failed to delete image");
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+
+
 
 
 </body>

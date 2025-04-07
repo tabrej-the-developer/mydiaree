@@ -460,7 +460,7 @@ class Reflections extends CI_Controller {
 			 ->get('eylfactivity')
 			 ->result();
   
-			$outcome->activities = $activities;
+			$outcome->activities = $activities; 
 			$outcomes_with_activities[] = $outcome;
 			 }
 		  $data->eylf_outcomes = $outcomes_with_activities;
@@ -543,6 +543,35 @@ class Reflections extends CI_Controller {
 			echo json_encode($data);
 		}
 	}
+
+	public function deleteMedia() {
+		$reflectionid = $this->input->post('reflectionid');
+		$mediaurl = $this->input->post('mediaurl');
+	
+		if (!$reflectionid || !$mediaurl) {
+			echo json_encode(['status' => 'error', 'message' => 'Missing data']);
+			return;
+		}
+	
+		// Full path to file
+		$file_path = FCPATH . 'assets/media/' . $mediaurl;
+	
+		// Delete from database
+		$this->db->where('reflectionid', $reflectionid);
+		$this->db->where('mediaUrl', $mediaurl);
+		$delete = $this->db->delete('reflectionmedia');
+	
+		if ($delete) {
+			if (file_exists($file_path)) {
+				unlink($file_path); // delete physical file
+			}
+			echo json_encode(['status' => 'success']);
+		} else {
+			echo json_encode(['status' => 'error', 'message' => 'Database delete failed']);
+		}
+	}
+	
+	
 
     public function getChildRecords($centerid='',$refid='')
 	{
