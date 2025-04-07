@@ -2679,7 +2679,7 @@ class Observation extends CI_Controller {
     }
 
 	private function call_openai($text) {
-		$apiKey = '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';  // Your OpenAI GPT-4o mini API Key
+		// $apiKey = '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';  // Your OpenAI GPT-4o mini API Key
 	
 		$postData = [
 			"model" => "gpt-4o",
