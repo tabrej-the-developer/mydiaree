@@ -496,6 +496,9 @@ class Reflections extends CI_Controller {
 		if($this->session->has_userdata('LoginId')){
 			$this->load->helper('form');
 			$data = $this->input->post();
+			echo "<pre>";
+			print_r($data);
+			exit;
 			$data['userid'] = $this->session->userdata('LoginId');
 			$data['reflectionid'] = $_GET['reflectionId'];
 
@@ -506,14 +509,90 @@ class Reflections extends CI_Controller {
             unset($data['childId']);
 			$data['educators'] = json_encode($data['Educator']);
 			unset($data['Educator']);
-			if(!empty($_FILES['media'])){
+			// if(!empty($_FILES['media'])){
+			// 	$filesCount = count($_FILES['media']['name']);
+			// 	for ($i=0; $i < $filesCount; $i++) {
+			// 		if(!empty($_FILES['media']['tmp_name'][$i])){
+			// 			$data['media'.$i]= new CurlFile($_FILES['media']['tmp_name'][$i],$_FILES['media']['type'][$i],$_FILES['media']['name'][$i]);
+			// 		}
+			// 	}
+			// }
+
+			if (!empty($_FILES['media'])) {
 				$filesCount = count($_FILES['media']['name']);
-				for ($i=0; $i < $filesCount; $i++) {
-					if(!empty($_FILES['media']['tmp_name'][$i])){
-						$data['media'.$i]= new CurlFile($_FILES['media']['tmp_name'][$i],$_FILES['media']['type'][$i],$_FILES['media']['name'][$i]);
+			
+				for ($i = 0; $i < $filesCount; $i++) {
+					// Skip if there's no valid uploaded file
+					if (empty($_FILES['media']['tmp_name'][$i]) || $_FILES['media']['error'][$i] !== UPLOAD_ERR_OK) {
+						continue;
 					}
+			
+					$fileSize = $_FILES['media']['size'][$i];
+					$tempPath = $_FILES['media']['tmp_name'][$i];
+					$originalName = $_FILES['media']['name'][$i];
+					$fileType = $_FILES['media']['type'][$i];
+					
+					// Verify file exists and is readable
+					if (!file_exists($tempPath) || !is_readable($tempPath)) {
+						log_message('error', 'File not accessible: ' . $tempPath);
+						continue;
+					}
+			
+					// Get rotation angle from POST data
+					$rotationKey = 'image_rotation_' . $i;
+					$rotationAngle = isset($_POST[$rotationKey]) ? (int)$_POST[$rotationKey] : 0;
+					
+					// Normalize rotation to always be within 0-360
+					$rotationAngle = $rotationAngle % 360;
+					
+					// Convert clockwise CSS rotation to counterclockwise Intervention Image rotation
+					$rotationAngle = -$rotationAngle;
+					
+					// Only attempt to load image if rotation is needed or needs compression
+					$needsProcessing = ($rotationAngle !== 0 || $fileSize > 2 * 1024 * 1024);
+					
+					if ($needsProcessing) {
+						try {
+							// Load image using Intervention Image
+							$image = \Intervention\Image\ImageManagerStatic::make($tempPath);
+							
+							// Apply rotation if needed
+							if ($rotationAngle !== 0) {
+								$image->rotate($rotationAngle);  // Correct rotation direction
+								$rotatedFile = sys_get_temp_dir() . '/' . uniqid('rotated_', true) . '.' . pathinfo($originalName, PATHINFO_EXTENSION);
+								$image->save($rotatedFile);
+								$tempPath = $rotatedFile;
+							}
+							
+							// Check if file is larger than 2MB for compression
+							if ($fileSize > 2 * 1024 * 1024) {
+								$compressedFile = sys_get_temp_dir() . '/' . uniqid('compressed_', true) . '.' . pathinfo($originalName, PATHINFO_EXTENSION);
+								
+								try {
+									// Compress and save the image
+									$compressedPath = $this->image_intervention->compress($tempPath, $compressedFile, 1024, 70);
+									
+									if ($compressedPath) {
+										$tempPath = $compressedPath;
+									}
+								} catch (Exception $e) {
+									log_message('error', 'Image Compression Error: ' . $e->getMessage());
+								}
+							}
+						} catch (Exception $e) {
+							// Log the error and continue with the original file
+							log_message('error', 'Image Processing Error: ' . $e->getMessage());
+							// Use the original file without processing
+							$tempPath = $_FILES['media']['tmp_name'][$i];
+						}
+					}
+			
+					// Assign processed file for upload
+					$data['media' . $i] = new CurlFile($tempPath, $fileType, $originalName);
 				}
 			}
+
+
 			$url = BASE_API_URL."Reflections/updateReflection/";
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_POST, 1);

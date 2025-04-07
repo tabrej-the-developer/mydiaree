@@ -266,29 +266,24 @@
             <!-- Image preview area (Uploaded + New) -->
             <div class="col-md-9 d-flex flex-wrap" id="imageContainer" style="margin-top: 15px; margin-left: 4px;">
                 <!-- Already uploaded images -->
-                <?php foreach($Reflections->refMedia as $media => $objmedia) { 
+                <?php 
+foreach($Reflections->refMedia as $media => $objmedia) { 
     $uniqueId = 'img_' . uniqid();
 ?>
-    <div class="image-box uploaded" id="<?= $uniqueId ?>" style="position:relative;" data-rotation="0">
-        <img class="card-img rotatable" src="<?= BASE_API_URL."assets/media/".$objmedia->mediaUrl ?>" 
-             alt="No media here">
+<div class="image-box uploaded" id="<?= $uniqueId ?>" style="position:relative;" data-rotation="0">
+    <img class="card-img rotatable" src="<?= BASE_API_URL."assets/media/".$objmedia->mediaUrl ?>" alt="No media here">
 
-        <div class="btn-group-vertical" style="position:absolute;top:0;left:0;">
-            <button type="button" class="btn btn-sm btn-warning rotate-left">⟲</button>
-            <button type="button" class="btn btn-sm btn-warning rotate-right">⟳</button>
-        </div>
-
-        <button class="btn btn-sm btn-danger delete-image" 
-                data-reflectionid="<?= $reflectionid ?>" 
-                data-mediaurl="<?= $objmedia->mediaUrl ?>" 
-                style="position:absolute;top:0;right:0;">X</button>
+    <!-- Buttons to rotate -->
+    <div class="btn-group-vertical" style="position:absolute;top:0;left:0;">
+        <button type="button" class="btn btn-sm btn-warning rotate-left">⟲</button>
+        <button type="button" class="btn btn-sm btn-warning rotate-right">⟳</button>
     </div>
-<?php } ?>
-            </div>
-   
-    
 
-                                                
+    <!-- Hidden input to store image URL -->
+    <input type="hidden" name="existing_media[]" value="<?= $objmedia->mediaUrl ?>" class="existing-media-url" />
+</div>
+<?php } ?>
+            </div>                                               
       </div>
      </div>
 
@@ -879,24 +874,55 @@
 
     // Before form submit, create new input with only selected files
     $('form').on('submit', function(e) {
-        const form = this;
+    const form = this;
 
-        // Remove old file input
-        $('#fileUpload').remove();
+    // Remove old file input
+    $('#fileUpload').remove();
 
-        // Create new input
-        const newInput = document.createElement('input');
-        newInput.type = 'file';
-        newInput.name = 'media[]';
-        newInput.multiple = true;
-        newInput.style.display = 'none';
+    // Create new file input and set selected files
+    const newInput = document.createElement('input');
+    newInput.type = 'file';
+    newInput.name = 'media[]';
+    newInput.multiple = true;
+    newInput.style.display = 'none';
 
-        const dataTransfer = new DataTransfer();
-        selectedFiles.forEach(f => dataTransfer.items.add(f.file));
-        newInput.files = dataTransfer.files;
+    const dataTransfer = new DataTransfer();
 
-        form.appendChild(newInput);
+    // Remove old hidden inputs
+    $('.rotation-hidden-input').remove();
+
+    // Handle new images (preview)
+    selectedFiles.forEach((f, i) => {
+        dataTransfer.items.add(f.file);
+        const previewBox = $(`#${f.id}`);
+        const rotation = parseInt(previewBox.attr('data-rotation')) || 0;
+
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = `image_rotation_${i}`;
+        hiddenInput.value = rotation;
+        hiddenInput.className = 'rotation-hidden-input';
+
+        form.appendChild(hiddenInput);
     });
+
+    newInput.files = dataTransfer.files;
+    form.appendChild(newInput);
+
+    // Handle existing uploaded images
+    const uploadedImages = $('.image-box.uploaded');
+    uploadedImages.each(function(index) {
+        const rotation = parseInt($(this).attr('data-rotation')) || 0;
+
+        const hiddenRotation = document.createElement('input');
+        hiddenRotation.type = 'hidden';
+        hiddenRotation.name = `existing_rotation_${index}`;
+        hiddenRotation.value = rotation;
+        hiddenRotation.className = 'rotation-hidden-input';
+
+        form.appendChild(hiddenRotation);
+    });
+});
 
     // AJAX delete for uploaded images (already working fine)
     $(document).on('click', '.delete-image', function(event) {
