@@ -184,8 +184,8 @@ class ReflectionsModel extends CI_Model {
 			"eylf"=>$data['eylf'],
 			"roomids" => $data['room'],
 			"status"=>strtoupper($data['status']),
-			"createdBy"=>$data['userid'],
-			"createdAt"=>date('Y-m-d h:i:s')
+			"createdBy"=>$data['userid']
+			// "createdAt"=>date('Y-m-d h:i:s')
 		];
 		$this->db->where('id',$data['reflectionid']);
 		$this->db->update('reflection', $insarr);

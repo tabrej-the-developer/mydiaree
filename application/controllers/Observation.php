@@ -2670,7 +2670,7 @@ class Observation extends CI_Controller {
             return;
         }
 
-        $response = $this->call_openrouter($text);
+        $response = $this->call_openai($text);
 
         echo json_encode([
             'status' => 'success',
@@ -2678,33 +2678,66 @@ class Observation extends CI_Controller {
         ]);
     }
 
-    private function call_openrouter($text) {
-        $apiKey = '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';  // Replace with your OpenRouter API Key
+	private function call_openai($text) {
+		$apiKey = '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';  // Your OpenAI GPT-4o mini API Key
+	
+		$postData = [
+			"model" => "gpt-4o",
+			"messages" => [
+				[
+					"role" => "system",
+					"content" => "You are an assistant that improves and refines text for grammar, clarity, and flow in a professional way. Do not explain anything, just return the improved version of the text."
+				],
+				[
+					"role" => "user",
+					"content" => $text
+				]
+			]
+		];
+	
+		$ch = curl_init("https://api.openai.com/v1/chat/completions");
+		curl_setopt($ch, CURLOPT_HTTPHEADER, [
+			"Authorization: Bearer $apiKey",
+			"Content-Type: application/json"
+		]);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
+	
+		$result = curl_exec($ch);
+		curl_close($ch);
+	
+		$response = json_decode($result, true);
+		return $response['choices'][0]['message']['content'] ?? $text;
+	}
 
-        $postData = [
-            "model" => "meta-llama/llama-3-70b-instruct:free",  // Use free AI model
-            "messages" => [
-                ["role" => "system", "content" => "You are an assistant that improves and refines text for grammar, clarity, and flow in professional way. and don't need your explaination just response the changed text."],
-                ["role" => "user", "content" => $text]
-            ]
-        ];
+    // private function call_openrouter($text) {
+	// 	//my api gpt 4o mini -
+    //     $apiKey = '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';  // Replace with your OpenRouter API Key
 
-        $ch = curl_init("https://openrouter.ai/api/v1/chat/completions");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            "Authorization: Bearer $apiKey",
-            "Content-Type: application/json",
-            "HTTP-Referer: your-website.com",  // Your domain
-            "X-Title: CKEditor AI Refiner"
-        ]);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
+    //     $postData = [
+    //         "model" => "meta-llama/llama-3-70b-instruct:free",  // Use free AI model
+    //         "messages" => [
+    //             ["role" => "system", "content" => "You are an assistant that improves and refines text for grammar, clarity, and flow in professional way. and don't need your explaination just response the changed text."],
+    //             ["role" => "user", "content" => $text]
+    //         ]
+    //     ];
 
-        $result = curl_exec($ch);
-        curl_close($ch);
+    //     $ch = curl_init("https://openrouter.ai/api/v1/chat/completions");
+    //     curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    //         "Authorization: Bearer $apiKey",
+    //         "Content-Type: application/json",
+    //         "HTTP-Referer: your-website.com",  // Your domain
+    //         "X-Title: CKEditor AI Refiner"
+    //     ]);
+    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
 
-        $response = json_decode($result, true);
-        return $response['choices'][0]['message']['content'] ??  $text;
-    }
+    //     $result = curl_exec($ch);
+    //     curl_close($ch);
+
+    //     $response = json_decode($result, true);
+    //     return $response['choices'][0]['message']['content'] ??  $text;
+    // }
 
 
 

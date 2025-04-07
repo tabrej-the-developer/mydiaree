@@ -101,6 +101,19 @@
         padding: 2px 6px;
         font-size: 12px;
     }
+
+    .image-box img.rotatable {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+}
+
+.image-box .btn-group-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
 </style>
 
 </head>
@@ -245,7 +258,7 @@
             <span style="color:blueviolet;">(upload up to 8 pics only)</span>
         </h5>
 
-        <div class="d-flex row">
+            <div class="d-flex row">
             <div class="col-md-3">
                 <input type="file" name="media[]" id="fileUpload" class="form-control-hidden" multiple accept="image/*">
             </div>
@@ -253,23 +266,31 @@
             <!-- Image preview area (Uploaded + New) -->
             <div class="col-md-9 d-flex flex-wrap" id="imageContainer" style="margin-top: 15px; margin-left: 4px;">
                 <!-- Already uploaded images -->
-                <?php foreach($Reflections->refMedia as $media => $objmedia) { ?>
-                    <div class="image-box uploaded" style="position:relative;">
-                        <img class="card-img" src="<?= BASE_API_URL."assets/media/".$objmedia->mediaUrl ?>" 
-                             alt="No media here">
-                        
-                        <button class="btn btn-sm btn-danger delete-image" 
-                                data-reflectionid="<?= $reflectionid ?>" 
-                                data-mediaurl="<?= $objmedia->mediaUrl ?>">X</button>
-                    </div>
-                <?php } ?>
+                <?php foreach($Reflections->refMedia as $media => $objmedia) { 
+    $uniqueId = 'img_' . uniqid();
+?>
+    <div class="image-box uploaded" id="<?= $uniqueId ?>" style="position:relative;" data-rotation="0">
+        <img class="card-img rotatable" src="<?= BASE_API_URL."assets/media/".$objmedia->mediaUrl ?>" 
+             alt="No media here">
+
+        <div class="btn-group-vertical" style="position:absolute;top:0;left:0;">
+            <button type="button" class="btn btn-sm btn-warning rotate-left">⟲</button>
+            <button type="button" class="btn btn-sm btn-warning rotate-right">⟳</button>
+        </div>
+
+        <button class="btn btn-sm btn-danger delete-image" 
+                data-reflectionid="<?= $reflectionid ?>" 
+                data-mediaurl="<?= $objmedia->mediaUrl ?>" 
+                style="position:absolute;top:0;right:0;">X</button>
+    </div>
+<?php } ?>
             </div>
    
     
 
                                                 
-                                            </div>
-                                        </div>
+      </div>
+     </div>
 
 
                                         <div class="mt-2">
@@ -828,13 +849,20 @@
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const imageHtml = `
-                    <div class="image-box preview" id="${id}" style="position:relative;">
-                        <img src="${e.target.result}" alt="Preview">
-                        <button class="btn btn-sm btn-danger remove-preview" data-id="${id}">X</button>
-                    </div>`;
-                $('#imageContainer').append(imageHtml);
-            };
+    const id = 'img_' + Math.random().toString(36).substr(2, 9); // Unique ID
+    const imageHtml = `
+        <div class="image-box preview" id="${id}" style="position:relative;" data-rotation="0">
+            <img src="${e.target.result}" class="rotatable" alt="Preview">
+
+            <div class="btn-group-vertical" style="position:absolute;top:0;left:0;">
+                <button type="button" class="btn btn-sm btn-warning rotate-left">⟲</button>
+                <button type="button" class="btn btn-sm btn-warning rotate-right">⟳</button>
+            </div>
+
+            <button class="btn btn-sm btn-danger remove-preview" data-id="${id}" style="position:absolute;top:0;right:0;">X</button>
+        </div>`;
+    $('#imageContainer').append(imageHtml);
+};
             reader.readAsDataURL(file);
         }
 
@@ -898,6 +926,30 @@
 </script>
 
 
+
+
+
+<script>
+    // Rotate Left
+    $(document).on('click', '.rotate-left', function(e) {
+        e.preventDefault();
+        const box = $(this).closest('.image-box');
+        let rotation = parseInt(box.attr('data-rotation')) || 0;
+        rotation -= 90;
+        box.attr('data-rotation', rotation);
+        box.find('.rotatable').css('transform', `rotate(${rotation}deg)`);
+    });
+
+    // Rotate Right
+    $(document).on('click', '.rotate-right', function(e) {
+        e.preventDefault();
+        const box = $(this).closest('.image-box');
+        let rotation = parseInt(box.attr('data-rotation')) || 0;
+        rotation += 90;
+        box.attr('data-rotation', rotation);
+        box.find('.rotatable').css('transform', `rotate(${rotation}deg)`);
+    });
+</script>
 
 
 
