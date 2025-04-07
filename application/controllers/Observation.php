@@ -2679,14 +2679,16 @@ class Observation extends CI_Controller {
     }
 
 	private function call_openai($text) {
+		
 		// $apiKey = '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';  // Your OpenAI GPT-4o mini API Key
-	
+	  
+		$apiKey = 'sk-d1febdfb38e3491391e5ca4ce911be5c';
 		$postData = [
-			"model" => "gpt-4o",
+			"model" => "deepseek-chat",
 			"messages" => [
 				[
 					"role" => "system",
-					"content" => "You are an assistant that improves and refines text for grammar, clarity, and flow in a professional way. Do not explain anything, just return the improved version of the text."
+					"content" => "refine the text and correct it grammer and write in Professional way also add some content if you want in need. And remember in response i need only modified text not any other data like what you do what you change etc just response only modified text."
 				],
 				[
 					"role" => "user",
@@ -2695,7 +2697,7 @@ class Observation extends CI_Controller {
 			]
 		];
 	
-		$ch = curl_init("https://api.openai.com/v1/chat/completions");
+		$ch = curl_init("https://api.deepseek.com/chat/completions");
 		curl_setopt($ch, CURLOPT_HTTPHEADER, [
 			"Authorization: Bearer $apiKey",
 			"Content-Type: application/json"
