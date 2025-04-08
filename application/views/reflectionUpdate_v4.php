@@ -266,23 +266,24 @@
             <!-- Image preview area (Uploaded + New) -->
             <div class="col-md-9 d-flex flex-wrap" id="imageContainer" style="margin-top: 15px; margin-left: 4px;">
                 <!-- Already uploaded images -->
-                <?php 
-foreach($Reflections->refMedia as $media => $objmedia) { 
-    $uniqueId = 'img_' . uniqid();
-?>
+                <?php foreach($Reflections->refMedia as $media => $objmedia) { 
+   $uniqueId = 'img_' . uniqid();
+   ?>
 <div class="image-box uploaded" id="<?= $uniqueId ?>" style="position:relative;" data-rotation="0">
-    <img class="card-img rotatable" src="<?= BASE_API_URL."assets/media/".$objmedia->mediaUrl ?>" alt="No media here">
+     <img class="card-img rotatable" src="<?= BASE_API_URL."assets/media/".$objmedia->mediaUrl ?>" alt="No media here">
 
-    <!-- Buttons to rotate -->
-    <div class="btn-group-vertical" style="position:absolute;top:0;left:0;">
-        <button type="button" class="btn btn-sm btn-warning rotate-left">⟲</button>
-        <button type="button" class="btn btn-sm btn-warning rotate-right">⟳</button>
-    </div>
-
-    <!-- Hidden input to store image URL -->
-    <input type="hidden" name="existing_media[]" value="<?= $objmedia->mediaUrl ?>" class="existing-media-url" />
-</div>
-<?php } ?>
+     <div class="btn-group-vertical" style="position:absolute;top:0;left:0;">
+             <button type="button" class="btn btn-sm btn-warning rotate-left">⟲</button>
+             <button type="button" class="btn btn-sm btn-warning rotate-right">⟳</button>
+         </div>
+ 
+         <button class="btn btn-sm btn-danger delete-image" 
+                 data-reflectionid="<?= $reflectionid ?>" 
+                 data-mediaurl="<?= $objmedia->mediaUrl ?>" 
+                 style="position:absolute;top:0;right:0;">X</button>
+                 </div>
+                 <?php } ?>
+           
             </div>                                               
       </div>
      </div>
@@ -818,7 +819,7 @@ foreach($Reflections->refMedia as $media => $objmedia) {
 
             </script>
 
-<script>
+<!-- <script>
     let selectedFiles = [];
 
     // On file input change - add files to selectedFiles
@@ -949,8 +950,103 @@ foreach($Reflections->refMedia as $media => $objmedia) {
             });
         }
     });
-</script>
+</script> -->
 
+
+    <script>
+    let selectedFiles = [];
+
+    // On file input change - add files to selectedFiles
+    $('#fileUpload').on('change', function() {
+        const files = Array.from(this.files);
+        const maxAllowed = 8;
+        const existingCount = $('#imageContainer .image-box').length;
+        const totalCount = existingCount + selectedFiles.length + files.length;
+
+        if (totalCount > maxAllowed) {
+            alert("You can upload a maximum of 8 images.");
+            this.value = ""; // reset input
+            return;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (!file.type.startsWith("image/")) continue;
+
+            const id = 'preview-' + Date.now() + Math.random().toString(36).substr(2, 5);
+
+            selectedFiles.push({ id: id, file: file });
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageHtml = `
+                    <div class="image-box preview" id="${id}" style="position:relative;">
+                        <img src="${e.target.result}" alt="Preview">
+                        <button class="btn btn-sm btn-danger remove-preview" data-id="${id}">X</button>
+                    </div>`;
+                $('#imageContainer').append(imageHtml);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        this.value = ""; // allow re-selecting same file
+    });
+
+    // Remove preview image
+    $(document).on('click', '.remove-preview', function(e) {
+        e.preventDefault();
+        const id = $(this).data('id');
+        selectedFiles = selectedFiles.filter(f => f.id !== id);
+        $('#' + id).remove();
+    });
+
+    // Before form submit, create new input with only selected files
+    $('form').on('submit', function(e) {
+        const form = this;
+
+        // Remove old file input
+        $('#fileUpload').remove();
+
+        // Create new input
+        const newInput = document.createElement('input');
+        newInput.type = 'file';
+        newInput.name = 'media[]';
+        newInput.multiple = true;
+        newInput.style.display = 'none';
+
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(f => dataTransfer.items.add(f.file));
+        newInput.files = dataTransfer.files;
+
+        form.appendChild(newInput);
+    });
+
+    // AJAX delete for uploaded images (already working fine)
+    $(document).on('click', '.delete-image', function(event) {
+        event.preventDefault();
+
+        var reflectionid = $(this).data('reflectionid');
+        var mediaurl = $(this).data('mediaurl');
+        var button = $(this);
+
+        if(confirm("Are you sure you want to delete this image?")) {
+            $.ajax({
+                url: "<?= base_url('Reflections/deleteMedia') ?>",
+                method: "POST",
+                data: { reflectionid: reflectionid, mediaurl: mediaurl },
+                success: function(response) {
+                    var res = JSON.parse(response);
+                    if(res.status === 'success') {
+                        button.parent().remove();
+                        alert("Image deleted successfully");
+                    } else {
+                        alert("Failed to delete image");
+                    }
+                }
+            });
+        }
+    });
+</script>
 
 
 
