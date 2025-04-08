@@ -496,9 +496,9 @@ class Reflections extends CI_Controller {
 		if($this->session->has_userdata('LoginId')){
 			$this->load->helper('form');
 			$data = $this->input->post();
-			echo "<pre>";
-			print_r($data);
-			exit;
+			// echo "<pre>";
+			// print_r($data);
+			// exit;
 			$data['userid'] = $this->session->userdata('LoginId');
 			$data['reflectionid'] = $_GET['reflectionId'];
 
