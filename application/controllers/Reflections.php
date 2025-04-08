@@ -623,6 +623,104 @@ class Reflections extends CI_Controller {
 		}
 	}
 
+	// public function save_file() {
+
+
+	// 	echo "<pre>";
+	// 	print_r($_FILES);
+	// 	exit;
+
+	// 	if (!empty($_FILES['image']['name'])) {
+	// 		$config['upload_path'] = './uploads/';
+	// 		$config['allowed_types'] = 'jpg|jpeg|png';
+	// 		$config['file_name'] = uniqid('img_');
+	
+	// 		if (!is_dir($config['upload_path'])) {
+	// 			mkdir($config['upload_path'], 0755, true);
+	// 		}
+	
+	// 		$this->load->library('upload', $config);
+	
+	// 		if ($this->upload->do_upload('image')) {
+	// 			$uploadData = $this->upload->data();
+	// 			$filename = $uploadData['file_name'];
+	
+	// 			// Save to DB
+	// 			$this->db->insert('images', [
+	// 				'image_name' => $filename,
+	// 				'uploaded_at' => date('Y-m-d H:i:s')
+	// 			]);
+	
+	// 			echo "Image uploaded: " . $filename;
+	// 		} else {
+	// 			echo "Upload failed: " . $this->upload->display_errors('', '');
+	// 		}
+	// 	} else {
+	// 		echo "No image received";
+	// 	}
+	// }
+	
+	public function receive_rotated_image() {
+		// $data =  $this->input->post();
+		
+		if (!empty($_FILES['image']['tmp_name'])) {
+			$fileSize = $_FILES['image']['size'];
+			$tempPath = $_FILES['image']['tmp_name'];
+			$fileName = $_FILES['image']['name'];
+			$fileType = $_FILES['image']['type'];
+			$reflectionid = $this->input->post('reflectionIds'); 
+	
+			// Check size and compress if needed
+			if ($fileSize > 2 * 1024 * 1024) {
+				$compressedFile = tempnam(sys_get_temp_dir(), 'compressed_');
+				$compressedFile .= '.' . pathinfo($fileName, PATHINFO_EXTENSION);
+	
+				$compressedPath = $this->image_intervention->compress(
+					$tempPath, $compressedFile, 1024, 70
+				);
+	
+				$sendFile = $compressedPath
+					? new CurlFile($compressedPath, $fileType, $fileName)
+					: new CurlFile($tempPath, $fileType, $fileName);
+			} else {
+				$sendFile = new CurlFile($tempPath, $fileType, $fileName);
+			}
+
+		
+			// Prepare cURL data
+			$data = [
+				'obsMedia0' => $sendFile,
+				'reflectionId' => $reflectionid 
+			];
+			
+		// echo "<pre>";
+		// print_r($data);
+		// exit;
+	
+	
+			$url = base_url('Reflections/image_upload_endpoint');
+			$url = BASE_API_URL."Reflections/image_upload_endpoint";
+			$ch = curl_init($url);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, [
+				'X-Device-Id: ' . $this->session->userdata('X-Device-Id'),
+				'X-Token: ' . $this->session->userdata('AuthToken')
+			]);
+	
+			$response = curl_exec($ch);
+			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+			curl_close($ch);
+	
+			echo ($httpcode == 200) ? "Image uploaded successfully" : "Upload failed with code $httpcode";
+		} else {
+			echo "No file received.";
+		}
+	}
+	
+	
+
 	public function deleteMedia() {
 		$reflectionid = $this->input->post('reflectionid');
 		$mediaurl = $this->input->post('mediaurl');

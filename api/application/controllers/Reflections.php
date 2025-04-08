@@ -525,6 +525,42 @@ $headers = $updated_headers;
 		echo json_encode($data);
 	}
 
+	public function image_upload_endpoint() {
+		$reflectionid = $this->input->post('reflectionId'); // match the exact case
+		$target_dir = "assets/media/";
+	
+		if (isset($_FILES['obsMedia0'])) {
+			$file = $_FILES['obsMedia0'];
+	
+			$newName = uniqid();
+			$file_type = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+			$newTarget = $target_dir . $newName . "." . $file_type;
+	
+			if (in_array($file_type, ['mp4', 'jpg', 'jpeg', 'png'])) {
+				$type = ($file_type == 'mp4') ? 'Video' : 'Image';
+	
+				if (move_uploaded_file($file["tmp_name"], $newTarget)) {
+					$mediaObj = new stdClass();
+					$mediaObj->reflectionId = $reflectionid;
+					$mediaObj->mediaUrl = $newName . "." . $file_type;
+					$mediaObj->mediaType = $type;
+	
+					$this->refmodel->insertReflectionMedia($mediaObj);
+					echo json_encode(["status" => "success", "message" => "File uploaded"]);
+				} else {
+					echo json_encode(["status" => "error", "message" => "File could not be moved!"]);
+				}
+			} else {
+				echo json_encode(["status" => "error", "message" => "Unsupported file type!"]);
+			}
+		} else {
+			echo json_encode(["status" => "error", "message" => "No file received!"]);
+		}
+	}
+	
+	
+	
+
 	public function getReflectionDetails()
 	{
 		$headers = $this->input->request_headers();

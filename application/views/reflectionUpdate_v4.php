@@ -151,6 +151,7 @@
                                     <input type="hidden" name="centerid" value="<?= $Reflections->centerid; ?>">
                                 <div class="row">
                                     <div class="col-md-6">
+                                    <input type="hidden" id="reflectionIds" value="<?= $reflectionid ?>">
 
                                     <div class="form-group">
                                             <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-backdrop="static" data-target="#selectChildrenModal"> + Add Children </button>&nbsp;&nbsp;<span style="color:red;">* Required</span>
@@ -272,10 +273,10 @@
 <div class="image-box uploaded" id="<?= $uniqueId ?>" style="position:relative;" data-rotation="0">
      <img class="card-img rotatable" src="<?= BASE_API_URL."assets/media/".$objmedia->mediaUrl ?>" alt="No media here">
 
-     <div class="btn-group-vertical" style="position:absolute;top:0;left:0;">
+     <!-- <div class="btn-group-vertical" style="position:absolute;top:0;left:0;">
              <button type="button" class="btn btn-sm btn-warning rotate-left">⟲</button>
              <button type="button" class="btn btn-sm btn-warning rotate-right">⟳</button>
-         </div>
+         </div> -->
  
          <button class="btn btn-sm btn-danger delete-image" 
                  data-reflectionid="<?= $reflectionid ?>" 
@@ -435,6 +436,28 @@
 
 
 
+    
+<!-- Modal -->
+<div class="modal fade" id="rotateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Rotate Image</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body text-center" style="max-height:500px;overflow-y:auto;">
+        <canvas id="imageCanvas" style="max-width: 100%;"></canvas>
+        <br>
+        <button class="btn btn-primary mt-2" onclick="rotateCurrentImage()">Rotate</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" onclick="saveRotatedImage()" id="saveButton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
      <!-- EYLF Modal -->
 <div class="modal fade" id="eylfModal" tabindex="-1" role="dialog" aria-labelledby="eylfModalLabel" aria-hidden="true">
@@ -542,6 +565,8 @@
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/slick.min.js?id=1234"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/ckeditor5-build-classic/ckeditor.js"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/dropzone.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
 
             $(document).on('click', "#select-all-child", function() {           
@@ -952,106 +977,210 @@
     });
 </script> -->
 
+<script type="text/javascript">
+  var baseUrl = '<?= base_url() ?>';
+</script>
+
 
     <script>
-    let selectedFiles = [];
+    // let selectedFiles = [];
 
-    // On file input change - add files to selectedFiles
-    $('#fileUpload').on('change', function() {
-        const files = Array.from(this.files);
-        const maxAllowed = 8;
-        const existingCount = $('#imageContainer .image-box').length;
-        const totalCount = existingCount + selectedFiles.length + files.length;
+    // // On file input change - add files to selectedFiles
+    // $('#fileUpload').on('change', function() {
+    //     const files = Array.from(this.files);
+    //     const maxAllowed = 8;
+    //     const existingCount = $('#imageContainer .image-box').length;
+    //     const totalCount = existingCount + selectedFiles.length + files.length;
 
-        if (totalCount > maxAllowed) {
-            alert("You can upload a maximum of 8 images.");
-            this.value = ""; // reset input
-            return;
-        }
+    //     if (totalCount > maxAllowed) {
+    //         alert("You can upload a maximum of 8 images.");
+    //         this.value = ""; // reset input
+    //         return;
+    //     }
 
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            if (!file.type.startsWith("image/")) continue;
+    //     for (let i = 0; i < files.length; i++) {
+    //         const file = files[i];
+    //         if (!file.type.startsWith("image/")) continue;
 
-            const id = 'preview-' + Date.now() + Math.random().toString(36).substr(2, 5);
+    //         const id = 'preview-' + Date.now() + Math.random().toString(36).substr(2, 5);
 
-            selectedFiles.push({ id: id, file: file });
+    //         selectedFiles.push({ id: id, file: file });
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const imageHtml = `
-                    <div class="image-box preview" id="${id}" style="position:relative;">
-                        <img src="${e.target.result}" alt="Preview">
-                        <button class="btn btn-sm btn-danger remove-preview" data-id="${id}">X</button>
-                    </div>`;
-                $('#imageContainer').append(imageHtml);
-            };
-            reader.readAsDataURL(file);
-        }
+    //         const reader = new FileReader();
+    //         reader.onload = function(e) {
+    //             const imageHtml = `
+    //                 <div class="image-box preview" id="${id}" style="position:relative;">
+    //                     <img src="${e.target.result}" alt="Preview">
+    //                     <button class="btn btn-sm btn-danger remove-preview" data-id="${id}">X</button>
+    //                 </div>`;
+    //             $('#imageContainer').append(imageHtml);
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
 
-        this.value = ""; // allow re-selecting same file
-    });
+    //     this.value = ""; // allow re-selecting same file
+    // });
 
-    // Remove preview image
-    $(document).on('click', '.remove-preview', function(e) {
-        e.preventDefault();
-        const id = $(this).data('id');
-        selectedFiles = selectedFiles.filter(f => f.id !== id);
-        $('#' + id).remove();
-    });
+    // // Remove preview image
+    // $(document).on('click', '.remove-preview', function(e) {
+    //     e.preventDefault();
+    //     const id = $(this).data('id');
+    //     selectedFiles = selectedFiles.filter(f => f.id !== id);
+    //     $('#' + id).remove();
+    // });
 
-    // Before form submit, create new input with only selected files
-    $('form').on('submit', function(e) {
-        const form = this;
+    // // Before form submit, create new input with only selected files
+    // $('form').on('submit', function(e) {
+    //     const form = this;
 
-        // Remove old file input
-        $('#fileUpload').remove();
+    //     // Remove old file input
+    //     $('#fileUpload').remove();
 
-        // Create new input
-        const newInput = document.createElement('input');
-        newInput.type = 'file';
-        newInput.name = 'media[]';
-        newInput.multiple = true;
-        newInput.style.display = 'none';
+    //     // Create new input
+    //     const newInput = document.createElement('input');
+    //     newInput.type = 'file';
+    //     newInput.name = 'media[]';
+    //     newInput.multiple = true;
+    //     newInput.style.display = 'none';
 
-        const dataTransfer = new DataTransfer();
-        selectedFiles.forEach(f => dataTransfer.items.add(f.file));
-        newInput.files = dataTransfer.files;
+    //     const dataTransfer = new DataTransfer();
+    //     selectedFiles.forEach(f => dataTransfer.items.add(f.file));
+    //     newInput.files = dataTransfer.files;
 
-        form.appendChild(newInput);
-    });
+    //     form.appendChild(newInput);
+    // });
 
     // AJAX delete for uploaded images (already working fine)
+    // $(document).on('click', '.delete-image', function(event) {
+    //     event.preventDefault();
+
+    //     var reflectionid = $(this).data('reflectionid');
+    //     var mediaurl = $(this).data('mediaurl');
+    //     var button = $(this);
+
+    //     if(confirm("Are you sure you want to delete this image?")) {
+    //         $.ajax({
+    //             url: "<?= base_url('Reflections/deleteMedia') ?>",
+    //             method: "POST",
+    //             data: { reflectionid: reflectionid, mediaurl: mediaurl },
+    //             success: function(response) {
+    //                 var res = JSON.parse(response);
+    //                 if(res.status === 'success') {
+    //                     button.parent().remove();
+    //                     alert("Image deleted successfully");
+    //                 } else {
+    //                     alert("Failed to delete image");
+    //                 }
+    //             }
+    //         });
+    //     }
+    // });
+
     $(document).on('click', '.delete-image', function(event) {
-        event.preventDefault();
+    event.preventDefault();
 
-        var reflectionid = $(this).data('reflectionid');
-        var mediaurl = $(this).data('mediaurl');
-        var button = $(this);
+    var reflectionid = $(this).data('reflectionid');
+    var mediaurl = $(this).data('mediaurl');
+  
+    function getBaseUrl() {
+  if (typeof baseUrl !== 'undefined') {
+    return baseUrl;
+  } else {
+    console.error("Base URL not defined.");
+    return "";
+  }
+}
 
-        if(confirm("Are you sure you want to delete this image?")) {
-            $.ajax({
-                url: "<?= base_url('Reflections/deleteMedia') ?>",
-                method: "POST",
-                data: { reflectionid: reflectionid, mediaurl: mediaurl },
-                success: function(response) {
-                    var res = JSON.parse(response);
-                    if(res.status === 'success') {
-                        button.parent().remove();
-                        alert("Image deleted successfully");
-                    } else {
-                        alert("Failed to delete image");
-                    }
-                }
+var mediaurl2 = getBaseUrl() + "api/assets/media/" + mediaurl;
+
+console.log(mediaurl2);
+
+
+    var button = $(this);
+
+    Swal.fire({
+        title: 'Delete Image',
+        text: "Would you like to download this image before deleting?",
+        icon: 'warning',
+        showCancelButton: true,
+        showDenyButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        denyButtonColor: '#3085d6',
+        confirmButtonText: 'Download & Delete',
+        denyButtonText: 'Delete without Download',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Download the image first
+            downloadImage(mediaurl2, function() {
+                console.log("mediaurl",mediaurl2);
+                // After download is initiated, delete the image
+                deleteImage(reflectionid, mediaurl, button);
+            });
+        } else if (result.isDenied) {
+            // Delete without downloading
+            deleteImage(reflectionid, mediaurl, button);
+        }
+    });
+});
+
+// Function to handle the image downloading
+function downloadImage(mediaurl2, callback) {
+    // Create a temporary anchor element to trigger download
+    var downloadLink = document.createElement('a');
+    downloadLink.href = mediaurl2;
+    downloadLink.download = mediaurl2.split('/').pop();
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    
+    // Add a small delay to ensure download begins before deletion
+    setTimeout(function() {
+        if (callback) callback();
+    }, 1000);
+}
+
+// Function to handle the image deletion
+function deleteImage(reflectionid, mediaurl, button) {
+    $.ajax({
+        url: "<?= base_url('Reflections/deleteMedia') ?>",
+        method: "POST",
+        data: { reflectionid: reflectionid, mediaurl: mediaurl },
+        success: function(response) {
+            var res = JSON.parse(response);
+            if(res.status === 'success') {
+                button.parent().remove();
+                Swal.fire({
+                    title: 'Deleted!',
+                    text: 'Image deleted successfully',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to delete image',
+                    icon: 'error'
+                });
+            }
+        },
+        error: function() {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Server error occurred',
+                icon: 'error'
             });
         }
     });
+}
 </script>
 
 
 
 
-<script>
+<!-- <script>
     // Rotate Left
     $(document).on('click', '.rotate-left', function(e) {
         e.preventDefault();
@@ -1071,7 +1200,112 @@
         box.attr('data-rotation', rotation);
         box.find('.rotatable').css('transform', `rotate(${rotation}deg)`);
     });
+</script> -->
+
+
+<script>
+let imageFiles = [];
+let currentIndex = 0;
+let angle = 0;
+let img = new Image();
+
+document.getElementById('fileUpload').addEventListener('change', function (e) {
+    imageFiles = Array.from(e.target.files);
+    currentIndex = 0;
+    if (imageFiles.length > 0) {
+        openModalWithImage(imageFiles[currentIndex]);
+    }
+});
+
+function openModalWithImage(file) {
+    angle = 0;
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        img = new Image();
+        img.onload = () => drawImage();
+        img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+    $('#rotateModal').modal('show');
+}
+
+function rotateCurrentImage() {
+    angle = (angle + 90) % 360;
+    drawImage();
+}
+
+function drawImage() {
+    const canvas = document.getElementById('imageCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = img.width;
+    let height = img.height;
+
+    if (angle === 90 || angle === 270) {
+        canvas.width = height;
+        canvas.height = width;
+    } else {
+        canvas.width = width;
+        canvas.height = height;
+    }
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.rotate(angle * Math.PI / 180);
+    ctx.drawImage(img, -width / 2, -height / 2);
+    ctx.restore();
+}
+
+function saveRotatedImage() {
+    const canvas = document.getElementById('imageCanvas');
+    const saveBtn = document.getElementById('saveButton'); // Assuming button has this ID
+
+    // Disable button and show loading
+    saveBtn.disabled = true;
+    saveBtn.innerText = 'Saving...';
+
+    canvas.toBlob(function(blob) {
+        const formData = new FormData();
+        const filename = 'image_' + Date.now() + '.jpg';
+        formData.append('image', blob, filename);
+
+        const reflectionId = $('#reflectionIds').val(); // Get from hidden input
+        formData.append('reflectionIds', reflectionId);
+
+        fetch("<?= base_url('Reflections/receive_rotated_image') ?>", {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.text())
+        .then(response => {
+            console.log(response);
+            // Reset button
+            saveBtn.disabled = false;
+            saveBtn.innerText = 'Save';
+
+            currentIndex++;
+            if (currentIndex < imageFiles.length) {
+                openModalWithImage(imageFiles[currentIndex]);
+            } else {
+                $('#rotateModal').modal('hide');
+                location.reload(); // All images saved
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            saveBtn.disabled = false;
+            saveBtn.innerText = 'Save';
+        });
+    }, 'image/jpeg', 0.95);
+}
+
+// Reload page when modal is closed by user manually
+$('#rotateModal').on('hidden.bs.modal', function () {
+    location.reload();
+});
 </script>
+
 
 
 
