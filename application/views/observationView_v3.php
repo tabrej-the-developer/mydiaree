@@ -917,7 +917,7 @@ function openImageModal(observationId) {
         $.each(response.images, function(index, image) {
           $('#imagesContainer').append(
             '<div class="image-box uploaded" id="image-' + image.id + '" style="position:relative;" data-rotation="0">' +
-              '<img class="card-img rotatable" src="<?= base_url('/api/assets/media/') ?>' + image.mediaUrl + '" alt="No media here">' +
+              '<img class="card-img rotatable" style="width:220px;height:190px;padding:10px;" src="<?= base_url('/api/assets/media/') ?>' + image.mediaUrl + '" alt="No media here">' +
               '<button class="btn btn-sm btn-danger delete-image" ' +
                      'data-observationid="' + observationId + '" ' +
                      'data-mediaurl="' + image.mediaUrl + '" ' +
