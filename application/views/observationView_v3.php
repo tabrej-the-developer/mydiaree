@@ -120,6 +120,12 @@
                 <div class="col-12">
                     <div class="tab-content">
                         <div class="tab-pane show active" id="first" role="tabpanel" aria-labelledby="first-tab">
+                        <div style="display: flex; justify-content: flex-end;">
+  <button class="btn btn-sm btn-primary" style="margin-bottom:5px;" 
+          onclick="openImageModal(<?= $observation->id; ?>)">Edit Image</button>
+</div>
+<input type="hidden" id="reflectionIds" value="<?= $observation->id ?>">
+
                             <div class="card">
                                 <div class="position-absolute card-top-buttons">
                                     <a class="btn btn-header-light icon-button" href="<?= base_url()."observation/view?id=".$nextObsId; ?>">
@@ -676,6 +682,54 @@
     </div>
     <!-- Modal -->
 
+    <!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="imageModalLabel">Edit Images</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="max-height:550px;overflow-y:auto;">
+      <div class="form-group">
+    <label for="fileUpload" class="btn btn-primary mb-3">Add More Images</label>
+    <input type="file" name="media[]" id="fileUpload" class="form-control-hidden" multiple accept="image/*" style="display: none;">
+  </div>
+    
+        <div id="imagesContainer" class="row">
+          <!-- Images will be loaded here dynamically -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="rotateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Rotate Image</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body text-center" style="max-height:500px;overflow-y:auto;">
+        <canvas id="imageCanvas" style="max-width: 100%;"></canvas>
+        <br>
+        <button class="btn btn-primary mt-2" onclick="rotateCurrentImage()">Rotate</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" onclick="saveRotatedImage()" id="saveButton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
     <?php $this->load->view('footer_v3'); ?>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/jquery-3.3.1.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/bootstrap.bundle.min.js?v=1.0.0"></script>
@@ -688,6 +742,8 @@
     <script src="<?= base_url('assets/v3'); ?>/js/scripts.js?v=1.0.0"></script>
     <!-- <script src="https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js"></script> -->
     <script src="https://cdn.ckeditor.com/4.22.1/full-all/ckeditor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <script>
 
@@ -838,6 +894,257 @@ $(document).ready(function() {
         // Open the print page in a new window
         window.open('<?= base_url("observation/print/") ?>' + observationId, '_blank');
     });
+});
+</script>
+
+<script>
+function openImageModal(observationId) {
+  // Clear previous images
+  $('#imagesContainer').empty();
+  
+  // Show the modal
+  $('#imageModal').modal('show');
+  
+  // Fetch images using AJAX
+  $.ajax({
+    url: '<?= base_url('Observation/get_observation_images') ?>',
+    type: 'GET',
+    data: { observation_id: observationId },
+    dataType: 'json',
+    success: function(response) {
+      if(response.status === 'success') {
+        // Display images in the modal
+        $.each(response.images, function(index, image) {
+          $('#imagesContainer').append(
+            '<div class="image-box uploaded" id="image-' + image.id + '" style="position:relative;" data-rotation="0">' +
+              '<img class="card-img rotatable" src="<?= base_url('/api/assets/media/') ?>' + image.mediaUrl + '" alt="No media here">' +
+              '<button class="btn btn-sm btn-danger delete-image" ' +
+                     'data-observationid="' + observationId + '" ' +
+                     'data-mediaurl="' + image.mediaUrl + '" ' +
+                     'style="position:absolute;top:0;right:0;">X</button>' +
+            '</div>'
+          );
+        });
+      } else {
+        $('#imagesContainer').html('<div class="col-12"><p>No images found.</p></div>');
+      }
+    },
+    error: function() {
+      $('#imagesContainer').html('<div class="col-12"><p>Error loading images. Please try again.</p></div>');
+    }
+  });
+}
+</script>
+
+<script type="text/javascript">
+  var baseUrl = '<?= base_url() ?>';
+</script>
+
+<script>
+// Event handler for observation image delete button
+$(document).on('click', '.delete-image', function(event) {
+    event.preventDefault();
+
+    var observationId = $(this).data('observationid');
+    var mediaurl = $(this).data('mediaurl');
+  
+    function getBaseUrl() {
+      if (typeof baseUrl !== 'undefined') {
+        return baseUrl;
+      } else {
+        console.error("Base URL not defined.");
+        return "";
+      }
+    }
+
+    var mediaurl2 = getBaseUrl() + "api/assets/media/" + mediaurl;
+    console.log("mediaurl2", mediaurl2);
+    console.log("observationId", observationId);
+    console.log("mediaurl", mediaurl);
+
+    var button = $(this);
+
+    Swal.fire({
+        title: 'Delete Image',
+        text: "Would you like to download this image before deleting?",
+        icon: 'warning',
+        showCancelButton: true,
+        showDenyButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        denyButtonColor: '#3085d6',
+        confirmButtonText: 'Download & Delete',
+        denyButtonText: 'Delete without Download',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Download the image first
+            downloadImage(mediaurl2, function() {
+                console.log("mediaurl",mediaurl2);
+                // After download is initiated, delete the image
+                deleteObservationImage(observationId, mediaurl, button);
+            });
+        } else if (result.isDenied) {
+            // Delete without downloading
+            deleteObservationImage(observationId, mediaurl, button);
+        }
+    });
+});
+
+function downloadImage(mediaurl2, callback) {
+    // Create a temporary anchor element to trigger download
+    var downloadLink = document.createElement('a');
+    downloadLink.href = mediaurl2;
+    downloadLink.download = mediaurl2.split('/').pop();
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    
+    // Add a small delay to ensure download begins before deletion
+    setTimeout(function() {
+        if (callback) callback();
+    }, 1000);
+}
+
+// Function to handle the observation image deletion
+function deleteObservationImage(observationId, mediaurl, button) {
+    // console.log("mediaurl2", mediaurl2);
+    console.log("observationId", observationId);
+    console.log("mediaurl", mediaurl);
+    $.ajax({
+        url: "<?= base_url('Observation/deleteMedia') ?>",
+        method: "POST",
+        data: { observation_id: observationId, mediaurl: mediaurl },
+        success: function(response) {
+            var res = JSON.parse(response);
+            if(res.status === 'success') {
+                button.parent().remove();
+                Swal.fire({
+                    title: 'Deleted!',
+                    text: 'Image deleted successfully',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to delete image',
+                    icon: 'error'
+                });
+            }
+        },
+        error: function() {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Server error occurred',
+                icon: 'error'
+            });
+        }
+    });
+}
+</script>
+
+<script>
+let imageFiles = [];
+let currentIndex = 0;
+let angle = 0;
+let img = new Image();
+
+document.getElementById('fileUpload').addEventListener('change', function (e) {
+    imageFiles = Array.from(e.target.files);
+    currentIndex = 0;
+    if (imageFiles.length > 0) {
+        openModalWithImage(imageFiles[currentIndex]);
+    }
+});
+
+function openModalWithImage(file) {
+    angle = 0;
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        img = new Image();
+        img.onload = () => drawImage();
+        img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+    $('#rotateModal').modal('show');
+}
+
+function rotateCurrentImage() {
+    angle = (angle + 90) % 360;
+    drawImage();
+}
+
+function drawImage() {
+    const canvas = document.getElementById('imageCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = img.width;
+    let height = img.height;
+
+    if (angle === 90 || angle === 270) {
+        canvas.width = height;
+        canvas.height = width;
+    } else {
+        canvas.width = width;
+        canvas.height = height;
+    }
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.rotate(angle * Math.PI / 180);
+    ctx.drawImage(img, -width / 2, -height / 2);
+    ctx.restore();
+}
+
+function saveRotatedImage() {
+    const canvas = document.getElementById('imageCanvas');
+    const saveBtn = document.getElementById('saveButton'); // Assuming button has this ID
+
+    // Disable button and show loading
+    saveBtn.disabled = true;
+    saveBtn.innerText = 'Saving...';
+
+    canvas.toBlob(function(blob) {
+        const formData = new FormData();
+        const filename = 'image_' + Date.now() + '.jpg';
+        formData.append('image', blob, filename);
+
+        const reflectionId = $('#reflectionIds').val(); // Get from hidden input
+        formData.append('reflectionIds', reflectionId);
+
+        fetch("<?= base_url('Observation/receive_rotated_image') ?>", {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.text())
+        .then(response => {
+            console.log(response);
+            // Reset button
+            saveBtn.disabled = false;
+            saveBtn.innerText = 'Save';
+
+            currentIndex++;
+            if (currentIndex < imageFiles.length) {
+                openModalWithImage(imageFiles[currentIndex]);
+            } else {
+                $('#rotateModal').modal('hide');
+                location.reload(); // All images saved
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            saveBtn.disabled = false;
+            saveBtn.innerText = 'Save';
+        });
+    }, 'image/jpeg', 0.95);
+}
+
+// Reload page when modal is closed by user manually
+$('#rotateModal').on('hidden.bs.modal', function () {
+    location.reload();
 });
 </script>
 

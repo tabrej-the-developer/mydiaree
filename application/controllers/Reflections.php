@@ -698,7 +698,7 @@ class Reflections extends CI_Controller {
 		// exit;
 	
 	
-			$url = base_url('Reflections/image_upload_endpoint');
+			// $url = base_url('Reflections/image_upload_endpoint');
 			$url = BASE_API_URL."Reflections/image_upload_endpoint";
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_POST, 1);

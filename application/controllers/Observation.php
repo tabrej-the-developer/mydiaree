@@ -910,6 +910,138 @@ class Observation extends CI_Controller {
 	    }
 	}
 
+	public function get_observation_images() {
+		// Check if this is an AJAX request
+		if (!$this->input->is_ajax_request()) {
+			exit('No direct script access allowed');
+		}
+		
+		$observation_id = $this->input->get('observation_id');
+		
+		// Use DB query instead of model as requested
+		$query = $this->db->query("
+			SELECT * FROM observationmedia 
+			WHERE observationId = ?
+		", [$observation_id]);
+		
+		$result = $query->result();
+		
+		if ($query->num_rows() > 0) {
+			echo json_encode([
+				'status' => 'success',
+				'images' => $result
+			]);
+		} else {
+			echo json_encode([
+				'status' => 'error',
+				'message' => 'No images found'
+			]);
+		}
+	}
+
+	public function deleteMedia() {
+		if (!$this->input->is_ajax_request()) {
+			exit('No direct script access allowed');
+		}
+		
+		$observation_id = $this->input->post('observation_id');
+		$mediaurl = $this->input->post('mediaurl');
+
+		// print_r($observation_id);
+		// print_r($mediaurl);
+		// exit;
+		
+		// Use DB query to delete the image record
+		$result = $this->db->query("
+			DELETE FROM observationmedia 
+			WHERE observationId = ? AND mediaUrl = ?
+		", [$observation_id, $mediaurl]);
+		
+		if ($this->db->affected_rows() > 0) {
+			// Attempt to delete the actual file (optional)
+			$file_path = FCPATH . 'api/assets/media/' . $mediaurl;
+			if (file_exists($file_path)) {
+				unlink($file_path);
+			}
+			
+			echo json_encode([
+				'status' => 'success',
+				'message' => 'Image deleted successfully'
+			]);
+		} else {
+			echo json_encode([
+				'status' => 'error',
+				'message' => 'Failed to delete image'
+			]);
+		}
+	}
+
+
+	public function receive_rotated_image() {
+		// $data =  $this->input->post();
+
+		// echo "<pre>";
+		// print_r($data);
+		// exit;
+	
+
+		
+		if (!empty($_FILES['image']['tmp_name'])) {
+			$fileSize = $_FILES['image']['size'];
+			$tempPath = $_FILES['image']['tmp_name'];
+			$fileName = $_FILES['image']['name'];
+			$fileType = $_FILES['image']['type'];
+			$reflectionid = $this->input->post('reflectionIds'); 
+	
+			// Check size and compress if needed
+			if ($fileSize > 2 * 1024 * 1024) {
+				$compressedFile = tempnam(sys_get_temp_dir(), 'compressed_');
+				$compressedFile .= '.' . pathinfo($fileName, PATHINFO_EXTENSION);
+	
+				$compressedPath = $this->image_intervention->compress(
+					$tempPath, $compressedFile, 1024, 70
+				);
+	
+				$sendFile = $compressedPath
+					? new CurlFile($compressedPath, $fileType, $fileName)
+					: new CurlFile($tempPath, $fileType, $fileName);
+			} else {
+				$sendFile = new CurlFile($tempPath, $fileType, $fileName);
+			}
+
+		
+			// Prepare cURL data
+			$data = [
+				'obsMedia0' => $sendFile,
+				'reflectionId' => $reflectionid 
+			];
+			
+		// echo "<pre>";
+		// print_r($data);
+		// exit;
+	
+	
+			// $url = base_url('Reflections/image_upload_endpoint');
+			$url = BASE_API_URL."observation/image_upload_endpoint";
+			$ch = curl_init($url);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, [
+				'X-Device-Id: ' . $this->session->userdata('X-Device-Id'),
+				'X-Token: ' . $this->session->userdata('AuthToken')
+			]);
+	
+			$response = curl_exec($ch);
+			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+			curl_close($ch);
+	
+			echo ($httpcode == 200) ? "Image uploaded successfully" : "Upload failed with code $httpcode";
+		} else {
+			echo "No file received.";
+		}
+	}
+
 	public function print($observationId) {
 		// Check if user is logged in
 		if (!$this->session->has_userdata('LoginId')) {

@@ -554,7 +554,7 @@
                                                                     <div class="img-preview sticky-preview" data-origin="OBSERVED" data-mediaid="<?= $obsMedia->id; ?>" data-key="<?= $obsMedia->id; ?>">
                                                                         <img class="thumb-image" src="<?php echo BASE_API_URL."assets/media/".$obsMedia->mediaUrl;?>">
                                                                         <span id="<?php echo $obsMedia->id; ?>" class="img-remove deleteMedia">X</span>
-                                                                        <a class="img-edit img-real-edit" href="#!" data-imgcount="<?= $key; ?>" data-mediaid="<?= $obsMedia->id; ?>" data-image="<?= BASE_API_URL."assets/media/".$obsMedia->mediaUrl; ?>" data-toggle="modal" data-target="#myModal" data-edit="1" data-mediaorigin="OBSERVED">#</a>
+                                                                        <!-- <a class="img-edit img-real-edit" href="#!" data-imgcount="<?= $key; ?>" data-mediaid="<?= $obsMedia->id; ?>" data-image="<?= BASE_API_URL."assets/media/".$obsMedia->mediaUrl; ?>" data-toggle="modal" data-target="#myModal" data-edit="1" data-mediaorigin="OBSERVED">#</a> -->
                                                                     </div>
                                                                 <?php
                                                                        }
