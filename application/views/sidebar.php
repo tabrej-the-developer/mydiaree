@@ -314,11 +314,11 @@
                     </li>
                 <?php } ?>
 
-                     <li>
+                     <!-- <li>
                         <a href="<?php echo base_url('headChecks/sleepchecklistindex'); ?>">
                             <i class="simple-icon-picture"></i> <span class="d-inline-block">Sleep Check List</span>
                         </a>
-                    </li>
+                    </li> -->
 
 
                 <li>
