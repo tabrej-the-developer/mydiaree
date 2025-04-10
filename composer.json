@@ -14,7 +14,8 @@
 		"php": ">=5.3.7",
 		"dompdf/dompdf": "^3.1",
 		"mpdf/mpdf": "^8.2",
-		"intervention/image": "^2.7"
+		"intervention/image": "^2.7",
+		"phpoffice/phpspreadsheet": "^1.12"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

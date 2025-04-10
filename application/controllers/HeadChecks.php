@@ -31,6 +31,9 @@ class HeadChecks extends CI_Controller {
 			if($httpcode == 200){
 				$data = json_decode($server_output);
 				curl_close ($ch);
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
 				$this->load->view('HeadChecksView',$data);
 			}
 			else if($httpcode == 401){
@@ -40,6 +43,44 @@ class HeadChecks extends CI_Controller {
 			redirect("welcome");
 		}
 	}
+
+
+	public function sleepchecklistindex(){
+		if($this->session->has_userdata('LoginId')){
+			if(!empty($this->input->get())){
+				$data = $this->input->get();
+			} else {
+				$data = [];
+			}
+			$data['userid'] = $this->session->userdata("LoginId");	
+			$url = BASE_API_URL.'HeadChecks/getsleepChecks';
+			$ch = curl_init($url);
+			curl_setopt($ch, CURLOPT_URL,$url);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS,json_encode($data));
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'X-Device-Id: '.$this->session->userdata('X-Device-Id'),
+				'X-Token: '.$this->session->userdata('AuthToken')
+			));
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$server_output = curl_exec($ch);
+			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+			if($httpcode == 200){
+				$data = json_decode($server_output);
+				curl_close ($ch);
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
+				$this->load->view('sleepchecklist',$data);
+			}
+			else if($httpcode == 401){
+				return 'error';
+			}
+		}else{
+			redirect("welcome");
+		}
+	}
+
 
 	public function addHeadChecks()
 	{

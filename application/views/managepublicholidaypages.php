@@ -39,6 +39,9 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 style="margin-left:20px;margin-top:25px;">Manage Public Holidays</h4>
+                        <button type="button" class="btn btn-info" style="margin-right:20px;margin-top:25px;" data-toggle="modal" data-target="#uploadExcelModal">
+    <i class="fas fa-plus"></i> Upload Excel Sheet
+</button>
                         <button type="button" class="btn btn-primary" style="margin-right:20px;margin-top:25px;" id="addNewBtn">
                             <i class="fas fa-plus"></i> Add New
                         </button>
@@ -113,6 +116,36 @@
     </div>
 
 
+
+    <!-- Modal for Excel Upload -->
+<div class="modal fade" id="uploadExcelModal" tabindex="-1" role="dialog" aria-labelledby="uploadExcelModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadExcelModalLabel">Upload Holiday Excel Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="uploadResponse"></div>
+                <form id="excelUploadForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="excelfile">Select Excel File</label>
+                        <input type="file" name="excelfile" id="excelfile" class="form-control" accept=".xlsx, .xls, .csv" required>
+                        <small class="form-text text-muted">Only Excel files (.xlsx, .xls) or CSV files are allowed</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnUploadExcel">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 </main>
 
 
@@ -123,6 +156,62 @@
     <script src="<?= base_url('assets/v3'); ?>/js/vendor/mousetrap.min.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/dore.script.js?v=1.0.0"></script>
     <script src="<?= base_url('assets/v3'); ?>/js/scripts.js?v=1.0.0"></script>
+
+
+    <!-- Add these in the <head> section if not already included -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+    <!-- Add this at the end of your page, before the closing </body> tag -->
+<script>
+$(document).ready(function() {
+    $('#btnUploadExcel').click(function() {
+        var formData = new FormData();
+        var fileInput = $('#excelfile')[0];
+        
+        // Validate if file is selected
+        if (fileInput.files.length === 0) {
+            $('#uploadResponse').html('<div class="alert alert-danger">Please select an Excel file to upload.</div>');
+            return;
+        }
+        
+        // Add file to form data
+        formData.append('excelfile', fileInput.files[0]);
+        
+        // Show loading message
+        $('#uploadResponse').html('<div class="alert alert-info">Uploading and processing your file. Please wait...</div>');
+        
+        // Send AJAX request
+        $.ajax({
+            url: '<?php echo base_url('Settings/upload_ajax'); ?>',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                var data = JSON.parse(response);
+                if (data.status === 'success') {
+                    $('#uploadResponse').html('<div class="alert alert-success">' + data.message + '</div>');
+                    // Reset the file input
+                    $('#excelUploadForm')[0].reset();
+                    // Optionally refresh the page or table after 2 seconds
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    $('#uploadResponse').html('<div class="alert alert-danger">' + data.message + '</div>');
+                }
+            },
+            error: function(xhr, status, error) {
+                $('#uploadResponse').html('<div class="alert alert-danger">An error occurred: ' + error + '</div>');
+            }
+        });
+    });
+});
+</script>
   
 
     </body>

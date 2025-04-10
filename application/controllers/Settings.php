@@ -1,4 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+require_once FCPATH . 'vendor/autoload.php'; // Include composer autoload
+
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 
 class Settings extends CI_Controller {
 
@@ -36,6 +40,130 @@ class Settings extends CI_Controller {
         $data['holidays'] = $this->db->get('publicholidays')->result();
         $this->load->view('managepublicholidaypages', $data);
     }
+
+
+	public function upload_ajax() {
+        // Set up the response array
+        $response = array(
+            'status' => 'error',
+            'message' => 'Unknown error occurred'
+        );
+        
+        // Configure upload settings
+        $config['upload_path'] = './uploads/';
+        $config['allowed_types'] = 'xlsx|xls|csv';
+        $config['max_size'] = 2048; // 2MB max
+        
+        // Create upload folder if it doesn't exist
+        if (!is_dir('./uploads/')) {
+            mkdir('./uploads/', 0777, true);
+        }
+        
+        $this->load->library('upload', $config);
+        
+        if (!$this->upload->do_upload('excelfile')) {
+            // File upload failed
+            $response['message'] = $this->upload->display_errors('', '');
+        } else {
+            // File upload succeeded
+            $upload_data = $this->upload->data();
+            $file_path = $upload_data['full_path'];
+            
+            // Process the Excel file
+            try {
+                $result = $this->process_excel($file_path);
+                $response['status'] = 'success';
+                $response['message'] = $result;
+            } catch (Exception $e) {
+                $response['message'] = "Error processing file: " . $e->getMessage();
+            }
+            
+            // Delete the file after processing
+            unlink($file_path);
+        }
+        
+        // Send JSON response
+        echo json_encode($response);
+    }
+    
+	private function process_excel($file_path) {
+		try {
+			// Identify the type of file (xlsx, xls, csv)
+			$file_type = IOFactory::identify($file_path);
+			
+			// Create a reader based on file type
+			$reader = IOFactory::createReader($file_type);
+			
+			// Load the file
+			$spreadsheet = $reader->load($file_path);
+			
+			// Get the first worksheet
+			$worksheet = $spreadsheet->getActiveSheet();
+			
+			// Get the highest row with data
+			$highest_row = $worksheet->getHighestRow();
+			
+			// Start from row 2 if there's a header row
+			$start_row = 2;
+			
+			// Count successful inserts and skipped entries
+			$insert_count = 0;
+			$skip_count = 0;
+			
+			// Begin transaction
+			$this->db->trans_start();
+			
+			for ($row = $start_row; $row <= $highest_row; $row++) {
+				$date = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
+				$month = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
+				$occasion = $worksheet->getCellByColumnAndRow(3, $row)->getValue();
+				
+				// Skip rows with empty required fields
+				if (empty($date) || empty($month) || empty($occasion)) {
+					continue;
+				}
+				
+				// Check if entry already exists in database
+				$this->db->where('date', (int)$date);
+				$this->db->where('month', (int)$month);
+				$this->db->where('occasion', $occasion);
+				$query = $this->db->get('publicholidays');
+				
+				// If entry exists, skip it
+				if ($query->num_rows() > 0) {
+					$skip_count++;
+					continue;
+				}
+				
+				// Using direct DB query instead of model
+				$data = array(
+					'date' => (int)$date,
+					'month' => (int)$month,
+					'occasion' => $occasion
+				);
+				
+				$this->db->insert('publicholidays', $data);
+				$insert_count++;
+			}
+			
+			// Complete transaction
+			$this->db->trans_complete();
+			
+			if ($this->db->trans_status() === FALSE) {
+				throw new Exception("Database transaction failed");
+			}
+			
+			$message = "Successfully imported $insert_count holiday records.";
+			if ($skip_count > 0) {
+				$message .= " Skipped $skip_count duplicate entries.";
+			}
+			
+			return $message;
+			
+		} catch (Exception $e) {
+			throw $e; // Re-throw to be caught by the calling function
+		}
+	}
 
 
 	  // API endpoint to fetch all holidays
