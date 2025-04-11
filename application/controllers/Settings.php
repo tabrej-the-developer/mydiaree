@@ -88,6 +88,10 @@ class Settings extends CI_Controller {
     
 	private function process_excel($file_path) {
 		try {
+			// Temporarily suppress deprecation warnings
+			$errorLevel = error_reporting();
+			error_reporting($errorLevel & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+			
 			// Identify the type of file (xlsx, xls, csv)
 			$file_type = IOFactory::identify($file_path);
 			
@@ -97,16 +101,13 @@ class Settings extends CI_Controller {
 			// Load the file
 			$spreadsheet = $reader->load($file_path);
 			
-			// Get the first worksheet
+			// Restore original error reporting level
+			error_reporting($errorLevel);
+			
+			// Rest of your code remains the same
 			$worksheet = $spreadsheet->getActiveSheet();
-			
-			// Get the highest row with data
 			$highest_row = $worksheet->getHighestRow();
-			
-			// Start from row 2 if there's a header row
 			$start_row = 2;
-			
-			// Count successful inserts and skipped entries
 			$insert_count = 0;
 			$skip_count = 0;
 			
