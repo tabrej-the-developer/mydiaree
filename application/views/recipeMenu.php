@@ -242,7 +242,7 @@
                                         <div class="position-relative">
                                             <?php
                                                 if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                                                    $imgurl = "https://via.placeholder.com/307x218?text=No+Image+Available";
+                                                    $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                                                 } else {
                                                     $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                                                 }
@@ -296,7 +296,7 @@
                                         <div class="position-relative">
                                             <?php
                                                 if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                                                    $imgurl = base_url('api/assets/media/no-image.png');
+                                                    $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                                                 } else {
                                                     $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                                                 }
@@ -349,7 +349,7 @@
                                         <div class="position-relative">
                                             <?php
                                                 if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                                                    $imgurl = "https://via.placeholder.com/307x218?text=No+Image+Available";
+                                                    $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                                                 } else {
                                                     $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                                                 }
@@ -402,7 +402,7 @@
                                         <div class="position-relative">
                                             <?php
                                                 if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                                                    $imgurl = base_url('api/assets/media/no-image.png');
+                                                    $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                                                 } else {
                                                     $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                                                 }
@@ -455,7 +455,7 @@
                                         <div class="position-relative">
                                             <?php
                                                 if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                                                    $imgurl = "https://via.placeholder.com/307x218?text=No+Image+Available";
+                                                    $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                                                 } else {
                                                     $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                                                 }
@@ -510,7 +510,7 @@
                                         <div class="position-relative">
                                             <?php
                                                 if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                                                    $imgurl = "https://via.placeholder.com/307x218?text=No+Image+Available";
+                                                    $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                                                 } else {
                                                     $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                                                 }
@@ -566,7 +566,7 @@
             <div class="position-relative">
                 <?php
                     if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                        $imgurl = base_url('api/assets/media/no-image.png');
+                        $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                     } else {
                         $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                     }
@@ -620,7 +620,7 @@
                                         <div class="position-relative">
                                             <?php
                                                 if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                                                    $imgurl = "https://via.placeholder.com/307x218?text=No+Image+Available";
+                                                    $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                                                 } else {
                                                     $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                                                 }
@@ -675,7 +675,7 @@
             <div class="position-relative">
                 <?php
                     if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                        $imgurl = base_url('api/assets/media/no-image.png');
+                        $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                     } else {
                         $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                     }
@@ -730,7 +730,7 @@
                                         <div class="position-relative">
                                             <?php
                                                 if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                                                    $imgurl = "https://via.placeholder.com/307x218?text=No+Image+Available";
+                                                    $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                                                 } else {
                                                     $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                                                 }
@@ -785,7 +785,7 @@
                                         <div class="position-relative">
                                             <?php
                                                 if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                                                    $imgurl = "https://via.placeholder.com/307x218?text=No+Image+Available";
+                                                    $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                                                 } else {
                                                     $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                                                 }
@@ -841,7 +841,7 @@
             <div class="position-relative">
                 <?php
                     if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                        $imgurl = base_url('api/assets/media/no-image.png');
+                        $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                     } else {
                         $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                     }
@@ -895,7 +895,7 @@
                                         <div class="position-relative">
                                             <?php
                                                 if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                                                    $imgurl = "https://via.placeholder.com/307x218?text=No+Image+Available";
+                                                    $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                                                 } else {
                                                     $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                                                 }
@@ -950,7 +950,7 @@
             <div class="position-relative">
                 <?php
                     if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                        $imgurl = base_url('api/assets/media/no-image.png');
+                        $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                     } else {
                         $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                     }
@@ -1006,7 +1006,7 @@
                                         <div class="position-relative">
                                             <?php
                                                 if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                                                    $imgurl = "https://via.placeholder.com/307x218?text=No+Image+Available";
+                                                    $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                                                 } else {
                                                     $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                                                 }
@@ -1061,7 +1061,7 @@
                                         <div class="position-relative">
                                             <?php
                                                 if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                                                    $imgurl = "https://via.placeholder.com/307x218?text=No+Image+Available";
+                                                    $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                                                 } else {
                                                     $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                                                 }
@@ -1118,7 +1118,7 @@
             <div class="position-relative">
                 <?php
                     if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                        $imgurl = base_url('api/assets/media/no-image.png');
+                        $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                     } else {
                         $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                     }
@@ -1173,7 +1173,7 @@
                                         <div class="position-relative">
                                             <?php
                                                 if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                                                    $imgurl = "https://via.placeholder.com/307x218?text=No+Image+Available";
+                                                    $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                                                 } else {
                                                     $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                                                 }
@@ -1230,7 +1230,7 @@
             <div class="position-relative">
                 <?php
                     if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                        $imgurl = base_url('api/assets/media/no-image.png');
+                        $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                     } else {
                         $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                     }
@@ -1285,7 +1285,7 @@
                                         <div class="position-relative">
                                             <?php
                                                 if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                                                    $imgurl = "https://via.placeholder.com/307x218?text=No+Image+Available";
+                                                    $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                                                 } else {
                                                     $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                                                 }
@@ -1340,7 +1340,7 @@
                                         <div class="position-relative">
                                             <?php
                                                 if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                                                    $imgurl = "https://via.placeholder.com/307x218?text=No+Image+Available";
+                                                    $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                                                 } else {
                                                     $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                                                 }
@@ -1396,7 +1396,7 @@
             <div class="position-relative">
                 <?php
                     if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                        $imgurl = base_url('api/assets/media/no-image.png');
+                        $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                     } else {
                         $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                     }
@@ -1451,7 +1451,7 @@
                                         <div class="position-relative">
                                             <?php
                                                 if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                                                    $imgurl = "https://via.placeholder.com/307x218?text=No+Image+Available";
+                                                    $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                                                 } else {
                                                     $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                                                 }
@@ -1507,7 +1507,7 @@
             <div class="position-relative">
                 <?php
                     if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                        $imgurl = base_url('api/assets/media/no-image.png');
+                        $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                     } else {
                         $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                     }
@@ -1563,7 +1563,7 @@
                                         <div class="position-relative">
                                             <?php
                                                 if (empty($value->recipeDetails->media[0]->mediaUrl)) { 
-                                                    $imgurl = "https://via.placeholder.com/307x218?text=No+Image+Available";
+                                                    $imgurl = "https://media.istockphoto.com/id/612759522/photo/fake-junk-food-on-a-wooden-table.jpg?s=612x612&w=0&k=20&c=zI-m6WyTpm-imNeQLoASndk5VpAETKebPpZomSmgnas=";
                                                 } else {
                                                     $imgurl = base_url('api/assets/media/').$value->recipeDetails->media[0]->mediaUrl;
                                                 }
