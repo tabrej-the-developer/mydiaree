@@ -176,25 +176,91 @@ class Settings extends CI_Controller {
         echo json_encode(['data' => $holidays]);
     }
     
-    // API endpoint to add new holiday
-    public function addHoliday() {
-        $data = [
-            'state' => $this->input->post('state'),
-            'date' => $this->input->post('date'),
-            'month' => $this->input->post('month'),
-            'occasion' => $this->input->post('occasion')
-        ];
-        
-        $result = $this->db->insert('publicholidays', $data);
-        
-        if ($result) {
-            echo json_encode(['status' => 'success', 'message' => 'Holiday added successfully']);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Failed to add holiday']);
-        }
-    }
+   
+	public function addHoliday() {
+		$state = $this->input->post('state');
+		$occasion = $this->input->post('occasion');
+		$isRange = $this->input->post('isRange');
+		
+		// Check if we're using date range or single date
+		if ($isRange == '1') {
+			$fromDate = $this->input->post('fromDate');
+			$toDate = $this->input->post('toDate');
+			
+			if (empty($fromDate)) {
+				echo json_encode(['status' => 'error', 'message' => 'From date is required']);
+				return;
+			}
+			
+			// Convert dates to DateTime objects
+			$startDate = new DateTime($fromDate);
+			
+			// If toDate is empty, use fromDate as the end date (single day)
+			$endDate = !empty($toDate) ? new DateTime($toDate) : clone $startDate;
+			
+			// If end date is before start date, swap them
+			if ($endDate < $startDate) {
+				$temp = $startDate;
+				$startDate = $endDate;
+				$endDate = $temp;
+			}
+			
+			// Create a period iterator
+			$interval = new DateInterval('P1D'); // 1 day interval
+			$dateRange = new DatePeriod($startDate, $interval, $endDate->modify('+1 day'));
+			
+			$insertCount = 0;
+			$errorCount = 0;
+			
+			// Loop through each date in the range and insert
+			foreach ($dateRange as $date) {
+				$data = [
+					'state' => $state,
+					'date' => $date->format('j'), // Day of month without leading zeros
+					'month' => $date->format('n'), // Month without leading zeros
+					'occasion' => $occasion
+				];
+				
+				$result = $this->db->insert('publicholidays', $data);
+				
+				if ($result) {
+					$insertCount++;
+				} else {
+					$errorCount++;
+				}
+			}
+			
+			if ($errorCount == 0) {
+				echo json_encode([
+					'status' => 'success', 
+					'message' => $insertCount . ' holiday(s) added successfully'
+				]);
+			} else {
+				echo json_encode([
+					'status' => 'partial', 
+					'message' => $insertCount . ' holiday(s) added, ' . $errorCount . ' failed'
+				]);
+			}
+		} else {
+			// Original single date mode (kept for backward compatibility)
+			$data = [
+				'state' => $state,
+				'date' => $this->input->post('date'),
+				'month' => $this->input->post('month'),
+				'occasion' => $occasion
+			];
+			
+			$result = $this->db->insert('publicholidays', $data);
+			
+			if ($result) {
+				echo json_encode(['status' => 'success', 'message' => 'Holiday added successfully']);
+			} else {
+				echo json_encode(['status' => 'error', 'message' => 'Failed to add holiday']);
+			}
+		}
+	}
     
-    // API endpoint to update holiday
+    
     public function updateHoliday() {
         $id = $this->input->post('id');
         $data = [

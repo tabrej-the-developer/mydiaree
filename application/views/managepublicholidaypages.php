@@ -70,51 +70,67 @@
         </div>
     </div>
 
-    <!-- Add/Edit Modal -->
-    <div class="modal fade" id="holidayModal" tabindex="-1" aria-labelledby="holidayModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="holidayModalLabel">Add Public Holiday</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="holidayForm">
-                        <input type="hidden" id="holidayId" name="id">
-                        
-                        <div class="mb-3">
-                            <label for="state" class="form-label">State</label>
-                            <select class="form-select" id="state" name="state" required>
-                                <option value="">Select State</option>
-                                <option value="Victoria">Victoria</option>
-                                <option value="New South Wales">New South Wales</option>
-                            </select>
-                        </div>
-                        
+  <!-- Add/Edit Modal -->
+<div class="modal fade" id="holidayModal" tabindex="-1" aria-labelledby="holidayModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="holidayModalLabel">Add Public Holiday</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="holidayForm">
+                    <input type="hidden" id="holidayId" name="id">
+                    <input type="hidden" id="isRangeInput" name="isRange" value="0">
+                    
+                    <div class="mb-3">
+                        <label for="state" class="form-label">State</label>
+                        <select class="form-select" id="state" name="state" required>
+                            <option value="">Select State</option>
+                            <option value="Victoria">Victoria</option>
+                            <option value="New South Wales">New South Wales</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Single date fields (visible in edit mode) -->
+                    <div id="singleDateFields">
                         <div class="mb-3">
                             <label for="date" class="form-label">Date</label>
-                            <input type="number" class="form-control" id="date" name="date" min="1" max="31" required>
+                            <input type="number" class="form-control" id="date" name="date" min="1" max="31">
                         </div>
                         
                         <div class="mb-3">
                             <label for="month" class="form-label">Month</label>
-                            <input type="number" class="form-control" id="month" name="month" min="1" max="12" required>
+                            <input type="number" class="form-control" id="month" name="month" min="1" max="12">
+                        </div>
+                    </div>
+                    
+                    <!-- Date range fields (visible in add mode) -->
+                    <div id="dateRangeFields">
+                        <div class="mb-3">
+                            <label for="fromDate" class="form-label">From Date</label>
+                            <input type="date" class="form-control" id="fromDate" name="fromDate">
                         </div>
                         
                         <div class="mb-3">
-                            <label for="occasion" class="form-label">Occasion</label>
-                            <input type="text" class="form-control" id="occasion" name="occasion" required>
+                            <label for="toDate" class="form-label">To Date (Optional)</label>
+                            <input type="date" class="form-control" id="toDate" name="toDate">
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="saveHoliday">Save</button>
-                </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="occasion" class="form-label">Occasion</label>
+                        <input type="text" class="form-control" id="occasion" name="occasion" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveHoliday">Save</button>
             </div>
         </div>
     </div>
-
+</div>
 
 
     <!-- Modal for Excel Upload -->
@@ -236,107 +252,136 @@ $(document).ready(function() {
       <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script> -->
     <script>
-        $(document).ready(function() {
-            // Load holiday data
-            loadHolidays();
-            
-            // Initialize modal
-            const holidayModal = new bootstrap.Modal(document.getElementById('holidayModal'));
-            
-            // Add New button click
-            $('#addNewBtn').click(function() {
-                $('#holidayModalLabel').text('Add Public Holiday');
-                $('#holidayForm')[0].reset();
-                $('#holidayId').val('');
-                holidayModal.show();
-            });
-            
-            // Save holiday (Add/Edit)
-            $('#saveHoliday').click(function() {
-                const id = $('#holidayId').val();
-                const formData = $('#holidayForm').serialize();
-                
-                // Validate form
-                if (!$('#state').val() || !$('#date').val() || !$('#month').val() || !$('#occasion').val()) {
-                    alert('Please fill all required fields');
-                    return;
+    $(document).ready(function() {
+    // Load holiday data
+    loadHolidays();
+    
+    // Initialize modal
+    const holidayModal = new bootstrap.Modal(document.getElementById('holidayModal'));
+    
+    // Add New button click
+    $('#addNewBtn').click(function() {
+        $('#holidayModalLabel').text('Add Public Holiday');
+        $('#holidayForm')[0].reset();
+        $('#holidayId').val('');
+        $('#isRangeInput').val('1');
+        
+        // Show date range fields, hide single date fields
+        $('#dateRangeFields').show();
+        $('#singleDateFields').hide();
+        
+        holidayModal.show();
+    });
+    
+    // Save holiday (Add/Edit)
+    $('#saveHoliday').click(function() {
+        const id = $('#holidayId').val();
+        const isRange = $('#isRangeInput').val() === '1';
+        
+        // Validate form based on mode (add or edit)
+        if (!$('#state').val() || !$('#occasion').val()) {
+            alert('Please fill all required fields');
+            return;
+        }
+        
+        if (id) {
+            // Edit mode - validate single date fields
+            if (!$('#date').val() || !$('#month').val()) {
+                alert('Please fill all required fields');
+                return;
+            }
+        } else {
+            // Add mode - validate date range
+            if (!$('#fromDate').val()) {
+                alert('Please enter at least the From Date');
+                return;
+            }
+        }
+        
+        // Get form data
+        const formData = $('#holidayForm').serialize();
+        
+        // Determine if adding or editing
+        const url = id ? '<?= base_url('Settings/updateHoliday') ?>' : '<?= base_url('Settings/addHoliday') ?>';
+        
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'success') {
+                    holidayModal.hide();
+                    loadHolidays();
+                    alert(response.message);
+                } else {
+                    alert(response.message);
                 }
-                
-                // Determine if adding or editing
-                const url = id ? '<?= base_url('Settings/updateHoliday') ?>' : '<?= base_url('Settings/addHoliday') ?>';
-                
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: formData,
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            holidayModal.hide();
-                            loadHolidays();
-                            alert(response.message);
-                        } else {
-                            alert(response.message);
-                        }
-                    },
-                    error: function() {
-                        alert('An error occurred. Please try again.');
-                    }
-                });
-            });
-            
-            // Handle Edit button click (using event delegation)
-            $('#holidayTable').on('click', '.edit-btn', function() {
-                const id = $(this).data('id');
-                
-                $.ajax({
-                    url: '<?= base_url('Settings/getHoliday') ?>',
-                    type: 'GET',
-                    data: { id: id },
-                    dataType: 'json',
-                    success: function(response) {
-                        const holiday = response.data;
-                        
-                        $('#holidayModalLabel').text('Edit Public Holiday');
-                        $('#holidayId').val(holiday.id);
-                        $('#state').val(holiday.state);
-                        $('#date').val(holiday.date);
-                        $('#month').val(holiday.month);
-                        $('#occasion').val(holiday.occasion);
-                        
-                        holidayModal.show();
-                    },
-                    error: function() {
-                        alert('Failed to fetch holiday details.');
-                    }
-                });
-            });
-            
-            // Handle Delete button click (using event delegation)
-            $('#holidayTable').on('click', '.delete-btn', function() {
-                if (confirm('Are you sure you want to delete this holiday?')) {
-                    const id = $(this).data('id');
-                    
-                    $.ajax({
-                        url: '<?= base_url('Settings/deleteHoliday') ?>',
-                        type: 'POST',
-                        data: { id: id },
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.status === 'success') {
-                                loadHolidays();
-                                alert(response.message);
-                            } else {
-                                alert(response.message);
-                            }
-                        },
-                        error: function() {
-                            alert('An error occurred. Please try again.');
-                        }
-                    });
-                }
-            });
+            },
+            error: function() {
+                alert('An error occurred. Please try again.');
+            }
         });
+    });
+    
+    // Handle Edit button click (using event delegation)
+    $('#holidayTable').on('click', '.edit-btn', function() {
+        const id = $(this).data('id');
+        
+        $.ajax({
+            url: '<?= base_url('Settings/getHoliday') ?>',
+            type: 'GET',
+            data: { id: id },
+            dataType: 'json',
+            success: function(response) {
+                const holiday = response.data;
+                
+                $('#holidayModalLabel').text('Edit Public Holiday');
+                $('#holidayForm')[0].reset();
+                $('#holidayId').val(holiday.id);
+                $('#state').val(holiday.state);
+                $('#date').val(holiday.date);
+                $('#month').val(holiday.month);
+                $('#occasion').val(holiday.occasion);
+                $('#isRangeInput').val('0');
+                
+                // Show single date fields, hide date range fields
+                $('#singleDateFields').show();
+                $('#dateRangeFields').hide();
+                
+                holidayModal.show();
+            },
+            error: function() {
+                alert('Failed to fetch holiday details.');
+            }
+        });
+    });
+    
+    // Handle Delete button click (using event delegation)
+    $('#holidayTable').on('click', '.delete-btn', function() {
+        if (confirm('Are you sure you want to delete this holiday?')) {
+            const id = $(this).data('id');
+            
+            $.ajax({
+                url: '<?= base_url('Settings/deleteHoliday') ?>',
+                type: 'POST',
+                data: { id: id },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        loadHolidays();
+                        alert(response.message);
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function() {
+                    alert('An error occurred. Please try again.');
+                }
+            });
+        }
+    });
+});
         
         // Function to load holidays via AJAX
         function loadHolidays() {
