@@ -192,19 +192,34 @@ $(document).ready(function() {
             contentType: false,
             processData: false,
             success: function(response) {
-                var data = JSON.parse(response);
-                if (data.status === 'success') {
-                    $('#uploadResponse').html('<div class="alert alert-success">' + data.message + '</div>');
-                    // Reset the file input
-                    $('#excelUploadForm')[0].reset();
-                    // Optionally refresh the page or table after 2 seconds
-                    setTimeout(function() {
-                        location.reload();
-                    }, 2000);
-                } else {
-                    $('#uploadResponse').html('<div class="alert alert-danger">' + data.message + '</div>');
-                }
-            },
+    // Try to extract just the JSON part
+    var jsonResponse = response;
+    
+    // Check if the response contains both error text and JSON
+    if (response.includes('{"status"')) {
+        // Extract just the JSON part
+        jsonResponse = response.substring(response.indexOf('{"status"'));
+    }
+    
+    try {
+        var data = JSON.parse(jsonResponse);
+        if (data.status === 'success') {
+            $('#uploadResponse').html('<div class="alert alert-success">' + data.message + '</div>');
+            // Reset the file input
+            $('#excelUploadForm')[0].reset();
+            // Optionally refresh the page or table after 2 seconds
+            setTimeout(function() {
+                location.reload();
+            }, 2000);
+        } else {
+            $('#uploadResponse').html('<div class="alert alert-danger">' + data.message + '</div>');
+        }
+    } catch (e) {
+        // If JSON parsing fails, show the error
+        console.error("Failed to parse response:", e);
+        $('#uploadResponse').html('<div class="alert alert-danger">Server returned an invalid response. Please try again.</div>');
+    }
+},
             error: function(xhr, status, error) {
                 $('#uploadResponse').html('<div class="alert alert-danger">An error occurred: ' + error + '</div>');
             }

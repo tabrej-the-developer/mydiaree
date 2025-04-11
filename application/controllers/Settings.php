@@ -43,6 +43,8 @@ class Settings extends CI_Controller {
 
 
 	public function upload_ajax() {
+		ini_set('display_errors', 0);
+
         // Set up the response array
         $response = array(
             'status' => 'error',
@@ -84,6 +86,7 @@ class Settings extends CI_Controller {
         
         // Send JSON response
         echo json_encode($response);
+		exit; // Ensure execution stops here
     }
     
 	private function process_excel($file_path) {
