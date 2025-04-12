@@ -56,6 +56,17 @@ class HeadChecksModel extends CI_Model {
 		}
 		return $query->result();
 	}
+
+	public function getsleepChecks($userid = NULL,$diarydate=NULL,$roomid=NULL)
+	{
+		if ($userid == NULL) {
+			$query = $this->db->get("dailydiarysleepchecklist");
+		} else {
+			$query = $this->db->get_where("dailydiarysleepchecklist",array("diarydate"=>$diarydate,"roomid"=>$roomid));
+		}
+		return $query->result();
+	}
+
 }
 
 /* End of file HeadChecksModel.php */

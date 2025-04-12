@@ -313,12 +313,14 @@
                         </a>
                     </li>
                 <?php } ?>
-
-                     <!-- <li>
+            
+                <?php if($this->session->userdata("UserType")!="Parent"){ ?>
+                     <li>
                         <a href="<?php echo base_url('headChecks/sleepchecklistindex'); ?>">
                             <i class="simple-icon-picture"></i> <span class="d-inline-block">Sleep Check List</span>
                         </a>
-                    </li> -->
+                    </li>
+                    <?php } ?>
 
 
                 <li>

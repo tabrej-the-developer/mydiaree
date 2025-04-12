@@ -123,8 +123,7 @@
       font-weight: 600;
     }
     input[type="time"],
-    input[type="text"],
-    input[type="number"],
+    select,
     textarea {
       width: 100%;
       padding: 8px;
@@ -135,22 +134,69 @@
     textarea {
       resize: vertical;
     }
-    .add-row-btn {
+    .add-row-btn,
+    .save-row-btn{
       background-color: #3498db;
       color: white;
       border: none;
-      padding: 10px 16px;
+      padding: 8px 12px;
       border-radius: 8px;
       cursor: pointer;
+      margin: 5px;
+      transition: background-color 0.3s ease;
+    
+    
+    }
+ 
+    .remove-row-btn {
+        background-color: red;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 5px;
       transition: background-color 0.3s ease;
     }
-    .add-row-btn:hover {
+    .update-row-btn{
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 5px;
+      transition: background-color 0.3s ease;
+    
+    
+    }
+ 
+    .delete-row-btn {
+        background-color: red;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .add-row-btn:hover,
+    .save-row-btn:hover{
       background-color: #2980b9;
     }
-    .section-divider {
-      height: 1px;
-      background-color: #dcdde1;
-      margin: 30px 0;
+
+    .remove-row-btn:hover {
+    background-color: darkred;
+    }
+    
+    .update-row-btn:hover{
+      background-color: #2980b9;
+    }
+
+    .delete-row-btn:hover {
+    background-color: darkred;
     }
   </style>
 
@@ -269,52 +315,105 @@
                     <div class="separator mb-5"></div>
                 </div>
 
+<input type="hidden" id="roomid" value="<?= $roomid ?>" >
+<input type="hidden" id="date" value="<?= $calDate ?>" >
 
-
-                <div class="container">
-    <?php foreach ($children as $index => $child): ?>
+<div class="container">
+  <?php foreach ($children as $index => $child): ?>
     <div class="child-section" id="child<?php echo $child->id; ?>">
-    <div class="child-header">
-    <?php if (!empty($child->imageUrl)): ?>
+      <div class="child-header">
+      <?php if (!empty($child->imageUrl)): ?>
         <div class="child-avatar" style="display: inline-block; margin-right: 10px;">
-            <img src="<?php echo base_url('api/assets/media/' . $child->imageUrl); ?>" 
-                 alt="<?php echo htmlspecialchars($child->name); ?>" 
-                 style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+          <img src="<?php echo base_url('api/assets/media/' . $child->imageUrl); ?>" alt="<?php echo htmlspecialchars($child->name); ?>" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
         </div>
-    <?php else: ?>
+        <?php else: ?>
         <div class="child-avatar" style="display: inline-block; margin-right: 10px;">
-            <div style="width: 40px; height: 40px; border-radius: 50%; background-color: #ccc; display: inline-flex; align-items: center; justify-content: center;">
-                <span style="font-size: 18px; color: #666;">
-                    <?php echo strtoupper(substr($child->name, 0, 1)); ?>
-                </span>
-            </div>
+          <div style="width: 40px; height: 40px; border-radius: 50%; background-color: #ccc; display: inline-flex; align-items: center; justify-content: center;">
+            <span style="font-size: 18px; color: #666;">
+              <?php echo strtoupper(substr($child->name, 0, 1)); ?>
+            </span>
+          </div>
         </div>
-    <?php endif; ?>
-    <span><?php echo htmlspecialchars($child->name . ' ' . $child->lastname); ?></span>
-</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>Sleep Position</th>
-                    <th>Body Temperature (°C)</th>
-                    <th>Notes</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><input type="time" name="children[<?php echo $child->id; ?>][time][]"></td>
-                    <td><input type="text" name="children[<?php echo $child->id; ?>][position][]" placeholder="e.g. Left side"></td>
-                    <td><input type="number" step="0.1" name="children[<?php echo $child->id; ?>][temperature][]" placeholder="36.5"></td>
-                    <td><textarea rows="2" name="children[<?php echo $child->id; ?>][notes][]" placeholder="Observation notes..."></textarea></td>
-                </tr>
-            </tbody>
-        </table>
-        <button class="add-row-btn" onclick="addRow('child<?php echo $child->id; ?>', <?php echo $child->id; ?>)">+ Add 10-Min Entry</button>
+        <?php endif; ?>
+        <span><?php echo htmlspecialchars($child->name . ' ' . $child->lastname); ?></span>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Breathing</th>
+            <th>Body Temperature</th>
+            <th>Notes</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- Existing Saved Data Rows -->
+          <?php
+          $childSleepChecks = array_filter($sleepChecks, fn($sc) => $sc->childid == $child->id);
+          usort($childSleepChecks, fn($a, $b) => strcmp($a->time, $b->time));
+          foreach ($childSleepChecks as $sleep): ?>
+            <tr data-id="<?= $sleep->id ?>">
+              <td><input type="time" value="<?= $sleep->time ?>" /></td>
+              <td>
+                <select>
+                  <option value="">Select</option>
+                  <option value="Regular" <?= $sleep->breathing == 'Regular' ? 'selected' : '' ?>>Regular</option>
+                  <option value="Fast" <?= $sleep->breathing == 'Fast' ? 'selected' : '' ?>>Fast</option>
+                  <option value="Difficult" <?= $sleep->breathing == 'Difficult' ? 'selected' : '' ?>>Difficult</option>
+                </select>
+              </td>
+              <td>
+                <select>
+                  <option value="">Select</option>
+                  <option value="Warm" <?= $sleep->body_temperature == 'Warm' ? 'selected' : '' ?>>Warm</option>
+                  <option value="Cool" <?= $sleep->body_temperature == 'Cool' ? 'selected' : '' ?>>Cool</option>
+                  <option value="Hot" <?= $sleep->body_temperature == 'Hot' ? 'selected' : '' ?>>Hot</option>
+                </select>
+              </td>
+              <td><textarea rows="2"><?= htmlspecialchars($sleep->notes) ?></textarea></td>
+              <td>
+                <button class="update-row-btn" onclick="updateRow(this, <?= $child->id ?>, <?= $sleep->id ?>)">Update</button>
+                <button class="delete-row-btn" onclick="deleteRow(this, <?= $sleep->id ?>)">Delete</button>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+
+          <!-- Empty Row for New Entry -->
+          <tr>
+            <td><input type="time" name="children[<?= $child->id ?>][time][]"></td>
+            <td>
+              <select name="children[<?= $child->id ?>][breathing][]">
+                <option value="">Select</option>
+                <option value="Regular">Regular</option>
+                <option value="Fast">Fast</option>
+                <option value="Difficult">Difficult</option>
+              </select>
+            </td>
+            <td>
+              <select name="children[<?= $child->id ?>][temperature][]">
+                <option value="">Select</option>
+                <option value="Warm">Warm</option>
+                <option value="Cool">Cool</option>
+                <option value="Hot">Hot</option>
+              </select>
+            </td>
+            <td><textarea rows="2" name="children[<?= $child->id ?>][notes][]" placeholder="Sleep Check List Notes..."></textarea></td>
+            <td>
+              <button class="save-row-btn" onclick="saveRow(this, <?= $child->id ?>)">Save</button>
+              <button class="remove-row-btn" onclick="removeRow(this)">Remove</button>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      <button class="add-row-btn" onclick="addRow('child<?= $child->id ?>', <?= $child->id ?>)">+ Add 10-Min Entry</button>
     </div>
-    <?php endforeach; ?>
+  <?php endforeach; ?>
 </div>
-  
+
 
 
 
@@ -351,18 +450,227 @@
 </body>
 
 <script>
-    function addRow(childId) {
+    function addRow(childId, childDbId) {
       const tableBody = document.querySelector(`#${childId} table tbody`);
       const row = document.createElement('tr');
       row.innerHTML = `
-        <td><input type="time"></td>
-        <td><input type="text" placeholder="e.g. On back"></td>
-        <td><input type="number" step="0.1" placeholder="36.5"></td>
-        <td><textarea rows="2" placeholder="Observation notes..."></textarea></td>
+        <td><input type="time" name="children[${childDbId}][time][]"></td>
+        <td>
+          <select name="children[${childDbId}][breathing][]">
+            <option value="">Select</option>
+            <option value="Regular">Regular</option>
+            <option value="Fast">Fast</option>
+            <option value="Difficult">Difficult</option>
+          </select>
+        </td>
+        <td>
+          <select name="children[${childDbId}][temperature][]">
+            <option value="">Select</option>
+            <option value="Warm">Warm</option>
+            <option value="Cool">Cool</option>
+            <option value="Hot">Hot</option>
+          </select>
+        </td>
+        <td><textarea rows="2" name="children[${childDbId}][notes][]" placeholder="Sleep Check List Notes..."></textarea></td>
+        <td>
+          <button class="save-row-btn" onclick="saveRow(this, ${childDbId})">Save</button>
+          <button class="remove-row-btn" onclick="removeRow(this)">Remove</button>
+        </td>
       `;
       tableBody.appendChild(row);
     }
+
+    function removeRow(button) {
+      button.closest('tr').remove();
+    }
+
+    function saveRow(button, childId) {
+    const row = button.closest('tr');
+    const timeInput = row.querySelector('input[type="time"]');
+    const breathingSelect = row.querySelector('select[name*="breathing"]');
+    const temperatureSelect = row.querySelector('select[name*="temperature"]');
+    const notesTextarea = row.querySelector('textarea');
+
+    var roomIdValue = document.getElementById("roomid").value;
+
+    var dateValue = document.getElementById("date").value;
+
+    // Get values
+    const time = timeInput.value;
+    const breathing = breathingSelect.value;
+    const temperature = temperatureSelect.value;
+    const notes = notesTextarea.value;
+
+    // Validation
+    if (!time) {
+        alert('Please enter a time');
+        timeInput.focus();
+        return;
+    }
+
+    if (!breathing) {
+        alert('Please select breathing status');
+        breathingSelect.focus();
+        return;
+    }
+
+    if (!temperature) {
+        alert('Please select body temperature');
+        temperatureSelect.focus();
+        return;
+    }
+
+    // Prepare form data
+    const formData = new FormData();
+    formData.append('childid', childId);
+    formData.append('roomid', roomIdValue);
+    formData.append('diarydate', dateValue);
+    formData.append('time', time);
+    formData.append('breathing', breathing);
+    formData.append('body_temperature', temperature);
+    
+    // Notes is optional, only append if it has value
+    if (notes) {
+        formData.append('notes', notes);
+    }
+
+    // Disable button during save to prevent duplicate submissions
+    button.disabled = true;
+    button.textContent = 'Saving...';
+
+    fetch("<?= base_url('HeadChecks/sleep_checklist_save') ?>", {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(result => {
+        if (result.success) {
+            alert(result.message);
+            // Update UI to reflect saved state
+            button.textContent = 'Saved';
+            setTimeout(() => {
+            location.reload();
+        }, 500);
+            // Optional: Highlight the saved row or change its appearance
+            // row.style.backgroundColor = '#f0fff0'; // Light green background
+        } else {
+            alert(result.message);
+            // Re-enable button if save failed
+            button.disabled = false;
+            button.textContent = 'Save';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error saving data. Please try again.');
+        // Re-enable button on error
+        button.disabled = false;
+        button.textContent = 'Save';
+    });
+}
+
+
+
+function updateRow(button, childId, entryId) {
+  const row = button.closest('tr');
+  const time = row.querySelector('input[type="time"]').value;
+  const selects = row.querySelectorAll('select');
+const breathing = selects[0]?.value || '';
+const temperature = selects[1]?.value || '';
+  const notes = row.querySelector('textarea').value;
+  const roomIdValue = document.getElementById("roomid").value;
+  const dateValue = document.getElementById("date").value;
+
+  console.log("breathing",breathing);
+  console.log("row",row);
+  console.log("entryId",entryId);
+  console.log("temperature",temperature);
+  if (!time || !breathing || !temperature) {
+    alert("Please fill all fields.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('id', entryId);
+  formData.append('childid', childId);
+  formData.append('roomid', roomIdValue);
+  formData.append('diarydate', dateValue);
+  formData.append('time', time);
+  formData.append('breathing', breathing);
+  formData.append('body_temperature', temperature);
+  formData.append('notes', notes);
+
+  button.disabled = true;
+  button.textContent = "Updating...";
+
+  fetch("<?= base_url('HeadChecks/sleep_checklist_update') ?>", {
+    method: 'POST',
+    body: formData
+  })
+    .then(res => res.json())
+    .then(result => {
+      alert(result.message);
+      button.disabled = false;
+      button.textContent = "Update";
+      location.reload();
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Update failed.");
+      button.disabled = false;
+      button.textContent = "Update";
+    });
+}
+
+function deleteRow(button, entryId) {
+  if (!confirm("Are you sure you want to delete this entry?")) return;
+
+  const formData = new FormData();
+  formData.append('id', entryId);
+
+  button.disabled = true;
+  button.textContent = "Deleting...";
+
+  fetch("<?= base_url('HeadChecks/sleep_checklist_delete') ?>", {
+    method: 'POST',
+    body: formData
+  })
+    .then(res => res.json())
+    .then(result => {
+      if (result.success) {
+        button.closest('tr').remove();
+        alert(result.message);
+        location.reload();
+      } else {
+        alert(result.message);
+        button.disabled = false;
+        button.textContent = "Delete";
+        location.reload();
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Delete failed.");
+      button.disabled = false;
+      button.textContent = "Delete";
+    });
+}
+
   </script>
+
+  <script>
+    	$(document).on('change','#txtCalendar',function(){
+			// $('#headCheckForm').submit();
+            let date = $(this).val();
+            let url = "<?= base_url('HeadChecks/sleepchecklistindex').'?centerid='.$centerid.'&roomid='.$roomid.'&date='; ?>"+date;
+            window.location.href = url;
+		});
+    </script>
 
 
 </html>

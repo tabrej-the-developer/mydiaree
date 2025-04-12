@@ -5,6 +5,7 @@ class HeadChecks extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->database(); 
 	}
 
 	public function index()
@@ -52,6 +53,10 @@ class HeadChecks extends CI_Controller {
 			} else {
 				$data = [];
 			}
+
+			// echo "<pre>";
+			// print_r($data);
+			// exit;
 			$data['userid'] = $this->session->userdata("LoginId");	
 			$url = BASE_API_URL.'HeadChecks/getsleepChecks';
 			$ch = curl_init($url);
@@ -80,6 +85,106 @@ class HeadChecks extends CI_Controller {
 			redirect("welcome");
 		}
 	}
+
+	public function sleep_checklist_save() {
+		// Get the input data
+		$input = $this->input->post();
+
+	
+		
+		// Validate required fields (adjust as needed)
+		if (empty($input['childid']) || empty($input['diarydate']) || empty($input['time'])) {
+			echo json_encode(['success' => false, 'message' => 'Required fields are missing']);
+			return;
+		}
+
+		$input['diarydate'] = str_replace('-', '/', $input['diarydate']);
+        $mysqlDate = date('Y-d-m', strtotime($input['diarydate']));
+
+
+	
+		// Prepare data for insertion
+		$data = [
+			'childid' => $input['childid'],
+			'diarydate' => $mysqlDate,
+			'roomid' => $input['roomid'],
+			'time' => $input['time'],
+			'breathing' => $input['breathing'] ?? null, // Use null if not provided
+			'body_temperature' => $input['body_temperature'] ?? null,
+			'notes' => $input['notes'] ?? null,
+			'createdBy' => $this->session->userdata('LoginId'), // Assuming you're using session
+			'created_at' => date('Y-m-d H:i:s')
+		];
+	
+
+		// echo "<pre>";
+		// print_r($data);
+		// exit;
+		// Insert into database
+		$this->db->insert('dailydiarysleepchecklist', $data);
+		
+		// Check if insertion was successful
+		if ($this->db->affected_rows() > 0) {
+			echo json_encode(['success' => true, 'message' => 'Saved successfully']);
+		} else {
+			echo json_encode(['success' => false, 'message' => 'Failed to save']);
+		}
+	}
+
+
+	public function sleep_checklist_update() {
+		$input = $this->input->post();
+	
+		if (empty($input['id']) || empty($input['childid']) || empty($input['diarydate']) || empty($input['time'])) {
+			echo json_encode(['success' => false, 'message' => 'Required fields are missing']);
+			return;
+		}
+	
+		$input['diarydate'] = str_replace('-', '/', $input['diarydate']);
+		$mysqlDate = date('Y-d-m', strtotime($input['diarydate']));
+	
+		$data = [
+			'childid' => $input['childid'],
+			'diarydate' => $mysqlDate,
+			'roomid' => $input['roomid'],
+			'time' => $input['time'],
+			'breathing' => $input['breathing'] ?? null,
+			'body_temperature' => $input['body_temperature'] ?? null,
+			'notes' => $input['notes'] ?? null
+			// 'updatedBy' => $this->session->userdata('LoginId'),
+			// 'updated_at' => date('Y-m-d H:i:s')
+		];
+	
+		$this->db->where('id', $input['id']);
+		$this->db->update('dailydiarysleepchecklist', $data);
+	
+		if ($this->db->affected_rows() > 0) {
+			echo json_encode(['success' => true, 'message' => 'Updated successfully']);
+		} else {
+			echo json_encode(['success' => false, 'message' => 'No changes made or update failed']);
+		}
+	}
+
+
+	public function sleep_checklist_delete() {
+		$id = $this->input->post('id');
+	
+		if (empty($id)) {
+			echo json_encode(['success' => false, 'message' => 'Invalid ID']);
+			return;
+		}
+	
+		$this->db->where('id', $id);
+		$this->db->delete('dailydiarysleepchecklist');
+	
+		if ($this->db->affected_rows() > 0) {
+			echo json_encode(['success' => true, 'message' => 'Deleted successfully']);
+		} else {
+			echo json_encode(['success' => false, 'message' => 'Failed to delete or already removed']);
+		}
+	}
+	
+	
 
 
 	public function addHeadChecks()

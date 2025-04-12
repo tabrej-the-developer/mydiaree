@@ -192,6 +192,18 @@ $headers = $updated_headers;
 					// Now $children contains all child records with room = $roomid
 					// You can process this data as needed
 				}
+
+				// http_response_code(200);
+				// $dataToSend = [
+				// 	'userid' => $userid,
+				// 	'date' => $date,
+				// 	'roomid' => $roomid,
+				// ];
+				
+				// $jsonOutput = json_encode($dataToSend);
+				
+				// echo $jsonOutput;
+				// exit;
 				
 				$data['Status'] = "SUCCESS";
 				$data['centerid'] = $centerid;
@@ -201,7 +213,7 @@ $headers = $updated_headers;
 				$data['roomname'] = $roomname;
 				$data['roomcolor'] = $roomcolor;
 				$data['rooms'] = $getCenterRoomsArr;
-				$data['headChecks'] = $this->hcm->getHeadChecks($userid,$date,$roomid); //use userid to get specific records
+				$data['sleepChecks'] = $this->hcm->getsleepChecks($userid,$date,$roomid); //use userid to get specific records
 				$data['permissions'] = $permission;
 			}else{
 				http_response_code(401);
