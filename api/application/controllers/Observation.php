@@ -1211,12 +1211,12 @@ $headers = $updated_headers;
 				$this->load->model('LoginModel');
 				$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 				// $json = json_decode(file_get_contents('php://input'));
-			if($json){
-				$json = $json;
-				}else{
-					$json = $_POST;
-					$json = (object)$_POST;
-				}
+			// if($json){
+			// 	$json = $json;
+			// 	}else{
+			// 		$json = $_POST;
+			// 		$json = (object)$_POST;
+			// 	}
 				if($_POST!= null && $res != null && $res->userid == $_POST['userid']){
 					$this->load->model('ObservationModel');
 					$Data = $_POST;
@@ -3034,12 +3034,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 				$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 				// $json = json_decode(file_get_contents('php://input'));
-			if($json){
-				$json = $json;
-				}else{
-					$json = $_POST;
-					$json = (object)$_POST;
-				}
+			// if($json){
+			// 	$json = $json;
+			// 	}else{
+			// 		$json = $_POST;
+			// 		$json = (object)$_POST;
+			// 	}
 				if($_POST!= null && $res != null && $res->userid == $_POST['userid']){
 					$Data = $_POST;
 					$Data['link'] = json_decode($_POST['link']);
@@ -3178,6 +3178,9 @@ foreach ($headers as $key => $value) {
 
 // Assign back to $headers
 $headers = $updated_headers;
+	// echo "<pre>";
+	// 		print_r($headers);
+	// 		exit;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -3187,12 +3190,7 @@ $headers = $updated_headers;
 					$json = $_POST;
 					$json = (object)$_POST;
 				}
-			if($json){
-				$json = $json;
-				}else{
-					$json = $_POST;
-					$json = (object)$_POST;
-				}
+		
 			// echo "<pre>";
 			// print_r($json);
 			// exit;

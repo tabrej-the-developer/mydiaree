@@ -49,6 +49,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$userArr = $this->LoginModel->getUserFromId($json->userid);
 				$role = $userArr->userType;
@@ -127,6 +133,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$user_id =$json->userid;
 				$centerid = $json->centerid;
@@ -209,6 +221,12 @@ $headers = $updated_headers;
 			$this->load->model('ObservationModel');
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$records = $this->AnnouncementsModel->childGroupsList();
 				$data=array();
@@ -318,6 +336,12 @@ $headers = $updated_headers;
 			if($_SERVER['REQUEST_METHOD'] == 'POST'){
 				$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 				$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 				if($json!= null && $res != null && $res->userid == $json->userid){
 					$announcementId = isset($json->announcementId) ? $json->announcementId : null;
 					if($announcementId != null){
@@ -373,6 +397,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				//Children List
 				$childrenList = [];
@@ -513,6 +543,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 
 				if (isset($json->annId) && !empty($json->annId)) {
@@ -614,6 +650,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$announcementId = $json->annId;
 				$announcementInfo = $this->AnnouncementsModel->getAnnouncement($announcementId);

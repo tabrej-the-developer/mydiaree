@@ -181,6 +181,12 @@ $headers = $updated_headers;
         if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
             $res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
             $json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
             if ($json != null && $res != null && $res->userid == $json->userid) {
                 $userArr = $this->LoginModel->getUserFromId($json->userid);
                 if ($userArr->userType == "Superadmin") {
@@ -293,6 +299,12 @@ $headers = $updated_headers;
         if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers) ) {
             $res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
             $json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
             if ($json != null && $res != null && $res->userid == $json->userid) {
                 $roomArr = $this->roomModel->getRoom($json->id);
                 $user_id = $json->userid;
@@ -352,6 +364,12 @@ $headers = $updated_headers;
         if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
             $res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
             $json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
             if ($json != null && $res != null && $res->userid == $json->userid) {
                 if (empty($json->imageName)) {
                     $json->imageName = "";
@@ -400,6 +418,12 @@ $headers = $updated_headers;
             $this->load->model('LoginModel');
             $res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
             $json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
             if ($json != null &&$res != null &&$res->userid == $json->userid) {
                 $this->load->model('roomModel');
                 if (!empty($json->imageName)) {
@@ -441,6 +465,12 @@ $headers = $updated_headers;
             $this->load->model('LoginModel');
             $res = $this->LoginModel->getAuthUserId( $headers['X-Device-Id'], $headers['X-Token'] );
             $json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
             if ( $json != null && $res != null && $res->userid == $json->userid ) {
                 $this->load->model('roomModel');
                 $id = $this->roomModel->changeStatus($json);
@@ -483,6 +513,12 @@ $headers = $updated_headers;
         if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
             $res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
             $json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
             if ($json != null && $res != null && $res->userid == $json->userid) {
                 $user_id = $json->userid;
                 $centerid = $json->centerid;
@@ -572,6 +608,12 @@ $headers = $updated_headers;
                 $headers['X-Token']
             );
             $json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
             if (
                 $json != null &&
                 $res != null &&
@@ -612,6 +654,12 @@ $headers = $updated_headers;
             $this->load->model('LoginModel');
             $res = $this->LoginModel->getAuthUserId( $headers['X-Device-Id'], $headers['X-Token'] );
             $json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
             if ( $json != null && $res != null && $res->userid == $json->userid ) {
                 $this->load->model('roomModel');
                 $this->roomModel->deleteChilds($json->childids);
@@ -654,6 +702,12 @@ $headers = $updated_headers;
         if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
             $res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
             $json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
             if ($user_id != null && $res != null && $res->userid == $user_id) {
 
                 if($roomId != null){
@@ -790,6 +844,12 @@ $headers = $updated_headers;
         if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
             $res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
             $json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
             if ($json != null && $res != null && $res->userid == $json->userid) {
 
                 $user_id = $json->userid;

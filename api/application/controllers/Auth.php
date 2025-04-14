@@ -20,6 +20,12 @@ class Auth extends CI_Controller {
 
 	public function login(){
 		$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 		if($json != null){
 			$email = $json->email;
 			$password = $json->password;
@@ -76,6 +82,12 @@ class Auth extends CI_Controller {
 
 	public function forgotPassword(){
 		$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 		if($json != null){
 			$email = $json->email;
 			$user = $this->authModel->getUserFromEmail($email);
@@ -165,6 +177,12 @@ class Auth extends CI_Controller {
 
 	public function updatePassword(){
 		$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 		if($json != null){
 			$userid = isset($json->userid) ? $json->userid : null;
 			$token = isset($json->token) ? $json->token : null;
@@ -229,6 +247,12 @@ $headers = $updated_headers;
 
 	public function logoutSession(){
 		$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 		$id = $json->id;
 		$this->load->model('authModel');
 		$this->authModel->logoutTime($id);

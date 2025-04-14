@@ -364,6 +364,12 @@ $headers = $updated_headers;
 			if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 				$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 				$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 				if($json!= null && $res != null && $res->userid == $json->userid){
 					$totalObservations = $this->DashboardModel->totalChildObservations($json->userid);
 					$totalChilds = $this->DashboardModel->totalChilds($json->userid);

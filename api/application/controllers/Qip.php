@@ -317,6 +317,12 @@ $headers = $updated_headers;
 			$this->load->model('loginModel');
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				
 			    $id=$this->qipModel->createQIP($json);
@@ -361,6 +367,12 @@ $headers = $updated_headers;
 			$this->load->model('loginModel');
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$this->load->model('qipModel');
 			    $id=$this->qipModel->updateQIP($json);
@@ -471,6 +483,12 @@ $headers = $updated_headers;
 		$this->load->model('loginModel');
 		if($headers != null && $headers['X-Token'] != null && $headers['X-Device-Id'] != null ){
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			if($json != null  && $res->userid == $userid){
 				// $data['areas']=isset($post['areas'])?$post['areas']:array();
@@ -525,6 +543,12 @@ $headers = $updated_headers;
 		$this->load->model('loginModel');
 		if($headers != null && $headers['X-Token'] != null && $headers['X-Device-Id'] != null ){
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			if($json != null  && $res->userid == $userid){
 				$this->load->library('M_pdf');
@@ -648,6 +672,12 @@ $headers = $updated_headers;
 		if($headers != null && $headers['X-Token'] != null && $headers['X-Device-Id'] != null ){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$json->name = date('Y M');
 				$response = $this->qipModel->addNewQip($json);
@@ -697,6 +727,12 @@ $headers = $updated_headers;
 		if($headers != null && $headers['X-Token'] != null && $headers['X-Device-Id'] != null ){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$response = $this->qipModel->renameQip($json);
 				if ($response) {
@@ -742,6 +778,12 @@ $headers = $updated_headers;
 		if($headers != null && $headers['X-Token'] != null && $headers['X-Device-Id'] != null ){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				//Check if qip exists or not
 				$qipCheck = $this->qipModel->getQip($json->qipid);
@@ -823,6 +865,12 @@ $headers = $updated_headers;
 		if($headers != null && $headers['X-Token'] != null && $headers['X-Device-Id'] != null ){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$dcss = $this->qipModel->getDiscussions($json);
 				if ($dcss) {
@@ -870,6 +918,12 @@ $headers = $updated_headers;
 		if($headers != null && $headers['X-Token'] != null && $headers['X-Device-Id'] != null ){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$response = $this->qipModel->addComment($json);
 				if ($response) {
@@ -916,6 +970,12 @@ $headers = $updated_headers;
 		if($headers != null && $headers['X-Token'] != null && $headers['X-Device-Id'] != null ){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				if (empty($json->stdid)) {
 					$data['Status']="ERROR";
@@ -986,6 +1046,12 @@ $headers = $updated_headers;
 		if($headers != null && $headers['X-Token'] != null && $headers['X-Device-Id'] != null ){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$response = $this->qipModel->getQipAreaStandards($json->areaid);
 				if ($response) {
@@ -1032,6 +1098,12 @@ $headers = $updated_headers;
 		if($headers != null && $headers['X-Token'] != null && $headers['X-Device-Id'] != null ){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$json->val1 = htmlspecialchars($json->val1);
 				$json->val2 = htmlspecialchars($json->val2);
@@ -1083,6 +1155,12 @@ $headers = $updated_headers;
 		if($headers != null && $headers['X-Token'] != null && $headers['X-Device-Id'] != null ){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$response = $this->qipModel->getQipStandardElements($json->stdid);
 				if ($response) {
@@ -1129,6 +1207,12 @@ $headers = $updated_headers;
 		if($headers != null && $headers['X-Token'] != null && $headers['X-Device-Id'] != null ){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$json->links = [];
 				$arr = [];
@@ -1304,6 +1388,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$qipid = $json->qipid;
 				$elementid = $json->elementid;
@@ -1410,6 +1500,12 @@ $headers = $updated_headers;
 			$this->load->model('loginModel');
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$results = $this->qipModel->getProgramPlans($json->centerid);
 				foreach ($results as $key => $obj) {
@@ -1457,6 +1553,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$results = $this->qipModel->getMontessoriSubActivites();	
 				foreach ($results as $key => $obj) {
@@ -1502,6 +1604,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$results = $this->qipModel->getDevelopmentalMilestoneSubActivites();
 				foreach ($results as $key => $obj) {
@@ -1547,6 +1655,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$results = $this->qipModel->getEylfSubActivites();
 				foreach ($results as $key => $obj) {
@@ -1593,6 +1707,12 @@ $headers = $updated_headers;
 		if($headers != null && $headers['X-Token'] != null && $headers['X-Device-Id'] != null ){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				//Check if qip exists or not
 				$qipCheck = $this->qipModel->getQip($json->qipid);
@@ -1709,6 +1829,12 @@ $headers = $updated_headers;
 		if($headers != null && $headers['X-Token'] != null && $headers['X-Device-Id'] != null ){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$elementUsers = $this->qipModel->getQipElementUsers($json);
 				$data['Status'] = "SUCCESS";
@@ -1749,6 +1875,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$json->pronotes = htmlspecialchars($json->pronotes);
 				$response = $this->qipModel->saveProgressNotes($json);
@@ -1793,6 +1925,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				if (empty($json->issueid)) {
 					$response = $this->qipModel->saveElementIssues($json);
@@ -1840,6 +1978,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$results = $this->qipModel->saveElementComment($json);
 				$data['Status'] = "SUCCESS";
@@ -1878,6 +2022,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$results = $this->qipModel->getCenterStaffs($json);
 				foreach ($results as $key => $obj) {
@@ -1928,6 +2078,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				//get standardid to store in table
 				$elmArr = $this->qipModel->getElementInfo($json->elementid);
@@ -1997,6 +2153,12 @@ $headers = $updated_headers;
 		if (!empty($headers['X-Device-Id']) && !empty($headers['X-Token'])) {
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 
 			// print_r($json->selectedOptions);
 			// exit;

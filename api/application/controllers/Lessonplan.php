@@ -48,7 +48,13 @@ class Lessonplan extends CI_Controller {
 // $headers = $updated_headers;
     //             if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 	// 				$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
-	// 				$json = json_decode(file_get_contents('php://input'));	
+	// 				$json = json_decode(file_get_contents('php://input'));
+			// if($json){
+			// 	$json = $json;
+			// 	}else{
+			// 		$json = $_POST;
+			// 		$json = (object)$_POST;
+			// 	}	
 
 	// 				if($json!= null && $res != null && $res->userid == $json->userid){
 	// 					if($json->usertype !='Superadmin'){
@@ -137,6 +143,12 @@ $headers = $updated_headers;
 		if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			
 			if ($json != null && $res != null && $res->userid == $json->userid) {
 				if ($json->usertype != 'Superadmin') {
@@ -249,6 +261,12 @@ $headers = $updated_headers;
 			$this->load->model('loginModel');
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 
 			if($json!= null && $res != null && $res->userid == $json->userid){
 			
@@ -303,6 +321,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			 $res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			
 // print_r($res);
 // print_r($json); exit;

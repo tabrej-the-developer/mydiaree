@@ -60,6 +60,12 @@ $headers = $updated_headers;
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			//print_r($res);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				//print_r($json);
@@ -153,6 +159,12 @@ $headers = $updated_headers;
 			$this->load->model('loginModel');
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				
@@ -248,6 +260,12 @@ $headers = $updated_headers;
 			$this->load->model('loginModel');
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 
 			if($json!= null && $res != null && $res->userid == $json->userid){
 			
@@ -307,6 +325,12 @@ $headers = $updated_headers;
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			
 			
 			
@@ -368,6 +392,12 @@ $headers = $updated_headers;
 			$this->load->model('loginModel');
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			// var_dump($json);
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				if (!empty($json->centerid) && is_numeric($json->centerid)) {
@@ -445,6 +475,12 @@ $headers = $updated_headers;
 			$this->load->model('loginModel');
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				$bySomeone = 0;
 				if(empty($json->childid) || empty($json->montessoriid)){

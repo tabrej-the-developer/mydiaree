@@ -46,7 +46,13 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers))
 		{
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
-			$json = json_decode(file_get_contents('php://input'));			
+			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}			
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				if(empty($json->programid)){
 					http_response_code(401);
@@ -115,7 +121,13 @@ foreach ($headers as $key => $value) {
 $headers = $updated_headers;		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);		
-			$json = json_decode(file_get_contents('php://input'));			
+			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}			
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				if(empty($json->programid)){
 					http_response_code(401);
@@ -166,6 +178,12 @@ $headers = $updated_headers;
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 		
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			
 			if($json!= null && $res != null && $res->userid == $json->userid){
 		
@@ -228,6 +246,12 @@ $headers = $updated_headers;
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 		
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				
@@ -290,6 +314,12 @@ $headers = $updated_headers;
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 		
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			
 			if($json!= null && $res != null && $res->userid == $json->userid){
 		
@@ -349,6 +379,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 
 				$userType = trim($json->usertype);
@@ -428,6 +464,12 @@ $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				if(trim($json->usertype)=='Staff'){
 					$permission = $this->UtilModel->getPermissions($json->userid,$json->centerid);
@@ -480,6 +522,12 @@ $headers = $updated_headers;
 			
 			
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			
 			
 			if($json!= null && $res != null && $res->userid == $json->userid){
@@ -537,6 +585,12 @@ $headers = $updated_headers;
 			
 			
 	// 		$json = json_decode(file_get_contents('php://input'));
+			// if($json){
+			// 	$json = $json;
+			// 	}else{
+			// 		$json = $_POST;
+			// 		$json = (object)$_POST;
+			// 	}
 			
 	// 		if($json!= null && $res != null && $res->userid == $json->userid){
 				
@@ -592,6 +646,12 @@ $headers = $updated_headers;
 			
 			// Decode JSON with error handling
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			if (json_last_error() !== JSON_ERROR_NONE) {
 				http_response_code(400);
 				echo json_encode(['Status' => 'ERROR', 'Message' => 'Invalid JSON format']);
@@ -808,7 +868,13 @@ foreach ($headers as $key => $value) {
 $headers = $updated_headers;		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){			
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);		
-			$json = json_decode(file_get_contents('php://input'));		
+			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}		
 				//var_dump($res); exit;
 			if($json!= null && $res != null && $res->userid == $json->userid){		
 				// if(trim($json->usertype)=='Staff'){
@@ -866,6 +932,12 @@ $headers = $updated_headers;
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 		
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			
 			if($json!= null && $res != null && $res->userid == $json->userid){
 
@@ -926,7 +998,13 @@ foreach ($headers as $key => $value) {
 $headers = $updated_headers;		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){			
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);		
-			$json = json_decode(file_get_contents('php://input'));			
+			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}			
 			if($json!= null && $res != null && $res->userid == $json->userid){	
 				if(empty($json->progplanid)){
 					http_response_code(401);
@@ -981,7 +1059,13 @@ foreach ($headers as $key => $value) {
 $headers = $updated_headers;		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){			
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);		
-			$json = json_decode(file_get_contents('php://input'));			
+			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}			
 			if($json!= null && $res != null && $res->userid == $json->userid){	
 				if (empty($json->centerid)) {
 					http_response_code(401);
@@ -1031,7 +1115,13 @@ foreach ($headers as $key => $value) {
 $headers = $updated_headers;		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){			
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);		
-			$json = json_decode(file_get_contents('php://input'));			
+			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}			
 			if($json!= null && $res != null && $res->userid == $json->userid){	
 
 				if (isset($json->progplanid)) {
@@ -1116,7 +1206,13 @@ foreach ($headers as $key => $value) {
 $headers = $updated_headers;		
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){			
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);		
-			$json = json_decode(file_get_contents('php://input'));			
+			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}			
 			if($json != null && $res != null && $res->userid == $json->userid){	
 				// Start a database transaction
 				$this->db->trans_start();
@@ -1237,6 +1333,12 @@ $headers = $updated_headers;
 	
 			// Decode the JSON payload
 			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 	
 			// Validate payload and user
 			if ($json != null && $res != null && $res->userid == $json->userid) {
