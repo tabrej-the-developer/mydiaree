@@ -664,28 +664,32 @@ $headers = $updated_headers;
 								  		}
 					  				}
 					  			}
-					  		}elseif($origin[$i]=="OBSERVED"){
+							}elseif ($origin[$i] == "OBSERVED") {
 
-					  			$mediaid = $data['obsMediaId_' . $i];
-					  			$childArrName = 'obsImage_' . $i;
-					  			if (isset($data[$childArrName])) {
-					  				$childArr = json_decode($data[$childArrName]);
-						  			foreach ($childArr as $child => $childObj) {
-						  				$this->ObservationModel->insertUploadedMediaChildTags($mediaid,$childObj);
-						  			}
-					  			}
-
-					  			$educatorArrName = 'obsEducator_' . $i;
-					  			if (isset($data[$educatorArrName])) {
-						  			$educatorArr = json_decode($data[$educatorArrName]);
-						  			foreach ($educatorArr as $educator => $educatorObj) {
-						  				$this->ObservationModel->insertUploadedMediaEducatorTags($mediaid,$educatorObj);
-						  			}
-						  		}
-						  		
-					  			$priority2 = $i + 1;
-					  			$this->ObservationModel->updateObservedImagePriority($priority[$i],$priority2);
-					  		}
+								$mediaKey = 'obsMediaId_' . $i;
+								if (isset($data[$mediaKey])) {
+									$mediaid = $data[$mediaKey];
+							
+									$childArrName = 'obsImage_' . $i;
+									if (isset($data[$childArrName])) {
+										$childArr = json_decode($data[$childArrName]);
+										foreach ($childArr as $childObj) {
+											$this->ObservationModel->insertUploadedMediaChildTags($mediaid, $childObj);
+										}
+									}
+							
+									$educatorArrName = 'obsEducator_' . $i;
+									if (isset($data[$educatorArrName])) {
+										$educatorArr = json_decode($data[$educatorArrName]);
+										foreach ($educatorArr as $educatorObj) {
+											$this->ObservationModel->insertUploadedMediaEducatorTags($mediaid, $educatorObj);
+										}
+									}
+							
+									$priority2 = $i + 1;
+									$this->ObservationModel->updateObservedImagePriority($priority[$i], $priority2);
+								}
+							}
 					  	}
 				  	}
 
