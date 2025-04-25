@@ -443,8 +443,12 @@ $headers = $updated_headers;
 
 
 	public function get_details_list(){
+		
 		$headers = $this->input->request_headers();
+
 $updated_headers = []; // Temporary array to store modified headers
+
+
 
 foreach ($headers as $key => $value) {
     $lower_key = strtolower($key);
@@ -461,6 +465,8 @@ foreach ($headers as $key => $value) {
 
 // Assign back to $headers
 $headers = $updated_headers;
+
+
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
 			$json = json_decode(file_get_contents('php://input'));
@@ -470,6 +476,9 @@ $headers = $updated_headers;
 					$json = $_POST;
 					$json = (object)$_POST;
 				}
+				// echo "<pre>";
+				// print_r($json);
+				// exit;
 			if($json!= null && $res != null && $res->userid == $json->userid){
 				if(trim($json->usertype)=='Staff'){
 					$permission = $this->UtilModel->getPermissions($json->userid,$json->centerid);
@@ -619,6 +628,383 @@ $headers = $updated_headers;
 	// 		http_response_code(401);
 	// 	}
 	// }
+
+
+	public function programPlanList() {
+        $headers = $this->input->request_headers();
+
+        // Normalize header keys
+        $updated_headers = [];
+        foreach ($headers as $key => $value) {
+            $lower_key = strtolower($key);
+            if ($lower_key === 'x-device-id') {
+                $updated_headers['X-Device-Id'] = $value;
+            } elseif ($lower_key === 'x-token') {
+                $updated_headers['X-Token'] = $value;
+            } else {
+                $updated_headers[$key] = $value;
+            }
+        }
+        $headers = $updated_headers;
+
+        // Validate headers and authenticate
+        if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
+            $res = $this->loginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
+
+            $json = json_decode(file_get_contents('php://input'));
+            if (!$json) {
+                $json = (object) $_POST;
+            }
+
+            if ($json != null && $res != null && $res->userid == $json->userid) {
+
+                $usertype = $res->usertype;
+                $userid = $res->userid;
+
+                // Get centerid
+                $centerid = isset($json->centerid) ? intval($json->centerid) : 0;
+
+                // Superadmin - get all data
+                if ($usertype == "Superadmin") {
+                    $this->db->select('ppd.*, u.name as creator_name, r.name as room_name');
+                    $this->db->from('programplantemplatedetailsadd as ppd');
+                    $this->db->join('users as u', 'u.userid = ppd.created_by', 'left');
+                    $this->db->join('room as r', 'r.id = ppd.room_id', 'left');
+                    $this->db->where('ppd.centerid', $centerid);
+                    $this->db->order_by('ppd.created_at', 'DESC');
+                    $query = $this->db->get();
+                } else {
+                    // Other users - filter by created_by or educators
+                    $this->db->select('ppd.*, u.name as creator_name, r.name as room_name');
+                    $this->db->from('programplantemplatedetailsadd as ppd');
+                    $this->db->join('users as u', 'u.userid = ppd.created_by', 'left');
+                    $this->db->join('room as r', 'r.id = ppd.room_id', 'left');
+                    $this->db->where('ppd.centerid', $centerid);
+                    $this->db->group_start();
+                    $this->db->where('ppd.created_by', $userid);
+                    $this->db->or_like('ppd.educators', $userid);
+                    $this->db->group_end();
+                    $this->db->order_by('ppd.created_at', 'DESC');
+                    $query = $this->db->get();
+                }
+
+                $program_plans = $query->result();
+
+                // Return data as JSON
+                echo json_encode([
+                    'status' => true,
+                    'message' => 'Program plans fetched successfully.',
+                    'data' => $program_plans
+                ]);
+                return;
+            }
+        }
+
+        // Invalid auth or request
+        echo json_encode([
+            'status' => false,
+            'message' => 'Unauthorized access or invalid data.'
+        ]);
+    }
+
+
+
+	public function getProgramPlanFormData_post()
+{
+    $headers = $this->input->request_headers();
+
+    $updated_headers = [];
+    foreach ($headers as $key => $value) {
+        $lower_key = strtolower($key);
+        if ($lower_key === 'x-device-id') {
+            $updated_headers['X-Device-Id'] = $value;
+        } elseif ($lower_key === 'x-token') {
+            $updated_headers['X-Token'] = $value;
+        } else {
+            $updated_headers[$key] = $value;
+        }
+    }
+    $headers = $updated_headers;
+
+    if (isset($headers['X-Device-Id']) && isset($headers['X-Token'])) {
+        $res = $this->loginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
+        $json = json_decode(file_get_contents('php://input'));
+        if (!$json) {
+            $json = (object)$_POST;
+        }
+
+        if ($json && $res && $res->userid == $json->userid) {
+            $centerid = $json->centerid ?? 0;
+            $userid = $res->userid;
+            $usertype = $res->usertype;
+            $planid = $json->planid ?? null;
+
+            $admin = ($usertype == "Superadmin") ? 1 : 0;
+
+            // Rooms
+            if ($admin == 1) {
+                $rooms = $this->db->where('centerid', $centerid)->get('room')->result();
+            } else {
+                $room_ids = $this->db->select('roomid')->where('staffid', $userid)->get('room_staff')->result_array();
+                $room_ids = array_column($room_ids, 'roomid');
+                $rooms = !empty($room_ids) ? $this->db->where_in('id', $room_ids)->get('room')->result() : [];
+            }
+
+            // Users
+            $user_ids = $this->db->select('userid')->where('centerid', $centerid)->get('usercenters')->result_array();
+            $user_ids = array_column($user_ids, 'userid');
+            $users = !empty($user_ids) ? $this->db->where_in('userid', $user_ids)->get('users')->result() : [];
+
+            // EYLF Outcomes + Activities
+            $eylf_outcomes = $this->db->select('id, title, name')->order_by('title', 'ASC')->get('eylfoutcome')->result();
+            foreach ($eylf_outcomes as $outcome) {
+                $outcome->activities = $this->db->select('id, outcomeId, title')->where('outcomeId', $outcome->id)->get('eylfactivity')->result();
+            }
+
+            // Montessori subjects, activities, and subactivities
+            $montessorisubjects = $this->db->select('idSubject, name')->order_by('idSubject', 'ASC')->get('montessorisubjects')->result();
+            foreach ($montessorisubjects as $subject) {
+                $subject->activities = $this->db->select('idActivity, idSubject, title')->where('idSubject', $subject->idSubject)->get('montessoriactivity')->result();
+                foreach ($subject->activities as $activity) {
+                    $activity->sub_activities = $this->db->select('title')->where('idActivity', $activity->idActivity)->get('montessorisubactivity')->result();
+                }
+            }
+
+            // Plan Data (Edit case)
+            $plan_data = null;
+            $selected_educators = [];
+            $selected_children = [];
+
+            if ($planid) {
+                $plan_data = $this->db->where('id', $planid)->get('programplantemplatedetailsadd')->row();
+                if ($plan_data) {
+                    if (!empty($plan_data->educators)) {
+                        $selected_educators = explode(',', $plan_data->educators);
+                    }
+                    if (!empty($plan_data->children)) {
+                        $selected_children = explode(',', $plan_data->children);
+                    }
+                }
+            }
+
+            // Final Response
+            $response = [
+                'status' => true,
+                'message' => 'Data fetched successfully',
+                'data' => [
+                    'rooms' => $rooms,
+                    'users' => $users,
+                    'centerid' => $centerid,
+                    'user_id' => $userid,
+                    'eylf_outcomes' => $eylf_outcomes,
+                    'Montessori' => $montessorisubjects,
+                    'plan_data' => $plan_data,
+                    'selected_educators' => $selected_educators,
+                    'selected_children' => $selected_children,
+                    'is_edit' => !empty($planid)
+                ]
+            ];
+        } else {
+            $response = ['status' => false, 'message' => 'Unauthorized or invalid request'];
+        }
+    } else {
+        $response = ['status' => false, 'message' => 'Missing required headers'];
+    }
+
+    $this->output
+        ->set_content_type('application/json')
+        ->set_output(json_encode($response));
+}
+
+
+
+public function getRoomUsers_post()
+{
+    $headers = $this->input->request_headers();
+    $headers = array_change_key_case($headers, CASE_LOWER); // Normalize headers
+
+    if (isset($headers['x-device-id']) && isset($headers['x-token'])) {
+        $authUser = $this->loginModel->getAuthUserId($headers['x-device-id'], $headers['x-token']);
+        $json = json_decode(file_get_contents('php://input'));
+        if (!$json) {
+            $json = (object)$_POST;
+        }
+
+        if ($authUser && $authUser->userid == $json->userid) {
+            $room_id = $json->room_id ?? 0;
+            $center_id = $json->center_id ?? 0;
+
+            // Fetch staff IDs
+            $staff_query = $this->db->select('staffid')->where('roomid', $room_id)->get('room_staff');
+
+            if ($staff_query->num_rows() > 0) {
+                $staff_ids = array_column($staff_query->result_array(), 'staffid');
+
+                // Fetch user info
+                $users_query = $this->db->select('userid, name')->where_in('userid', $staff_ids)->get('users');
+                $users = [];
+                foreach ($users_query->result() as $user) {
+                    $users[] = [
+                        'id' => $user->userid,
+                        'name' => $user->name
+                    ];
+                }
+
+                $response = ['status' => true, 'users' => $users];
+            } else {
+                $response = ['status' => true, 'users' => []];
+            }
+        } else {
+            $response = ['status' => false, 'message' => 'Unauthorized or invalid user'];
+        }
+    } else {
+        $response = ['status' => false, 'message' => 'Missing authentication headers'];
+    }
+
+    $this->output
+        ->set_content_type('application/json')
+        ->set_output(json_encode($response));
+}
+
+
+
+public function getRoomChildren_post()
+{
+    $headers = $this->input->request_headers();
+    $headers = array_change_key_case($headers, CASE_LOWER);
+
+    if (isset($headers['x-device-id']) && isset($headers['x-token'])) {
+        $authUser = $this->loginModel->getAuthUserId($headers['x-device-id'], $headers['x-token']);
+        $json = json_decode(file_get_contents('php://input'));
+        if (!$json) {
+            $json = (object)$_POST;
+        }
+
+        if ($authUser && $authUser->userid == $json->userid) {
+            $room_id = $json->room_id ?? 0;
+            $center_id = $json->center_id ?? 0;
+
+            $query = $this->db->select('id, name, lastname')->where('room', $room_id)->get('child');
+
+            $children = [];
+            foreach ($query->result() as $child) {
+                $children[] = [
+                    'id' => $child->id,
+                    'name' => $child->name . ' ' . $child->lastname
+                ];
+            }
+
+            $response = ['status' => true, 'children' => $children];
+        } else {
+            $response = ['status' => false, 'message' => 'Unauthorized or invalid user'];
+        }
+    } else {
+        $response = ['status' => false, 'message' => 'Missing authentication headers'];
+    }
+
+    $this->output
+        ->set_content_type('application/json')
+        ->set_output(json_encode($response));
+}
+
+
+
+public function saveProgramPlan_post()
+{
+    $headers = $this->input->request_headers();
+    $headers = array_change_key_case($headers, CASE_LOWER);
+
+    if (isset($headers['x-device-id']) && isset($headers['x-token'])) {
+        $authUser = $this->loginModel->getAuthUserId($headers['x-device-id'], $headers['x-token']);
+        $json = json_decode(file_get_contents("php://input"));
+
+        if ($authUser && $authUser->userid == ($json->user_id ?? null)) {
+            // Validate required fields
+            if (empty($json->room) || empty($json->months) || empty($json->users) || empty($json->children)) {
+                $response = ['status' => 'error', 'message' => 'room, months, users, and children are required.'];
+                return $this->output->set_content_type('application/json')->set_output(json_encode($response));
+            }
+
+            // Convert arrays to comma-separated strings
+            $educators = is_array($json->users) ? implode(',', $json->users) : NULL;
+            $children = is_array($json->children) ? implode(',', $json->children) : NULL;
+
+            // Build data for insert/update
+            $program_data = [
+                'room_id' => $json->room,
+                'months' => $json->months,
+                'years' => $json->years ?? NULL,
+                'centerid' => $json->centerid ?? NULL,
+                'created_by' => $json->user_id ?? NULL,
+                'educators' => $educators,
+                'children' => $children,
+                'practical_life' => $json->practical_life ?? NULL,
+                'focus_area' => $json->focus_area ?? NULL,
+                'practical_life_experiences' => $json->practical_life_experiences ?? NULL,
+                'sensorial' => $json->sensorial ?? NULL,
+                'sensorial_experiences' => $json->sensorial_experiences ?? NULL,
+                'math' => $json->math ?? NULL,
+                'math_experiences' => $json->math_experiences ?? NULL,
+                'language' => $json->language ?? NULL,
+                'language_experiences' => $json->language_experiences ?? NULL,
+                'culture' => $json->culture ?? NULL,
+                'culture_experiences' => $json->culture_experiences ?? NULL,
+                'art_craft' => $json->art_craft ?? NULL,
+                'art_craft_experiences' => $json->art_craft_experiences ?? NULL,
+                'eylf' => $json->eylf ?? NULL,
+                'outdoor_experiences' => $json->outdoor_experiences ?? NULL,
+                'inquiry_topic' => $json->inquiry_topic ?? NULL,
+                'sustainability_topic' => $json->sustainability_topic ?? NULL,
+                'special_events' => $json->special_events ?? NULL,
+                'children_voices' => $json->children_voices ?? NULL,
+                'families_input' => $json->families_input ?? NULL,
+                'group_experience' => $json->group_experience ?? NULL,
+                'spontaneous_experience' => $json->spontaneous_experience ?? NULL,
+                'mindfulness_experiences' => $json->mindfulness_experiences ?? NULL,
+            ];
+
+            if (!empty($json->plan_id)) {
+                // Update
+                $program_data['updated_at'] = date('Y-m-d H:i:s', strtotime('now Australia/Sydney'));
+                $this->db->where('id', $json->plan_id);
+                $result = $this->db->update('programplantemplatedetailsadd', $program_data);
+
+                if ($result) {
+                    $response = [
+                        'success' => true,
+                        'message' => 'Program plan updated successfully',
+                        'redirect_url' => base_url('LessonPlanList/programplanprintpage/' . $json->plan_id)
+                    ];
+                } else {
+                    $response = ['status' => 'error', 'message' => 'Error updating program plan.'];
+                }
+            } else {
+                // Insert
+                $program_data['created_at'] = date('Y-m-d H:i:s', strtotime('now Australia/Sydney'));
+                $result = $this->db->insert('programplantemplatedetailsadd', $program_data);
+
+                if ($result) {
+                    $insert_id = $this->db->insert_id();
+                    $response = [
+                        'success' => true,
+                        'message' => 'Program plan created successfully',
+                        'redirect_url' => base_url('LessonPlanList/programplanprintpage/' . $insert_id)
+                    ];
+                } else {
+                    $response = ['status' => 'error', 'message' => 'Error creating program plan.'];
+                }
+            }
+        } else {
+            $response = ['status' => false, 'message' => 'Unauthorized or invalid user'];
+        }
+    } else {
+        $response = ['status' => false, 'message' => 'Missing authentication headers'];
+    }
+
+    $this->output->set_content_type('application/json')->set_output(json_encode($response));
+}
+
+
 
 	public function delete(){
 		$headers = $this->input->request_headers();
