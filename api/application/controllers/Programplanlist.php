@@ -908,14 +908,65 @@ public function getRoomChildren_post()
 }
 
 
-
-public function saveProgramPlan_post()
+public function deleteProgramPlan_post()
 {
     $headers = $this->input->request_headers();
     $headers = array_change_key_case($headers, CASE_LOWER);
 
     if (isset($headers['x-device-id']) && isset($headers['x-token'])) {
         $authUser = $this->loginModel->getAuthUserId($headers['x-device-id'], $headers['x-token']);
+        $json = json_decode(file_get_contents("php://input"));
+
+        if ($authUser && $authUser->userid == ($json->user_id ?? null)) {
+            $program_id = $json->program_id ?? null;
+
+            if (empty($program_id)) {
+                $response = ['status' => 'error', 'message' => 'Program ID is required'];
+                return $this->output->set_content_type('application/json')->set_output(json_encode($response));
+            }
+
+            try {
+                $this->db->where('id', $program_id);
+                $result = $this->db->delete('programplantemplatedetailsadd');
+
+                if ($result) {
+                    $response = ['status' => 'success', 'message' => 'Program plan deleted successfully'];
+                } else {
+                    $response = ['status' => 'error', 'message' => 'Failed to delete program plan'];
+                }
+            } catch (Exception $e) {
+                $response = ['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()];
+            }
+        } else {
+            $response = ['status' => false, 'message' => 'Unauthorized or invalid user'];
+        }
+    } else {
+        $response = ['status' => false, 'message' => 'Missing authentication headers'];
+    }
+
+    $this->output->set_content_type('application/json')->set_output(json_encode($response));
+}
+
+
+
+public function saveProgramPlan_post()
+{
+    $headers = $this->input->request_headers();
+	$updated_headers = [];
+    foreach ($headers as $key => $value) {
+        $lower_key = strtolower($key);
+        if ($lower_key === 'x-device-id') {
+            $updated_headers['X-Device-Id'] = $value;
+        } elseif ($lower_key === 'x-token') {
+            $updated_headers['X-Token'] = $value;
+        } else {
+            $updated_headers[$key] = $value;
+        }
+    }
+    $headers = $updated_headers;
+
+    if (isset($headers['X-Device-Id']) && isset($headers['X-Token'])) {
+        $authUser = $this->loginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
         $json = json_decode(file_get_contents("php://input"));
 
         if ($authUser && $authUser->userid == ($json->user_id ?? null)) {
