@@ -916,6 +916,9 @@ public function deleteProgramPlan_post()
     if (isset($headers['x-device-id']) && isset($headers['x-token'])) {
         $authUser = $this->loginModel->getAuthUserId($headers['x-device-id'], $headers['x-token']);
         $json = json_decode(file_get_contents("php://input"));
+		if (!$json) {
+            $json = (object)$_POST;
+        }
 
         if ($authUser && $authUser->userid == ($json->user_id ?? null)) {
             $program_id = $json->program_id ?? null;
@@ -967,7 +970,6 @@ public function saveProgramPlan_post()
 
     if (isset($headers['X-Device-Id']) && isset($headers['X-Token'])) {
         $authUser = $this->loginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
-        $json = json_decode(file_get_contents("php://input"));
 
 		$json = json_decode(file_get_contents('php://input'));
         if (!$json) {
