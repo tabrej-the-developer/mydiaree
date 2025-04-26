@@ -969,6 +969,11 @@ public function saveProgramPlan_post()
         $authUser = $this->loginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
         $json = json_decode(file_get_contents("php://input"));
 
+		$json = json_decode(file_get_contents('php://input'));
+        if (!$json) {
+            $json = (object)$_POST;
+        }
+
         if ($authUser && $authUser->userid == ($json->user_id ?? null)) {
             // Validate required fields
             if (empty($json->room) || empty($json->months) || empty($json->users) || empty($json->children)) {
