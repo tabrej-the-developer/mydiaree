@@ -1614,6 +1614,47 @@ class ObservationModel extends CI_Model {
 		return $q->result();
 	}
 
+
+	public function getObsMonSubActvts2($obsId = '')
+	{
+		$sql = "SELECT * FROM observationmontessori WHERE observationId = ? AND assesment != 'Not Assessed'";
+		$q = $this->db->query($sql, array($obsId));
+		return $q->result();
+	}
+
+	public function getDistObsMonActvts2($obsId = '')
+{
+    $sql = "SELECT DISTINCT(idActivity) 
+            FROM montessorisubactivity 
+            WHERE idSubActivity IN (
+                SELECT idSubActivity 
+                FROM observationmontessori 
+                WHERE observationId = ? 
+                AND assesment != 'Not Assessed'
+            )";
+    $q = $this->db->query($sql, array($obsId));
+    return $q->result();
+}
+	public function getDistObsMonSubs2($obsId = '')
+{
+    $sql = "SELECT idSubject, title 
+            FROM montessoriactivity 
+            WHERE idActivity IN (
+                SELECT DISTINCT(idActivity) 
+                FROM montessorisubactivity 
+                WHERE idSubActivity IN (
+                    SELECT idSubActivity 
+                    FROM observationmontessori 
+                    WHERE observationId = ? 
+                    AND assesment != 'Not Assessed'
+                )
+            )";
+    $q = $this->db->query($sql, array($obsId));
+    return $q->result();
+}
+
+
+
 	public function getMonActvts($subjectId='')
 	{
 		$q = $this->db->get_where("montessoriactivity",array('idSubject'=>$subjectId));

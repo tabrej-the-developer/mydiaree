@@ -3313,17 +3313,17 @@ $headers = $updated_headers;
 	                $obsMonActArr = [];
 	                $obsMonSubArr = [];
 
-	                $demoArr = $this->ObservationModel->getObsMonSubActvts($obsId);
+	                $demoArr = $this->ObservationModel->getObsMonSubActvts2($obsId);
 	                foreach ($demoArr as $demo => $obj) {
 	                	$obsMonSubActArr[] = $obj->idSubActivity;
 	                }
 
-	                $demoArr2 = $this->ObservationModel->getDistObsMonActvts($obsId);
+	                $demoArr2 = $this->ObservationModel->getDistObsMonActvts2($obsId);
                 	foreach ($demoArr2 as $demo2 => $obj2) {
                 		$obsMonActArr[] = $obj2->idActivity;
                 	}
 
-                	$demoArr3 = $this->ObservationModel->getDistObsMonSubs($obsId);
+                	$demoArr3 = $this->ObservationModel->getDistObsMonSubs2($obsId);
                 	foreach ($demoArr3 as $demo3 => $obj3) {
                 		$obsMonSubArr[] = $obj3->idSubject;
                 	}
