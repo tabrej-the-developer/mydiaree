@@ -2475,10 +2475,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 $("#form-observation").append('<input type="hidden" name="fileno[]" value="'+$(this).data("fileno")+'">');
             });
 
-            if ($('#obs_title').val() == '') {
-                alert('Plz Enter Title');
-                return false;
-            }
+            // if ($('#obs_title').val() == '') {
+            //     alert('Plz Enter Title');
+            //     return false;
+            // }
             var url = "<?= base_url('observation/addNew?type=assessments&sub_type=Montessori&id='.$id); ?>";
             var test = url.replace(/&/g, '&');
             document.getElementById("form-observation").action = test;
