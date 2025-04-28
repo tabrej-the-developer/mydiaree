@@ -705,6 +705,68 @@ class ObservationModel extends CI_Model {
 		return $query->result();
 	}
 
+
+	   // For Superadmin
+	   public function getChildsforSuperadmin($user_id, $centerid) {
+        // Find rooms under this center
+        $this->db->select('id');
+        $this->db->from('room');
+        $this->db->where('centerid', $centerid);
+        $roomIdsResult = $this->db->get()->result_array();
+        
+        $roomIds = [];
+        foreach ($roomIdsResult as $room) {
+            $roomIds[] = $room['id'];
+        }
+
+        if (!empty($roomIds)) {
+            $this->db->select('child.*, room.name as room_name');
+            $this->db->from('child');
+            $this->db->join('room', 'child.room = room.id', 'left');
+            $this->db->where_in('child.room', $roomIds);
+            return $this->db->get()->result_array();
+        } else {
+            return [];
+        }
+    }
+
+    // For Educators / Normal Staff
+    public function getChildsforeducators($user_id, $centerid) {
+        // Find rooms where educator is staff OR owner
+        $roomIdsFromStaff = $this->db->select('roomid')
+                                     ->from('room_staff')
+                                     ->where('staffid', $user_id)
+                                     ->get()
+                                     ->result_array();
+
+        $roomIdsFromOwner = $this->db->select('id')
+                                     ->from('room')
+                                     ->where('userId', $user_id)
+                                     ->get()
+                                     ->result_array();
+
+        $roomIds = [];
+        foreach ($roomIdsFromStaff as $room) {
+            $roomIds[] = $room['roomid'];
+        }
+        foreach ($roomIdsFromOwner as $room) {
+            if (!in_array($room['id'], $roomIds)) {
+                $roomIds[] = $room['id'];
+            }
+        }
+
+        if (!empty($roomIds)) {
+            $this->db->select('child.*, room.name as room_name');
+            $this->db->from('child');
+            $this->db->join('room', 'child.room = room.id', 'left');
+            $this->db->where_in('child.room', $roomIds);
+            return $this->db->get()->result_array();
+        } else {
+            return [];
+        }
+    }
+
+
 	public function getMontessoriActivites($centerid='')
 	{
 		if ($centerid) {

@@ -1469,9 +1469,9 @@ $headers = $updated_headers;
 	{
 
 		$headers = $this->input->request_headers();
-$updated_headers = []; // Temporary array to store modified headers
+        $updated_headers = []; // Temporary array to store modified headers
 
-foreach ($headers as $key => $value) {
+      foreach ($headers as $key => $value) {
     $lower_key = strtolower($key);
 
     // Normalize key names
@@ -1482,10 +1482,10 @@ foreach ($headers as $key => $value) {
     } else {
         $updated_headers[$key] = $value; // Keep other headers as is
     }
-}
+        }
 
-// Assign back to $headers
-$headers = $updated_headers;
+     // Assign back to $headers
+         $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
 			$this->load->model('LoginModel');
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
@@ -1841,7 +1841,14 @@ $headers = $updated_headers;
                 }
 
 				$observationTotal = $this->ObservationModel->getObservationsTotal($filter_data);
-				$data['childs'] = $this->ObservationModel->getChilds();
+				//  $data['childs'] = $this->ObservationModel->getChilds();
+				if($admin == 1){
+					$data['childs'] = $this->ObservationModel->getChildsforSuperadmin($user_id,$centerid);
+				}else{
+					$data['childs'] = $this->ObservationModel->getChildsforeducators($user_id,$centerid);
+				}
+
+
 				$data['observationsTotal'] = $observationTotal->total;
 				$data['observations'] = array();
 				foreach($observations as $observation)
