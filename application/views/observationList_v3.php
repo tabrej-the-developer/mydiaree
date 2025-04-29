@@ -1088,8 +1088,10 @@ $('.filter_added').each(function() {
                 </div>
             `);
         });
+        $('#btn-apply-filters').prop('disabled', false).html('Apply Filters');
     } else {
         alert(json.Message);
+        $('#btn-apply-filters').prop('disabled', false).html('Apply Filters');
     }
 }
 
@@ -1100,6 +1102,7 @@ $('.filter_added').each(function() {
 
         $('#btn-apply-filters').on('click', function() {
             // console.log("filter clicked");
+            $(this).prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
             filters();
         });
 
