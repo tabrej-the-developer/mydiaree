@@ -595,7 +595,7 @@ class LessonPlanList extends CI_Controller {
 
 
 
-    public function programPlanList()  
+    public function programPlanList()   
 {
     if($this->session->has_userdata('LoginId')){
         $data = [];

@@ -422,192 +422,280 @@ class ObservationModel extends CI_Model {
 	}
 
 
-	public function getListFilterObservations($data=array())
-	{
+	// public function getListFilterObservations($data=array())
+	// {
 		
-		$sql="SELECT o.id,o.date_added FROM observation o left join observationchild oc on (oc.observationId=o.id) left join users u on
-		      (u.userid=o.userId) left join users a on (u.userid=o.approver) left join child c on (c.id=oc.childId) left join observationmedia om on
-			  (om.observationId=o.id) left join observationmontessori omo on (omo.observationId=o.id) left join observationeylf oe on (oe.observationId=o.id)
-			  left join observationdevmilestonesub od on (od.observationId=o.id) left join observationcomments co on (co.observationId=o.id)
-			  left join users cu on (cu.userid=co.userId) left join observationlinks ol on (ol.linkid=o.id) where o.status is not null";
+	// 	$sql="SELECT o.id,o.date_added FROM observation o left join observationchild oc on (oc.observationId=o.id) left join users u on
+	// 	      (u.userid=o.userId) left join users a on (u.userid=o.approver) left join child c on (c.id=oc.childId) left join observationmedia om on
+	// 		  (om.observationId=o.id) left join observationmontessori omo on (omo.observationId=o.id) left join observationeylf oe on (oe.observationId=o.id)
+	// 		  left join observationdevmilestonesub od on (od.observationId=o.id) left join observationcomments co on (co.observationId=o.id)
+	// 		  left join users cu on (cu.userid=co.userId) left join observationlinks ol on (ol.linkid=o.id) where o.status is not null";
 
 
 
 
-		if(!empty($data['filter_children']))
-		{
-			$sql.=" and  oc.childId  IN (".implode(',',$data['filter_children']).") ";
+	// 	if(!empty($data['filter_children']))
+	// 	{
+	// 		$sql.=" and  oc.childId  IN (".implode(',',$data['filter_children']).") ";
+	// 	}
+
+	// 	if(!empty($data['filter_observationss']))
+	// 	{
+	// 	   foreach($data['filter_observationss'] as $observation){
+	// 			$sql.=" and  o.status='".$observation."' ";
+	// 	   }
+	// 	}
+
+	// 	// if(!empty($data['filter_media']))
+	// 	// {
+	// 	//    foreach($data['filter_media'] as $media)
+	// 	//    {
+	// 	// 	$sql.=" and  om.mediaType='".$media."' ";
+	// 	//    }
+	// 	// }
+
+	// 	// if(!empty($data['filter_links']))
+	// 	// {
+	// 	//    foreach($data['filter_links'] as $link)
+	// 	//    {
+	// 	// 	if($link=='Linked to anything')
+	// 	// 	{
+	// 	// 		$sql.=" and  ol.linkid is not  null ";
+	// 	// 	}else if($link=='Not Linked to anything')
+	// 	// 	{
+	// 	// 		$sql.=" and  ol.linkid is   null ";
+	// 	// 	}
+	// 	// 	else if($link=='Linked to observations')
+	// 	// 	{
+	// 	// 		$sql.=" and  ol.linktype='OBSERVATION'";
+	// 	// 	}
+	// 	// 	else if($link=='Not Linked to observations')
+	// 	// 	{
+	// 	// 		$sql.=" and  ol.linktype <> 'OBSERVATION'";
+	// 	// 	}
+	// 	// 	else if($link=='Not Linked to reflections')
+	// 	// 	{
+	// 	// 		$sql.=" and  ol.linktype <> 'REFLECTIONS'";
+	// 	// 	}
+	// 	// 	else if($link=='Linked to reflections')
+	// 	// 	{
+	// 	// 		$sql.=" and  ol.linktype ='REFLECTIONS'";
+	// 	// 	}
+	// 	//    }
+	// 	// }
+
+	// 	// if(!empty($data['filter_comments']))
+	// 	// {
+	// 	//    foreach($data['filter_comments'] as $comment)
+	// 	//    {
+	// 	// 	if($comment=='With Comments')
+	// 	// 	{
+	// 	// 		$sql.=" and  co.comments is not  null ";
+	// 	// 	}
+	// 	// 	else if($comment=='With Staff Comments')
+	// 	// 	{
+	// 	// 		$sql.=" and  cu.userType='Staff' ";
+	// 	// 	}
+	// 	// 	else if($comment=='With Relative Comments')
+	// 	// 	{
+	// 	// 		$sql.=" and  cu.userType='Relative' ";
+	// 	// 	}
+	// 	// 	else if($comment=='No Comments')
+	// 	// 	{
+	// 	// 		$sql.=" and  co.comments is   null ";
+	// 	// 	}
+	// 	// 	else if($comment=='No Staff Comments')
+	// 	// 	{
+	// 	// 		$sql.=" and  cu.userType <> 'Staff' ";
+	// 	// 	}
+	// 	// 	else if($comment=='No Relative Comments')
+	// 	// 	{
+	// 	// 		$sql.=" and  cu.userType <> 'Relative' ";
+	// 	// 	}
+
+	// 	//    }
+	// 	// }
+
+	// 	if(!empty($data['filter_added']))
+	// 	{
+	//   	foreach($data['filter_added'] as $added)
+	//     {
+	// 			if($added=='Today')
+	// 			{
+	// 				$date=date('Y-m-d');
+	// 				$sql.=" and  DATE_FORMAT(o.date_added,'%Y-%m-%d') BETWEEN '".$date."' and '".$date."' ";
+	// 			}else if($added=='This Week')
+	// 			{
+	// 				$date=date('Y-m-d');
+	// 				$ts = strtotime($date);
+	// 				$start = (date('w', $ts) == 0) ? $ts : strtotime('last sunday', $ts);
+	// 				$start_date = date('Y-m-d', $start);
+	// 				$end_date = date('Y-m-d', strtotime('next saturday', $start));
+	// 				$sql.=" and  DATE_FORMAT(o.date_added,'%Y-%m-%d') BETWEEN '".$start_date."' and '".$end_date."' ";
+	// 			}else if($added=='This Month')
+	// 			{
+	// 				$start_date=date('Y-m-01');
+	// 				$end_date=date('Y-m-t',strtotime($start_date.' 30 days'));
+	// 				$sql.=" and  DATE_FORMAT(o.date_added,'%Y-%m-%d') BETWEEN '".$start_date."' and '".$end_date."' ";
+	// 			}
+	//   	}
+	// 	}
+
+	// 	// if(!empty($data['filter_assessments']))
+	// 	// {
+	// 	// 	if($data['filter_assessments'][0]=='Does Not Have Any Assessment')
+	// 	// 	{
+	// 	// 	$sql.=" and omo.id is null and oe.id is null and od.id is null ";
+	// 	// 	}
+	// 	// 	if(in_array('Has Montessori',$data['filter_assessments']))
+	// 	// 	{
+	// 	// 		$sql.=" and omo.id is not null";
+	// 	// 	}
+	// 	// 	if(in_array('Has Early Years Learning Framework',$data['filter_assessments']))
+	// 	// 	{
+	// 	// 		$sql.=" and oe.id is not null";
+	// 	// 	}
+	// 	// 	if(in_array('Has Developmental Milestones',$data['filter_assessments']))
+	// 	// 	{
+	// 	// 		$sql.=" and od.id is not null";
+	// 	// 	}
+	// 	// 	if(in_array('Does Not Have Montessori',$data['filter_assessments']))
+	// 	// 	{
+	// 	// 		$sql.=" and omo.id is  null";
+	// 	// 	}
+	// 	// 	if(in_array('Does Not Have Early Years Learning Framework',$data['filter_assessments']))
+	// 	// 	{
+	// 	// 		$sql.=" and oe.id is  null";
+	// 	// 	}
+	// 	// 	if(in_array('Does Not Have Developmental Milestones',$data['filter_assessments']))
+	// 	// 	{
+	// 	// 		$sql.=" and od.id is  null";
+	// 	// 	}
+	// 	// }
+
+	// 	if(!empty($data['filter_authors']))
+	// 	{
+	// 		$true=false;
+	// 		foreach($data['filter_authors'] as $author)
+	// 		{
+	// 			if($author=='Any')
+	// 			{
+	// 				break;
+	// 			}elseif($author=='Me')
+	// 			{
+	// 				if(!in_array('Staff',$data['filter_authors']))
+	// 				{
+	// 					$sql.=" and (u.userid=".$data['userid'].")";
+	// 				}else{
+	// 					$sql.=" and (u.userid=".$data['userid']."";
+	// 				}
+
+	// 				$true=true;
+	// 			}else if($author=='Staff')
+	// 			{
+	// 				if($true)
+	// 				{
+	// 					$sql.=" or u.userType='Staff')";
+	// 				}else{
+	// 					$sql.=" and  u.userType='Staff'";
+	// 				}
+
+	// 			}
+	// 		}
+	// 	}
+
+	// 	$sql.=" group by o.id order by o.date_added asc";
+	// 	$query = $this->db->query($sql);
+	// 	return $query->result();
+	// }
+
+	public function getListFilterObservations($data = array())
+{
+    $sql = "SELECT o.id, o.date_added 
+            FROM observation o 
+            LEFT JOIN observationchild oc ON oc.observationId = o.id 
+            LEFT JOIN users u ON u.userid = o.userId 
+            LEFT JOIN users a ON a.userid = o.approver 
+            LEFT JOIN child c ON c.id = oc.childId 
+            LEFT JOIN observationmedia om ON om.observationId = o.id 
+            LEFT JOIN observationmontessori omo ON omo.observationId = o.id 
+            LEFT JOIN observationeylf oe ON oe.observationId = o.id 
+            LEFT JOIN observationdevmilestonesub od ON od.observationId = o.id 
+            LEFT JOIN observationcomments co ON co.observationId = o.id 
+            LEFT JOIN users cu ON cu.userid = co.userId 
+            LEFT JOIN observationlinks ol ON ol.linkid = o.id 
+            WHERE o.status IS NOT NULL";
+
+    // Filter by children
+    if (!empty($data['filter_children']) && is_array($data['filter_children'])) {
+        $child_ids = implode(',', array_map('intval', $data['filter_children']));
+        $sql .= " AND oc.childId IN ($child_ids)";
+    }
+
+    // Filter by observations status
+    if (!empty($data['filter_observationss']) && is_array($data['filter_observationss'])) {
+        $statuses = array_map(function ($status) {
+            return "'" . $this->db->escape_str($status) . "'";
+        }, $data['filter_observationss']);
+        $sql .= " AND o.status IN (" . implode(',', $statuses) . ")";
+    }
+
+   // Filter by date added
+if (!empty($data['filter_added'])) {
+	foreach ($data['filter_added'] as $added) {
+		if ($added == 'Today') {
+			$date = date('Y-m-d');
+			$sql .= " AND DATE_FORMAT(o.date_added,'%Y-%m-%d') = '".$date."' ";
+		} elseif ($added == 'This Week') {
+			$ts = strtotime(date('Y-m-d'));
+			$start_date = date('Y-m-d', strtotime('last sunday', $ts));
+			$end_date = date('Y-m-d', strtotime('next saturday', $ts));
+			$sql .= " AND DATE_FORMAT(o.date_added,'%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."' ";
+		} elseif ($added == 'This Month') {
+			$start_date = date('Y-m-01');
+			$end_date = date('Y-m-t');
+			$sql .= " AND DATE_FORMAT(o.date_added,'%Y-%m-%d') BETWEEN '".$start_date."' AND '".$end_date."' ";
+		} elseif (
+			$added == 'Custom' &&
+			!empty($data['fromDate']) && !empty($data['toDate'])
+		) {
+			$from = $data['fromDate'];
+			$to = $data['toDate'];
+			$sql .= " AND DATE_FORMAT(o.date_added,'%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' ";
 		}
-
-		if(!empty($data['filter_observationss']))
-		{
-		   foreach($data['filter_observationss'] as $observation){
-				$sql.=" and  o.status='".$observation."' ";
-		   }
-		}
-
-		if(!empty($data['filter_media']))
-		{
-		   foreach($data['filter_media'] as $media)
-		   {
-			$sql.=" and  om.mediaType='".$media."' ";
-		   }
-		}
-
-		if(!empty($data['filter_links']))
-		{
-		   foreach($data['filter_links'] as $link)
-		   {
-			if($link=='Linked to anything')
-			{
-				$sql.=" and  ol.linkid is not  null ";
-			}else if($link=='Not Linked to anything')
-			{
-				$sql.=" and  ol.linkid is   null ";
-			}
-			else if($link=='Linked to observations')
-			{
-				$sql.=" and  ol.linktype='OBSERVATION'";
-			}
-			else if($link=='Not Linked to observations')
-			{
-				$sql.=" and  ol.linktype <> 'OBSERVATION'";
-			}
-			else if($link=='Not Linked to reflections')
-			{
-				$sql.=" and  ol.linktype <> 'REFLECTIONS'";
-			}
-			else if($link=='Linked to reflections')
-			{
-				$sql.=" and  ol.linktype ='REFLECTIONS'";
-			}
-		   }
-		}
-
-		if(!empty($data['filter_comments']))
-		{
-		   foreach($data['filter_comments'] as $comment)
-		   {
-			if($comment=='With Comments')
-			{
-				$sql.=" and  co.comments is not  null ";
-			}
-			else if($comment=='With Staff Comments')
-			{
-				$sql.=" and  cu.userType='Staff' ";
-			}
-			else if($comment=='With Relative Comments')
-			{
-				$sql.=" and  cu.userType='Relative' ";
-			}
-			else if($comment=='No Comments')
-			{
-				$sql.=" and  co.comments is   null ";
-			}
-			else if($comment=='No Staff Comments')
-			{
-				$sql.=" and  cu.userType <> 'Staff' ";
-			}
-			else if($comment=='No Relative Comments')
-			{
-				$sql.=" and  cu.userType <> 'Relative' ";
-			}
-
-		   }
-		}
-
-		if(!empty($data['filter_added']))
-		{
-	  	foreach($data['filter_added'] as $added)
-	    {
-				if($added=='Today')
-				{
-					$date=date('Y-m-d');
-					$sql.=" and  DATE_FORMAT(o.date_added,'%Y-%m-%d') BETWEEN '".$date."' and '".$date."' ";
-				}else if($added=='This Week')
-				{
-					$date=date('Y-m-d');
-					$ts = strtotime($date);
-					$start = (date('w', $ts) == 0) ? $ts : strtotime('last sunday', $ts);
-					$start_date = date('Y-m-d', $start);
-					$end_date = date('Y-m-d', strtotime('next saturday', $start));
-					$sql.=" and  DATE_FORMAT(o.date_added,'%Y-%m-%d') BETWEEN '".$start_date."' and '".$end_date."' ";
-				}else if($added=='This Month')
-				{
-					$start_date=date('Y-m-01');
-					$end_date=date('Y-m-t',strtotime($start_date.' 30 days'));
-					$sql.=" and  DATE_FORMAT(o.date_added,'%Y-%m-%d') BETWEEN '".$start_date."' and '".$end_date."' ";
-				}
-	  	}
-		}
-
-		if(!empty($data['filter_assessments']))
-		{
-			if($data['filter_assessments'][0]=='Does Not Have Any Assessment')
-			{
-			$sql.=" and omo.id is null and oe.id is null and od.id is null ";
-			}
-			if(in_array('Has Montessori',$data['filter_assessments']))
-			{
-				$sql.=" and omo.id is not null";
-			}
-			if(in_array('Has Early Years Learning Framework',$data['filter_assessments']))
-			{
-				$sql.=" and oe.id is not null";
-			}
-			if(in_array('Has Developmental Milestones',$data['filter_assessments']))
-			{
-				$sql.=" and od.id is not null";
-			}
-			if(in_array('Does Not Have Montessori',$data['filter_assessments']))
-			{
-				$sql.=" and omo.id is  null";
-			}
-			if(in_array('Does Not Have Early Years Learning Framework',$data['filter_assessments']))
-			{
-				$sql.=" and oe.id is  null";
-			}
-			if(in_array('Does Not Have Developmental Milestones',$data['filter_assessments']))
-			{
-				$sql.=" and od.id is  null";
-			}
-		}
-
-		if(!empty($data['filter_authors']))
-		{
-			$true=false;
-			foreach($data['filter_authors'] as $author)
-			{
-				if($author=='Any')
-				{
-					break;
-				}elseif($author=='Me')
-				{
-					if(!in_array('Staff',$data['filter_authors']))
-					{
-						$sql.=" and (u.userid=".$data['userid'].")";
-					}else{
-						$sql.=" and (u.userid=".$data['userid']."";
-					}
-
-					$true=true;
-				}else if($author=='Staff')
-				{
-					if($true)
-					{
-						$sql.=" or u.userType='Staff')";
-					}else{
-						$sql.=" and  u.userType='Staff'";
-					}
-
-				}
-			}
-		}
-
-		$sql.=" group by o.id order by o.date_added asc";
-		$query = $this->db->query($sql);
-		return $query->result();
 	}
+}
+
+    // Filter by authors
+    if (!empty($data['filter_authors']) && is_array($data['filter_authors'])) {
+        $author_conditions = [];
+
+        foreach ($data['filter_authors'] as $author) {
+            if ($author === 'Any') {
+                // No filter applied
+                $author_conditions = [];
+                break;
+            } elseif ($author === 'Me') {
+                $author_conditions[] = "u.userid = " . intval($data['userid']);
+            } elseif ($author === 'Staff') {
+                $author_conditions[] = "u.userType = 'Staff'";
+            } elseif ($author === 'Relative') {
+                $author_conditions[] = "u.userType = 'Relative'";
+            }
+        }
+
+        if (!empty($author_conditions)) {
+            $sql .= " AND (" . implode(" OR ", $author_conditions) . ")";
+        }
+    }
+
+    // Group and order
+    $sql .= " GROUP BY o.id ORDER BY o.date_added ASC";
+
+    $query = $this->db->query($sql);
+    return $query->result();
+}
+
 
 	public function getFilterObservations($data=array())
 	{
@@ -981,12 +1069,50 @@ class ObservationModel extends CI_Model {
 			$query = $this->db->query($sql);
 			return $query->result();
 	}
-	public function getObservationUser($id)
-	{
+
+	public function getMedia2($id)
+{
+    $sql = "SELECT * FROM observationmedia WHERE observationId = ? ORDER BY priority ASC";
+    $query = $this->db->query($sql, array($id));
+
+    $result = $query->result();
+
+    if (!empty($result)) {
+        return $result;
+    } else {
+		return null;
+
+        // Return a dummy object with dummy image URL
+        // return [
+        //     (object)[
+        //         'id' => null,
+        //         'observationId' => $id,
+        //         'mediaUrl' => 'https://skala.or.id/wp-content/uploads/2024/01/dummy-post-square-1-1.jpg',
+        //         'priority' => 0,
+        //         'type' => 'image',
+        //         // add other fields if required
+        //     ]
+        // ];
+    }
+}
+
+// 	public function getObservationUser($id)
+// 	{
 		
-		$query = $this->db->query("SELECT o.*,u.name as user_name,a.name as approverName FROM observation o left join users u on (u.userid=o.userId) left join users a on (a.userid = o.approver) where o.id = ".$id."");
-		return $query->row();
-	}
+// 		$query = $this->db->query("SELECT o.*,u.name as user_name,a.name as approverName FROM observation o left join users u on (u.userid=o.userId) left join users a on (a.userid = o.approver) where o.id = ".$id."");
+// 		return $query->row();
+// 	}
+
+	public function getObservationUser($id)
+{
+    $query = $this->db->query("SELECT o.*, u.name as user_name, a.name as approverName 
+        FROM observation o 
+        LEFT JOIN users u ON (u.userid = o.userId) 
+        LEFT JOIN users a ON (a.userid = o.approver) 
+        WHERE o.id = ?", array($id));
+    return $query->row();
+}
+
 	public function getReflectionUser($id)
 	{
 		

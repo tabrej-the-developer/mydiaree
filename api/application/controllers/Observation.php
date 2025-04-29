@@ -1509,24 +1509,45 @@ $headers = $updated_headers;
 					'filter_authors'=>isset($json->authors) ? $json->authors : null ,
 					'filter_observationss'=>isset($json->observations) ? $json->observations : null ,
 					'filter_added'=>isset($json->added) ? $json->added : null ,
+					
+					'fromDate'=>isset($json->fromDate) ? $json->fromDate : null ,
+
+					'toDate'=>isset($json->toDate) ? $json->toDate : null ,
+
 					'filter_comments'=>isset($json->comments) ? $json->comments : null ,
 					'filter_links'=>isset($json->links) ? $json->links : null ,
 					'filter_media'=>isset($json->media) ? $json->media : null ,
 					'filter_assessments'=>isset($json->assessments) ? $json->assessments : null 
 				);
 
+				        // http_response_code(200);
+						// echo "<pre>";
+						// print_r($filter_data);
+						// exit;
+
+			
 			    $observations = $this->ObservationModel->getListFilterObservations($filter_data);
 
+				
+
+				
 			    if (empty($observations)) {
 			    	$data['observations'] = [];
 			    } else {
 					foreach($observations as $observation){
-						$childs=$this->ObservationModel->getObservationChildrens($observation->id);
-						$media=$this->ObservationModel->getMedia($observation->id);
+						// $childs=$this->ObservationModel->getObservationChildrens($observation->id);
+						$media=$this->ObservationModel->getMedia2($observation->id);
+						
 						$obs=$this->ObservationModel->getObservationUser($observation->id);
-						$montessoryCount=$this->ObservationModel->getObservationMontessoriCount($observation->id);
-						$eylfCount=$this->ObservationModel->getObservationEylfCount($observation->id);
-						$milestoneCount=$this->ObservationModel->getObservationMilestoneCount($observation->id);
+
+						// http_response_code(200);
+						// echo "<pre>";
+						// print_r($media);
+						// exit;
+					
+						// $montessoryCount=$this->ObservationModel->getObservationMontessoriCount($observation->id);
+						// $eylfCount=$this->ObservationModel->getObservationEylfCount($observation->id);
+						// $milestoneCount=$this->ObservationModel->getObservationMilestoneCount($observation->id);
 						$data['observations'][] = array(
 							'id'=>$observation->id,
 							'date_added'=>date('d.m.Y',strtotime($observation->date_added)),
@@ -1534,14 +1555,19 @@ $headers = $updated_headers;
 							'userName'=>$obs->user_name,
 							'status'=>$obs->status,
 							'approverName'=>$obs->approverName,
-							'childs'=>$childs,
-							'montessoryCount'=>$montessoryCount,
-							'eylfCount'=>$eylfCount,
-							'milestoneCount'=>$milestoneCount,
+							// 'childs'=>$childs,
+							// 'montessoryCount'=>$montessoryCount,
+							// 'eylfCount'=>$eylfCount,
+							// 'milestoneCount'=>$milestoneCount,
 							'media'=>isset($media[0]->mediaUrl)?$media[0]->mediaUrl:''
 						);
 					}
 				}
+                        // http_response_code(200);
+						// echo "<pre>";
+						// print_r($media);
+						// exit;
+			
 				
 			}else{
 				http_response_code(401);

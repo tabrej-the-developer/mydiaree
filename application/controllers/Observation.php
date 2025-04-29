@@ -582,6 +582,22 @@ class Observation extends CI_Controller {
 			}else{
 				$data['media']=array();
 			}
+
+
+			if(!empty($_POST['fromDate']))
+			{
+				$data['fromDate']=$_POST['fromDate'];
+			}else{
+				$data['fromDate']=array();
+			}
+
+			if(!empty($_POST['toDate']))
+			{
+				$data['toDate']=$_POST['toDate'];
+			}else{
+				$data['toDate']=array();
+			}
+
 			
 			if(!empty($_POST['comments']))
 			{
@@ -595,7 +611,9 @@ class Observation extends CI_Controller {
 			}else{
 				$data['links']=array();
 			}
-			
+			// echo "<pre>";
+			// print_r($data);
+			// exit;
 		    $url = BASE_API_URL.'observation/getListFilterObservations/'.$userid;
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_POST, 1);
@@ -610,11 +628,20 @@ class Observation extends CI_Controller {
 			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			curl_close($ch);
 			$jsonOutput = json_decode($server_output);
+			
 			if ($httpcode == 200) {
+					// $jsonOutput = json_encode($jsonOutput);
+			// echo "<pre>";
+			// print_r($server_output);
+			// exit;
+			
 				foreach ($jsonOutput->observations as $key => $obj) {
 					$obj->title = substr_replace(strip_tags(html_entity_decode($obj->title)),'...',40);
 					$obj->date_added = date("d.m.Y",strtotime($obj->date_added));
 				}
+
+		
+		
 				echo json_encode($jsonOutput);
 			}else{
 				echo $server_output;
@@ -2077,6 +2104,9 @@ class Observation extends CI_Controller {
 				$data->page=$page;
 				$data->count=ceil($count);
 				$data->centerid = $centerid;
+				// echo "<pre>";
+				// print_r($data);
+				// exit;
 			    $this->load->view('observationList_v3',$data);
 			}
 			else if($httpcode == 401){

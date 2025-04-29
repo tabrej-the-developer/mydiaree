@@ -480,6 +480,7 @@
                                     </div>
                                 </div>
                             </div>
+                          
                             <div class="border">
                                 <button class="btn btn-link dropdown-toggle collapsed" data-toggle="collapse"
                                     data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -508,9 +509,21 @@
                                             <label class="custom-control-label" for="added_this_month">This
                                                 Month</label>
                                         </div>
+
+                                        <div class="custom-control custom-radio">
+    <input type="radio" id="added_custom" name="filter_added"
+        class="custom-control-input filter_added" value="Custom">
+    <label class="custom-control-label" for="added_custom">Custom Date</label>
+</div>
+<div id="custom_date_range" style="display:none; margin-top: 10px;">
+    <input type="date" id="from_date" class="form-control mb-2" placeholder="From Date">
+    <input type="date" id="to_date" class="form-control" placeholder="To Date">
+</div>
+
                                     </div>
                                 </div>
                             </div>
+
                             <div class="border">
                                 <button class="btn btn-link dropdown-toggle collapsed" data-toggle="collapse"
                                     data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
@@ -566,7 +579,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="border">
+                            <!-- <div class="border">
                                 <button class="btn btn-link dropdown-toggle collapsed" data-toggle="collapse"
                                     data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
                                     Assessments </button>
@@ -744,7 +757,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -842,19 +855,58 @@
 
 
     <script>
+
+// Handle "Select All" functionality
+$(document).ready(function() {
+    // Handle "Select All" checkbox click
+    $('#fitler_child_selectall').change(function() {
+        $('.filter_child:not(#fitler_child_selectall)').prop('checked', $(this).prop('checked'));
+    });
+    
+    // Update "Select All" when individual checkboxes change
+    $('.filter_child:not(#fitler_child_selectall)').change(function() {
+        var allChecked = $('.filter_child:not(#fitler_child_selectall)').length === 
+                         $('.filter_child:not(#fitler_child_selectall):checked').length;
+        $('#fitler_child_selectall').prop('checked', allChecked);
+    });
+});
+
+
     $(function() {
         function filters() {
-            var childs = [];
-            $('.filter_child').each(function() {
-                if ($(this).prop("checked") == true) {
-                    if ($(this).val() == 'All') {
-                        childs = [];
-                        return false;
-                    } else {
-                        childs.push($(this).val());
-                    }
+            var childs = getSelectedChildIds();
+
+// Define this function elsewhere in your code
+function getSelectedChildIds() {
+    var childs = [];
+    var hasSelectAll = false;
+    
+    $('.filter_child').each(function() {
+        if ($(this).prop("checked") == true) {
+            if ($(this).val() == 'All') {
+                hasSelectAll = true;
+            } else {
+                // Only add if not already in the array (prevents duplicates)
+                if (childs.indexOf($(this).val()) === -1) {
+                    childs.push($(this).val());
                 }
-            });
+            }
+        }
+    });
+    
+    // If "Select All" is checked, get all child IDs
+    if (hasSelectAll) {
+        childs = []; // Reset array
+        $('.filter_child:not(#fitler_child_selectall)').each(function() {
+            // Only add if not already in the array (prevents duplicates)
+            if (childs.indexOf($(this).val()) === -1) {
+                childs.push($(this).val());
+            }
+        });
+    }
+    
+    return childs;
+}
 
             var authors = [];
             $('.filter_author').each(function() {
@@ -863,12 +915,12 @@
                 }
             });
 
-            var assessments = [];
-            $('.filter_assessment').each(function() {
-                if ($(this).prop("checked") == true) {
-                    assessments.push($(this).val());
-                }
-            });
+            // var assessments = [];
+            // $('.filter_assessment').each(function() {
+            //     if ($(this).prop("checked") == true) {
+            //         assessments.push($(this).val());
+            //     }
+            // });
 
             var observations = [];
             $('.filter_observation').each(function() {
@@ -877,112 +929,172 @@
                 }
             });
 
-            var added = [];
-            $('.filter_added').each(function() {
-                if ($(this).prop("checked") == true) {
-                    if ($(this).val() == 'All') {
-                        added = [];
-                        return false;
-                    } else {
-                        added.push($(this).val());
-                    }
-                }
-            });
+            // var added = [];
+            // $('.filter_added').each(function() {
+            //     if ($(this).prop("checked") == true) {
+            //         if ($(this).val() == 'All') {
+            //             added = [];
+            //             return false;
+            //         } else {
+            //             added.push($(this).val());
+            //         }
+            //     }
+            // });
 
-            var media = [];
-            $('.filter_media').each(function() {
-                if ($(this).prop("checked") == true) {
-                    if ($(this).val() == 'Any') {
-                        media = [];
-                        return false;
-                    } else {
-                        media.push($(this).val());
-                    }
-                }
-            });
+var added = [];
+var fromDate = '';
+var toDate = '';
 
-            var comments = [];
-            $('.filter_comment').each(function() {
-                if ($(this).prop("checked") == true) {
-                    if ($(this).val() == 'Any') {
-                        comments = [];
-                        return false;
-                    } else {
-                        comments.push($(this).val());
-                    }
-                }
-            });
+$('.filter_added').each(function() {
+    if ($(this).prop("checked") == true) {
+        let val = $(this).val();
+        if (val == 'All') {
+            added = [];
+            return false;
+        } else {
+            added.push(val);
+            if (val === 'Custom') {
+                fromDate = $('#from_date').val();
+                toDate = $('#to_date').val();
+            }
+        }
+    }
+});
 
-            var links = [];
-            $('.filter_link').each(function() {
-                if ($(this).prop("checked") == true) {
-                    if ($(this).val() == 'Not Filtered') {
-                        links = [];
-                        return false;
-                    } else {
-                        links.push($(this).val());
-                    }
-                }
-            });
+
+            // var media = [];
+            // $('.filter_media').each(function() {
+            //     if ($(this).prop("checked") == true) {
+            //         if ($(this).val() == 'Any') {
+            //             media = [];
+            //             return false;
+            //         } else {
+            //             media.push($(this).val());
+            //         }
+            //     }
+            // });
+
+            // var comments = [];
+            // $('.filter_comment').each(function() {
+            //     if ($(this).prop("checked") == true) {
+            //         if ($(this).val() == 'Any') {
+            //             comments = [];
+            //             return false;
+            //         } else {
+            //             comments.push($(this).val());
+            //         }
+            //     }
+            // });
+
+            // var links = [];
+            // $('.filter_link').each(function() {
+            //     if ($(this).prop("checked") == true) {
+            //         if ($(this).val() == 'Not Filtered') {
+            //             links = [];
+            //             return false;
+            //         } else {
+            //             links.push($(this).val());
+            //         }
+            //     }
+            // });
 
             $.ajax({
                 type: 'POST',
                 url: '<?php echo base_url('observation/listfilters'); ?>',
-                data: 'childs=' + childs + '&authors=' + authors + '&assessments=' + assessments +
-                    '&observations=' + observations + '&added=' + added + '&media=' + media +
-                    '&comments=' + comments + '&links=' + links,
+                data: 'childs=' + childs + '&authors=' + authors +
+                    '&observations=' + observations + '&added=' + added + '&fromDate=' + fromDate + '&toDate=' + toDate,
+                // data: 'childs=' + childs + '&authors=' + authors + '&assessments=' + assessments +
+                //     '&observations=' + observations + '&added=' + added + '&media=' + media +
+                //     '&comments=' + comments + '&links=' + links,
                 datatype: 'json',
                 success: function(json) {
-                    //console.log(json);
-                    json = JSON.parse(json);
-                    if (json.Status == "SUCCESS") {
-                        $('#observations-list').empty();
-                        $.each(json.observations, function(key, val) {
-                            if (val.media == "") {
-                                _img = "https://via.placeholder.com/320x240?text=No+Media";
-                            } else {
-                                _img = "<?= base_url('/api/assets/media'); ?>/" + val.media;
-                            }
+    json = JSON.parse(json);
+    if (json.Status == "SUCCESS") {
+        $('#observations-list').empty();
+        $.each(json.observations, function(key, val) {
+            var _status = '';
+            var _mediaUrl = '';
+            var _role = '<?= $role ?>'; // You must pass the PHP role into JavaScript
 
-                            if (val.status == "Draft") {
-                                _status =
-                                    `<span class="badge badge-pill position-absolute badge-top-right badge-danger">DRAFT</span>`;
-                            } else {
-                                _status =
-                                    `<span class="badge badge-pill position-absolute badge-top-right badge-success">PUBLISHED</span>`;
-                            }
+            // Media Handling
+            if (val.media == "" || val.media == null) {
+                _mediaUrl = "https://skala.or.id/wp-content/uploads/2024/01/dummy-post-square-1-1.jpg";
+            } else {
+                _mediaUrl = "<?= base_url('/api/assets/media/'); ?>" + val.media;
+            }
 
-                            $('#observations-list').append(
-                                `
-                                    <div class="col-lg-6 col-md-3">
-                                        <div class="d-flex flex-row mb-3 bg-white br-10">
-                                            <a class="d-block position-relative" href="<?= base_url('observation/view?id='); ?>` + val.id + `">                                                
-                                                <img src="` + _img + `" alt="video" class="list-thumbnail border-0">
-                                                ` + _status + `
-                                            </a>
-                                            <div class="pl-3 pt-2 pr-2 pb-2">
-                                                <a href="<?= base_url('observation/view?id='); ?>` + val.id + `" class="obs-link">
-                                                    <p class="list-item-heading">
-                                                        ` + val.title + `
-                                                    </p>
-                                                    <div class="pr-4 d-none d-sm-block">
-                                                        <p class="text-muted mb-1 text-small">
-                                                            By: ` + val.user_name + `
-                                                        </p>
-                                                    </div>
-                                                    <div class="text-primary text-small font-weight-medium d-none d-sm-block">
-                                                        ` + val.date_added + `
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `);
-                        });
-                    } else {
-                        alert(json.Message);
-                    }
-                }
+            // Status Badge
+            if (val.status == "Published") {
+                _status = `<span class="badge badge-pill position-absolute badge-top-right badge-success">PUBLISHED</span>`;
+            } else {
+                _status = `<span class="badge badge-pill position-absolute badge-top-right badge-danger">DRAFT</span>`;
+            }
+
+            // Link based on Role
+            var viewLink = (_role !== "Parent")
+                ? "<?= base_url('observation/view?id='); ?>" + val.id
+                : "<?= base_url('observation/print/'); ?>" + val.id;
+
+            var targetAttr = (_role !== "Parent") ? '' : 'target="_blank"';
+
+            // Icons on Right side
+            var iconsHtml = '';
+            if (_role !== "Parent") {
+                iconsHtml = `
+                    <a href="<?= base_url('observation/print/'); ?>${val.id}" target="_blank" class="mb-2">
+                        <i class="fa-solid fa-print fa-lg fa-beat" style="color: #74C0FC;"></i>
+                    </a>
+                    <i class="fa-sharp fa-solid fa-trash fa-lg fa-fade" style="color: #da0711;cursor:pointer;" onclick="deleteObservation(${val.id})"></i>
+                `;
+            } else {
+                iconsHtml = `
+                    <i class="fa-solid fa-comment fa-bounce fa-sm" style="color: #74C0FC;cursor:pointer;" onclick="openAddCommentModal(${val.id})"></i>
+                `;
+            }
+
+            // Now build full card
+            $('#observations-list').append(`
+                <div class="col-lg-6 col-md-3">
+                    <div class="d-flex flex-row mb-3 bg-white br-10 align-items-center justify-content-between p-3">
+
+                        <div class="d-flex flex-row align-items-center">
+                            <a class="d-block position-relative" href="${viewLink}" ${targetAttr}>
+                                <img src="${_mediaUrl}" alt="Media" class="list-thumbnail border-0" style="width:100px;height:100px;object-fit:cover;">
+                                ${_status}
+                            </a>
+
+                            <div class="pl-3">
+                                <a href="${viewLink}" class="obs-link" ${targetAttr}>
+                                    <p class="list-item-heading mb-1">
+                                        ${val.title.length > 40 ? val.title.substring(0, 40) + '...' : val.title}
+                                    </p>
+                                </a>
+
+                                <p class="text-muted mb-1 text-small">
+                                    By: ${val.userName ?? 'Unknown'}
+                                </p>
+
+                                <p class="text-primary text-small font-weight-medium mb-0">
+                                    ${val.date_added}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column align-items-center icon-actions">
+                            ${iconsHtml}
+                        </div>
+
+                    </div>
+                </div>
+            `);
+        });
+    } else {
+        alert(json.Message);
+    }
+}
+
+
+
             });
         }
 
@@ -1288,9 +1400,21 @@
             });
         });
     });
+
+
+    $('input[name="filter_added"]').change(function() {
+    if ($(this).val() == 'Custom') {
+        $('#custom_date_range').show();
+    } else {
+        $('#custom_date_range').hide();
+        $('#from_date').val('');
+        $('#to_date').val('');
+    }
+});
+
     </script>
 
 
-</body>
+</body>/
 
 </html>
