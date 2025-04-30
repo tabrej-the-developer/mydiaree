@@ -90,7 +90,11 @@ class HeadChecks extends CI_Controller {
 		// Get the input data
 		$input = $this->input->post();
 
-	
+		
+
+		// 	echo "<pre>";
+		// print_r($input);
+		// exit;
 		
 		// Validate required fields (adjust as needed)
 		if (empty($input['childid']) || empty($input['diarydate']) || empty($input['time'])) {
@@ -99,7 +103,9 @@ class HeadChecks extends CI_Controller {
 		}
 
 		$input['diarydate'] = str_replace('-', '/', $input['diarydate']);
-        $mysqlDate = date('Y-d-m', strtotime($input['diarydate']));
+		$date = DateTime::createFromFormat('d/m/Y', $input['diarydate']);
+		$mysqlDate = $date ? $date->format('Y-m-d') : null;
+
 
 
 	
@@ -140,8 +146,12 @@ class HeadChecks extends CI_Controller {
 			return;
 		}
 	
+		// $input['diarydate'] = str_replace('-', '/', $input['diarydate']);
+		// $mysqlDate = date('Y-d-m', strtotime($input['diarydate']));
+
 		$input['diarydate'] = str_replace('-', '/', $input['diarydate']);
-		$mysqlDate = date('Y-d-m', strtotime($input['diarydate']));
+		$date = DateTime::createFromFormat('d/m/Y', $input['diarydate']);
+		$mysqlDate = $date ? $date->format('Y-m-d') : null;
 	
 		$data = [
 			'childid' => $input['childid'],
