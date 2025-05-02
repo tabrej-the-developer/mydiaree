@@ -16,6 +16,7 @@ class HeadChecks extends CI_Controller {
 		if($method == "OPTIONS") {
 			die();
 		}
+		$this->load->database(); 
 	}
 
 	public function index()
@@ -238,6 +239,242 @@ $headers = $updated_headers;
 		}
 		echo json_encode($data);
 	}
+
+
+
+
+	public function saveSleepChecklist()
+{
+    $headers = $this->input->request_headers();
+    $updated_headers = [];
+
+    // Normalize headers
+    foreach ($headers as $key => $value) {
+        $lower_key = strtolower($key);
+        if ($lower_key === 'x-device-id') {
+            $updated_headers['X-Device-Id'] = $value;
+        } elseif ($lower_key === 'x-token') {
+            $updated_headers['X-Token'] = $value;
+        } else {
+            $updated_headers[$key] = $value;
+        }
+    }
+
+    $headers = $updated_headers;
+
+    // Check auth headers
+    if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
+        $authUser = $this->LoginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
+
+        $json = json_decode(file_get_contents('php://input'));
+        if (!$json) {
+            $json = (object) $_POST;
+        }
+
+		
+        if ($authUser != null && isset($json->userid) && $authUser->userid == $json->userid) {
+            // Validate required fields
+            if (empty($json->childid) || empty($json->diarydate) || empty($json->time)) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(400)
+                    ->set_output(json_encode(['success' => false, 'message' => 'Required fields are missing']));
+            }
+  
+			$mysqlDate = $json->diarydate;
+			$formattedDate = date('Y-m-d', strtotime($mysqlDate));
+// print_r($formattedDate); // Outputs: 2025-05-01
+// exit;
+        
+
+            // Prepare data
+            $data = [
+                'childid' => $json->childid,
+                'diarydate' => $formattedDate,
+                'roomid' => $json->roomid ?? null,
+                'time' => $json->time,
+                'breathing' => $json->breathing ?? null,
+                'body_temperature' => $json->body_temperature ?? null,
+                'notes' => $json->notes ?? null,
+                'createdBy' => $authUser->userid,
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+
+            $this->db->insert('dailydiarysleepchecklist', $data);
+
+            if ($this->db->affected_rows() > 0) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(200)
+                    ->set_output(json_encode(['success' => true, 'message' => 'Saved successfully']));
+            } else {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(500)
+                    ->set_output(json_encode(['success' => false, 'message' => 'Failed to save']));
+            }
+
+        } else {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(403)
+                ->set_output(json_encode(['success' => false, 'message' => 'Unauthorized or invalid user']));
+        }
+
+    } else {
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(401)
+            ->set_output(json_encode(['success' => false, 'message' => 'Missing authentication headers']));
+    }
+}
+
+
+
+
+public function updateSleepChecklist()
+{
+    $headers = $this->input->request_headers();
+    $updated_headers = [];
+
+    foreach ($headers as $key => $value) {
+        $lower_key = strtolower($key);
+        if ($lower_key === 'x-device-id') {
+            $updated_headers['X-Device-Id'] = $value;
+        } elseif ($lower_key === 'x-token') {
+            $updated_headers['X-Token'] = $value;
+        } else {
+            $updated_headers[$key] = $value;
+        }
+    }
+    $headers = $updated_headers;
+
+    if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
+        $authUser = $this->LoginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
+
+        $json = json_decode(file_get_contents('php://input'));
+        if (!$json) {
+            $json = (object) $_POST;
+        }
+
+        if ($authUser != null && isset($json->userid) && $authUser->userid == $json->userid) {
+            if (empty($json->id) || empty($json->childid) || empty($json->diarydate) || empty($json->time)) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(400)
+                    ->set_output(json_encode(['success' => false, 'message' => 'Required fields are missing']));
+            }
+
+            // $diaryDate = str_replace('-', '/', $json->diarydate);
+            // $date = DateTime::createFromFormat('d/m/Y', $diaryDate);
+            // $mysqlDate = $date ? $date->format('Y-m-d') : null;
+
+			$mysqlDate = $json->diarydate;
+			$formattedDate = date('Y-m-d', strtotime($mysqlDate));
+
+            $data = [
+                'childid' => $json->childid,
+                'diarydate' => $formattedDate,
+                'roomid' => $json->roomid ?? null,
+                'time' => $json->time,
+                'breathing' => $json->breathing ?? null,
+                'body_temperature' => $json->body_temperature ?? null,
+                'notes' => $json->notes ?? null
+            ];
+
+            $this->db->where('id', $json->id);
+            $this->db->update('dailydiarysleepchecklist', $data);
+
+            if ($this->db->affected_rows() > 0) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(200)
+                    ->set_output(json_encode(['success' => true, 'message' => 'Updated successfully']));
+            } else {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(200)
+                    ->set_output(json_encode(['success' => false, 'message' => 'No changes made or update failed']));
+            }
+        } else {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(403)
+                ->set_output(json_encode(['success' => false, 'message' => 'Unauthorized or invalid user']));
+        }
+    } else {
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(401)
+            ->set_output(json_encode(['success' => false, 'message' => 'Missing authentication headers']));
+    }
+}
+
+
+
+
+public function deleteSleepChecklist()
+{
+    $headers = $this->input->request_headers();
+    $updated_headers = [];
+
+    foreach ($headers as $key => $value) {
+        $lower_key = strtolower($key);
+        if ($lower_key === 'x-device-id') {
+            $updated_headers['X-Device-Id'] = $value;
+        } elseif ($lower_key === 'x-token') {
+            $updated_headers['X-Token'] = $value;
+        } else {
+            $updated_headers[$key] = $value;
+        }
+    }
+    $headers = $updated_headers;
+
+    if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
+        $authUser = $this->LoginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
+
+        $json = json_decode(file_get_contents('php://input'));
+        if (!$json) {
+            $json = (object) $_POST;
+        }
+
+        if ($authUser != null && isset($json->userid) && $authUser->userid == $json->userid) {
+            if (empty($json->id)) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(400)
+                    ->set_output(json_encode(['success' => false, 'message' => 'Invalid ID']));
+            }
+
+            $this->db->where('id', $json->id);
+            $this->db->delete('dailydiarysleepchecklist');
+
+            if ($this->db->affected_rows() > 0) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(200)
+                    ->set_output(json_encode(['success' => true, 'message' => 'Deleted successfully']));
+            } else {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(200)
+                    ->set_output(json_encode(['success' => false, 'message' => 'Failed to delete or already removed']));
+            }
+        } else {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(403)
+                ->set_output(json_encode(['success' => false, 'message' => 'Unauthorized or invalid user']));
+        }
+    } else {
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(401)
+            ->set_output(json_encode(['success' => false, 'message' => 'Missing authentication headers']));
+    }
+}
+
+
 
 
 
