@@ -690,11 +690,60 @@ $headers = $updated_headers;
 
                 $program_plans = $query->result();
 
+				// Assuming you already have these IDs
+$childIDs = explode(',', $program_plans[0]->children); // Convert to array
+$userIDs = explode(',', $program_plans[0]->educators); // Convert to array
+
+$CI =& get_instance(); // Get CodeIgniter instance
+
+// Get Child Data
+$childrenData = [];
+foreach ($childIDs as $id) {
+    $child = $CI->db->select('name, lastname')
+                    ->from('child')
+                    ->where('id', trim($id))
+                    ->get()
+                    ->row();
+
+    if ($child) {
+        $childrenData[] = [
+            'id' => $child->id,
+            'name' => $child->name,
+            'lastname' => $child->lastname
+        ];
+    }
+}
+
+
+
+// Get User Data
+$educatorsData = [];
+foreach ($userIDs as $id) {
+    $user = $CI->db->select('name')
+                   ->from('users')
+                   ->where('userid', trim($id))
+                   ->get()
+                   ->row();
+
+    if ($user) {
+        $educatorsData[] = [
+            'id' => $user->userid,
+            'name' => $user->name
+        ];
+    }
+}
+			
+                // echo "<pre>";
+				// print_r($educatorsData);
+				// exit;
+
                 // Return data as JSON
                 echo json_encode([
                     'status' => true,
                     'message' => 'Program plans fetched successfully.',
-                    'data' => $program_plans
+                    'data' => $program_plans,
+					'childrendata' => $childrenData,
+					'Educatorsdata' => $educatorsData
                 ]);
                 return;
             }
