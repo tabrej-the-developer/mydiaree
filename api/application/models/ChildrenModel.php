@@ -110,15 +110,15 @@ class ChildrenModel extends CI_Model {
 			return "Child not found"; // In case the child does not exist
 		}
 	
-		// Calculate the child's age from the date of birth
-		$dob = new DateTime($child->dob);
-		$now = new DateTime();
-		$childAge = $now->diff($dob)->y; // Calculate the age in years
+		// // Calculate the child's age from the date of birth
+		// $dob = new DateTime($child->dob);
+		// $now = new DateTime();
+		// $childAge = $now->diff($dob)->y; // Calculate the age in years
 	
-		// Check if the child's age is within the room's allowed age range
-		if ($childAge < $ageFrom || $childAge > $ageTo) {
-			return "Child's age does not fit within the room's age range";
-		}
+		// // Check if the child's age is within the room's allowed age range
+		// if ($childAge < $ageFrom || $childAge > $ageTo) {
+		// 	return "Child's age does not fit within the room's age range";
+		// }
 	
 		// Fetch the current number of children in the room
 		$currentChildrenQuery = $this->db->query("SELECT COUNT(*) as childCount FROM child WHERE room = $roomId");
