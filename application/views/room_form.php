@@ -193,12 +193,20 @@
                                             <a href="<?= base_url('room/editChild?id='.$id.'&childId='.$child->id); ?>">
                                                 <p class="list-item-heading mb-1 truncate"><?= $child->name; ?></p>
                                             </a>
-                                            <p class="mb-2 text-muted text-small">
+                                            <p class="mb-2 text-muted text-small">Date of birth -
     <?php
     $originalDate = $child->dob;
     $timestamp = strtotime($originalDate);
     $formattedDate = date("d-M-Y", $timestamp);
     echo $formattedDate;
+    ?>
+</p>
+                                            <p class="mb-2 text-muted text-small">Joining Date
+    <?php
+    $originalDate2 = $child->startDate;
+    $timestamp2 = strtotime($originalDate2);
+    $formattedDate2 = date("d-M-Y", $timestamp2);
+    echo $formattedDate2;
     ?>
 </p>
                                             <p class="mb-2 text-muted text-small"><?= $diff->y,' years'; ?></p>
