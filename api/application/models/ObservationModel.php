@@ -2149,29 +2149,62 @@ if (!empty($data['filter_added'])) {
 
 	# Write By Dinesh on 02-09-2021
 
+	// function getTable(){
+	// 	$get_query = '
+	// 	SELECT *,main_child.id as child_id, main_child.name as child_name,main_child.imageUrl as image,
+	// 	ob_main.date_added as observation_date2,
+	// 	DATE_FORMAT(ob_main.date_added, "%Y-%m-%d") as observation_date,
+		
+	// 	(SELECT count(*) FROM observationchild WHERE childId IN (main_child.id)) as observation_countid,
+
+	// 	(SELECT days FROM noticesettings WHERE centerid IN (main_centers.id)) as alter_day
+			
+	// 	FROM observationchild AS ob_child
+
+	// 		LEFT JOIN observation AS ob_main ON ob_main.id=ob_child.observationId
+
+	// 		LEFT JOIN child AS main_child ON main_child.id=ob_child.childId
+
+	// 		LEFT JOIN room AS main_room ON main_room.id=main_child.room
+
+	// 		LEFT JOIN centers AS main_centers ON main_centers.id=main_room.centerid  GROUP BY child_name ;';
+
+
+	// 	$gettable_result = $this->db->query($get_query)->result();
+ 
+	// 	return $gettable_result;
+	// }
+
+
 	function getTable(){
 		$get_query = '
-		SELECT *,main_child.id as child_id, main_child.name as child_name,main_child.imageUrl as image,
-		ob_main.date_added as observation_date2,
-		DATE_FORMAT(ob_main.date_added, "%Y-%m-%d") as observation_date,
-		
-		(SELECT count(*) FROM observationchild WHERE childId IN (main_child.id)) as observation_countid,
-
-		(SELECT days FROM noticesettings WHERE centerid IN (main_centers.id)) as alter_day
-			
-		FROM observationchild AS ob_child
-
-			LEFT JOIN observation AS ob_main ON ob_main.id=ob_child.observationId
-
-			LEFT JOIN child AS main_child ON main_child.id=ob_child.childId
-
-			LEFT JOIN room AS main_room ON main_room.id=main_child.room
-
-			LEFT JOIN centers AS main_centers ON main_centers.id=main_room.centerid  GROUP BY child_name ;';
-
-
+			SELECT 
+				main_child.id AS child_id, 
+				main_child.name AS child_name, 
+				main_child.imageUrl AS image,
+				MAX(ob_main.date_added) AS observation_date2,
+				DATE_FORMAT(MAX(ob_main.date_added), "%Y-%m-%d") AS observation_date,
+				
+				(SELECT COUNT(*) FROM observationchild WHERE childId = main_child.id) AS observation_countid,
+	
+				(SELECT days FROM noticesettings WHERE centerid = main_centers.id) AS alter_day
+	
+			FROM observationchild AS ob_child
+	
+			LEFT JOIN observation AS ob_main ON ob_main.id = ob_child.observationId
+			LEFT JOIN child AS main_child ON main_child.id = ob_child.childId
+			LEFT JOIN room AS main_room ON main_room.id = main_child.room
+			LEFT JOIN centers AS main_centers ON main_centers.id = main_room.centerid
+	
+			GROUP BY 
+				main_child.id, 
+				main_child.name, 
+				main_child.imageUrl,
+				main_centers.id
+		';
+	
 		$gettable_result = $this->db->query($get_query)->result();
- 
+	
 		return $gettable_result;
 	}
 
