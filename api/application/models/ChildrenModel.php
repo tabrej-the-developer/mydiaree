@@ -121,13 +121,13 @@ class ChildrenModel extends CI_Model {
 		// }
 	
 		// Fetch the current number of children in the room
-		$currentChildrenQuery = $this->db->query("SELECT COUNT(*) as childCount FROM child WHERE room = $roomId");
-		$currentChildren = $currentChildrenQuery->row()->childCount;
+		// $currentChildrenQuery = $this->db->query("SELECT COUNT(*) as childCount FROM child WHERE room = $roomId");
+		// $currentChildren = $currentChildrenQuery->row()->childCount;
 	
 		// Check if the room is full
-		if ($currentChildren >= $roomCapacity) {
-			return "Room capacity is full"; // Room is at full capacity
-		}
+		// if ($currentChildren >= $roomCapacity) {
+		// 	return "Room capacity is full"; // Room is at full capacity
+		// }
 	
 		// Update the child's room
 		$this->db->query("UPDATE child SET room = $roomId WHERE id = $childId");
