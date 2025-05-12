@@ -13,50 +13,54 @@ class ProgressPlanModel extends CI_Model {
 		$this->date=date('Y-m-d');
 	}
 
-	public function getprocessplan($data=NULL){
-		$id= $data->center_id;
-		$user_type_id=$data->userid;
-		/*$getprocess=$this->db->query("
-		  SELECT child.id as child_id, child.name as child_name,child.imageUrl as child_imageUrl,
-		   (SELECT GROUP_CONCAT(DISTINCT userprogressplan.status) FROM userprogressplan WHERE userprogressplan.childid=child.id ) as process_status, 
-		   (SELECT GROUP_CONCAT(DISTINCT userprogressplan.activityid) FROM userprogressplan WHERE userprogressplan.childid=child.id ) as processactivityid,
-		   (SELECT GROUP_CONCAT(DISTINCT userprogressplan.subid) FROM userprogressplan WHERE userprogressplan.childid=child.id ) as subid,
-		   (SELECT GROUP_CONCAT( DISTINCT userprogressplan.created_by) FROM userprogressplan WHERE userprogressplan.childid=child.id AND 		userprogressplan.status='Planned') as created_by 
-			FROM child 
-			LEFT JOIN room on room.id=child.room 
-			LEFT JOIN centers on centers.id=room.centerid WHERE centers.id='$id' group by child_id")->result();*/
-
-			if(trim($data->usertype)=='Parent'){
-				
-				$getprocess=$this->db->query("
-					SELECT child.id as child_id, child.name as child_name,child.imageUrl as child_imageUrl,
-					(SELECT GROUP_CONCAT(userprogressplan.status) FROM userprogressplan WHERE userprogressplan.childid=child.id order by userprogressplan.status) as process_status, 
-					(SELECT GROUP_CONCAT(userprogressplan.activityid) FROM userprogressplan WHERE userprogressplan.childid=child.id order by userprogressplan.status ) as processactivityid,
-					(SELECT GROUP_CONCAT(userprogressplan.subid) FROM userprogressplan WHERE userprogressplan.childid=child.id order by userprogressplan.status ) as subid,
-					(SELECT GROUP_CONCAT(DISTINCT userprogressplan.created_by) FROM userprogressplan WHERE userprogressplan.childid=child.id) as created_by 
-			 			FROM child 
-							LEFT JOIN room on room.id=child.room 
-								LEFT JOIN centers on centers.id=room.centerid WHERE centers.id='$id' AND child.id IN (SELECT childid FROM `childparent` WHERE parentid = '$user_type_id')")->result();
-				
-
-
-			}else{
-
-				$getprocess=$this->db->query("
-					SELECT child.id as child_id, child.name as child_name,child.imageUrl as child_imageUrl,
-					(SELECT GROUP_CONCAT(userprogressplan.status) FROM userprogressplan WHERE userprogressplan.childid=child.id order by userprogressplan.status) as process_status, 
-					(SELECT GROUP_CONCAT(userprogressplan.activityid) FROM userprogressplan WHERE userprogressplan.childid=child.id order by userprogressplan.status ) as processactivityid,
-					(SELECT GROUP_CONCAT(userprogressplan.subid) FROM userprogressplan WHERE userprogressplan.childid=child.id order by userprogressplan.status ) as subid,
-					(SELECT GROUP_CONCAT(DISTINCT userprogressplan.created_by) FROM userprogressplan WHERE userprogressplan.childid=child.id) as created_by 
-			 			FROM child 
-							LEFT JOIN room on room.id=child.room 
-								LEFT JOIN centers on centers.id=room.centerid WHERE centers.id='$id' group by child_name asc")->result();
-
-			}
-
-			
-
-	return $getprocess;
+	public function getprocessplan($data = NULL) {
+		$id = $data->center_id;
+		$user_type_id = $data->userid;
+	
+		if (trim($data->usertype) == 'Parent') {
+	
+			$getprocess = $this->db->query("
+				SELECT child.id as child_id, child.name as child_name, child.imageUrl as child_imageUrl,
+					(SELECT GROUP_CONCAT(userprogressplan.status ORDER BY userprogressplan.status) 
+						FROM userprogressplan WHERE userprogressplan.childid = child.id) as process_status,
+					(SELECT GROUP_CONCAT(userprogressplan.activityid ORDER BY userprogressplan.status) 
+						FROM userprogressplan WHERE userprogressplan.childid = child.id) as processactivityid,
+					(SELECT GROUP_CONCAT(userprogressplan.subid ORDER BY userprogressplan.status) 
+						FROM userprogressplan WHERE userprogressplan.childid = child.id) as subid,
+					(SELECT GROUP_CONCAT(DISTINCT userprogressplan.created_by) 
+						FROM userprogressplan WHERE userprogressplan.childid = child.id) as created_by
+				FROM child 
+					LEFT JOIN room ON room.id = child.room 
+					LEFT JOIN centers ON centers.id = room.centerid 
+				WHERE centers.id = '$id' 
+					AND child.id IN (SELECT childid FROM childparent WHERE parentid = '$user_type_id')
+				GROUP BY child.id 
+				ORDER BY child.name ASC
+			")->result();
+	
+		} else {
+	
+			$getprocess = $this->db->query("
+				SELECT child.id as child_id, child.name as child_name, child.imageUrl as child_imageUrl,
+					(SELECT GROUP_CONCAT(userprogressplan.status ORDER BY userprogressplan.status) 
+						FROM userprogressplan WHERE userprogressplan.childid = child.id) as process_status,
+					(SELECT GROUP_CONCAT(userprogressplan.activityid ORDER BY userprogressplan.status) 
+						FROM userprogressplan WHERE userprogressplan.childid = child.id) as processactivityid,
+					(SELECT GROUP_CONCAT(userprogressplan.subid ORDER BY userprogressplan.status) 
+						FROM userprogressplan WHERE userprogressplan.childid = child.id) as subid,
+					(SELECT GROUP_CONCAT(DISTINCT userprogressplan.created_by) 
+						FROM userprogressplan WHERE userprogressplan.childid = child.id) as created_by
+				FROM child 
+					LEFT JOIN room ON room.id = child.room 
+					LEFT JOIN centers ON centers.id = room.centerid 
+				WHERE centers.id = '$id' 
+				GROUP BY child.id 
+				ORDER BY child.name ASC
+			")->result();
+	
+		}
+	
+		return $getprocess;
 	}
 
 	public function createPlan($data=NULL){		
