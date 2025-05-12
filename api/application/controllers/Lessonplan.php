@@ -236,66 +236,71 @@ $headers = $updated_headers;
 		}
 	}
 
-	public function getlessonstatusdetails(){
-		
-		$headers = $this->input->request_headers();
-$updated_headers = []; // Temporary array to store modified headers
-
-foreach ($headers as $key => $value) {
-    $lower_key = strtolower($key);
-
-    // Normalize key names
-    if ($lower_key === 'x-device-id') {
-        $updated_headers['X-Device-Id'] = $value;
-    } elseif ($lower_key === 'x-token') {
-        $updated_headers['X-Token'] = $value;
-    } else {
-        $updated_headers[$key] = $value; // Keep other headers as is
-    }
-}
-
-// Assign back to $headers
-$headers = $updated_headers;
-		
-		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
-			$this->load->model('loginModel');
-			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
-			$json = json_decode(file_get_contents('php://input'));
-			if($json){
-				$json = $json;
-				}else{
-					$json = $_POST;
+	public function getlessonstatusdetails() {
+		try {
+			$headers = $this->input->request_headers();
+			$updated_headers = [];
+	
+			foreach ($headers as $key => $value) {
+				$lower_key = strtolower($key);
+	
+				if ($lower_key === 'x-device-id') {
+					$updated_headers['X-Device-Id'] = $value;
+				} elseif ($lower_key === 'x-token') {
+					$updated_headers['X-Token'] = $value;
+				} else {
+					$updated_headers[$key] = $value;
+				}
+			}
+	
+			$headers = $updated_headers;
+	
+			if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
+				$this->load->model('loginModel');
+				$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
+				$json = json_decode(file_get_contents('php://input'));
+	
+				if (!$json) {
 					$json = (object)$_POST;
 				}
-
-			if($json!= null && $res != null && $res->userid == $json->userid){
-			
-				if($json->usertype !='Superadmin'){
-					$permission = $this->UtilModel->getPermissions($json->userid,$json->centerid);
+	
+				if ($json != null && $res != null && $res->userid == $json->userid) {
+	
+					if ($json->usertype != 'Superadmin') {
+						$permission = $this->UtilModel->getPermissions($json->userid, $json->centerid);
+					} else {
+						$permission = new stdClass();
+						$permission->editlesson = '1';
+					}
+	
+					if ($permission->editlesson == 1) {
+						$get_result = $this->LessonplanModel->getlessonstatusupdate($json);
+						$data['Status'] = 'Success';
+						// You can include $get_result in the response if needed
+					} else {
+						$data['Status'] = 'ERROR';
+						$data['Message'] = "Permission Error.";
+					}
+	
+					echo json_encode($data);
+					http_response_code(200);
 				} else {
-					$permission->editlesson='1';
+					http_response_code(403);
+					echo json_encode(['Status' => 'ERROR', 'Message' => 'Unauthorized access.']);
 				}
-				
-				if ($permission->editlesson==1) {
-                    $get_result=$this->LessonplanModel->getlessonstatusupdate($json);
-					$data['Status']='Success';
-					
-				}else{
-					$data['Status']='ERROR';
-					$data['Message']="Permission Error.";
-				}
-				echo json_encode($data);
-				http_response_code(200);
-				
-				
+	
+			} else {
+				http_response_code(401);
+				echo json_encode(['Status' => 'ERROR', 'Message' => 'Missing headers.']);
 			}
-			
-			
-		}
-		else{
-			http_response_code(401);
+	
+		} catch (Exception $e) {
+			log_message('error', 'Lesson Status Error: ' . $e->getMessage());
+			http_response_code(500);
+			echo json_encode(['Status' => 'ERROR', 'Message' => 'Internal Server Error']);
 		}
 	}
+	
 
 	public function printlessonPDF($get_mode=null){
 		
