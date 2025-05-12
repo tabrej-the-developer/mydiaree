@@ -34,105 +34,89 @@ class Progressplan extends CI_Controller {
 				echo json_encode($data);
     }
 
-    public function getProgressplandetails(){
-		
-		$headers = $this->input->request_headers();
-$updated_headers = []; // Temporary array to store modified headers
-
-foreach ($headers as $key => $value) {
-    $lower_key = strtolower($key);
-
-    // Normalize key names
-    if ($lower_key === 'x-device-id') {
-        $updated_headers['X-Device-Id'] = $value;
-    } elseif ($lower_key === 'x-token') {
-        $updated_headers['X-Token'] = $value;
-    } else {
-        $updated_headers[$key] = $value; // Keep other headers as is
-    }
-}
-
-// Assign back to $headers
-$headers = $updated_headers;
-		//print_r($headers);
-		if($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)){
-			
-			$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
-			//print_r($res);
-			$json = json_decode(file_get_contents('php://input'));
-			if($json){
-				$json = $json;
-				}else{
-					$json = $_POST;
+	public function getProgressplandetails() {
+		try {
+			$headers = $this->input->request_headers();
+			$updated_headers = [];
+	
+			foreach ($headers as $key => $value) {
+				$lower_key = strtolower($key);
+				if ($lower_key === 'x-device-id') {
+					$updated_headers['X-Device-Id'] = $value;
+				} elseif ($lower_key === 'x-token') {
+					$updated_headers['X-Token'] = $value;
+				} else {
+					$updated_headers[$key] = $value;
+				}
+			}
+	
+			$headers = $updated_headers;
+	
+			if ($headers != null && array_key_exists('X-Device-Id', $headers) && array_key_exists('X-Token', $headers)) {
+				$res = $this->loginModel->getAuthUserId($headers['X-Device-Id'], $headers['X-Token']);
+				$json = json_decode(file_get_contents('php://input'));
+	
+				if (!$json) {
 					$json = (object)$_POST;
 				}
-			
-			if($json!= null && $res != null && $res->userid == $json->userid){
-				//print_r($json);
-				if(trim($json->usertype)=='Staff'){
-					$permission = $this->UtilModel->getPermissions($json->userid,$json->centerid);
-				} else {
-					$permission->viewprogress='1';
-				}
-				//print_r($json);
-				
-				if ($permission->viewprogress==1) {
-					
-					$new_result=$new=$concat=[];
-					
-					if(trim($json->usertype)=='Parent'){
-						$get_result=$this->ProgressPlanModel->getprocessplan($json); 
-
-					}else{
-						$get_result=$this->ProgressPlanModel->getprocessplan($json);
-					}
-				    
-					
-					
-
-					foreach($get_result as $child_key=>$child_value){ 
-						$new_result[]=$child_value;
-						if($child_value->process_status!='' && $child_value->subid!=''){
-							$child_status=explode(',',$child_value->process_status);
-							$child_sub=explode(',',$child_value->subid);
 	
-							for($i=0;$i<count($child_status);$i++){
-								
-								//$new_result[$child_value->child_name][$child_sub[$i]]=$child_status[$i];
-								$new_result[$child_value->child_name.'_'.$child_value->child_id][$child_sub[$i]]=$child_status[$i];
-								
-							}
-							
-						}
-						
-						
-
+				if ($json != null && $res != null && $res->userid == $json->userid) {
+					if (trim($json->usertype) == 'Staff') {
+						$permission = $this->UtilModel->getPermissions($json->userid, $json->centerid);
+					} else {
+						$permission = (object)['viewprogress' => '1'];
 					}
-					
-
-					$data['Status']='Success';
-					$data['process_plan']=$get_result;
-					$data['child_count']=count($get_result);
-
-					$data['new_process']=$new_result;
-					$data['montessorisubactivity'] = $this->MontessoriModel->Montessori_sub_detail();
-					
-				}else{
-					$data['Status']='ERROR';
-					$data['Message']="Permission Error.";
+	
+					if ($permission->viewprogress == 1) {
+						$new_result = [];
+	
+						$get_result = $this->ProgressPlanModel->getprocessplan($json);
+	
+						foreach ($get_result as $child_key => $child_value) {
+							$new_result[] = $child_value;
+							if ($child_value->process_status != '' && $child_value->subid != '') {
+								$child_status = explode(',', $child_value->process_status);
+								$child_sub = explode(',', $child_value->subid);
+	
+								for ($i = 0; $i < count($child_status); $i++) {
+									$new_result[$child_value->child_name . '_' . $child_value->child_id][$child_sub[$i]] = $child_status[$i];
+								}
+							}
+						}
+	
+						$data['Status'] = 'Success';
+						$data['process_plan'] = $get_result;
+						$data['child_count'] = count($get_result);
+						$data['new_process'] = $new_result;
+						$data['montessorisubactivity'] = $this->MontessoriModel->Montessori_sub_detail();
+					} else {
+						$data['Status'] = 'ERROR';
+						$data['Message'] = "Permission Error.";
+					}
+	
+					http_response_code(200);
+					echo json_encode($data);
+				} else {
+					http_response_code(401);
+					echo json_encode(['Status' => 'ERROR', 'Message' => 'Unauthorized or invalid user.']);
 				}
-				http_response_code(200);
-				
-				echo json_encode($data);
+			} else {
+				http_response_code(401);
+				echo json_encode(['Status' => 'ERROR', 'Message' => 'Missing headers.']);
 			}
-			
-			
+		} catch (Exception $e) {
+			// Log the error (optional but recommended)
+			log_message('error', 'getProgressplandetails error: ' . $e->getMessage());
+	
+			// Respond with error details
+			http_response_code(500);
+			echo json_encode([
+				'Status' => 'ERROR',
+				'Message' => 'Server error: ' . $e->getMessage()
+			]);
 		}
-		else{
-			http_response_code(401);
-		}
-
 	}
+	
 	
 		public function getstatusprogress_details(){
 			
