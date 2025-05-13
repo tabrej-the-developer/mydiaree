@@ -266,6 +266,33 @@ class DailyDiaryModel extends CI_Model {
 		return  $insertId;
 	}
 
+	public function addSleepRecord2($data,$delete=NULL)
+	{
+		if (isset($data->diarydate)) {
+			$diarydate = date('Y-m-d', strtotime($data->diarydate));
+		} else {
+			$diarydate = date("Y-m-d");
+		}
+		// if ($delete==NULL) {
+		// 	$this->db->delete('dailydiarysleep', array('childid' => $data->childid, 'diarydate' => $diarydate));
+		// }
+		
+		$ins_data = array(
+		    'childid' => $data->childid,
+		    'diarydate' => $diarydate,
+		    'startTime' => $data->startTime,
+		    'endTime' => $data->endTime,
+		    'comments' => $data->comments,
+		    'createdBy' => $data->userid,
+		    'createdAt' => date('Y-m-d h:i:s')
+		);
+		$this->db->insert("dailydiarysleep", $ins_data);
+		$insertId = $this->db->insert_id();
+		return  $insertId;
+	}
+
+	
+
 	public function addToiletingRecord($data)
 {
     if (isset($data->diarydate)) {
@@ -379,6 +406,43 @@ public function addSunscreenRecord2($data)
 
     return $this->db->affected_rows();
 }
+
+
+public function addSunscreenRecord3($data)
+{
+    if (isset($data->diarydate)) {
+        $diarydate = date('Y-m-d', strtotime($data->diarydate));
+    } else {
+        $diarydate = date("Y-m-d");
+    }
+
+    $insert_batch = [];
+
+    foreach ($data->childids as $childid) {
+        // Delete existing records for this child and date
+        // $this->db->delete('dailydiarysunscreen', ['childid' => $childid, 'diarydate' => $diarydate]);
+
+        // Prepare new entry
+        $ins_data = [
+            'childid'   => $childid,
+            'diarydate' => $diarydate,
+            'startTime' => $data->startTime,
+            'comments'  => $data->comments,
+            'createdBy' => $data->userid,
+            'createdAt' => date('Y-m-d H:i:s')
+        ];
+
+        $insert_batch[] = $ins_data;
+    }
+
+    // Insert multiple records
+    if (!empty($insert_batch)) {
+        $this->db->insert_batch("dailydiarysunscreen", $insert_batch);
+    }
+
+    return $this->db->affected_rows();
+}
+
 
 
 	public function getChildInfo($childid)

@@ -450,9 +450,9 @@ $headers = $updated_headers;
 					$i = 0;
 					foreach ($json->sleep as $slp) {
 						if ($i==0) {
-							$last_rec_id = $this->ddm->addSleepRecord($slp);
+							$last_rec_id = $this->ddm->addSleepRecord2($slp);
 						} else {
-							$last_rec_id = $this->ddm->addSleepRecord($slp,1);
+							$last_rec_id = $this->ddm->addSleepRecord2($slp,1);
 						}
 						$i++;
 					}
@@ -627,10 +627,10 @@ $headers = $updated_headers;
 					$j = 0;
 					foreach ($json->sunscreen as $ss) {
 						if ($j==0) {
-							$last_rec_id = $this->ddm->addSunscreenRecord2($ss);
+							$last_rec_id = $this->ddm->addSunscreenRecord3($ss);
 							array_push($data['last_rec_ids'], $last_rec_id);
 						} else {
-							$last_rec_id = $this->ddm->addSunscreenRecord2($ss,1);
+							$last_rec_id = $this->ddm->addSunscreenRecord3($ss,1);
 							array_push($data['last_rec_ids'], $last_rec_id);
 						}
 						$j++;
