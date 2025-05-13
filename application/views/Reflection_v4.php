@@ -196,7 +196,7 @@
                                         <?php echo $ref->status ?>
                                 </span>
                                 <?php }else{ ?>
-                                    <span class="badge badge-pill badge-theme-1 position-absolute badge-top-right">
+                                    <span class="badge badge-pill position-absolute badge-top-right badge-danger">
                                         <?php echo $ref->status ?>
                                 </span>
                             <?php } ?>
