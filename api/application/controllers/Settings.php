@@ -424,13 +424,13 @@ foreach ($headers as $key => $value) {
 $headers = $updated_headers;
 		if($headers != null && array_key_exists('X-Device-Id',$headers) && array_key_exists('X-Token',$headers)){
 			$res = $this->LoginModel->getAuthUserId($headers['X-Device-Id'],$headers['X-Token']);
-			// $json = json_decode(file_get_contents('php://input'));
-			// if($json){
-			// 	$json = $json;
-			// 	}else{
-			// 		$json = $_POST;
-			// 		$json = (object)$_POST;
-			// 	}
+			$json = json_decode(file_get_contents('php://input'));
+			if($json){
+				$json = $json;
+				}else{
+					$json = $_POST;
+					$json = (object)$_POST;
+				}
 			// echo "<pre>";
 			// print_r($_POST);
 			// exit;
