@@ -3502,6 +3502,50 @@ $headers = $updated_headers;
 					// print_r($childrens);
 					// exit;
 
+					if ($obsId) {
+						// Load database if not already loaded
+						$this->load->database();
+					
+						// Step 1: Get all links for this observation
+						$this->db->where('observationId', $obsId);
+						$query = $this->db->get('observationlinks');
+						$links = $query->result();
+					
+						$linkedData = [];
+					
+						// Step 2: Loop through each link and fetch related data
+						foreach ($links as $link) {
+							$linkId = $link->linkid;
+							$linkType = $link->linktype;
+					
+							if ($linkType == "REFLECTION") {
+								// Get data from reflection table
+								$this->db->where('id', $linkId);
+								$reflectionData = $this->db->get('reflection')->row();
+								if ($reflectionData) {
+									$linkedData[] = [
+										'type' => 'REFLECTION',
+										'data' => $reflectionData
+									];
+								}
+					
+							} elseif ($linkType == "OBSERVATION") {
+								// Get data from observation table
+								$this->db->where('id', $linkId);
+								$observationData = $this->db->get('observation')->row();
+								if ($observationData) {
+									$linkedData[] = [
+										'type' => 'OBSERVATION',
+										'data' => $observationData
+									];
+								}
+							}
+						}
+					
+						// Use $linkedData as needed
+						// print_r($linkedData); // or return it
+					}
+
 	                $data['Status'] = "SUCCESS";
 	                $data['observation']=isset($obsList)?$obsList:NULL;
 	                $data['childrens'] = isset($childrens)?$childrens:NULL;
@@ -3513,6 +3557,7 @@ $headers = $updated_headers;
 	                $data['nextObsId'] = $next;
 	                $data['prevObsId'] = $prev;
 	                $data['permission'] = $permission;
+					$data['linkedData'] = $linkedData;
 				}
 			}else{
 				$data['Status'] = "ERROR";
