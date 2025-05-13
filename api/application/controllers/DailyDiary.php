@@ -627,10 +627,10 @@ $headers = $updated_headers;
 					$j = 0;
 					foreach ($json->sunscreen as $ss) {
 						if ($j==0) {
-							$last_rec_id = $this->ddm->addSunscreenRecord($ss);
+							$last_rec_id = $this->ddm->addSunscreenRecord2($ss);
 							array_push($data['last_rec_ids'], $last_rec_id);
 						} else {
-							$last_rec_id = $this->ddm->addSunscreenRecord($ss,1);
+							$last_rec_id = $this->ddm->addSunscreenRecord2($ss,1);
 							array_push($data['last_rec_ids'], $last_rec_id);
 						}
 						$j++;
