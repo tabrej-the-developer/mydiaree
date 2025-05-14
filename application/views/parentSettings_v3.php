@@ -312,9 +312,14 @@
                                             <?= ucwords(strtolower($pobj->name)); ?></p>
                                     </a>
                                     <ul class="list-unstyled">
-                                        <li class="users-list-item">
-                                            <span class="iconsminds-suitcase"></span> <?= $pobj->status; ?>
-                                        </li>
+									<li class="users-list-item">
+    <span class="iconsminds-suitcase"></span>
+    <?php if ($pobj->status == 'ACTIVE') { ?>
+        <span style="color: green; font-weight: bold;">Active</span>
+    <?php } else { ?>
+        <span style="color: red; font-weight: bold;">Deactivated</span>
+    <?php } ?>
+</li>
                                         <li class="users-list-item">
                                             <span class="simple-icon-calendar"></span>
                                             <?= date('d-m-y',strtotime($pobj->dob)); ?>
@@ -347,6 +352,22 @@
                                 <a href="#" class="delete-link" data-userid="<?= $pobj->userid; ?>">
                                     <i class="fa-solid fa-trash fa-fade" style="color: #ff1605;"></i>
                                 </a>
+
+								&nbsp;&nbsp;
+
+								   <!-- Activate/Deactivate Button -->
+    <?php if ($pobj->status == 'ACTIVE') { ?>
+        <a href="#" class="deactivate-link" data-userid="<?= $pobj->userid; ?>" data-action="deactivate" title="Deactivate">
+            <i class="fa-solid fa-user-slash" style="color: #f39c12;"></i>
+        </a>
+    <?php } else { ?>
+        <a href="#" class="deactivate-link" data-userid="<?= $pobj->userid; ?>" data-action="activate" title="Activate">
+            <i class="fa-solid fa-user-check" style="color: #28a745;"></i>
+        </a>
+    <?php } ?>
+
+
+
                             </div>
 
 							
@@ -428,7 +449,63 @@
                 }
             });
         });
+
+
+
+		$('.deactivate-link').on('click', function(e) {
+    e.preventDefault();
+
+    var userId = $(this).data('userid');
+    var action = $(this).data('action'); // 'activate' or 'deactivate'
+    var newStatus = (action === 'deactivate') ? 'IN-ACTIVE' : 'ACTIVE';
+    var confirmText = (action === 'deactivate') ? 'Deactivate this user?' : 'Activate this user?';
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: confirmText,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, proceed!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '<?= base_url("Settings/changeUserStatus"); ?>',
+                type: 'POST',
+                data: {
+                    userid: userId,
+                    status: newStatus
+                },
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire(
+                            'Success!',
+                            'User status updated.',
+                            'success'
+                        ).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire('Error!', 'Failed to update user status.', 'error');
+                    }
+                },
+                error: function() {
+                    Swal.fire('Error!', 'There was a server error.', 'error');
+                }
+            });
+        }
     });
+});
+
+
+		
+    });
+
+
+
+
+
     </script>
 
 </body>

@@ -1193,6 +1193,27 @@ class Settings extends CI_Controller {
     }
 
 
+	public function changeUserStatus()
+{
+    $userid = $this->input->post('userid');
+    $status = $this->input->post('status');
+
+    $this->db->where('userid', $userid);
+    $this->db->update('users', ['status' => $status]);
+
+    if ($this->db->affected_rows() > 0) {
+        $response = ['success' => true];
+    } else {
+        $response = ['success' => false];
+    }
+
+    $this->output
+        ->set_content_type('application/json')
+        ->set_output(json_encode($response));
+}
+
+
+
 	
 	public function saveParentDetails()
 	{
