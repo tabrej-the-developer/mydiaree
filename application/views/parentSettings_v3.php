@@ -358,11 +358,11 @@
 								   <!-- Activate/Deactivate Button -->
     <?php if ($pobj->status == 'ACTIVE') { ?>
         <a href="#" class="deactivate-link" data-userid="<?= $pobj->userid; ?>" data-action="deactivate" title="Deactivate">
-            <i class="fa-solid fa-user-slash" style="color: #f39c12;"></i>
+			<i class="fa-solid fa-user-check" style="color: #28a745;"></i>
         </a>
     <?php } else { ?>
         <a href="#" class="deactivate-link" data-userid="<?= $pobj->userid; ?>" data-action="activate" title="Activate">
-            <i class="fa-solid fa-user-check" style="color: #28a745;"></i>
+		<i class="fa-solid fa-user-slash" style="color: #f39c12;"></i>
         </a>
     <?php } ?>
 
