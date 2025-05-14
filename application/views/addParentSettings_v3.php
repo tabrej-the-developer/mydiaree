@@ -17,6 +17,9 @@
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/dore.light.blueolympic.min.css?v=1.0.0" />
 	<link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/select2.min.css?v=1.0.0" />
     <link rel="stylesheet" href="<?= base_url('assets/v3'); ?>/css/vendor/select2-bootstrap.min.css?v=1.0.0" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!-- jQuery -->
+
 	<body id="app-container" class="menu-default show-spinner">
 		<?php 
 			$this->load->view('sidebar'); 
@@ -94,10 +97,15 @@
 											</div>
 										</div>
 										<div class="col-md-4">
-											<div class="form-group">
-												<label for="dob">Date of Birth - <span style="color:red;">Format</span><span style="color:green;"> dd-mm-yyyy</span> (use "-")</label>
-												<input type="text" class="form-control" id="dob" name="dob" value="<?= isset($parents->dob)?date('d-m-Y',strtotime($parents->dob)):""; ?>" >
-											</div>
+										<div class="form-group">
+    <label for="dob">Inviting Date - 
+        <span style="color:red;">Format</span>
+        <span style="color:green;"> dd-mm-yyyy</span> (use "-")
+    </label>
+    <input type="text" class="form-control" id="dob" name="dob" 
+           value="<?= isset($parents->dob) ? date('d-m-Y', strtotime($parents->dob)) : ""; ?>" 
+           readonly>
+</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
@@ -238,7 +246,9 @@
 									<div class="row">
 										<div class="col-md-12 text-right">
 											<div class="form-group">
-												<button type="button" class="btn btn-outline-primary btn-add">Add Child</button>
+											<button type="button" class="btn btn-outline-secondary" onclick="history.back();">
+    <i class="fa-solid fa-backward-step"></i>&nbsp;Go Back
+</button>												<button type="button" class="btn btn-outline-primary btn-add">Add Child</button>
 												<button type="submit" class="btn btn-primary">Submit</button>
 											</div>
 										</div>
@@ -259,6 +269,11 @@
 	    <script src="<?= base_url('assets/v3'); ?>/js/vendor/mousetrap.min.js?v=1.0.0"></script>
 	    <script src="<?= base_url('assets/v3'); ?>/js/dore.script.js?v=1.0.0"></script>
 	    <script src="<?= base_url('assets/v3'); ?>/js/scripts.js?v=1.0.0"></script>
+		<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+
+<!-- jQuery UI -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 		<script>
 			$(document).ready(function(){
 				$(".btn-add").on("click",function(){
@@ -311,6 +326,41 @@
 				// });
 			});
 		</script>
+
+<script>
+$(document).ready(function () {
+    var dobInput = $("#dob");
+
+    // Set today's date if input is empty
+    if (!dobInput.val()) {
+        var today = new Date();
+        var day = String(today.getDate()).padStart(2, '0');
+        var month = String(today.getMonth() + 1).padStart(2, '0');
+        var year = today.getFullYear();
+        dobInput.val(day + "-" + month + "-" + year);
+    }
+
+    // Initialize jQuery UI datepicker with popup above input
+    dobInput.datepicker({
+        dateFormat: "dd-mm-yy",
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "1900:+10",
+        beforeShow: function(input, inst) {
+            setTimeout(function () {
+                inst.dpDiv.css({
+                    top: $(input).offset().top - inst.dpDiv.outerHeight() - 5,
+                    left: $(input).offset().left
+                });
+            }, 0);
+        }
+    });
+});
+</script>
+
+
+
+
 	</body>
 </html>
 
