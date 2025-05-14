@@ -324,12 +324,13 @@
 									<?php if (!empty($pobj->children)) { ?>
     <ul class="list-unstyled mt-2">
         <li class="font-weight-bold">Child/ren:</li>
-        <?php foreach ($pobj->children as $child) { ?>
-            <li class="ml-3">
-                <i class="simple-icon-user"></i>
-                <?= ucwords(strtolower($child->name . ' ' . $child->lastname)); ?>
-            </li>
-        <?php } ?>
+		<?php foreach ($pobj->children as $child) { ?>
+    <li class="ml-3">
+        <i class="simple-icon-user"></i>
+        <?= ucwords(strtolower($child->name . ' ' . $child->lastname)); ?>
+        <small class="text-muted"> (<?= ucfirst(strtolower($child->relation)); ?>)</small>
+    </li>
+<?php } ?>
     </ul>
 <?php } else { ?>
     <ul class="list-unstyled mt-2">
