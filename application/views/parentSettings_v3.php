@@ -387,6 +387,25 @@
                     </div>
                 </div>
                 <?php } ?>
+
+                <?php
+    $total = $totalParents ?? 0;
+    $page = $page ?? 1;
+    $limit = 10;
+    $totalPages = ceil($total / $limit);
+?>
+
+<nav>
+    <ul class="pagination justify-content-center">
+        <?php for ($i = 1; $i <= $totalPages; $i++) { 
+            $active = $i == $page ? 'active' : '';
+            $url = base_url("Settings/parentSettings") . "?centerid={$centerid}&page={$i}";
+        ?>
+        <li class="page-item <?= $active ?>"><a class="page-link" href="<?= $url ?>"><?= $i ?></a></li>
+        <?php } ?>
+    </ul>
+</nav>
+
             </div>
 
         </div>

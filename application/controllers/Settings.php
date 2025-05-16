@@ -1083,6 +1083,18 @@ class Settings extends CI_Controller {
 			if (isset($_GET["order"])) {
 				$data['order'] = $_GET["order"];
 			}
+
+			    // 👇 Add pagination
+				$limit = 10;
+				$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+				if ($page < 1) $page = 1;
+			
+				$offset = ($page - 1) * $limit;
+			
+				$data['limit'] = $limit;
+				$data['offset'] = $offset;
+				$data['page'] = $page;
+			
 			$url = BASE_API_URL.'Settings/getParentSettings';
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_URL,$url);

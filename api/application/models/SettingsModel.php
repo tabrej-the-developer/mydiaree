@@ -300,59 +300,132 @@ class SettingsModel extends CI_Model {
 	// }
 
 
-	public function getCenterUsersParent($centerid = '', $userid = '', $order = NULL)
-	{
-		if (empty($userid)) {
-			$sql = "SELECT DISTINCT(u.userid), u.name, u.imageUrl, u.status, u.dob 
-					FROM `usercenters` uc 
-					INNER JOIN `users` u ON uc.userid = u.userid 
-					WHERE uc.centerid = $centerid AND u.userType = 'Parent'";
-		} else {
-			$sql = "SELECT DISTINCT(u.userid), u.name, u.imageUrl, u.status, u.dob 
-					FROM `usercenters` uc 
-					INNER JOIN `users` u ON uc.userid = u.userid 
-					WHERE uc.centerid = $centerid AND u.userType = 'Parent' AND u.userid != $userid";
-		}
+	// public function getCenterUsersParent($centerid = '', $userid = '', $order = NULL)
+	// {
+	// 	if (empty($userid)) {
+	// 		$sql = "SELECT DISTINCT(u.userid), u.name, u.imageUrl, u.status, u.dob 
+	// 				FROM `usercenters` uc 
+	// 				INNER JOIN `users` u ON uc.userid = u.userid 
+	// 				WHERE uc.centerid = $centerid AND u.userType = 'Parent'";
+	// 	} else {
+	// 		$sql = "SELECT DISTINCT(u.userid), u.name, u.imageUrl, u.status, u.dob 
+	// 				FROM `usercenters` uc 
+	// 				INNER JOIN `users` u ON uc.userid = u.userid 
+	// 				WHERE uc.centerid = $centerid AND u.userType = 'Parent' AND u.userid != $userid";
+	// 	}
 	
-		if ($order != NULL) {
-			$sql .= " ORDER BY u.userid " . strtoupper($order);
-		}
+	// 	if ($order != NULL) {
+	// 		$sql .= " ORDER BY u.userid " . strtoupper($order);
+	// 	}
 	
-		$query = $this->db->query($sql);
-		$parents = $query->result();
+	// 	$query = $this->db->query($sql);
+	// 	$parents = $query->result();
 	
-		foreach ($parents as $parent) {
-			// Step 1: Get childid and relation for this parent
-			$this->db->select('childid, relation');
-			$this->db->from('childparent');
-			$this->db->where('parentid', $parent->userid);
-			$childLinks = $this->db->get()->result();
+	// 	foreach ($parents as $parent) {
+	// 		// Step 1: Get childid and relation for this parent
+	// 		$this->db->select('childid, relation');
+	// 		$this->db->from('childparent');
+	// 		$this->db->where('parentid', $parent->userid);
+	// 		$childLinks = $this->db->get()->result();
 	
-			$childData = [];
+	// 		$childData = [];
 	
-			foreach ($childLinks as $link) {
-				// Step 2: Get child details by ID
-				$this->db->select('name, lastname');
-				$this->db->from('child');
-				$this->db->where('id', $link->childid);
-				$child = $this->db->get()->row();
+	// 		foreach ($childLinks as $link) {
+	// 			// Step 2: Get child details by ID
+	// 			$this->db->select('name, lastname');
+	// 			$this->db->from('child');
+	// 			$this->db->where('id', $link->childid);
+	// 			$child = $this->db->get()->row();
 	
-				if ($child) {
-					// Add relation info
-					$childData[] = (object)[
-						'name' => $child->name,
-						'lastname' => $child->lastname,
-						'relation' => $link->relation
-					];
-				}
-			}
+	// 			if ($child) {
+	// 				// Add relation info
+	// 				$childData[] = (object)[
+	// 					'name' => $child->name,
+	// 					'lastname' => $child->lastname,
+	// 					'relation' => $link->relation
+	// 				];
+	// 			}
+	// 		}
 	
-			// Attach children to the parent object
-			$parent->children = $childData;
-		}
+	// 		// Attach children to the parent object
+	// 		$parent->children = $childData;
+	// 	}
 	
-		return $parents;
-	}
+	// 	return $parents;
+	// }
+
+	public function getCenterUsersParent($centerid = '', $userid = '', $order = NULL, $search = NULL, $limit = 10, $offset = 0)
+{
+    // Base query
+    $sql = "SELECT DISTINCT(u.userid), u.name, u.imageUrl, u.status, u.dob 
+            FROM `usercenters` uc 
+            INNER JOIN `users` u ON uc.userid = u.userid 
+            WHERE uc.centerid = $centerid AND u.userType = 'Parent'";
+
+    // Exclude current user
+    if (!empty($userid)) {
+        $sql .= " AND u.userid != $userid";
+    }
+
+    // Search by name
+    if (!empty($search)) {
+        $search = $this->db->escape_like_str($search);
+        $sql .= " AND u.name LIKE '%$search%'";
+    }
+
+    // Order by userid
+    if ($order != NULL) {
+        $sql .= " ORDER BY u.userid " . strtoupper($order);
+    }
+
+    // Add pagination
+    $sql .= " LIMIT $limit OFFSET $offset";
+
+    $query = $this->db->query($sql);
+    $parents = $query->result();
+
+    // Load children for each parent
+    foreach ($parents as $parent) {
+        $this->db->select('childid, relation');
+        $this->db->from('childparent');
+        $this->db->where('parentid', $parent->userid);
+        $childLinks = $this->db->get()->result();
+
+        $childData = [];
+
+        foreach ($childLinks as $link) {
+            $this->db->select('name, lastname');
+            $this->db->from('child');
+            $this->db->where('id', $link->childid);
+            $child = $this->db->get()->row();
+
+            if ($child) {
+                $childData[] = (object)[
+                    'name' => $child->name,
+                    'lastname' => $child->lastname,
+                    'relation' => $link->relation
+                ];
+            }
+        }
+
+        $parent->children = $childData;
+    }
+
+    return $parents;
+}
+
+
+
+	public function countCenterUsersParent($centerid = '')
+{
+    $this->db->select('COUNT(DISTINCT(u.userid)) as total');
+    $this->db->from('usercenters uc');
+    $this->db->join('users u', 'uc.userid = u.userid');
+    $this->db->where('uc.centerid', $centerid);
+    $this->db->where('u.userType', 'Parent');
+    $query = $this->db->get()->row();
+    return $query->total;
+}
 	
 
 

@@ -836,11 +836,22 @@ $headers = $updated_headers;
 					$json = (object)$_POST;
 				}
 			if($json != null && $res != null && $res->userid == $json->userid){
+
+				$limit = isset($json->limit) ? $json->limit : 10;
+                $offset = isset($json->offset) ? $json->offset : 0;
+
+
 				$parentStats = $this->SettingsModel->getUserStatsParent($json->centerid);
-				$parents = $this->SettingsModel->getCenterUsersParent($json->centerid,NULL,NULL);
+
+				$parents = $this->SettingsModel->getCenterUsersParent($json->centerid, NULL, NULL, NULL, $limit, $offset);
+
+				$totalParents = $this->SettingsModel->countCenterUsersParent($json->centerid);
+
+				
 				$data['Status'] = "SUCCESS";
 				$data['parentStats'] = $parentStats;
 				$data['parents'] = $parents;
+				$data['totalParents'] = $totalParents;
 			}else{
 				http_response_code(401);
 				$data['Status'] = "ERROR";
