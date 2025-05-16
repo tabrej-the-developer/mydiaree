@@ -9,6 +9,7 @@ class Settings extends CI_Controller {
 	function __construct() {
 		parent::__construct();
 		$this->load->database(); 
+		$this->load->model('Login_model');
 	  }
 
 	public function index()
@@ -1110,6 +1111,25 @@ class Settings extends CI_Controller {
 			redirect("Welcome");
 		}
 	}
+
+
+	public function searchParentsAjax()
+{
+    $search = $this->input->post('search');
+    $centerid = $this->input->post('centerid');
+
+    $this->load->model('Login_model'); // Replace with actual model name
+
+    $parents = $this->Login_model->getCenterUsersParent($centerid, '', NULL, $search);
+
+    $data['parents'] = $parents;
+    $data['centerid'] = $centerid;
+
+    // Load only the HTML of parent cards and return it
+    $this->load->view('test/parent_cards', $data);
+}
+
+
 	public function addParent()
 	{
 		if ($this->session->has_userdata("LoginId")) {
