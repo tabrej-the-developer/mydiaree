@@ -111,9 +111,36 @@ class DailyDiary extends CI_Controller {
 				}
 			
 				$data->centerid = $centerid;
+
+
+				
+
+				if($this->session->userdata("UserType") != "Parent" ){
+
+				$Reqdate = $data->date; // Format: YYYY-MM-DD
+
+				// Get the day of the week from the requested date
+				$dayIndex = date('N', strtotime($Reqdate)) - 1; // 0 = Monday, 4 = Friday
+				
+				if ($dayIndex >= 0 && $dayIndex <= 4) { // Only filter for Mon to Fri
+					$filteredChilds = [];
+				
+					foreach ($data->childs as $child) {
+						// Ensure daysAttending string is at least 5 characters
+						if (strlen($child->daysAttending) >= 5) {
+							if ($child->daysAttending[$dayIndex] === '1') {
+								$filteredChilds[] = $child;
+							}
+						}
+					}
+				
+					$data->childs = $filteredChilds;
+				}
+			}
+
 				
 				// echo "<pre>";
-                //             print_r($data);
+                //             print_r($data->childs);
                 //             exit;
 				
 				
