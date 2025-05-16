@@ -837,7 +837,7 @@ $headers = $updated_headers;
 				}
 			if($json != null && $res != null && $res->userid == $json->userid){
 
-				$limit = isset($json->limit) ? $json->limit : 10;
+				$limit = isset($json->limit) ? $json->limit : 12;
                 $offset = isset($json->offset) ? $json->offset : 0;
 
 

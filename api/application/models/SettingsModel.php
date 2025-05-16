@@ -354,7 +354,7 @@ class SettingsModel extends CI_Model {
 	// 	return $parents;
 	// }
 
-	public function getCenterUsersParent($centerid = '', $userid = '', $order = NULL, $search = NULL, $limit = 10, $offset = 0)
+	public function getCenterUsersParent($centerid = '', $userid = '', $order = NULL, $search = NULL, $limit = 12, $offset = 0)
 {
     // Base query
     $sql = "SELECT DISTINCT(u.userid), u.name, u.imageUrl, u.status, u.dob 

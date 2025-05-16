@@ -388,10 +388,10 @@
                 </div>
                 <?php } ?>
 
-                <?php
+    <?php
     $total = $totalParents ?? 0;
     $page = $page ?? 1;
-    $limit = 10;
+    $limit = 12;
     $totalPages = ceil($total / $limit);
 ?>
 
