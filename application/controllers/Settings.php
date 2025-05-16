@@ -1109,6 +1109,9 @@ class Settings extends CI_Controller {
 			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			if($httpcode == 200){
 				$data = json_decode($server_output);
+				$data->page = $page;
+				$data->limit = $limit;
+				$data->offset = $offset;
 				// echo "<pre>";
 				// print_r($data);
 				// exit;
