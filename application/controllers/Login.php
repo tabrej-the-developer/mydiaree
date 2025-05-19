@@ -72,6 +72,9 @@ class Login extends CI_Controller {
 			
 			$data['deviceid'] = $this->getIpAddress();
 			$data['devicetype'] = 'WEB';
+
+			print_r($data);
+			exit;
 			
 			$url = BASE_API_URL.'login/getUserValidation';
 			$ch = curl_init($url);
