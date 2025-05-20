@@ -285,10 +285,10 @@ class Reflections extends CI_Controller {
 			$data['room'] = implode(",", $data['room']);
 
 			
-			echo "<pre>";
-			print_r($data); 
-            print_r($_FILES); 
-            exit;
+			// echo "<pre>";
+			// print_r($data); 
+            // print_r($_FILES); 
+            // exit;
 
 
 			$data['userid'] = $this->session->userdata('LoginId');
