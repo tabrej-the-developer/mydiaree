@@ -275,10 +275,12 @@
 <!-- <a href="<?= base_url('lessonPlanList/viewnewtemplate').'?centerid='.$centerid; ?>">
     <button class="btn btn-outline-primary" style="margin-left:5px;">Add Templates</button>
 </a> -->
-
+<?php if ($this->session->userdata('UserType')!='Parent') {    ?> 
 <a href="<?= base_url('lessonPlanList/viewProgramplanCreateformpage').'?centerid='.$centerid; ?>">
     <button class="btn btn-outline-primary" style="margin-left:5px;">Add ProgramPlan</button>
 </a>
+
+<?php } ?>
                     </div>
                     <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
                         <ol class="breadcrumb pt-0">
@@ -341,12 +343,14 @@
                                                     <a href="<?php echo base_url('LessonPlanList/programplanprintpage/'.$plan->id); ?>" class="btn btn-sm btn-info">
                                                         <i class="fa-solid fa-print animated-icon"></i> Print
                                                     </a>
+                                                    <?php if ($this->session->userdata('UserType')!='Parent') {    ?> 
                                                     <a href="<?php echo base_url('LessonPlanList/viewProgramplanCreateformpage'."?centerid=".$centerid."&planid=".$plan->id); ?>" class="btn btn-sm btn-primary">
                                                         <i class="fa-solid fa-pen-to-square animated-icon"></i> Edit
                                                     </a>
                                                     <button type="button" class="btn btn-sm btn-danger delete-program" data-id="<?php echo $plan->id; ?>">
                                                         <i class="fa-solid fa-trash animated-icon"></i> Delete
                                                     </button>
+                                                    <?php } ?>
                                                 </div>
                                             </td>
                                         </tr>
