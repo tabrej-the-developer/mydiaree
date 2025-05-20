@@ -87,19 +87,19 @@
                                         </a>
                                     </div>
                                     <div class="col-md-6 mb-4">
-                                        <a href="<?php echo base_url('progressPlan/list'); ?>" class="card">
+                                        <a href="<?php echo base_url('Reflections'); ?>" class="card">
                                             <div class="card-body text-center">
-                                                <i class="iconsminds-line-chart-1"></i>
-                                                <p class="card-text mb-0">L&P Plan</p>
+                                                <i class="iconsminds-reset"></i>
+                                                <p class="card-text mb-0">Daily Reflections</p>
                                                 <p class="lead text-center"><?php  $totalChilds; ?></p>
                                             </div>
                                         </a>
                                     </div>
                                     <div class="col-md-6">
-                                        <a href="<?php echo base_url('recipe'); ?>" class="card"> 
+                                        <a href="<?php echo base_url('menu'); ?>" class="card"> 
                                             <div class="card-body text-center">
-                                                <i class="simple-icon-cup"></i>
-                                                <p class="card-text mb-0">Recipes</p>
+                                                <i class="simple-icon-picture"></i>
+                                                <p class="card-text mb-0">Menu</p>
                                                 <p class="lead text-center"><?php  $totalChildRecipes; ?></p>
                                             </div>
                                         </a>
@@ -145,6 +145,17 @@
                                             </div>
                                         </a>
                                     </div>
+
+                                    <div class="col-md-4">
+                                        <a href="<?= base_url("Reflections"); ?>" class="card">
+                                            <div class="card-body text-center">
+                                                <i class="iconsminds-reset"></i>
+                                                <p class="card-text mb-0 title">Daily Reflections</p>
+                                                <p class="lead text-center"><?php  $recipesCount; ?></p>
+                                            </div>
+                                        </a>
+                                    </div>
+
                                     <div class="col-md-4">
                                         <a href="<?= base_url("announcements"); ?>" class="card">
                                             <div class="card-body text-center">
@@ -154,15 +165,7 @@
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="col-md-4">
-                                        <a href="<?= base_url("recipe"); ?>" class="card">
-                                            <div class="card-body text-center">
-                                                <i class="iconsminds-book"></i>
-                                                <p class="card-text mb-0 title">Recipes</p>
-                                                <p class="lead text-center"><?php  $recipesCount; ?></p>
-                                            </div>
-                                        </a>
-                                    </div>
+                                   
                                 </div>
                             </div>
                             <?php } ?>
