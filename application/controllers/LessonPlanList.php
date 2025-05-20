@@ -595,90 +595,183 @@ class LessonPlanList extends CI_Controller {
 
 
 
-    public function programPlanList()   
+//     public function programPlanList()   
+// {
+//     if($this->session->has_userdata('LoginId')){
+//         $data = [];
+//         $data['created'] = $this->session->userdata('LoginId');
+//         $data['usertype'] = $this->session->userdata('UserType');
+//         $data['userid'] = $this->session->userdata('LoginId');
+        
+
+//         // print_r($data['usertype']);
+//         // exit;
+
+//         if (isset($_GET['centerid'])) {
+//             $centerid = strip_tags(trim(stripslashes($_GET['centerid'])));
+//         } else {
+//             $center = $this->session->userdata("centerIds");
+//             if (empty($center)) {
+//                 $centerid = 0;
+//             } else {
+//                 $centerid = $center[0]->id;
+//             }
+//         }
+//         $data['centerid'] = $centerid;
+
+//         if($data['usertype'] == "Superadmin"){
+//           // Get program plan data using direct DB query
+//         $this->db->select('ppd.*, u.name as creator_name, r.name as room_name');
+//         $this->db->from('programplantemplatedetailsadd as ppd');
+//         $this->db->join('users as u', 'u.userid = ppd.created_by', 'left');
+//         $this->db->join('room as r', 'r.id = ppd.room_id', 'left');
+//         $this->db->where('ppd.centerid', $centerid);
+//         $this->db->order_by('ppd.created_at', 'DESC'); // Change 'created_at' to the column you want to sort by
+//         $query = $this->db->get();
+        
+//         $data['program_plans'] = $query->result();
+
+//         }else{
+//  // Get program plan data for other users
+//     $this->db->select('ppd.*, u.name as creator_name, r.name as room_name');
+//     $this->db->from('programplantemplatedetailsadd as ppd');
+//     $this->db->join('users as u', 'u.userid = ppd.created_by', 'left');
+//     $this->db->join('room as r', 'r.id = ppd.room_id', 'left');
+//     $this->db->where('ppd.centerid', $centerid);
+
+//     // Filter by created_by or educators
+//     $this->db->group_start();
+//     $this->db->where('ppd.created_by', $data['userid']);
+//     $this->db->or_like('ppd.educators', $data['userid']);
+//     $this->db->group_end();
+
+//     $this->db->order_by('ppd.created_at', 'DESC');
+//     $query = $this->db->get();
+
+//     $data['program_plans'] = $query->result();
+
+//         }
+        
+        
+        
+//         // Helper function for month conversion (directly in controller)
+//         $data['get_month_name'] = function($month_number) {
+//             $months = array(
+//                 1 => 'January',
+//                 2 => 'February',
+//                 3 => 'March',
+//                 4 => 'April',
+//                 5 => 'May',
+//                 6 => 'June',
+//                 7 => 'July',
+//                 8 => 'August',
+//                 9 => 'September',
+//                 10 => 'October',
+//                 11 => 'November',
+//                 12 => 'December'
+//             );
+            
+//             return isset($months[$month_number]) ? $months[$month_number] : '';
+//         };
+        
+//         $this->load->view('programPlanList_v4', $data);
+//     } else { 
+//         $this->load->view('welcome');
+//     }
+// }
+
+public function programPlanList()   
 {
     if($this->session->has_userdata('LoginId')){
         $data = [];
         $data['created'] = $this->session->userdata('LoginId');
         $data['usertype'] = $this->session->userdata('UserType');
         $data['userid'] = $this->session->userdata('LoginId');
-        
-
-        // print_r($data['usertype']);
-        // exit;
 
         if (isset($_GET['centerid'])) {
             $centerid = strip_tags(trim(stripslashes($_GET['centerid'])));
         } else {
             $center = $this->session->userdata("centerIds");
-            if (empty($center)) {
-                $centerid = 0;
-            } else {
-                $centerid = $center[0]->id;
-            }
+            $centerid = empty($center) ? 0 : $center[0]->id;
         }
         $data['centerid'] = $centerid;
 
         if($data['usertype'] == "Superadmin"){
-          // Get program plan data using direct DB query
-        $this->db->select('ppd.*, u.name as creator_name, r.name as room_name');
-        $this->db->from('programplantemplatedetailsadd as ppd');
-        $this->db->join('users as u', 'u.userid = ppd.created_by', 'left');
-        $this->db->join('room as r', 'r.id = ppd.room_id', 'left');
-        $this->db->where('ppd.centerid', $centerid);
-        $this->db->order_by('ppd.created_at', 'DESC'); // Change 'created_at' to the column you want to sort by
-        $query = $this->db->get();
-        
-        $data['program_plans'] = $query->result();
+            $this->db->select('ppd.*, u.name as creator_name, r.name as room_name');
+            $this->db->from('programplantemplatedetailsadd as ppd');
+            $this->db->join('users as u', 'u.userid = ppd.created_by', 'left');
+            $this->db->join('room as r', 'r.id = ppd.room_id', 'left');
+            $this->db->where('ppd.centerid', $centerid);
+            $this->db->order_by('ppd.created_at', 'DESC');
+            $query = $this->db->get();
+            $data['program_plans'] = $query->result();
 
-        }else{
- // Get program plan data for other users
-    $this->db->select('ppd.*, u.name as creator_name, r.name as room_name');
-    $this->db->from('programplantemplatedetailsadd as ppd');
-    $this->db->join('users as u', 'u.userid = ppd.created_by', 'left');
-    $this->db->join('room as r', 'r.id = ppd.room_id', 'left');
-    $this->db->where('ppd.centerid', $centerid);
+        } elseif ($data['usertype'] == "Staff") {
+            $this->db->select('ppd.*, u.name as creator_name, r.name as room_name');
+            $this->db->from('programplantemplatedetailsadd as ppd');
+            $this->db->join('users as u', 'u.userid = ppd.created_by', 'left');
+            $this->db->join('room as r', 'r.id = ppd.room_id', 'left');
+            $this->db->where('ppd.centerid', $centerid);
+            $this->db->group_start();
+            $this->db->where('ppd.created_by', $data['userid']);
+            $this->db->or_like('ppd.educators', $data['userid']);
+            $this->db->group_end();
+            $this->db->order_by('ppd.created_at', 'DESC');
+            $query = $this->db->get();
+            $data['program_plans'] = $query->result();
 
-    // Filter by created_by or educators
-    $this->db->group_start();
-    $this->db->where('ppd.created_by', $data['userid']);
-    $this->db->or_like('ppd.educators', $data['userid']);
-    $this->db->group_end();
+        } elseif ($data['usertype'] == "Parent") {
+            // Step 1: Get all child IDs for this parent
+            $this->db->select('childid');
+            $this->db->from('childparent');
+            $this->db->where('parentid', $data['userid']);
+            $childQuery = $this->db->get();
+            $childRows = $childQuery->result();
 
-    $this->db->order_by('ppd.created_at', 'DESC');
-    $query = $this->db->get();
+            $childIds = [];
+            foreach ($childRows as $row) {
+                $childIds[] = $row->childid;
+            }
 
-    $data['program_plans'] = $query->result();
+            if (!empty($childIds)) {
+                // Step 2: Fetch program plans where children column contains any of these child IDs
+                $this->db->select('ppd.*, u.name as creator_name, r.name as room_name');
+                $this->db->from('programplantemplatedetailsadd as ppd');
+                $this->db->join('users as u', 'u.userid = ppd.created_by', 'left');
+                $this->db->join('room as r', 'r.id = ppd.room_id', 'left');
+                $this->db->where('ppd.centerid', $centerid);
 
+                // Add FIND_IN_SET conditions for each child ID
+                $this->db->group_start();
+                foreach ($childIds as $childid) {
+                    $this->db->or_where("FIND_IN_SET(" . $this->db->escape_str($childid) . ", ppd.children) !=", 0);
+                }
+                $this->db->group_end();
+
+                $this->db->order_by('ppd.created_at', 'DESC');
+                $query = $this->db->get();
+                $data['program_plans'] = $query->result();
+            } else {
+                $data['program_plans'] = [];
+            }
         }
-        
-        
-        
-        // Helper function for month conversion (directly in controller)
+
+        // Month name helper
         $data['get_month_name'] = function($month_number) {
-            $months = array(
-                1 => 'January',
-                2 => 'February',
-                3 => 'March',
-                4 => 'April',
-                5 => 'May',
-                6 => 'June',
-                7 => 'July',
-                8 => 'August',
-                9 => 'September',
-                10 => 'October',
-                11 => 'November',
-                12 => 'December'
-            );
-            
-            return isset($months[$month_number]) ? $months[$month_number] : '';
+            $months = [
+                1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April',
+                5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August',
+                9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December'
+            ];
+            return $months[$month_number] ?? '';
         };
-        
+
         $this->load->view('programPlanList_v4', $data);
     } else { 
         $this->load->view('welcome');
     }
 }
+
 
 
 public function deletedataofprogramplan()
