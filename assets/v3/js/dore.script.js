@@ -4573,9 +4573,9 @@ $.dore = function (element, options) {
 
 
             //floating button click
-            let centerid = $('main').data('centerid');
+            // let centerid = $('main').data('centerid');
             $.ajax({
-                url: 'https://mydiaree.com/Utility/getCenterChilds/' + centerid,
+                url: 'https://mydiaree.com/Utility/getCenterChilds/',
                 type: 'POST'
             })
                 .done(function (json) {
@@ -4589,12 +4589,12 @@ $.dore = function (element, options) {
 
             $(document).on('click', '#floating-children-icon', function () {
                 let base_url = $(location).attr('hostname');
-                let centerid = $('main').data('centerid');
+                // let centerid = $('main').data('centerid');
                 $('#floating-children-data').toggle();
                 let _cssBlock = $('#floating-children-data').css('display');
                 if (_cssBlock == "block") {
                     $.ajax({
-                        url: 'https://mydiaree.com/Utility/getCenterChilds/' + centerid,
+                        url: 'https://mydiaree.com/Utility/getCenterChilds/',
                         type: 'POST'
                     })
                         .done(function (json) {
