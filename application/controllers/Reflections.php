@@ -388,8 +388,19 @@ class Reflections extends CI_Controller {
 	{
 		if($this->session->has_userdata('LoginId')){
 			$data = $this->input->post();
+
+			if(empty($_GET['centerid'])){
+				$centers = $this->session->userdata("centerIds");
+				$defCenter = $centers[0]->id;
+			}else{
+				$data = $this->input->get();
+				$defCenter = $data['centerid'];
+			}
+
+			$data['centerid'] = $defCenter;
+
 			$data['userid'] = $this->session->userdata('LoginId');
-			$url = BASE_API_URL."Reflections/deleteReflection/";
+			$url = BASE_API_URL."Reflections/deleteReflection/?centerid=".$defCenter;
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_POSTFIELDS,json_encode($data));

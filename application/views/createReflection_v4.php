@@ -299,10 +299,10 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <div class="form-group filter-box">
+                <div class="modal-body" style="max-height:550px;overflow-y:auto;">
+                    <!-- <div class="form-group filter-box">
                         <input type="text" class="form-control" id="filter-child" placeholder="Enter child name ">
-                    </div>
+                    </div> -->
                     <ul class="nav nav-tabs separator-tabs ml-0 mb-5" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="first-tab" data-toggle="tab" href="#first" role="tab"

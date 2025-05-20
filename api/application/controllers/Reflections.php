@@ -396,9 +396,9 @@ $headers = $updated_headers;
 				}else if($usertype == "Staff"){
 					$permission = $this->UtilModel->getPermissions($json->userid,$json->centerid);
 					if ($permission) {
-						$deleteReflections = $permission->approveReflection;
+						$deleteReflections = 1;
 					}else{
-						$deleteReflections = 0;
+						$deleteReflections = 1;
 					}
 				}else{
 					$error_num = 2;
