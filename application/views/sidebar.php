@@ -100,11 +100,18 @@
                             <i class="iconsminds-building"></i>Rooms
                         </a>
                     </li>
+
+                    <?php } ?>
+
+
                     <li  class="<?= (strpos($_SERVER['REQUEST_URI'], 'lessonPlanList/programPlanList') === TRUE ? 'active' : ''); ?>">
                         <a href="<?php echo base_url('lessonPlanList/programPlanList'); ?>">
                             <i class="iconsminds-testimonal"></i>Program Plan
                         </a>
                     </li>
+
+                    <?php if($this->session->userdata("UserType")!="Parent"){ ?>
+
                     <li  class="<?= (strpos($_SERVER['REQUEST_URI'], 'ServiceDetails') === TRUE ? 'active' : ''); ?>">
                         <a href="<?php echo base_url('ServiceDetails'); ?>">
                             <i class="iconsminds-receipt-4"></i>Service Details
