@@ -317,6 +317,16 @@ class Reflections extends CI_Controller {
 			
 					// Convert clockwise CSS rotation to counterclockwise Intervention Image rotation
 					$rotationAngle = -$rotationAngle;  
+
+					if (!file_exists($tempPath)) {
+						log_message('error', "Temp file missing: $tempPath");
+					}
+					if (!is_readable($tempPath)) {
+						log_message('error', "Temp file unreadable: $tempPath");
+					}
+					if (@getimagesize($tempPath) === false) {
+						log_message('error', "File is not a valid image: $tempPath");
+					}
 			
 					// Load image using Intervention Image
 					$image = \Intervention\Image\ImageManagerStatic::make($tempPath);
@@ -375,6 +385,8 @@ class Reflections extends CI_Controller {
 				// print_r($data);
 				// exit;
 				redirect("Reflections");
+			}else{
+				redirect($_SERVER['HTTP_REFERER']);
 			}
 			if($httpcode == 401){
 				redirect('welcome');
