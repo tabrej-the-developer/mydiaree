@@ -96,11 +96,11 @@
                                         </a>
                                     </div>
                                     <div class="col-md-6">
-                                        <a href="<?php echo base_url('menu'); ?>" class="card"> 
+                                        <a href="<?php echo base_url('dailyDiary/list'); ?>" class="card"> 
                                             <div class="card-body text-center">
-                                                <i class="simple-icon-picture"></i>
-                                                <p class="card-text mb-0">Menu</p>
-                                                <p class="lead text-center"><?php  $totalChildRecipes; ?></p>
+                                                <i class="iconsminds-wallet"></i>
+                                                <p class="card-text mb-0">Daily Diary</p>
+                                                <!-- <p class="lead text-center"><?php  $totalChildRecipes; ?></p> -->
                                             </div>
                                         </a>
                                     </div>
@@ -157,11 +157,10 @@
                                     </div>
 
                                     <div class="col-md-4">
-                                        <a href="<?= base_url("announcements"); ?>" class="card">
+                                        <a href="<?= base_url("dailyDiary/list"); ?>" class="card">
                                             <div class="card-body text-center">
-                                                <i class="simple-icon-event"></i>
-                                                <p class="card-text mb-0 title">Events</p>
-                                                <p class="lead text-center"><?php  $eventsCount; ?></p>
+                                                <i class="iconsminds-wallet"></i>
+                                                <p class="card-text mb-0">Daily Diary</p>
                                             </div>
                                         </a>
                                     </div>
