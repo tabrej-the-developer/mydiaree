@@ -2153,6 +2153,7 @@ class Observation extends CI_Controller {
 				// echo "<pre>";
 				// print_r($data);
 				// exit;
+				$obestitle = $data['obestitle'];
 		        $data['centerid'] = $centerid;
 				$data['userid'] = $this->session->userdata('LoginId');
 
@@ -2302,7 +2303,8 @@ class Observation extends CI_Controller {
 						$data['reflection'] = $this->dataready($data['reflection']);
 						$data['child_voice'] = $this->dataready($data['child_voice']);
 						$data['room'] = $this->dataready($data['room']);
-						$data['future_plan'] = $this->dataready($data['future_plan']);
+						$data['future_plan'] = $this->dataready($data['future_plan']); 
+						$data['obestitle'] = $data['obestitle']; 
 						$url = BASE_API_URL.'observation/editObservation';
 					}
 				}else{
@@ -2534,6 +2536,8 @@ class Observation extends CI_Controller {
 						if (isset($data['childrens'])) {
 							$data['childrens'] = json_encode($data['childrens']);
 						}
+
+						$data['obestitle'] = $data['obestitle'];
 
 						$url = BASE_API_URL.'observation/createObservation';
 					}

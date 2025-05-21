@@ -253,6 +253,7 @@ $headers = $updated_headers;
 
 					$data['childrens'] = json_decode($data['childrens']);
 					$data['room'] = $data['room'];
+					$data['obestitle'] = $data['obestitle'];
 				  	$id = $this->ObservationModel->createObs($data);
 				  	$obsId = $id;
 				  	if (isset($data['origin'])) {
@@ -585,6 +586,7 @@ $headers = $updated_headers;
 
 					$data['childrens'] = json_decode($data['childrens']);
 					$data['room'] = $data['room'];
+					$data['obestitle'] = $data['obestitle'];
 
  					$this->ObservationModel->editObs($data);
 

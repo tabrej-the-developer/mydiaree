@@ -1439,6 +1439,7 @@ if (!empty($data['filter_added'])) {
 			"room" => $data['room'],
 			"future_plan" => $data['future_plan'],
 			"notes" => $data['notes'],
+			"obestitle" => $data['obestitle'],
 			"reflection" => isset($data['reflection']) ? $data['reflection'] : "",
 			"status" => $data['status'],
 			"approver" => $data['approver'],
@@ -1518,6 +1519,7 @@ if (!empty($data['filter_added'])) {
 			"room" => $data['room'],
 			"future_plan" => $data['future_plan'],
 			"notes" => $data['notes'],
+			"obestitle" => $data['obestitle'],
 			"reflection" => $data['reflection'],
 			// "status" => $data['status'],
 			"date_added"=> date('Y-m-d h:i:s'),
@@ -1532,6 +1534,7 @@ if (!empty($data['filter_added'])) {
 		reflection = '" . addslashes($data['reflection']) . "', 
 		child_voice = '" . addslashes($data['child_voice']) . "', 
 		room = '" . $data['room'] . "', 
+		obestitle = '" . $data['obestitle'] . "', 
 		future_plan = '" . addslashes($data['future_plan']) . "' 
 		WHERE id = " . $data['observationId']
 	);

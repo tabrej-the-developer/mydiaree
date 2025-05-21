@@ -512,10 +512,18 @@
 
                                              <hr> 
 
+                                             <div id="">
+                                             <div class="form-group required">
+                                                                <label class=" control-label" ><strong>Title</strong></label> 
+                                                                <input type="text" class="form-control" id="obestitle" name="obestitle" value="<?php echo isset($observation->obestitle)?$observation->obestitle:''; ?>" >
+                                                                <!-- <textarea name="obestitle" id="" class="form-control" data-sample-short></textarea> -->
+                                                            </div>
+                                             </div>
+
 
                                                         <div id="obs-title">
                                                             <div class="form-group required">
-                                                                <label class=" control-label" ><strong>Observation Title</strong></label> &nbsp;&nbsp;&nbsp; <button type="button" style="font-size:10px;font-weight:bold;margin-bottom:3px;" class="btn btn-outline-primary refine-btn btn-sm" data-editor="obs_title">Refine Text</button>
+                                                                <label class=" control-label" ><strong>Observation</strong></label> &nbsp;&nbsp;&nbsp; <button type="button" style="font-size:10px;font-weight:bold;margin-bottom:3px;" class="btn btn-outline-primary refine-btn btn-sm" data-editor="obs_title">Refine Text</button>
                                                                 <textarea name="title" id="obs_title" class="form-control" data-sample-short><?php echo isset($observation->title)?$observation->title:''; ?></textarea>
                                                             </div>
                                                            
