@@ -88,7 +88,7 @@
         object-fit: cover;
         border-radius: 10px;
     }
-    
+
     </style>
 </head>
 
@@ -390,9 +390,11 @@
                                             target="_blank">
                                             <?php } ?>
 
-                                            <p class="list-item-heading mb-1">
-                                                <?= substr_replace(strip_tags(html_entity_decode($observation->title)),'...',40); ?>
-                                            </p>
+                                         <p class="list-item-heading mb-1">
+    <?= !empty($observation->obestitle) 
+        ? strip_tags(($observation->obestitle)) 
+        : substr_replace(strip_tags(html_entity_decode($observation->title)), '...', 40); ?>
+</p>
                                         </a>
 
                                         <p class="text-muted mb-1 text-small">
