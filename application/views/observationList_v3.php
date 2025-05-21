@@ -72,22 +72,23 @@
     }
 
     .icon-actions {
-    min-width: 60px; /* Width of right icons area */
-    text-align: center;
-}
+        min-width: 60px;
+        /* Width of right icons area */
+        text-align: center;
+    }
 
-.icon-actions i {
-    font-size: 22px;
-    margin-bottom: 30px;
-}
+    .icon-actions i {
+        font-size: 22px;
+        margin-bottom: 30px;
+    }
 
-.list-thumbnail {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 10px;
-}
-
+    .list-thumbnail {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+    
     </style>
 </head>
 
@@ -329,90 +330,98 @@
 
 
                 <div class="col-lg-6 col-md-3">
-    <div class="d-flex flex-row mb-3 bg-white br-10 align-items-center justify-content-between p-3">
+                    <div class="d-flex flex-row mb-3 bg-white br-10 align-items-center justify-content-between p-3">
 
-        <!-- LEFT SIDE: Image + Content -->
-        <div class="d-flex flex-row align-items-center">
+                        <!-- LEFT SIDE: Image + Content -->
+                        <div class="d-flex flex-row align-items-center">
 
-            <?php if($role!="Parent"){ ?>
-                <a class="d-block position-relative" href="<?= base_url('observation/view?id='.$obsId); ?>">
-            <?php } else { ?>
-                <a class="d-block position-relative" href="<?= base_url('observation/print/'.$obsId); ?>" target="_blank">
-            <?php } ?>
+                            <?php if($role!="Parent"){ ?>
+                            <a class="d-block position-relative" href="<?= base_url('observation/view?id='.$obsId); ?>">
+                                <?php } else { ?>
+                                <a class="d-block position-relative"
+                                    href="<?= base_url('observation/print/'.$obsId); ?>" target="_blank">
+                                    <?php } ?>
 
-            <!-- Image Part -->
-            <?php if(empty($observation->observationsMedia)) { ?>
-                <img src="https://skala.or.id/wp-content/uploads/2024/01/dummy-post-square-1-1.jpg"
-                    alt="No Media" class="list-thumbnail border-0" style="width:100px;height:100px;object-fit:cover;">
-            <?php 
-            } else { 
-                if($observation->observationsMediaType == 'Image') {
+                                    <!-- Image Part -->
+                                    <?php if(empty($observation->observationsMedia)) { ?>
+                                    <img src="https://skala.or.id/wp-content/uploads/2024/01/dummy-post-square-1-1.jpg"
+                                        alt="No Media" class="list-thumbnail border-0"
+                                        style="width:100px;height:100px;object-fit:cover;">
+                                    <?php 
+                          } else { 
+                       if($observation->observationsMediaType == 'Image') {
                     if(file_exists('api/assets/media/'.$observation->observationsMedia)) {
-            ?>
-                <img src="<?= base_url('/api/assets/media/'.$observation->observationsMedia); ?>"
-                    alt="Image" class="list-thumbnail border-0" style="width:100px;height:100px;object-fit:cover;">
-            <?php } else { ?>
-                <img src="https://via.placeholder.com/320x240?text=Media+Deleted" alt="Image"
-                    class="list-thumbnail border-0" style="width:100px;height:100px;object-fit:cover;">
-            <?php
-                    }
-                } else if($observation->observationsMediaType == 'Video') {
-            ?>
-                <img src="<?= base_url('/api/assets/media/video-thumb.jpg'); ?>" alt="Video"
-                    class="list-thumbnail border-0" style="width:100px;height:100px;object-fit:cover;">
-            <?php
-                }
-            } 
+                          ?>
+                                    <img src="<?= base_url('/api/assets/media/'.$observation->observationsMedia); ?>"
+                                        alt="Image" class="list-thumbnail border-0"
+                                        style="width:100px;height:100px;object-fit:cover;">
+                                    <?php } else { ?>
+                                    <img src="https://via.placeholder.com/320x240?text=Media+Deleted" alt="Image"
+                                        class="list-thumbnail border-0"
+                                        style="width:100px;height:100px;object-fit:cover;">
+                                    <?php
+                     }
+                       } else if($observation->observationsMediaType == 'Video') {
+                      ?>
+                                    <img src="<?= base_url('/api/assets/media/video-thumb.jpg'); ?>" alt="Video"
+                                        class="list-thumbnail border-0"
+                                        style="width:100px;height:100px;object-fit:cover;">
+                                    <?php
+                   }
+                     } 
             
-            if($observation->status=='Published') {
-            ?>
-                <span class="badge badge-pill position-absolute badge-top-right badge-success">PUBLISHED</span>
-            <?php } else { ?>
-                <span class="badge badge-pill position-absolute badge-top-right badge-danger">DRAFT</span>
-            <?php } ?>
+                    if($observation->status=='Published') {
+                       ?>
+                                    <span
+                                        class="badge badge-pill position-absolute badge-top-right badge-success">PUBLISHED</span>
+                                    <?php } else { ?>
+                                    <span
+                                        class="badge badge-pill position-absolute badge-top-right badge-danger">DRAFT</span>
+                                    <?php } ?>
 
-            </a>
+                                </a>
 
-            <!-- Title and Details -->
-            <div class="pl-3">
-                <?php if($role!="Parent"){ ?>
-                    <a href="<?= base_url('observation/view?id='.$obsId); ?>" class="obs-link">
-                <?php } else { ?>
-                    <a href="<?= base_url('observation/print/'.$obsId); ?>" class="obs-link" target="_blank">
-                <?php } ?>
+                                <!-- Title and Details -->
+                                <div class="pl-3">
+                                    <?php if($role!="Parent"){ ?>
+                                    <a href="<?= base_url('observation/view?id='.$obsId); ?>" class="obs-link">
+                                        <?php } else { ?>
+                                        <a href="<?= base_url('observation/print/'.$obsId); ?>" class="obs-link"
+                                            target="_blank">
+                                            <?php } ?>
 
-                    <p class="list-item-heading mb-1">
-                        <?= substr_replace(strip_tags(html_entity_decode($observation->title)),'...',40); ?>
-                    </p>
-                </a>
+                                            <p class="list-item-heading mb-1">
+                                                <?= substr_replace(strip_tags(html_entity_decode($observation->title)),'...',40); ?>
+                                            </p>
+                                        </a>
 
-                <p class="text-muted mb-1 text-small">
-                    By: <?= $observation->user_name ?? 'Unknown'; ?>
-                </p>
+                                        <p class="text-muted mb-1 text-small">
+                                            By: <?= $observation->user_name ?? 'Unknown'; ?>
+                                        </p>
 
-                <p class="text-primary text-small font-weight-medium mb-0">
-                    <?= date("d.m.Y",strtotime($observation->date_added)); ?>
-                </p>
-            </div>
+                                        <p class="text-primary text-small font-weight-medium mb-0">
+                                            <?= date("d.m.Y",strtotime($observation->date_added)); ?>
+                                        </p>
+                                </div>
 
-        </div>
+                        </div>
 
-        <!-- RIGHT SIDE: Icons (Print/Delete/Comment) -->
-        <div class="d-flex flex-column align-items-center icon-actions">
-            <?php if($role!="Parent"){ ?>
-                <a href="<?= base_url('observation/print/') . $obsId ?>" target="_blank" class="mb-2">
-                    <i class="fa-solid fa-print fa-lg fa-beat" style="color: #74C0FC;"></i>
-                </a>
-                <i class="fa-sharp fa-solid fa-trash fa-lg fa-fade" style="color: #da0711;cursor:pointer;"
-                    onclick="deleteObservation(<?php echo $obsId; ?>)"></i>
-            <?php } else { ?>
-                <i class="fa-solid fa-comment fa-bounce fa-sm" style="color: #74C0FC;cursor:pointer;"
-                    onclick="openAddCommentModal(<?php echo $obsId; ?>)"></i>
-            <?php } ?>
-        </div>
+                        <!-- RIGHT SIDE: Icons (Print/Delete/Comment) -->
+                        <div class="d-flex flex-column align-items-center icon-actions">
+                            <?php if($role!="Parent"){ ?>
+                            <a href="<?= base_url('observation/print/') . $obsId ?>" target="_blank" class="mb-2">
+                                <i class="fa-solid fa-print fa-lg fa-beat" style="color: #74C0FC;"></i>
+                            </a>
+                            <i class="fa-sharp fa-solid fa-trash fa-lg fa-fade" style="color: #da0711;cursor:pointer;"
+                                onclick="deleteObservation(<?php echo $obsId; ?>)"></i>
+                            <?php } else { ?>
+                            <i class="fa-solid fa-comment fa-bounce fa-sm" style="color: #74C0FC;cursor:pointer;"
+                                onclick="openAddCommentModal(<?php echo $obsId; ?>)"></i>
+                            <?php } ?>
+                        </div>
 
-    </div>
-</div>
+                    </div>
+                </div>
 
                 <?php } }else{ ?>
                 <div class="col">
@@ -480,7 +489,7 @@
                                     </div>
                                 </div>
                             </div>
-                          
+
                             <div class="border">
                                 <button class="btn btn-link dropdown-toggle collapsed" data-toggle="collapse"
                                     data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -511,14 +520,15 @@
                                         </div>
 
                                         <div class="custom-control custom-radio">
-    <input type="radio" id="added_custom" name="filter_added"
-        class="custom-control-input filter_added" value="Custom">
-    <label class="custom-control-label" for="added_custom">Custom Date</label>
-</div>
-<div id="custom_date_range" style="display:none; margin-top: 10px;">
-    <input type="date" id="from_date" class="form-control mb-2" placeholder="From Date">
-    <input type="date" id="to_date" class="form-control" placeholder="To Date">
-</div>
+                                            <input type="radio" id="added_custom" name="filter_added"
+                                                class="custom-control-input filter_added" value="Custom">
+                                            <label class="custom-control-label" for="added_custom">Custom Date</label>
+                                        </div>
+                                        <div id="custom_date_range" style="display:none; margin-top: 10px;">
+                                            <input type="date" id="from_date" class="form-control mb-2"
+                                                placeholder="From Date">
+                                            <input type="date" id="to_date" class="form-control" placeholder="To Date">
+                                        </div>
 
                                     </div>
                                 </div>
@@ -856,57 +866,57 @@
 
     <script>
 
-// Handle "Select All" functionality
-$(document).ready(function() {
-    // Handle "Select All" checkbox click
-    $('#fitler_child_selectall').change(function() {
-        $('.filter_child:not(#fitler_child_selectall)').prop('checked', $(this).prop('checked'));
+    // Handle "Select All" functionality
+    $(document).ready(function() {
+        // Handle "Select All" checkbox click
+        $('#fitler_child_selectall').change(function() {
+            $('.filter_child:not(#fitler_child_selectall)').prop('checked', $(this).prop('checked'));
+        });
+
+        // Update "Select All" when individual checkboxes change
+        $('.filter_child:not(#fitler_child_selectall)').change(function() {
+            var allChecked = $('.filter_child:not(#fitler_child_selectall)').length ===
+                $('.filter_child:not(#fitler_child_selectall):checked').length;
+            $('#fitler_child_selectall').prop('checked', allChecked);
+        });
     });
-    
-    // Update "Select All" when individual checkboxes change
-    $('.filter_child:not(#fitler_child_selectall)').change(function() {
-        var allChecked = $('.filter_child:not(#fitler_child_selectall)').length === 
-                         $('.filter_child:not(#fitler_child_selectall):checked').length;
-        $('#fitler_child_selectall').prop('checked', allChecked);
-    });
-});
 
 
     $(function() {
         function filters() {
             var childs = getSelectedChildIds();
 
-// Define this function elsewhere in your code
-function getSelectedChildIds() {
-    var childs = [];
-    var hasSelectAll = false;
-    
-    $('.filter_child').each(function() {
-        if ($(this).prop("checked") == true) {
-            if ($(this).val() == 'All') {
-                hasSelectAll = true;
-            } else {
-                // Only add if not already in the array (prevents duplicates)
-                if (childs.indexOf($(this).val()) === -1) {
-                    childs.push($(this).val());
+            // Define this function elsewhere in your code
+            function getSelectedChildIds() {
+                var childs = [];
+                var hasSelectAll = false;
+
+                $('.filter_child').each(function() {
+                    if ($(this).prop("checked") == true) {
+                        if ($(this).val() == 'All') {
+                            hasSelectAll = true;
+                        } else {
+                            // Only add if not already in the array (prevents duplicates)
+                            if (childs.indexOf($(this).val()) === -1) {
+                                childs.push($(this).val());
+                            }
+                        }
+                    }
+                });
+
+                // If "Select All" is checked, get all child IDs
+                if (hasSelectAll) {
+                    childs = []; // Reset array
+                    $('.filter_child:not(#fitler_child_selectall)').each(function() {
+                        // Only add if not already in the array (prevents duplicates)
+                        if (childs.indexOf($(this).val()) === -1) {
+                            childs.push($(this).val());
+                        }
+                    });
                 }
+
+                return childs;
             }
-        }
-    });
-    
-    // If "Select All" is checked, get all child IDs
-    if (hasSelectAll) {
-        childs = []; // Reset array
-        $('.filter_child:not(#fitler_child_selectall)').each(function() {
-            // Only add if not already in the array (prevents duplicates)
-            if (childs.indexOf($(this).val()) === -1) {
-                childs.push($(this).val());
-            }
-        });
-    }
-    
-    return childs;
-}
 
             var authors = [];
             $('.filter_author').each(function() {
@@ -941,25 +951,25 @@ function getSelectedChildIds() {
             //     }
             // });
 
-var added = [];
-var fromDate = '';
-var toDate = '';
+            var added = [];
+            var fromDate = '';
+            var toDate = '';
 
-$('.filter_added').each(function() {
-    if ($(this).prop("checked") == true) {
-        let val = $(this).val();
-        if (val == 'All') {
-            added = [];
-            return false;
-        } else {
-            added.push(val);
-            if (val === 'Custom') {
-                fromDate = $('#from_date').val();
-                toDate = $('#to_date').val();
-            }
-        }
-    }
-});
+            $('.filter_added').each(function() {
+                if ($(this).prop("checked") == true) {
+                    let val = $(this).val();
+                    if (val == 'All') {
+                        added = [];
+                        return false;
+                    } else {
+                        added.push(val);
+                        if (val === 'Custom') {
+                            fromDate = $('#from_date').val();
+                            toDate = $('#to_date').val();
+                        }
+                    }
+                }
+            });
 
 
             // var media = [];
@@ -1002,58 +1012,64 @@ $('.filter_added').each(function() {
                 type: 'POST',
                 url: '<?php echo base_url('observation/listfilters'); ?>',
                 data: 'childs=' + childs + '&authors=' + authors +
-                    '&observations=' + observations + '&added=' + added + '&fromDate=' + fromDate + '&toDate=' + toDate,
+                    '&observations=' + observations + '&added=' + added + '&fromDate=' + fromDate +
+                    '&toDate=' + toDate,
                 // data: 'childs=' + childs + '&authors=' + authors + '&assessments=' + assessments +
                 //     '&observations=' + observations + '&added=' + added + '&media=' + media +
                 //     '&comments=' + comments + '&links=' + links,
                 datatype: 'json',
                 success: function(json) {
-    json = JSON.parse(json);
-    if (json.Status == "SUCCESS") {
-        $('#observations-list').empty();
-        $.each(json.observations, function(key, val) {
-            var _status = '';
-            var _mediaUrl = '';
-            var _role = '<?= $role ?>'; // You must pass the PHP role into JavaScript
+                    json = JSON.parse(json);
+                    if (json.Status == "SUCCESS") {
+                        $('#observations-list').empty();
+                        $.each(json.observations, function(key, val) {
+                            var _status = '';
+                            var _mediaUrl = '';
+                            var _role =
+                            '<?= $role ?>'; // You must pass the PHP role into JavaScript
 
-            // Media Handling
-            if (val.media == "" || val.media == null) {
-                _mediaUrl = "https://skala.or.id/wp-content/uploads/2024/01/dummy-post-square-1-1.jpg";
-            } else {
-                _mediaUrl = "<?= base_url('/api/assets/media/'); ?>" + val.media;
-            }
+                            // Media Handling
+                            if (val.media == "" || val.media == null) {
+                                _mediaUrl =
+                                    "https://skala.or.id/wp-content/uploads/2024/01/dummy-post-square-1-1.jpg";
+                            } else {
+                                _mediaUrl = "<?= base_url('/api/assets/media/'); ?>" + val
+                                    .media;
+                            }
 
-            // Status Badge
-            if (val.status == "Published") {
-                _status = `<span class="badge badge-pill position-absolute badge-top-right badge-success">PUBLISHED</span>`;
-            } else {
-                _status = `<span class="badge badge-pill position-absolute badge-top-right badge-danger">DRAFT</span>`;
-            }
+                            // Status Badge
+                            if (val.status == "Published") {
+                                _status =
+                                    `<span class="badge badge-pill position-absolute badge-top-right badge-success">PUBLISHED</span>`;
+                            } else {
+                                _status =
+                                    `<span class="badge badge-pill position-absolute badge-top-right badge-danger">DRAFT</span>`;
+                            }
 
-            // Link based on Role
-            var viewLink = (_role !== "Parent")
-                ? "<?= base_url('observation/view?id='); ?>" + val.id
-                : "<?= base_url('observation/print/'); ?>" + val.id;
+                            // Link based on Role
+                            var viewLink = (_role !== "Parent") ?
+                                "<?= base_url('observation/view?id='); ?>" + val.id :
+                                "<?= base_url('observation/print/'); ?>" + val.id;
 
-            var targetAttr = (_role !== "Parent") ? '' : 'target="_blank"';
+                            var targetAttr = (_role !== "Parent") ? '' : 'target="_blank"';
 
-            // Icons on Right side
-            var iconsHtml = '';
-            if (_role !== "Parent") {
-                iconsHtml = `
+                            // Icons on Right side
+                            var iconsHtml = '';
+                            if (_role !== "Parent") {
+                                iconsHtml = `
                     <a href="<?= base_url('observation/print/'); ?>${val.id}" target="_blank" class="mb-2">
                         <i class="fa-solid fa-print fa-lg fa-beat" style="color: #74C0FC;"></i>
                     </a>
                     <i class="fa-sharp fa-solid fa-trash fa-lg fa-fade" style="color: #da0711;cursor:pointer;" onclick="deleteObservation(${val.id})"></i>
                 `;
-            } else {
-                iconsHtml = `
+                            } else {
+                                iconsHtml = `
                     <i class="fa-solid fa-comment fa-bounce fa-sm" style="color: #74C0FC;cursor:pointer;" onclick="openAddCommentModal(${val.id})"></i>
                 `;
-            }
+                            }
 
-            // Now build full card
-            $('#observations-list').append(`
+                            // Now build full card
+                            $('#observations-list').append(`
                 <div class="col-lg-6 col-md-3">
                     <div class="d-flex flex-row mb-3 bg-white br-10 align-items-center justify-content-between p-3">
 
@@ -1087,13 +1103,13 @@ $('.filter_added').each(function() {
                     </div>
                 </div>
             `);
-        });
-        $('#btn-apply-filters').prop('disabled', false).html('Apply Filters');
-    } else {
-        alert(json.Message);
-        $('#btn-apply-filters').prop('disabled', false).html('Apply Filters');
-    }
-}
+                        });
+                        $('#btn-apply-filters').prop('disabled', false).html('Apply Filters');
+                    } else {
+                        alert(json.Message);
+                        $('#btn-apply-filters').prop('disabled', false).html('Apply Filters');
+                    }
+                }
 
 
 
@@ -1102,7 +1118,9 @@ $('.filter_added').each(function() {
 
         $('#btn-apply-filters').on('click', function() {
             // console.log("filter clicked");
-            $(this).prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+            $(this).prop('disabled', true).html(
+                '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
+                );
             filters();
         });
 
@@ -1406,14 +1424,14 @@ $('.filter_added').each(function() {
 
 
     $('input[name="filter_added"]').change(function() {
-    if ($(this).val() == 'Custom') {
-        $('#custom_date_range').show();
-    } else {
-        $('#custom_date_range').hide();
-        $('#from_date').val('');
-        $('#to_date').val('');
-    }
-});
+        if ($(this).val() == 'Custom') {
+            $('#custom_date_range').show();
+        } else {
+            $('#custom_date_range').hide();
+            $('#from_date').val('');
+            $('#to_date').val('');
+        }
+    });
 
     </script>
 
