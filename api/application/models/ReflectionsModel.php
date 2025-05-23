@@ -93,11 +93,41 @@ class ReflectionsModel extends CI_Model {
 		return $this->db->affected_rows();
 	}
 
-	public function getUserReflections($userid='')
-	{
-		$query = $this->db->get_where('reflection', ['createdBY'=>$userid]);
-		return $query->result();
-	}
+	// public function getUserReflections($userid='')
+	// {
+	// 	$query = $this->db->get_where('reflection', ['createdBY'=>$userid]);
+	// 	return $query->result();
+	// }
+
+	public function getUserReflections($userid = '')
+{
+    if (empty($userid)) {
+        return [];
+    }
+
+    // Step 1: Get all reflection IDs where staffid = $userid
+    $this->db->select('reflectionid');
+    $this->db->from('reflectionstaff');
+    $this->db->where('staffid', $userid);
+    $reflectionIdsResult = $this->db->get()->result();
+
+    if (empty($reflectionIdsResult)) {
+        return [];
+    }
+
+    // Extract reflection IDs into an array
+    $reflectionIds = array_map(function($obj) {
+        return $obj->reflectionid;
+    }, $reflectionIdsResult);
+
+    // Step 2: Get all reflections where id IN ($reflectionIds)
+    $this->db->from('reflection');
+    $this->db->where_in('id', $reflectionIds);
+    $query = $this->db->get();
+
+    return $query->result();
+}
+
 
 	public function getParentsReflections($userid = '') {
 		if (empty($userid)) {
