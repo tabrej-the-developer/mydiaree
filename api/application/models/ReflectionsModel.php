@@ -100,34 +100,49 @@ class ReflectionsModel extends CI_Model {
 	// }
 
 	public function getUserReflections($userid = '')
-{
-    if (empty($userid)) {
-        return [];
-    }
-
-    // Step 1: Get all reflection IDs where staffid = $userid
-    $this->db->select('reflectionid');
-    $this->db->from('reflectionstaff');
-    $this->db->where('staffid', $userid);
-    $reflectionIdsResult = $this->db->get()->result();
-
-    if (empty($reflectionIdsResult)) {
-        return [];
-    }
-
-    // Extract reflection IDs into an array
-    $reflectionIds = array_map(function($obj) {
-        return $obj->reflectionid;
-    }, $reflectionIdsResult);
-
-    // Step 2: Get all reflections where id IN ($reflectionIds)
-    $this->db->from('reflection');
-    $this->db->where_in('id', $reflectionIds);
-    $query = $this->db->get();
-
-    return $query->result();
-}
-
+	{
+		if (empty($userid)) {
+			return [];
+		}
+	
+		// Step 1: Get reflection IDs from reflectionstaff
+		$this->db->select('reflectionid');
+		$this->db->from('reflectionstaff');
+		$this->db->where('staffid', $userid);
+		$reflectionIdsResult = $this->db->get()->result();
+	
+		// Extract IDs
+		$reflectionIds = array_map(function($obj) {
+			return $obj->reflectionid;
+		}, $reflectionIdsResult);
+	
+		// Step 2: Get reflections where createdBY = $userid
+		$this->db->from('reflection');
+		$this->db->where('createdBY', $userid);
+		$createdByQuery = $this->db->get()->result();
+	
+		// Track reflection IDs already collected
+		$collectedIds = $reflectionIds;
+	
+		// Step 3: Add createdBY reflections (only if not already included)
+		foreach ($createdByQuery as $reflection) {
+			if (!in_array($reflection->id, $collectedIds)) {
+				$reflectionIds[] = $reflection->id;
+			}
+		}
+	
+		if (empty($reflectionIds)) {
+			return [];
+		}
+	
+		// Step 4: Get all unique reflections by IDs
+		$this->db->from('reflection');
+		$this->db->where_in('id', $reflectionIds);
+		$query = $this->db->get();
+	
+		return $query->result();
+	}
+	
 
 	public function getParentsReflections($userid = '') {
 		if (empty($userid)) {
