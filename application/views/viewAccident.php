@@ -132,8 +132,9 @@
 
                             <!-- <button onclick="printMainContent()" style="margin-top:100px;margin-left: 200px;" class="btn btn-outline-primary no-print">Print</button> -->
      <button onclick="printMainContent()" class="print-button no-print">Print Pages&nbsp;<i class="fa-solid fa-print fa-beat-fade"></i></button>
+    <?php if ($this->session->userdata('UserType')!='Parent') {    ?>    
      <button onclick="sendReportToParent()" class="email-button no-print">Send to Parent <i class="fa-solid fa-envelope fa-beat-fade"></i></button>
-
+<?php } ?>
 
     <main>
         <div class="container-fluid">
