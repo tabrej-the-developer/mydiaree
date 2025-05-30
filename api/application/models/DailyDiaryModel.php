@@ -113,6 +113,20 @@ class DailyDiaryModel extends CI_Model {
 		return $query->row();
 	}
 
+
+
+	public function getBottle($childid,$date=NULL)
+	{	
+		if ($date==NULL) {
+			$query = $this->db->get_where("dailydiarybottle",array("childid"=>$childid));
+		} else {
+			$query = $this->db->get_where("dailydiarybottle",array("childid"=>$childid,"diarydate"=>$date));
+		}
+		return $query->result();
+	}
+
+
+
 	public function getMorningTea($childid,$date=NULL)
 	{
 		if ($date==NULL) {

@@ -189,6 +189,9 @@ $headers = $updated_headers;
 						$ttObj = $this->ddm->getToileting($childId,$date);
 						$cobj->toileting = $ttObj;
 					}
+
+					$bottle = $this->ddm->getBottle($childId,$date);
+					$cobj->bottle = $bottle;
 				}
 
 				// print_r(json_encode($data['childs']));

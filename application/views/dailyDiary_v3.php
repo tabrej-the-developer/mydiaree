@@ -277,6 +277,7 @@
                                         <?php if($columns->toileting==1){ ?>
                                         <th class="table-header"> Toileting </th>
                                         <?php } ?>
+                                        <th class="table-header">Bottle</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -502,6 +503,63 @@
                                             ?>
                                         </td>
                                         <?php } ?>
+
+ <td>
+
+ <?php if (empty($cobj->bottle[0]->startTime)) {  ?>
+
+     <?php if ($this->session->userdata("UserType")!="Parent") { ?>
+
+    <button class="btn btn-outline-primary btn-sm open-bottle-modal"
+        data-bgcolor="#D1FFCD"
+        data-childid="<?php echo $cobj->id; ?>">
+        Add
+    </button>
+
+    <?php }else{ ?>
+                                                <p>Not Update</p>
+                                                <?php } ?>
+                                            <?php
+                                                } else {  ?>
+
+<?php if ($this->session->userdata("UserType")=="Parent") { ?>
+
+<?php
+if (isset($cobj->bottle) && is_array($cobj->bottle)) {
+    foreach ($cobj->bottle as $bottledata) {
+        // Convert 24-hour format (HH:MM) to 12-hour format with AM/PM
+        $formattedTime = date("h:i A", strtotime($bottledata->startTime));
+        echo $formattedTime . "<br>";
+    }
+}
+?>
+
+
+    <?php }else{ ?>
+
+        <?php if (isset($cobj->bottle) && is_array($cobj->bottle)) { ?>
+    <div class="bottle-times" data-childid="<?= $cobj->id; ?>" data-date="<?= isset($_GET['date']) ? $_GET['date'] : $date; ?>">
+        <?php foreach ($cobj->bottle as $bottledata): ?>
+            <span class="badge badge-info edit-bottle-time" 
+                  style="cursor:pointer;"
+                  data-id="<?= $bottledata->id ?>"
+                  data-time="<?= $bottledata->startTime ?>">
+                <?= date("h:i A", strtotime($bottledata->startTime)) ?>
+            </span><br>
+        <?php endforeach; ?>
+    </div>
+<?php } ?>
+
+
+    <?php } ?>
+
+
+                                                <?php } ?>
+
+</td>
+
+
+
                                     </tr>
                                     <?php }  }?>
                                 </tbody>
@@ -590,6 +648,85 @@
 
 
     <!-- Modal Section -->
+
+
+
+
+    <!-- Modal -->
+<div class="modal fade" id="bottleModal" tabindex="-1" role="dialog" aria-labelledby="bottleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form id="bottleForm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Bottle Time</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span>&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="childid" name="childid">
+          <input type="hidden" id="diarydate" name="diarydate" value="<?= isset($_GET['date']) ? $_GET['date'] : $date; ?>">
+
+          <div id="timeInputs">
+  <div class="form-group time-block">
+    <label>Time</label>
+    <div class="input-group">
+      <input type="time" name="startTime[]" class="form-control" required>
+      <div class="input-group-append">
+        <button type="button" class="btn btn-danger btn-sm remove-time">&times;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+          <button type="button" class="btn btn-sm btn-secondary" id="addMoreTime">Add More Time</button>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
+<!-- Edit Bottle Modal -->
+<div class="modal fade" id="editBottleModal" tabindex="-1" role="dialog" aria-labelledby="editBottleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form id="editBottleForm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Bottle Times</h5>
+          <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="childid" id="edit_childid">
+          <input type="hidden" name="diarydate" id="edit_diarydate">
+
+          <div id="editTimeInputs">
+            <!-- Existing DB times (editable) -->
+          </div>
+
+          <button type="button" class="btn btn-sm btn-secondary" id="addMoreEditTime">Add More Time</button>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="foodModal" id="foodModal">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -859,7 +996,7 @@ $mins = date('i'); // Current minute
                 var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
                 var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                 var createdAt = date+' '+time;
-                var diarydate = '<?= isset($_GET['date'])?$_GET['date']:$date; ?>';
+                var diarydate = '<?= isset($_GET['date'])?$_GET['date']:$date; ?>'; 
                 var type = $("#addDailyFoodRecord").find('input[name="type"]').val();
                 $.ajax({
                     traditional:true,
@@ -1116,6 +1253,147 @@ $mins = date('i'); // Current minute
         //     });
         // });
     </script>
+
+
+
+
+
+<script>
+$(document).ready(function() {
+    // Open modal and set child ID
+    $('.open-bottle-modal').click(function() {
+        var childid = $(this).data('childid');
+        $('#childid').val(childid);
+        $('#bottleModal').modal('show');
+    });
+
+    // Add more time fields
+  // Add more time inputs
+$('#addMoreTime').click(function () {
+  $('#timeInputs').append(`
+    <div class="form-group time-block">
+      <div class="input-group">
+        <input type="time" name="startTime[]" class="form-control" required>
+        <div class="input-group-append">
+          <button type="button" class="btn btn-danger btn-sm remove-time">&times;</button>
+        </div>
+      </div>
+    </div>
+  `);
+});
+
+// Remove individual time input
+$('#timeInputs').on('click', '.remove-time', function () {
+  $(this).closest('.time-block').remove();
+});
+
+    // Submit form with AJAX
+    $('#bottleForm').submit(function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: "<?= base_url('dailyDiary/addBottel'); ?>",
+            type: "POST",
+            data: $(this).serialize(),
+            success: function(response) {
+                alert('Data added successfully');
+                $('#bottleModal').modal('hide');
+                $('#bottleForm')[0].reset();
+                $('#timeInputs').html(`
+                    <div class="form-group time-input">
+                        <label>Time</label>
+                        <input type="time" name="startTime[]" class="form-control" required>
+                    </div>
+                `);
+
+                window.location.reload();
+            }
+        });
+    });
+});
+</script>
+
+
+
+<script>
+$(document).ready(function() {
+
+    // Open modal with existing bottle data
+    $('.bottle-times').on('click', '.edit-bottle-time', function () {
+        var parentDiv = $(this).closest('.bottle-times');
+        var childid = parentDiv.data('childid');
+        var diarydate = parentDiv.data('date');
+
+        $('#edit_childid').val(childid);
+        $('#edit_diarydate').val(diarydate);
+        $('#editTimeInputs').html(''); // Clear previous
+
+        // Loop through all sibling spans
+        parentDiv.find('.edit-bottle-time').each(function () {
+            let time = $(this).data('time');
+            let id = $(this).data('id');
+            $('#editTimeInputs').append(`
+                <div class="form-group time-block">
+                    <input type="hidden" name="existing_id[]" value="${id}">
+                    <div class="input-group">
+                        <input type="time" name="existing_time[]" class="form-control" value="${time}" required>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-danger btn-sm remove-existing" data-id="${id}">&times;</button>
+                        </div>
+                    </div>
+                </div>
+            `);
+        });
+
+        $('#editBottleModal').modal('show');
+    });
+
+    // Add new time input
+    $('#addMoreEditTime').click(function () {
+        $('#editTimeInputs').append(`
+            <div class="form-group time-block">
+                <div class="input-group">
+                    <input type="time" name="new_time[]" class="form-control" required>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-danger btn-sm remove-new">&times;</button>
+                    </div>
+                </div>
+            </div>
+        `);
+    });
+
+    // Remove existing time (from DB) with confirmation
+    $('#editTimeInputs').on('click', '.remove-existing', function () {
+        let id = $(this).data('id');
+        if (confirm('Delete this time?')) {
+            $.post("<?= base_url('dailyDiary/deleteBottleTime'); ?>", { id: id }, function (res) {
+                $('[data-id="'+id+'"]').closest('.time-block').remove();
+                location.reload();
+            });
+        }
+    });
+
+    // Remove new input (not yet saved)
+    $('#editTimeInputs').on('click', '.remove-new', function () {
+        $(this).closest('.time-block').remove();
+    });
+
+    // Submit all changes
+    $('#editBottleForm').submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "<?= base_url('dailyDiary/updateBottleTimes'); ?>",
+            type: "POST",
+            data: $(this).serialize(),
+            success: function (res) {
+                alert("Updated successfully");
+                location.reload(); // Reload page to reflect changes
+            }
+        });
+    });
+});
+</script>
+
 
 
     <script>

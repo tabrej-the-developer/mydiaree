@@ -62,6 +62,12 @@ class DailyDiary extends CI_Controller {
                 $data['date'] = $_GET['date'];
             }
 
+
+			                // echo "<pre>";
+                            // print_r($_GET['date']);
+                            // exit;
+			
+
             if(isset($_GET['roomid'])){
                 $data['roomid'] = $_GET['roomid'];
             }
@@ -139,9 +145,9 @@ class DailyDiary extends CI_Controller {
 			}
 
 				
-				// echo "<pre>";
-                //             print_r($data->childs);
-                //             exit;
+				            // echo "<pre>";
+                            // print_r($data->childs);
+                            // exit;
 				
 				
 				$this->load->view('dailyDiary_v3', $data);
@@ -153,6 +159,79 @@ class DailyDiary extends CI_Controller {
 			redirect("welcome");
 		}
 	}
+
+
+
+
+	public function addBottel()
+{
+    $childid   = $this->input->post('childid');
+    $diarydate = $this->input->post('diarydate');
+    $startTimes = $this->input->post('startTime');
+
+    // Format diarydate
+    $diarydate = date('Y-m-d', strtotime($diarydate));
+
+    $createdBy = $this->session->userdata("LoginId");
+
+    if (!empty($startTimes) && is_array($startTimes)) {
+        foreach ($startTimes as $startTime) {
+            $this->db->insert('dailydiarybottle', [
+                'childid'    => $childid,
+                'diarydate'  => $diarydate,
+                'startTime'  => $startTime,
+                'createdBy'  => $createdBy
+            ]);
+        }
+    }
+
+    echo json_encode(['status' => 'success']);
+}
+
+
+public function updateBottleTimes()
+{
+    $childid = $this->input->post('childid');
+    $diarydate = date('Y-m-d', strtotime($this->input->post('diarydate')));
+    $createdBy = $this->session->userdata("LoginId");
+
+    // Update existing times
+    $existing_ids = $this->input->post('existing_id');
+    $existing_times = $this->input->post('existing_time');
+    if (!empty($existing_ids)) {
+        foreach ($existing_ids as $i => $id) {
+            $this->db->where('id', $id)->update('dailydiarybottle', [
+                'startTime' => $existing_times[$i]
+            ]);
+        }
+    }
+
+    // Insert new times
+    $new_times = $this->input->post('new_time');
+    if (!empty($new_times)) {
+        foreach ($new_times as $time) {
+            $this->db->insert('dailydiarybottle', [
+                'childid' => $childid,
+                'diarydate' => $diarydate,
+                'startTime' => $time,
+                'createdBy' => $createdBy
+            ]);
+        }
+    }
+
+    echo json_encode(['status' => 'success']);
+}
+
+
+public function deleteBottleTime()
+{
+    $id = $this->input->post('id');
+    $this->db->where('id', $id)->delete('dailydiarybottle');
+    echo json_encode(['status' => 'deleted']);
+}
+
+
+
 
 	public function getItems($type)
 	{
