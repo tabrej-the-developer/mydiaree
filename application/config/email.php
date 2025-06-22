@@ -7,10 +7,10 @@ $config['protocol']    = 'smtp';
 $config['smtp_host']   = 'smtp.gmail.com';          // Zoho SMTP server
 $config['smtp_port']   = 587;
 // $config['smtp_user']   = 'support@mydiaree.com';     // Your full email address
-$config['smtp_user']   = 'mydairee47@gmail.com';     // Your full email address
+$config['smtp_user']   = 'mydiaree2026@gmail.com';     // Your full email address
 // $config['smtp_pass']   = 'MyD1@ree2026';      // Your email password
 // $config['smtp_pass']   = 'e90r5UG4SBJs'; 
-$config['smtp_pass']   = 'jwefdifgkxcbtbhx'; 
+$config['smtp_pass']   = 'rfrmbittihlaxhqk'; 
 
 //jwef difg kxcb tbhx
 // Your email password
